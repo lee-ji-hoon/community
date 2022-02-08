@@ -16,4 +16,9 @@ https://app.diagrams.net/#G16A5Jk-hlk1xUnX1pVzuDqR5D5I43Seua
 - 초기 세팅 
 ![image](https://user-images.githubusercontent.com/53300830/152991455-f48272b1-a1b2-4267-aa0f-2948daa15546.png)
 
+- postgress
+create database community;
+create user master with encrypted password '1234'
+grant all privileges on database community to master;
+
 
