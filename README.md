@@ -1,5 +1,8 @@
 **2022 02 08 남서울대학교 멀티미디어 학과 전용 커뮤니티 프로젝트 시작**
 
+FRONT : 배성현 (HTML / CSS / JS)
+BACKEND : 이지훈, 가준영 (SpringBoot, JPA)
+
 - Notion -
 https://www.notion.so/c080919d0f1e48c68971c8e96b997072
 - Google Slide -
