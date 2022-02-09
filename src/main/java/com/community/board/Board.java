@@ -25,7 +25,5 @@ public class Board {
 
     private String writer;
 
-    private String studentId;
-
     private LocalDateTime uploadTime;
 }
