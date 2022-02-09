@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="p-5">
+    <button class="btn btn-primary float-end"
+            onclick="location.href='board_write.html'"
+            th:onclick="|location.href='@{/board/write}'|"
+            type="button">
+        글 작성</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">제목</th>
+            <th scope="col">작성자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${board}">
+            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.id}">글번호</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.title}">글제목</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.user}">작성자</a></th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
