@@ -1,41 +1,49 @@
 package com.community.account;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id")
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
-    @Id
-    @GeneratedValue
-    private Long id; // 아이디
+    @Id @GeneratedValue
+    private Long id;
 
-    @NotNull
     @Column(unique = true)
-    private String email; // 이메일
+    private String email;
 
-    @NotNull
     @Column(unique = true)
-    private String studentId; // 학번
+    private String nickname;
 
-    @NotNull
-    @Column(unique = true)
-    private String nickname; // 회원 닉네임
+    private String password;
 
-    @NotNull
-    private String password; // 비밀번호
+    private boolean emailVerified;
 
-    private String profileImage; // 회원 이미지
+    private String emailCheckToken;
 
+    private String studentId;
+
+    private LocalDateTime joinedAt;
+
+    @Lob @Basic(fetch = FetchType.EAGER)
+    private String profileImage;
+
+
+    public void generateEmailCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
+
+    public void completeSignUp() {
+        this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
+    }
+
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
+    }
 }
