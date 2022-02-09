@@ -18,7 +18,7 @@
 
 ### postgress
 - create database community;
-- create user master with encrypted password '1234'
+- create user master with encrypted password '1234';
 - grant all privileges on database community to master;
 
 
