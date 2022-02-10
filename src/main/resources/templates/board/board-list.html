@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
 <div class="p-5">
     <button class="btn btn-primary float-end"
             onclick="location.href='board_write.html'"
@@ -20,13 +18,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="board : ${board}">
-            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.id}">글번호</a></th>
-            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.title}">글제목</a></th>
-            <th><a class="btn btn-default" href="board" th:href="@{/board/{board}(board=${board.id})}" th:text="${board.user}">작성자</a></th>
+        <tr th:each="board : ${boards}">
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.id}">글번호</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.title}">글제목</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.content}">작성자</a></th>
         </tr>
         </tbody>
     </table>
 </div>
+<div th:replace="fragments.html :: footer"></div>
 </body>
 </html>

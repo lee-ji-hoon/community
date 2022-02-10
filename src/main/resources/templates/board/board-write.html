@@ -1,10 +1,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments :: head"></head>
-
-<body>
+<head th:replace="fragments.html :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
 
 <!-- content -->
-<form class="container" action="/detail" th:action="@{/detail}" method="post">
+<form class="container" action="/detail" th:action="@{/board/detail}" method="post">
     <!--<input type="text" class="form-control" name="id" hidden>
     <input type="text" class="form-control" name="studentId" hidden>
     <input type="text" class="form-control" name="uploadTime" hidden>-->
@@ -24,6 +24,6 @@
     <button type="submit" class="btn btn-primary">작성</button>
     <a href="/board" type="submit" class="btn btn-danger">취소</a>
 </form>
-
+<div th:replace="fragments.html :: footer"></div>
 </body>
 </html>

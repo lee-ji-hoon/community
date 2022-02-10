@@ -20,7 +20,8 @@ public class BoardService {
                 .content(boardForm.getContent())
                 .writer(boardForm.getWriter())
                 .build();
-        return boardRepository.save(board);
+        boardRepository.save(board);
+        return board;
     }
 
 }

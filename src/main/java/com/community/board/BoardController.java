@@ -23,8 +23,8 @@ public class BoardController {
 
     @GetMapping("")
     public String boardList(Model model) {
-        List<Board> board = boardRepository.findAll();
-        model.addAttribute("board", board);
+        List<Board> findAllBoard = boardRepository.findAll();
+        model.addAttribute("boards", findAllBoard);
         return "board/board-list";
     }
 
@@ -36,10 +36,16 @@ public class BoardController {
     }
 
     @PostMapping("/detail")
-    public String detailView(BoardForm boardForm) {
-        Board newBoard = boardService.saveNewBoard(boardForm);
-        return "/board/board-list";
+    public String detailView(BoardForm boardForm, RedirectAttributes redirectAttributes) {
+        Board savedBoard = boardService.saveNewBoard(boardForm);
+        redirectAttributes.addAttribute("boardId", savedBoard.getId());
+        return "redirect:/board/detail/{boardId}";
     }
 
-
+    @GetMapping("/detail/{boardId}")
+    public String boardDetail(@PathVariable long boardId, Model model) {
+        Board detail = boardRepository.findById(boardId);
+        model.addAttribute("board", detail);
+        return "/board/detail";
+    }
 }
