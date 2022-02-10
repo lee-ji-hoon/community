@@ -1,5 +1,6 @@
-package com.community.account;
+package com.community.account.form;
 
+import com.community.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

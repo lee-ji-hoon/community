@@ -20,6 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/board", "/board/write").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .anyRequest().authenticated();
+        http.formLogin()
+                .loginPage("/login").permitAll();
+
+        http.logout()
+                .logoutSuccessUrl("/");
     }
 
     @Override
