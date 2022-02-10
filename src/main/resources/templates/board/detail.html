@@ -27,14 +27,14 @@
 </div>
 <div class="row text-center" style="width: auto">
     <th:block th:if="${account.nickname == board.writer}">
-        <!--<button class="btn btn-primary float-end"
-                onclick="location.href='board_write.html'"
+        <button class="btn btn-primary float-end"
+                onclick="location.href='board-write'"
                 th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.id})}'|"
                 type="button"> 글 수정</button>
         <button class="btn btn-danger float-end"
-                onclick="location.href='board_write.html'"
+                onclick="location.href='board-write'"
                 th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.id})}'|"
-                type="button"> 글 삭제</button>-->
+                type="button"> 글 삭제</button>
     </th:block>
 </div>
 <div th:replace="fragments.html :: footer"></div>
