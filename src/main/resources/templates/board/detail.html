@@ -1,0 +1,42 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments :: head"></head>
+
+<body>
+
+<!-- content -->
+<div class="p-3">
+    <label for="id">글 ID</label>
+    <input type="text" id="id" name="id" class="form-control"
+           value="1" th:value="${}" readonly>
+</div>
+<div class="p-3">
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" class="form-control"
+           value="상품A" th:value="${post.title}" readonly>
+</div>
+<div class="p-3">
+    <label for="user">작성자</label>
+    <input type="text" id="user" name="user" class="form-control"
+           value="10000" th:value="${post.user}"readonly>
+</div>
+<div class="p-3">
+    <label for="content">내용</label>
+    <input type="text" id="content" name="content" class="form-control"
+           value="10" th:value="${post.content}" readonly>
+</div>
+</div>
+<div class="row text-center" style="width: auto">
+    <th:block th:if="${session.UID == post.user}">
+        <button class="btn btn-primary float-end"
+                onclick="location.href='board_write.html'"
+                th:onclick="|location.href='@{/board/{postId}/edit(postId = ${post.id})}'|"
+                type="button"> 글 수정</button>
+        <button class="btn btn-danger float-end"
+                onclick="location.href='board_write.html'"
+                th:onclick="|location.href='@{/board/{postId}/delete(postId = ${post.id})}'|"
+                type="button"> 글 삭제</button>
+    </th:block>
+</div>
+
+</body>
+</html>
