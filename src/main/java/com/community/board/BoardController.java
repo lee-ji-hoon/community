@@ -43,9 +43,10 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{boardId}")
-    public String boardDetail(@PathVariable long boardId, Model model) {
-        Board detail = boardRepository.findById(boardId);
+    public String boardDetail(@PathVariable long boardId,@CurrentUser Account account, Model model) {
+        Board detail = boardRepository.findAllById(boardId);
         model.addAttribute("board", detail);
+        model.addAttribute("account", account);
         return "/board/detail";
     }
 }
