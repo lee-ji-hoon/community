@@ -5,9 +5,9 @@
 
 <!-- content -->
 <form class="container" action="/detail" th:action="@{/detail}" method="post">
-    <input type="text" class="form-control" name="id" hidden>
+    <!--<input type="text" class="form-control" name="id" hidden>
     <input type="text" class="form-control" name="studentId" hidden>
-    <input type="text" class="form-control" name="uploadTime" hidden>
+    <input type="text" class="form-control" name="uploadTime" hidden>-->
 
     <div class="mb-3">
         <label class="form-label">제목</label>
@@ -15,7 +15,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">작성자</label>
-        <input type="text" class="form-control" name="writer">
+        <input type="text" class="form-control" th:value="${account.nickname}" name="writer">
     </div>
     <div class="mb-3">
         <label class="form-label">내용</label>
