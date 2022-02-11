@@ -21,7 +21,10 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-        boardRepository.save(new Board(null, "title", "content", "writer", LocalDateTime.now().minusHours(1)));
-        accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"), true, "asdf", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null, null, null, null, null));
+
+        if (!accountRepository.existsByNickname("test@naver.com")) {
+            boardRepository.save(new Board(null, "title", "content", "writer", LocalDateTime.now().minusHours(1)));
+            accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"), true, "asdf", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null, null, null, null, null));
+        }
     }
 }
