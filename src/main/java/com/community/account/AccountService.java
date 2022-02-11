@@ -1,6 +1,9 @@
 package com.community.account;
 
 import com.community.account.form.SignUpForm;
+import com.community.config.AppProperties;
+import com.community.mail.EmailMessage;
+import com.community.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,8 +30,10 @@ import java.util.List;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final TemplateEngine templateEngine;
+    private final AppProperties appProperties;
 
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
@@ -42,17 +49,30 @@ public class AccountService implements UserDetailsService {
                 .nickname(signUpForm.getNickname())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .studentId(signUpForm.getStudentId())
+                .username(signUpForm.getUsername())
                 .build();
+
         return accountRepository.save(account);
     }
 
     public void sendSignUpConfirmEmail(Account newAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("멀티커뮤니티, 회원 가입 인증");
-        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+        Context context = new Context();
+        context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
-        javaMailSender.send(mailMessage);
+        context.setVariable("username", newAccount.getUsername());
+        context.setVariable("linkName", "이메일 인증");
+        context.setVariable("message", "멀티커뮤니티 사용을 위해서는 아래 링크를 클릭해주세요.");
+        context.setVariable("host", appProperties.getHost());
+
+        String process = templateEngine.process("account/send-email-link", context);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("멀티커뮤니티, 회원 가입 인증")
+                .message(process)
+                .build();
+
+        emailService.sendEmail(emailMessage);
     }
 
     public void login(Account account) {
