@@ -4,6 +4,7 @@ import com.community.account.form.SignUpForm;
 import com.community.config.AppProperties;
 import com.community.mail.EmailMessage;
 import com.community.mail.EmailService;
+import com.community.profile.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -100,5 +101,14 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setBio(profile.getBio());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+
+        accountRepository.save(account);
     }
 }
