@@ -23,6 +23,8 @@ public class Account {
     @Column(unique = true)
     private String studentId;
 
+    private String username;
+
     private String password;
 
     private boolean emailVerified;

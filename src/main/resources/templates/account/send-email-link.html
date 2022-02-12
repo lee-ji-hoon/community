@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>멀티커뮤니티</title>
+</head>
+<body>
+<div>
+  <p>안녕하세요. <span th:text="${username}"></span>님</p>
+
+  <h2 th:text="${message}">상세 내용</h2>
+
+  <div>
+    <a th:href="${host + link}" th:text="${linkName}">link</a>
+    <p>링크가 동작하지 않는 경우에는 아래 URL을 첫 페이지에서 붙혀 넣어주세요.</p>
+    <p th:text="${host + link}"></p>
+  </div>
+</div>
+<footer>
+  <p>스터디올래&copy; 2020</p>
+</footer>
+</body>
+</html>

@@ -12,6 +12,18 @@
         <div class="row justify-content-center">
             <form class="needs-validation col-sm-6" action="#"
                   th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+
+                <div class="form-group">
+                    <label for="username">이름</label>
+                    <input id="username" type="text" th:field="*{username}" class="form-control"
+                           placeholder="username" aria-describedby="usernameHelp" required minlength="3" maxlength="20">
+                    <small id="usernameHelp" class="form-text text-muted">
+                        이름을 입력해주세요
+                    </small>
+                    <small class="invalid-feedback">이름을 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</small>
+                </div>
+
                 <div class="form-group">
                     <label for="nickname">닉네임</label>
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
@@ -61,7 +73,7 @@
                     <button class="btn btn-primary btn-block" type="submit"
                             aria-describedby="submitHelp">가입하기</button>
                     <small id="submitHelp" class="form-text text-muted">
-                        <a href="#">약관</a>에 동의하시면 가입하기 버튼을 클릭하세요.
+                        프로필페이지에서 추가적인 설정이 가능합니다.
                     </small>
                 </div>
             </form>
