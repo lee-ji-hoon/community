@@ -20,6 +20,7 @@ public class BoardService {
         Board board = Board.builder()
                 .title(boardForm.getTitle())
                 .content(boardForm.getContent())
+                .boardTitle(boardForm.getBoardTitle())
                 .uploadTime(LocalDateTime.now().minusHours(1))
                 .writer(boardForm.getWriter())
                 .build();

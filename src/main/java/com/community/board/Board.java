@@ -19,6 +19,8 @@ public class Board {
     @GeneratedValue
     private Long id;
 
+    private String boardTitle;
+
     private String title;
 
     private String content;
