@@ -23,6 +23,7 @@
     <label for="content">내용</label>
     <input type="text" id="content" name="content" class="form-control"
            value="10" th:value="${board.content}" readonly>
+    <textarea id="summernote" class="summernote" name="content" th:value="${board.content}" readonly></textarea>
 </div>
 </div>
 <div class="row text-center" style="width: auto">
@@ -38,6 +39,13 @@
     </th:block>
 </div>
 <div th:replace="fragments.html :: footer"></div>
-
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            tabsize: 2,
+            height: 300
+        });
+    });
+</script>
 </body>
 </html>

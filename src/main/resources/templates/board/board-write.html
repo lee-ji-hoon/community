@@ -27,15 +27,24 @@
     </div>
     <div class="mb-3">
         <label class="form-label">작성자</label>
-        <input type="text" class="form-control" th:value="${account.nickname}" name="writer">
+        <input type="text" class="form-control" th:value="${account.nickname}" name="writer" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">내용</label>
-        <textarea class="form-control" name="content"></textarea>
+        <textarea id="summernote" class="summernote" name="content"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">작성</button>
     <a href="/board" type="submit" class="btn btn-danger">취소</a>
 </form>
 <div th:replace="fragments.html :: footer"></div>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            placeholder: 'Hello Bootstrap 4',
+            tabsize: 2,
+            height: 300
+        });
+    });
+</script>
 </body>
 </html>
