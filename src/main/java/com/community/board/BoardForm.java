@@ -16,4 +16,7 @@ public class BoardForm {
 
     @NotBlank
     private String writer;
+
+    @NotBlank
+    private String boardTitle;
 }

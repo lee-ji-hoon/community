@@ -8,7 +8,19 @@
     <!--<input type="text" class="form-control" name="id" hidden>
     <input type="text" class="form-control" name="studentId" hidden>
     <input type="text" class="form-control" name="uploadTime" hidden>-->
-
+    <div class="mb-3">
+        <label class="form-label">게시판 선택</label>
+        <select class="selectpicker" name="boardTitle">
+            <optgroup label="기본게시판">
+                <option value="자유게시판">자유게시판</option>
+                <option value="정보공유게시판">정보공유게시판</option>
+            </optgroup>
+            <optgroup label="전용게시판">
+                <option value="신입생게시판">신입생게시판</option>
+                <option value="졸업생게시판">졸업생게시판</option>
+            </optgroup>
+        </select>
+    </div>
     <div class="mb-3">
         <label class="form-label">제목</label>
         <input type="text" class="form-control" name="title">

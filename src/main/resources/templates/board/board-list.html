@@ -13,6 +13,7 @@
         <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">게시판</th>
             <th scope="col">제목</th>
             <th scope="col">작성자</th>
         </tr>
@@ -20,6 +21,7 @@
         <tbody>
         <tr th:each="board : ${boards}">
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.id}">글번호</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.boardTitle}">게시판</a></th>
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.title}">글제목</a></th>
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.content}">작성자</a></th>
         </tr>
