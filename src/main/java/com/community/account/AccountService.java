@@ -4,12 +4,10 @@ import com.community.account.form.SignUpForm;
 import com.community.config.AppProperties;
 import com.community.mail.EmailMessage;
 import com.community.mail.EmailService;
-import com.community.profile.Notifications;
-import com.community.profile.Profile;
+import com.community.profile.form.Notifications;
+import com.community.profile.form.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -127,5 +125,11 @@ public class AccountService implements UserDetailsService {
         account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
         account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
         accountRepository.save(account);
+    }
+
+    public void updateNickname(Account account, String nickname) {
+        account.setNickname(nickname);
+        accountRepository.save(account);
+        login(account);
     }
 }
