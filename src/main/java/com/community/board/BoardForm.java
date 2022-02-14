@@ -14,6 +14,8 @@ public class BoardForm {
     @NotBlank
     private String content;
 
+    private Integer pageView;
+
     @NotBlank
     private String writer;
 
