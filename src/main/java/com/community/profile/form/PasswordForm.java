@@ -1,4 +1,4 @@
-package com.community.profile;
+package com.community.profile.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

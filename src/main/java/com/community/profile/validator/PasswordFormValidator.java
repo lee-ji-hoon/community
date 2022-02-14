@@ -1,5 +1,6 @@
-package com.community.profile;
+package com.community.profile.validator;
 
+import com.community.profile.form.PasswordForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
