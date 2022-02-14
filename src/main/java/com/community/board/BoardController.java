@@ -53,4 +53,33 @@ public class BoardController {
         model.addAttribute("account", account);
         return "board/detail";
     }
+
+    // TODO 게시글 업데이트 구현해야함.
+    @GetMapping("/board/{boardId}/edit")
+    public String boardUpdateForm(@PathVariable long boardId, Model model) {
+        Board board = boardRepository.findAllById(boardId);
+        model.addAttribute("board", board);
+        return "board/edit";
+    }
+    @PostMapping("/board/detail/{boardId}")
+    public String boardUpdate(@PathVariable long boardId, BoardForm boardForm, Model model) {
+        Board board = boardService.updateBoard(boardId, boardForm);
+        model.addAttribute("board", board);
+        return "redirect:/board/detail/{boardId}";
+    }
+    // TODO 게시글 삭제 구현해야함.
+    public String boardDelete(){
+        return "board/delete";
+    }
+
+    // TODO Summernote 사진 업로드 구현해야함.
+    public void uploadFile() {
+
+    }
+
+    // TODO 게시판 별로 구분해야함.
+    public String boardList() {
+        return "/board/{boardList}";
+    }
+
 }

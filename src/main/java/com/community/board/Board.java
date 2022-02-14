@@ -32,4 +32,6 @@ public class Board {
     private String writer;
 
     private LocalDateTime uploadTime;
+
+    private LocalDateTime updateTime;
 }

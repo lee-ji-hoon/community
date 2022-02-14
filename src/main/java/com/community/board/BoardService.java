@@ -27,4 +27,15 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
+    public Board updateBoard(Long boardId, BoardForm boardForm) {
+        Board board = boardRepository.findAllById(boardId);
+        board.setTitle(boardForm.getTitle());
+        board.setBoardTitle(boardForm.getBoardTitle());
+        board.setContent(boardForm.getContent());
+        board.setWriter(boardForm.getWriter());
+        board.setUpdateTime(LocalDateTime.now().minusHours(1));
+
+        return boardRepository.save(board);
+    }
+
 }
