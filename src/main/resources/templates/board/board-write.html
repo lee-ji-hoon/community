@@ -4,13 +4,11 @@
 <div th:replace="fragments.html :: main-nav"></div>
 
 <!-- content -->
-<form class="container" action="/detail" th:action="@{/board/detail}" method="post">
-    <!--<input type="text" class="form-control" name="id" hidden>
-    <input type="text" class="form-control" name="studentId" hidden>
-    <input type="text" class="form-control" name="uploadTime" hidden>-->
-    <div class="mb-3">
+<form class="needs-validation container" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post">
+
+    <div class="form-group">
         <label class="form-label">게시판 선택</label>
-        <select class="form-control" name="boardTitle">
+        <select class="form-control" name="boardTitle" th:field="*{boardTitle}">
             <optgroup label="기본게시판">
                 <option value="자유게시판">자유게시판</option>
                 <option value="정보공유게시판">정보공유게시판</option>
@@ -21,21 +19,42 @@
             </optgroup>
         </select>
     </div>
-    <div class="mb-3">
+    <div class="form-group">
         <label class="form-label">제목</label>
-        <input type="text" class="form-control" name="title">
+        <input type="text" class="form-control" name="title"
+               th:field="*{title}"
+               placeholder="제목을 입력해주세요."
+               minlength="3" maxlength="15"
+               required>
+        <small class="invalid-feedback">제목을 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
     </div>
-    <div class="mb-3">
+    <div class="form-group">
         <label class="form-label">작성자</label>
-        <input type="text" class="form-control" th:value="${account.nickname}" name="writer">
+        <input type="text" class="form-control" th:value="${account.nickname}" name="writer" readonly>
     </div>
     <div class="mb-3">
         <label class="form-label">내용</label>
-        <textarea class="form-control" name="content"></textarea>
+        <small class="invalid-feedback">이름을 입력하세요.</small>
+        <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
+        <textarea id="summernote" class="summernote" name="content" th:field="*{content}" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">작성</button>
     <a href="/board" type="submit" class="btn btn-danger">취소</a>
 </form>
 <div th:replace="fragments.html :: footer"></div>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            placeholder: '내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 삭제됩니다.<br/>신고가 누적될 시 처벌을 받을 수 있습니다.',
+            tabsize: 2,
+            maxHeight: null,
+            minHeight: null,
+            lang : 'ko-KR',
+            height: 500,
+            prettifyHtml:false
+        });
+    });
+</script>
 </body>
 </html>

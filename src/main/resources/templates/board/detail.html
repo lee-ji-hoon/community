@@ -21,8 +21,7 @@
 </div>
 <div class="p-3">
     <label for="content">내용</label>
-    <input type="text" id="content" name="content" class="form-control"
-           value="10" th:value="${board.content}" readonly>
+    <div id="content" name="content" th:utext="${board.content}"></div>
 </div>
 </div>
 <div class="row text-center" style="width: auto">
@@ -38,6 +37,5 @@
     </th:block>
 </div>
 <div th:replace="fragments.html :: footer"></div>
-
 </body>
 </html>
