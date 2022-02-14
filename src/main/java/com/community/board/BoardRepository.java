@@ -8,4 +8,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Board findById(long id);
 
     Board findAllById(long id);
+
+    int findByPageView(long id);
 }
