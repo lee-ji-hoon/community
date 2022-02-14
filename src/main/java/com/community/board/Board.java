@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,11 +22,16 @@ public class Board {
 
     private String boardTitle;
 
+    @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
+    @NotBlank
     private String writer;
 
     private LocalDateTime uploadTime;
+
+    private LocalDateTime updateTime;
 }
