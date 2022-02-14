@@ -25,6 +25,7 @@ public class Board {
     @NotBlank
     private String title;
 
+    @NotBlank
     private String content;
 
     @NotBlank

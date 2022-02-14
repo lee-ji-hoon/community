@@ -11,6 +11,7 @@ public class BoardForm {
     @Length(min = 3, max = 20)
     private String title;
 
+    @NotBlank
     private String content;
 
     @NotBlank
