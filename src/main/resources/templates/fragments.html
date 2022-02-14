@@ -86,12 +86,12 @@
 
 <footer th:fragment="footer">
     <div class="row justify-content-center">
-        <small class="d-block mb-3 text-muted">&copy; 2022 멀티커뮤니티 이지훈 가준영 배성현</small>
+        <small class="d-block mb-3 text-muted">&copy; 2022 멀티커뮤니티 이지훈 가준영</small>
     </div>
 </footer>
 
 <div th:fragment="settings-menu (currentMenu)" class="list-group">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile}">프로필</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile-settings}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">패스워드</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">관심 주제</a>
