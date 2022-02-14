@@ -48,13 +48,13 @@ public class BoardController {
 
     @GetMapping("/board/detail/{boardId}")
     public String boardDetail(@PathVariable long boardId,@CurrentUser Account account, Model model) {
+        boardService.pageViewUpdate(boardId);
         Board detail = boardRepository.findAllById(boardId);
         model.addAttribute("board", detail);
         model.addAttribute("account", account);
         return "board/detail";
     }
 
-    // TODO 게시글 업데이트 구현해야함.
     @GetMapping("/board/{boardId}/edit")
     public String boardUpdateForm(@PathVariable long boardId, Model model) {
         Board board = boardRepository.findAllById(boardId);
@@ -67,7 +67,6 @@ public class BoardController {
         model.addAttribute("board", board);
         return "redirect:/board/detail/{boardId}";
     }
-    // TODO 게시글 삭제 구현해야함.
     @GetMapping("/board/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId, RedirectAttributes redirectAttributes){
         Board board = boardRepository.findAllById(boardId);

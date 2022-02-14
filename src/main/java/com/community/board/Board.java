@@ -33,6 +33,8 @@ public class Board {
     @NotBlank
     private String writer;
 
+    private Integer pageView;
+
     private LocalDateTime uploadTime;
 
     private LocalDateTime updateTime;

@@ -16,6 +16,8 @@
             <th scope="col">게시판</th>
             <th scope="col">제목</th>
             <th scope="col">작성자</th>
+            <th scope="col">작성일</th>
+            <th scope="col">조회수</th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +26,8 @@
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.boardTitle}">게시판</a></th>
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.title}">글제목</a></th>
             <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.writer}">작성자</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.uploadTime}">작성일</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.pageView}">조회수</a></th>
         </tr>
         </tbody>
     </table>
