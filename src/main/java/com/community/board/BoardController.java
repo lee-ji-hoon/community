@@ -68,8 +68,11 @@ public class BoardController {
         return "redirect:/board/detail/{boardId}";
     }
     // TODO 게시글 삭제 구현해야함.
-    public String boardDelete(){
-        return "board/delete";
+    @GetMapping("/board/{boardId}/delete")
+    public String boardDelete(@PathVariable long boardId, RedirectAttributes redirectAttributes){
+        Board board = boardRepository.findAllById(boardId);
+        boardRepository.delete(board);
+        return "redirect:/board";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.
