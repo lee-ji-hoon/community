@@ -8,6 +8,8 @@ import com.community.profile.form.Notifications;
 import com.community.profile.form.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +36,7 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
+    private final JavaMailSender javaMailSender;
 
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
@@ -131,5 +134,15 @@ public class AccountService implements UserDetailsService {
         account.setNickname(nickname);
         accountRepository.save(account);
         login(account);
+    }
+
+    public void sendLoginLink(Account account) {
+        account.generateEmailCheckToken();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(account.getEmail());
+        simpleMailMessage.setSubject("멀티 커뮤니티, 로그인 링크");
+        simpleMailMessage.setText("/email-login-view?token=" + account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+        javaMailSender.send(simpleMailMessage);
     }
 }
