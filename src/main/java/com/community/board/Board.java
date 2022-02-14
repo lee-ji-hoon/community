@@ -2,6 +2,7 @@ package com.community.board;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,6 +27,7 @@ public class Board {
     private String title;
 
     @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @NotBlank
