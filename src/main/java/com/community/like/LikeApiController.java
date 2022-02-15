@@ -1,6 +1,7 @@
 package com.community.like;
 
 import com.community.account.Account;
+import com.community.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class LikeApiController {
 
         @PostMapping("/board/detail/{boardId}/like")
         public ResponseEntity<String> addLike(
-                @AuthenticationPrincipal Account account,
+                @CurrentUser Account account,
                 @PathVariable Long boardId) {
 
             boolean result = false;
