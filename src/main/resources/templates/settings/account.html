@@ -19,7 +19,7 @@
                     <h2 class="col-12">닉네임 변경</h2>
                 </div>
                 <div class="row">
-                    <form class="needs-validation col-12" th:object="${nicknameForm}" th:action="@{/settings/account}" method="post" novalidate>
+                    <form class="needs-validation col-12" th:object="${accountForm}" th:action="@{/settings/account}" method="post" novalidate>
                         <div class="alert alert-warning" role="alert">
                             닉네임을 변경하면 프로필 페이지 링크도 바뀝니다!
                         </div>
@@ -36,19 +36,40 @@
                         </div>
                     </form>
                 </div>
+
                 <div class="dropdown-divider"></div>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h2 class="text-danger">계정 삭제</h2>
-                        <div class="alert alert-danger" role="alert">
-                            이 계정은 삭제할 수 없습니다.
+                    <form class="needs-validation col-12" th:object="${withdrawForm}" th:action="@{/settings/accountDelete}" method="post" novalidate>
+                        <div class="col-sm-12">
+                            <h2 class="text-danger">계정 삭제</h2>
+
+                            <div class="form-group">
+                                <label for="checkPassword">비밀번호 확인</label>
+                                <input id="checkPassword" type="password" th:field="*{checkPassword}" class="form-control"
+                                       aria-describedby="checkPasswordHelp" required min="8" max="50">
+                                <div th:if="${withdraw_message}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    <small class="form-text text-danger" th:text="${withdraw_message}">비밀번호 확인</small>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <small id="newPasswordHelp" class="form-text text-muted">
+                                    계정 삭제를 위해서는 현재 비밀번호를 입력이 필요합니다.
+                                </small>
+                                <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('checkPassword')}" th:errors="*{checkPassword}">checkPassword Error</small>
+                            </div>
+                            <div class="alert alert-danger" role="alert">
+                                한 번 삭제된 계정은 다시 복구가 불가능합니다.
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">계정 삭제</button>
+                            </div>
                         </div>
-                        <button class="btn btn-outline-danger disabled">계정 삭제</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-
         <div th:replace="fragments.html :: footer"></div>
     </div>
     <script th:replace="fragments.html :: form-validation"></script>
