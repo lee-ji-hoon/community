@@ -4,37 +4,64 @@
 <div th:replace="fragments.html :: main-nav"></div>
 
 <!-- content -->
-<div class="p-3">
-    <label for="id">글 ID</label>
-    <input type="text" id="id" name="id" class="form-control"
-           value="1" th:value="${board.id}" readonly>
-</div>
-<div class="p-3">
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" class="form-control"
-           value="상품A" th:value="${board.title}" readonly>
-</div>
-<div class="p-3">
-    <label for="writer">작성자</label>
-    <input type="text" id="writer" name="writer" class="form-control"
-           value="10000" th:value="${board.writer}"readonly>
-</div>
-<div class="p-3">
-    <label for="content">내용</label>
-    <div id="content" name="content" th:utext="${board.content}"></div>
-</div>
-</div>
-<div class="row text-center" style="width: auto">
-    <th:block th:if="${account.nickname == board.writer}">
-        <button class="btn btn-primary float-end"
-                onclick="location.href='board-write'"
-                th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.id})}'|"
-                type="button"> 글 수정</button>
-        <button class="btn btn-danger float-end"
-                onclick="location.href='board-write'"
-                th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.id})}'|"
-                type="button"> 글 삭제</button>
-    </th:block>
+<div class="p-5">
+    <div class="p-3 d-none">
+        <label for="id">글 ID</label>
+        <input type="text" id="id" name="id" class="form-control"
+               value="1" th:value="${board.id}" readonly>
+    </div>
+    <div class="p-3">
+        <h2 class="pt-1 pb-3" th:text="${board.title}"></h2>
+        <a class="text-muted mr-1" th:text="${board.writer}"></a>
+        <a class="text-muted mr-1"> | </a>
+        <th:block th:if="${board.updateTime != null}">
+            <a class="text-muted mr-1" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
+        </th:block>
+        <th:block th:if="${board.updateTime == null}">
+            <a class="text-muted mr-1" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+        </th:block>
+        <th:block th:if="${account.nickname == board.writer}">
+            <a class="text-muted mr-1"> | </a>
+            <a class="text-primary mr-1"
+                    onclick="location.href='board-write'"
+                    th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.id})}'|"
+                    type="button">수정</a>
+            <a class="text-muted mr-1"> | </a>
+            <a class="text-danger mr-1"
+                    onclick="location.href='board-write'"
+                    th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.id})}'|"
+                    type="button">삭제</a>
+        </th:block>
+        <!--<br>
+        <a class="text-muted mr-1"> 조회수 | </a>
+        <a class="text-muted mr-1" th:text="${board.pageView}"></a>-->
+    </div>
+    <hr>
+    <div class="container">
+        <div id="content" name="content" th:utext="${board.content}"></div>
+    </div>
+    <hr>
+    <button type="button" class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요</button>
+    <button type="button" class="btn btn-link text-danger">신고하기</button>
+    <hr>
+    <div class="bg-light">
+        <form>
+            <ul class="bg-light list-group list-group-flush">
+                <li class="list-group-item bg-light">
+                    <textarea style="resize: none" class="form-control" name="reply" rows="3"></textarea>
+                    <button type="submit" class="btn btn-dark mt-3">댓글 작성</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+    <hr>
+    <button class="btn btn-success float-end"
+            onclick="location.href='board-write'"
+            th:onclick="|location.href='@{/board}'|"
+            type="button"> 글 목록</button>
+    <div class="row text-center p-3" style="width: auto">
+
+    </div>
 </div>
 <div th:replace="fragments.html :: footer"></div>
 </body>
