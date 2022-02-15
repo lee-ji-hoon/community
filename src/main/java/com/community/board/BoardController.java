@@ -4,6 +4,7 @@ import com.community.account.Account;
 import com.community.account.CurrentUser;
 import com.community.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;

@@ -2,6 +2,10 @@ package com.community.board;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +85,13 @@ public class BoardService {
             msg = (diffTime) + "년 전";
         }
         return msg;
+    }
+
+    public Page<Board> sortBoard() {
+        Sort sort = Sort.by("id").descending();
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        Page<Board> result = boardRepository.findAll(pageable);
+        return result;
     }
 
 }
