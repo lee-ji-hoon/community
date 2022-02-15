@@ -28,12 +28,14 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+    // 회원가입 진입
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
         return "account/sign-up";
     }
 
+    // 회원가입 요청
     @PostMapping("/sign-up")
     public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors) {
         if (errors.hasErrors()) {
@@ -45,6 +47,7 @@ public class AccountController {
         return "redirect:/";
     }
 
+    // 이메일 토큰 확인 페이지
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
@@ -65,12 +68,14 @@ public class AccountController {
         return "account/checked-email";
     }
 
+    // 인증메일 재발송 페이지
     @GetMapping("/check-email")
     public String checkEmail(@CurrentUser Account account, Model model) {
         model.addAttribute("email", account.getEmail());
         return "account/check-email";
     }
 
+    // 인증메일 재발송
     @GetMapping("/resend-confirm-email")
     public String resendConfirmEmail(@CurrentUser Account account, Model model) {
         if (!account.canSendConfirmEmail()) {
@@ -83,6 +88,7 @@ public class AccountController {
         return "redirect:/";
     }
 
+    // 프로필 진입
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
         Account byNickname = accountRepository.findByNickname(nickname);
@@ -95,11 +101,13 @@ public class AccountController {
         return "account/profile";
     }
 
+    // 이메일 로그인
     @GetMapping("/email-login")
     public String sendEmailLoginLinkView() {
         return "account/email-login";
     }
 
+    // 이메일 로그인 요청
     @PostMapping("/email-login")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes redirectAttributes) {
 
@@ -120,6 +128,7 @@ public class AccountController {
         return "redirect:/email-login";
     }
 
+    // 이메일 로그인 요청 후 페이지
     @GetMapping("/email-login-view")
     public String EmailLoginView(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);

@@ -46,6 +46,7 @@ public class Account {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
+    // 임시 알림 설정
     private boolean studyCreatedByEmail;
 
     private boolean studyCreatedByWeb = true;
@@ -57,21 +58,26 @@ public class Account {
     private boolean studyUpdatedByEmail;
 
     private boolean studyUpdatedByWeb = true;
+    // 알림 설정 끝
 
+    // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
         this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
-    public void completeSignUp() {
+    // 이메일인증까지 완료한 회원
+    public void completeEmailCheck() {
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
     }
 
+    // 이메일 체크 토큰 확인
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
     }
 
+    // 이메일 1시간마다만 보내지게끔
     public boolean canSendConfirmEmail() {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }

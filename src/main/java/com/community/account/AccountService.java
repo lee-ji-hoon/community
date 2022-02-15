@@ -38,6 +38,7 @@ public class AccountService implements UserDetailsService {
     private final AppProperties appProperties;
     private final JavaMailSender javaMailSender;
 
+    // 회원가입
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -46,6 +47,7 @@ public class AccountService implements UserDetailsService {
         return newAccount;
     }
 
+    // 회원가입 내용 저장
     private Account saveNewAccount(@Valid SignUpForm signUpForm) {
         Account account = Account.builder()
                 .email(signUpForm.getEmail())
@@ -58,6 +60,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
+    // 이메일 인증 메시지 보내기
     public void sendSignUpConfirmEmail(Account newAccount) {
         Context context = new Context();
         context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
@@ -78,6 +81,7 @@ public class AccountService implements UserDetailsService {
         emailService.sendEmail(emailMessage);
     }
 
+    // 로그인
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
@@ -86,11 +90,13 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    // 회원가입 성공 -> 자동 로그인
     public void completeSignUp(Account account) {
-        account.completeSignUp();
+        account.completeEmailCheck();
         login(account);
     }
 
+    // 이메일 또는 닉네임 로그인
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
@@ -105,6 +111,7 @@ public class AccountService implements UserDetailsService {
         return new UserAccount(account);
     }
 
+    // 프로필 업데이트
     public void updateProfile(Account account, Profile profile) {
         account.setUrl(profile.getUrl());
         account.setBio(profile.getBio());
@@ -115,11 +122,13 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
+    // 비밀번호 업데이트
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 
+    // 알림설정 업데이트
     public void updateNotifications(Account account, Notifications notifications) {
         account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
@@ -130,12 +139,14 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
+    // 닉네임 업데이트
     public void updateNickname(Account account, String nickname) {
         account.setNickname(nickname);
         accountRepository.save(account);
         login(account);
     }
 
+    // 로그인 링크 보내기
     public void sendLoginLink(Account account) {
         account.generateEmailCheckToken();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

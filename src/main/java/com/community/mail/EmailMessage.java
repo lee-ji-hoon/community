@@ -7,10 +7,10 @@ import lombok.Data;
 @Builder
 public class EmailMessage {
 
-    private String to;
+    private String to; // 누구에게
 
-    private String subject;
+    private String subject; // 주제목
 
-    private String message;
+    private String message; // 내용
 
 }
