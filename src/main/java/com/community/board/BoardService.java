@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 @Slf4j
@@ -15,6 +18,11 @@ import java.time.LocalDateTime;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    public static final int SEC = 60;
+    public static final int MIN = 60;
+    public static final int HOUR = 24;
+    public static final int DAY = 30;
+    public static final int MONTH = 12;
 
     public Board saveNewBoard(@Valid BoardForm boardForm) {
         Board board = Board.builder()
@@ -44,6 +52,35 @@ public class BoardService {
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);
+    }
+
+    public String boardDateTime(LocalDateTime localDateTime){
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+
+        long curTime = System.currentTimeMillis();
+        long regTime = date.getTime();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = null;
+        if (diffTime < BoardService.SEC) {
+            // sec
+            msg = diffTime + "초 전";
+        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
+            // min
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
+            // hour
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
+            // day
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
+            // day
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
     }
 
 }

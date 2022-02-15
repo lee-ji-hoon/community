@@ -26,6 +26,7 @@ public class BoardController {
     public String boardList(Model model) {
         List<Board> findAllBoard = boardRepository.findAll();
         model.addAttribute("boards", findAllBoard);
+        model.addAttribute("service", boardService);
         return "board/board-list";
     }
 
