@@ -33,8 +33,11 @@
     <div class="mb-3">
       <textarea id="summernote" class="summernote" name="content" th:field="*{content}" th:utext="${board.content}" required></textarea>
     </div>
-    <button type="submit" class="btn btn-primary">작성</button>
-    <a href="/board" type="submit" class="btn btn-danger">취소</a>
+    <button type="submit" class="btn btn-success">수정 완료</button>
+    <button class="btn btn-danger float-end"
+            onclick="location.href='board-write'"
+            th:onclick="|location.href='@{/board/detail/{boardId}(boardId=${board.id})}'|"
+            type="button">돌아가기</button>
   </form>
 </div>
 <div th:replace="fragments.html :: footer"></div>
