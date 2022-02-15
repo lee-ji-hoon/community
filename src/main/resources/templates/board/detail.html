@@ -15,9 +15,14 @@
            value="상품A" th:value="${board.title}" readonly>
 </div>
 <div class="p-3">
+    <label for="title">조회수</label>
+    <input type="text" id="pageView" name="pageView" class="form-control"
+           value="상품A" th:value="${board.pageView}" readonly>
+</div>
+<div class="p-3">
     <label for="writer">작성자</label>
     <input type="text" id="writer" name="writer" class="form-control"
-           value="10000" th:value="${board.writer}"readonly>
+           value="10000" th:value="${board.writer}" readonly>
 </div>
 <div class="p-3">
     <label for="content">내용</label>

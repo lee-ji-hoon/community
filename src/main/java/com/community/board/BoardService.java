@@ -22,7 +22,7 @@ public class BoardService {
                 .content(boardForm.getContent())
                 .boardTitle(boardForm.getBoardTitle())
                 .pageView(0)
-                .uploadTime(LocalDateTime.now().minusHours(1))
+                .uploadTime(LocalDateTime.now())
                 .writer(boardForm.getWriter())
                 .build();
         return boardRepository.save(board);
@@ -32,10 +32,9 @@ public class BoardService {
         Board board = boardRepository.findAllById(boardId);
         board.setTitle(boardForm.getTitle());
         board.setBoardTitle(boardForm.getBoardTitle());
-        board.setPageView(0);
         board.setContent(boardForm.getContent());
         board.setWriter(boardForm.getWriter());
-        board.setUpdateTime(LocalDateTime.now().minusHours(1));
+        board.setUpdateTime(LocalDateTime.now());
 
         return boardRepository.save(board);
     }
@@ -45,6 +44,7 @@ public class BoardService {
         pageView += 1;
         Board board = boardRepository.findAllById(boardId);
         board.setPageView(pageView);
+        boardRepository.save(board);
     }
 
 }
