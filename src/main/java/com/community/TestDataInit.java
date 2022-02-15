@@ -25,7 +25,10 @@ public class TestDataInit {
 
         if (!accountRepository.existsByStudentId("17-100000")) {
             boardRepository.save(new Board(null, "자유게시판", "title", "content", "writer",0, LocalDateTime.now().minusHours(1), null));
-            accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"), true, "asdf", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null, null, null, null, null));
+            accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"),
+                    true, "asdf", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
+                    null, null, null, null, null, true, true,
+                    true, true, true, true));
         }
     }
 }
