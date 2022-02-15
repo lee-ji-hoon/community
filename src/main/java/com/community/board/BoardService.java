@@ -40,10 +40,9 @@ public class BoardService {
     }
 
     public void pageViewUpdate(Long boardId){
-        int pageView = boardRepository.findByPageView(boardId);
-        pageView += 1;
         Board board = boardRepository.findAllById(boardId);
-        board.setPageView(pageView);
+        Integer page = board.getPageView();
+        board.setPageView(++page);
         boardRepository.save(board);
     }
 
