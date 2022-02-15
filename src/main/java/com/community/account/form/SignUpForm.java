@@ -16,6 +16,7 @@ public class SignUpForm {
     private String nickname;
 
     @NotBlank
+    @Pattern(regexp = "\\d{2}-\\d{4,10}$")
     private String studentId;
 
     @Email
@@ -27,6 +28,8 @@ public class SignUpForm {
     private String password;
 
     @NotBlank
+    @Length(min = 2, max = 20)
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣]{2,20}$")
     private String username;
 
 }

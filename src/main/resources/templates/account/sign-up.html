@@ -16,22 +16,22 @@
                 <div class="form-group">
                     <label for="username">이름</label>
                     <input id="username" type="text" th:field="*{username}" class="form-control"
-                           placeholder="username" aria-describedby="usernameHelp" required minlength="3" maxlength="20">
+                           placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$">
                     <small id="usernameHelp" class="form-text text-muted">
                         이름을 입력해주세요
                     </small>
-                    <small class="invalid-feedback">이름을 입력하세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</small>
+                    <small class="invalid-feedback">이름을 양식에 맞게 입력해주세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</small>
                 </div>
 
                 <div class="form-group">
                     <label for="nickname">닉네임</label>
                     <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-                           placeholder="nickname" aria-describedby="nicknameHelp" required minlength="3" maxlength="20">
+                           placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$">
                     <small id="nicknameHelp" class="form-text text-muted">
                         공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
                     </small>
-                    <small class="invalid-feedback">닉네임을 입력하세요.</small>
+                    <small class="invalid-feedback">닉네임을 양식에 맞게 입력해주세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
                 </div>
 
@@ -42,19 +42,19 @@
                     <small id="emailHelp" class="form-text text-muted">
                         인증이 필요하므로 사용하는 이메일로 입력해주시기 바랍니다.
                     </small>
-                    <small class="invalid-feedback">이메일을 입력하세요.</small>
+                    <small class="invalid-feedback">이메일을 양식에 맞게 입력해주세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
                 </div>
 
                 <div class="form-group">
                     <label for="studentId">학번</label>
                     <input id="studentId" type="text" th:field="*{studentId}" class="form-control"
-                           placeholder="17-100459" aria-describedby="studentIdHelp" required>
+                           placeholder="17-100459" aria-describedby="studentIdHelp" required pattern="\d{2}-\d{2,10}$">
                     <small id="studentIdHelp" class="form-text text-muted">
                         예시) 17-100459 <br>
                         위의 예시처럼 작생해주시기 바랍니다.
                     </small>
-                    <small class="invalid-feedback">학번을 입력하세요.</small>
+                    <small class="invalid-feedback">학번을 양식에 맞게 입력해주세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}">StudentId Error</small>
                 </div>
 
@@ -65,7 +65,7 @@
                     <small id="passwordHelp" class="form-text text-muted">
                         8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
                     </small>
-                    <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                    <small class="invalid-feedback">패스워드를 양식에 맞게 입력해주세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
                 </div>
 
