@@ -96,10 +96,10 @@ public class BoardService {
         return result;
     }
 
-    public List<Board> sortBoardTitle(String boardTitle) {
-        List<Board> result = boardRepository.findAllByBoardTitle(boardTitle);
-        return result;
-    }
+    public List<Board> searchPosts(String keyword) {
+        List<Board> boards = boardRepository.findByTitle(keyword);
 
+        return boards;
+    }
 
 }

@@ -2,14 +2,10 @@ package com.community.board;
 
 import com.community.account.Account;
 import com.community.account.CurrentUser;
-import com.community.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -40,6 +36,7 @@ public class BoardController {
         model.addAttribute(new BoardForm());
         return "board/board-write";
     }
+
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
     public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes) {
@@ -50,13 +47,15 @@ public class BoardController {
         redirectAttributes.addAttribute("boardId", savedBoard.getId());
         return "redirect:/board/detail/{boardId}";
     }
+
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
-    public String boardDetail(@PathVariable long boardId,@CurrentUser Account account, Model model) {
+    public String boardDetail(@PathVariable long boardId, @CurrentUser Account account, Model model) {
         boardService.pageViewUpdate(boardId);
         Board detail = boardRepository.findAllById(boardId);
         model.addAttribute("board", detail);
         model.addAttribute("account", account);
+        model.addAttribute("service", boardService);
         return "board/detail";
     }
 
@@ -68,6 +67,7 @@ public class BoardController {
         model.addAttribute("board", board);
         return "board/edit";
     }
+
     // 게시글 수정 후 {boardId}로 리다이렉트
     @PostMapping("/board/detail/{boardId}")
     public String boardUpdate(@PathVariable long boardId, BoardForm boardForm, Model model) {
@@ -75,9 +75,10 @@ public class BoardController {
         model.addAttribute("board", board);
         return "redirect:/board/detail/{boardId}";
     }
+
     // 게시물 삭제
     @GetMapping("/board/{boardId}/delete")
-    public String boardDelete(@PathVariable long boardId){
+    public String boardDelete(@PathVariable long boardId) {
         Board board = boardRepository.findAllById(boardId);
         boardRepository.delete(board);
         return "redirect:/board";
