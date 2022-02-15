@@ -9,7 +9,17 @@
             th:onclick="|location.href='@{/board/write}'|"
             type="button">
         글 작성</button>
-
+    <table class="table">
+        <thead>
+        <tr>
+            <th><a class="btn btn-default" href="board" th:href="@{/board}">전체게시판</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='자유게시판')}">자유게시판</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='정보공유게시판')}">정보공유게시판</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='신입생게시판')}">신입생게시판</a></th>
+            <th><a class="btn btn-default" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='졸업생게시판')}">졸업생게시판</a></th>
+        </tr>
+        </thead>
+    </table>
     <table class="table">
         <thead>
         <tr>

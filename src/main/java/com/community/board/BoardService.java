@@ -13,7 +13,9 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -93,5 +95,11 @@ public class BoardService {
         Page<Board> result = boardRepository.findAll(pageable);
         return result;
     }
+
+    public List<Board> sortBoardTitle(String boardTitle) {
+        List<Board> result = boardRepository.findAllByBoardTitle(boardTitle);
+        return result;
+    }
+
 
 }
