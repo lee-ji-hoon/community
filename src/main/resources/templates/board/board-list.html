@@ -9,6 +9,7 @@
             th:onclick="|location.href='@{/board/write}'|"
             type="button">
         글 작성</button>
+
     <table class="table">
         <thead>
         <tr>
@@ -31,6 +32,14 @@
         </tr>
         </tbody>
     </table>
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="">이전</a></li>
+        <li class="page-item"><a class="page-link" href="">1</a></li>
+        <li class="page-item"><a class="page-link" href="">2</a></li>
+        <li class="page-item"><a class="page-link" href="">3</a></li>
+        <li><a class="page-link" href="">다음</a></li>
+    </ul>
+
 </div>
 <div th:replace="fragments.html :: footer"></div>
 </body>
