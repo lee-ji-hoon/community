@@ -41,17 +41,17 @@
     </thead>
     <tbody>
     <tr th:each="board : ${board}">
-      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.id}">글번호</a></th>
-      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.boardTitle}">게시판</a></th>
-      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.title}">글제목</a></th>
-      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.writer}">작성자</a></th>
+      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.bid}">글번호</a></th>
+      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.boardTitle}">게시판</a></th>
+      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}">글제목</a></th>
+      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.writer}">작성자</a></th>
       <th:block th:if="${board.updateTime != null}">
-        <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|">작성일</a></th>
+        <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|">작성일</a></th>
       </th:block>
       <th:block th:if="${board.updateTime == null}">
-        <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${service.boardDateTime(board.uploadTime)}">작성일</a></th>
+        <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}">작성일</a></th>
       </th:block>
-      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.id})}" th:text="${board.pageView}">조회수</a></th>
+      <th><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.pageView}">조회수</a></th>
     </tr>
     </tbody>
   </table>
