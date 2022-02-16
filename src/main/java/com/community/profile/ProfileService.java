@@ -3,7 +3,7 @@ package com.community.profile;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
-import com.community.profile.form.Notifications;
+import com.community.profile.form.NotificationsForm;
 import com.community.profile.form.ProfileForm;
 import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class ProfileService {
     }
 
     // 알림설정 업데이트
-    public void updateNotifications(Account account, Notifications notifications) {
+    public void updateNotifications(Account account, NotificationsForm notifications) {
         account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
         account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());

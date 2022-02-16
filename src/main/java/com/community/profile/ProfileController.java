@@ -1,6 +1,5 @@
 package com.community.profile;
 
-import com.community.account.AccountService;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
@@ -113,13 +112,13 @@ public class ProfileController {
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Notifications(account));
+        model.addAttribute(new NotificationsForm(account));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
     // 알림 설정 변경 요청
     @PostMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors,
+    public String updateNotifications(@CurrentUser Account account, @Valid NotificationsForm notifications, Errors errors,
                                       Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
