@@ -70,7 +70,7 @@ public class ProfileService {
     public void withdraw(Account account, String checkPassword) throws Exception {
         Account deleteNickname = accountRepository.findByNickname(account.getNickname());
         if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
-            boardRepository.deleteAllByWriter(account.getNickname());
+            boardRepository.deleteAllByWriterId(account.getId());
             accountRepository.delete(deleteNickname);
         }
     }

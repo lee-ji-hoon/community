@@ -1,5 +1,7 @@
 package com.community.board;
 
+import com.community.account.AccountRepository;
+import com.community.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +31,8 @@ public class BoardService {
     public static final int DAY = 30;
     public static final int MONTH = 12;
 
-    public Board saveNewBoard(@Valid BoardForm boardForm) {
+    public Board saveNewBoard(@Valid BoardForm boardForm, Account account) {
+
         Board board = Board.builder()
                 .title(boardForm.getTitle())
                 .content(boardForm.getContent())
@@ -37,6 +40,7 @@ public class BoardService {
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .writer(boardForm.getWriter())
+                .writerId(account.getId()) // 아이디 추가했어 확인 하면 주석 자워도 돼
                 .build();
         return boardRepository.save(board);
     }

@@ -48,11 +48,11 @@ public class BoardController {
 
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
-    public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes) {
+    public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         if (errors.hasErrors()) {
             return "board/board-write";
         }
-        Board savedBoard = boardService.saveNewBoard(boardForm);
+        Board savedBoard = boardService.saveNewBoard(boardForm, account);
         redirectAttributes.addAttribute("boardId", savedBoard.getBid());
         return "redirect:/board/detail/{boardId}";
     }
