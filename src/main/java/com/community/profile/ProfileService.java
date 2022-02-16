@@ -5,11 +5,15 @@ import com.community.account.AccountRepository;
 import com.community.account.AccountService;
 import com.community.profile.form.Notifications;
 import com.community.profile.form.ProfileForm;
+import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -62,5 +66,23 @@ public class ProfileService {
          if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
              accountRepository.delete(deleteNickname);
         }
+    }
+
+    // 태그 추가
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+    }
+
+    // 태그 가져오기
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getTags();
+    }
+
+    // 태그 지우기
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().remove(tag));
     }
 }
