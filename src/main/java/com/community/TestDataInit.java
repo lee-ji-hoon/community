@@ -29,5 +29,13 @@ public class TestDataInit {
                     null, null, null, null, null, null, true, true,
                     true, true, true, true, null));
         }
+
+        if (!accountRepository.existsByStudentId("17-100001")) {
+            // boardRepository.save(new Board(null, "자유게시판", "title", "content", "tester", null, 0, LocalDateTime.now().minusHours(1), null));
+            accountRepository.save(new Account(null, "1240@naver.com", "1240", "17-100001", "사람사람", passwordEncoder.encode("12401240"),
+                    true, "asdf1", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
+                    null, null, null, null, null, null, true, true,
+                    true, true, true, true, null));
+        }
     }
 }
