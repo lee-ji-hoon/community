@@ -8,6 +8,7 @@ import com.community.profile.form.*;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.tag.Tag;
+import com.community.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,8 +43,8 @@ public class ProfileController {
     private static final String SETTINGS_WITHDRAW_VIEW_NAME = "settings/withdraw";
     private static final String SETTINGS_WITHDRAW_URL = "/settings/withdraw";
 
-    private static final String SETTINGS_TAG_VIEW_NAME = "settings/tag";
-    private static final String SETTINGS_TAG_URL = "/settings/tag";
+    private static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+    private static final String SETTINGS_TAGS_URL = "/settings/tags";
 
     private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
@@ -174,25 +177,38 @@ public class ProfileController {
         }
     }
 
-    // 태그 페이지
-    @GetMapping(SETTINGS_TAG_URL)
-    public String tagForm(@CurrentUser Account account, Model model) {
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTags(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        return SETTINGS_TAG_VIEW_NAME;
+        Set<Tag> tags = profileService.getTags(account);
+        model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+        return SETTINGS_TAGS_VIEW_NAME;
     }
 
-    @PostMapping("/settings/tag/add")
+    @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
-    public ResponseEntity offerTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagName();
-        Tag byTitle = tagRepository.findByTitle(title);
-        if (byTitle == null) byTitle = tagRepository.save(Tag.builder()
-                .title(tagForm.getTagName())
-                .build());
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
+            tag = tagRepository.save(Tag.builder().title(title).build());
+        }
 
-        accountService.addTag(account, byTitle);
+        profileService.addTag(account, tag);
         return ResponseEntity.ok().build();
+    }
 
+    @PostMapping(SETTINGS_TAGS_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        profileService.removeTag(account, tag);
+        return ResponseEntity.ok().build();
     }
 
     /**
