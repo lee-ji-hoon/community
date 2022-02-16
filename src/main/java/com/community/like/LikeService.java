@@ -19,7 +19,7 @@ public class LikeService {
 
         //중복 좋아요 방지
         if(isNotAlreadyLike(account, board)) {
-            likeRepository.save(new Like(board, account));
+            likeRepository.save(new Likes(board, account));
             return true;
         }
         return false;

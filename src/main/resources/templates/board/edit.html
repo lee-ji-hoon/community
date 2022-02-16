@@ -5,7 +5,7 @@
 
 <!-- content -->
 <div class="p-5">
-  <form class="needs-validation container" action="/board/detail" th:action="@{/board/detail/{boardId}(boardId=${board.id})}" th:object="${board}" method="post">
+  <form class="needs-validation container" action="/board/detail" th:action="@{/board/detail/{boardId}(boardId=${board.bid})}" th:object="${board}" method="post">
 
     <div class="form-group">
       <label class="form-label">게시판 선택</label>
@@ -36,7 +36,7 @@
     <button type="submit" class="btn btn-success">수정 완료</button>
     <button class="btn btn-danger float-end"
             onclick="location.href='board-write'"
-            th:onclick="|location.href='@{/board/detail/{boardId}(boardId=${board.id})}'|"
+            th:onclick="|location.href='@{/board/detail/{boardId}(boardId=${board.bid})}'|"
             type="button">돌아가기</button>
   </form>
 </div>

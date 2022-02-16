@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class BoardService {
     }
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
-        Board board = boardRepository.findAllById(boardId);
+        Board board = boardRepository.findAllByBid(boardId);
         board.setTitle(boardForm.getTitle());
         board.setBoardTitle(boardForm.getBoardTitle());
         board.setContent(boardForm.getContent());
@@ -54,7 +53,7 @@ public class BoardService {
     }
 
     public void pageViewUpdate(Long boardId){
-        Board board = boardRepository.findAllById(boardId);
+        Board board = boardRepository.findAllByBid(boardId);
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);
@@ -90,7 +89,7 @@ public class BoardService {
     }
 
     public Page<Board> sortBoard() {
-        Sort sort = Sort.by("id").descending();
+        Sort sort = Sort.by("bid").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Board> result = boardRepository.findAll(pageable);
         return result;

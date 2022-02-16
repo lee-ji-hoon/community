@@ -12,19 +12,19 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Like {
+public class Likes {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
     private Board board;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     private Account account;
 
-    public Like(Board board, Account account) {
+    public Likes(Board board, Account account) {
         this.board = board;
         this.account = account;
     }
