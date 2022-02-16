@@ -1,11 +1,11 @@
 package com.community.account;
 
+import com.community.account.entity.Account;
 import com.community.account.form.SignUpForm;
 import com.community.config.AppProperties;
 import com.community.mail.EmailMessage;
 import com.community.mail.EmailService;
-import com.community.profile.form.Notifications;
-import com.community.profile.form.Profile;
+import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,6 +24,7 @@ import org.thymeleaf.context.Context;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -38,6 +39,7 @@ public class AccountService implements UserDetailsService {
     private final AppProperties appProperties;
     private final JavaMailSender javaMailSender;
 
+    // 회원가입
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -46,6 +48,7 @@ public class AccountService implements UserDetailsService {
         return newAccount;
     }
 
+    // 회원가입 내용 저장
     private Account saveNewAccount(@Valid SignUpForm signUpForm) {
         Account account = Account.builder()
                 .email(signUpForm.getEmail())
@@ -58,6 +61,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
+    // 이메일 인증 메시지 보내기
     public void sendSignUpConfirmEmail(Account newAccount) {
         Context context = new Context();
         context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
@@ -78,6 +82,7 @@ public class AccountService implements UserDetailsService {
         emailService.sendEmail(emailMessage);
     }
 
+    // 로그인
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account),
@@ -86,11 +91,13 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    // 회원가입 성공 -> 자동 로그인
     public void completeSignUp(Account account) {
-        account.completeSignUp();
+        account.completeEmailCheck();
         login(account);
     }
 
+    // 이메일 또는 닉네임 로그인
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
@@ -105,37 +112,7 @@ public class AccountService implements UserDetailsService {
         return new UserAccount(account);
     }
 
-    public void updateProfile(Account account, Profile profile) {
-        account.setUrl(profile.getUrl());
-        account.setBio(profile.getBio());
-        account.setOccupation(profile.getOccupation());
-        account.setLocation(profile.getLocation());
-        account.setProfileImage(profile.getProfileImage());
-
-        accountRepository.save(account);
-    }
-
-    public void updatePassword(Account account, String newPassword) {
-        account.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(account);
-    }
-
-    public void updateNotifications(Account account, Notifications notifications) {
-        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
-        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
-        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
-        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
-        accountRepository.save(account);
-    }
-
-    public void updateNickname(Account account, String nickname) {
-        account.setNickname(nickname);
-        accountRepository.save(account);
-        login(account);
-    }
-
+    // 로그인 링크 보내기
     public void sendLoginLink(Account account) {
         account.generateEmailCheckToken();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -144,5 +121,10 @@ public class AccountService implements UserDetailsService {
         simpleMailMessage.setText("/email-login-view?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         javaMailSender.send(simpleMailMessage);
+    }
+
+    public void addTag(Account account, Tag byTitle) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(byTitle));
     }
 }

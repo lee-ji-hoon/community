@@ -1,6 +1,6 @@
 package com.community.board;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

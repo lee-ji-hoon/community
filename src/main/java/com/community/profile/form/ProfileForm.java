@@ -1,12 +1,12 @@
 package com.community.profile.form;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Profile {
+public class ProfileForm {
 
     private String bio;
 
@@ -18,7 +18,7 @@ public class Profile {
 
     private String profileImage;
 
-    public Profile(Account account) {
+    public ProfileForm(Account account) {
         this.bio = account.getBio();
         this.url = account.getUrl();
         this.occupation = account.getOccupation();
