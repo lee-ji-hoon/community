@@ -3,6 +3,8 @@ package com.community.profile;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
+import com.community.board.Board;
+import com.community.board.BoardRepository;
 import com.community.like.LikeRepository;
 import com.community.like.Likes;
 import com.community.profile.form.NotificationsForm;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,6 +29,7 @@ public class ProfileService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
+    private final BoardRepository boardRepository;
 
     // 프로필 업데이트
     public void updateProfile(Account account, ProfileForm profile) {
@@ -65,9 +69,9 @@ public class ProfileService {
     // 회원탈퇴
     public void withdraw(Account account, String checkPassword) throws Exception {
         Account deleteNickname = accountRepository.findByNickname(account.getNickname());
-         if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
-             // account.setBoardList(null);
-             accountRepository.delete(deleteNickname);
+        if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
+            boardRepository.deleteAllByWriter(account.getNickname());
+            accountRepository.delete(deleteNickname);
         }
     }
 

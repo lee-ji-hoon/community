@@ -59,9 +59,6 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "account")
-//    private List<Board> boardList = new ArrayList<>();
-
     @Lob
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
