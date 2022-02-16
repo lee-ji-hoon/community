@@ -1,20 +1,21 @@
 package com.community.profile;
 
+import com.community.account.AccountService;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
 import com.community.profile.form.*;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
+import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -39,8 +40,13 @@ public class ProfileController {
     private static final String SETTINGS_WITHDRAW_VIEW_NAME = "settings/withdraw";
     private static final String SETTINGS_WITHDRAW_URL = "/settings/withdraw";
 
+    private static final String SETTINGS_TAG_VIEW_NAME = "settings/tag";
+    private static final String SETTINGS_TAG_URL = "/settings/tag";
+
     private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
+    private final AccountService accountService;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -56,14 +62,14 @@ public class ProfileController {
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Profile(account));
+        model.addAttribute(new ProfileForm(account));
 
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 
     // 프로필 변경 요청
     @PostMapping(SETTINGS_PROFILE_URL)
-    public String updateProfile(@CurrentUser Account account, @Valid Profile profile, Errors errors,
+    public String updateProfile(@CurrentUser Account account, @Valid ProfileForm profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -151,23 +157,42 @@ public class ProfileController {
 
     // 회원 탈퇴 요청
     @PostMapping(SETTINGS_WITHDRAW_URL)
-    public String deleteAccount(@CurrentUser Account account, WithdrawForm withdrawForm,
-                                Errors errors, Model model, RedirectAttributes redirectAttributes) throws Exception {
+    public String withdrawAccount(@CurrentUser Account account, WithdrawForm withdrawForm,
+                                  Errors errors, Model model, RedirectAttributes redirectAttributes) throws Exception {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_WITHDRAW_VIEW_NAME;
         }
-
         profileService.withdraw(account, withdrawForm.getCheckPassword());
-        if(accountRepository.findByNickname(account.getNickname()) != null){
+        if (accountRepository.findByNickname(account.getNickname()) != null) {
             model.addAttribute(account);
             redirectAttributes.addFlashAttribute("withdraw_message", "비밀번호를 다시 확인해주세요.");
             return "redirect:" + SETTINGS_WITHDRAW_URL;
-        }
-        else {
+        } else {
             SecurityContextHolder.clearContext();
             return "redirect:/";
         }
+    }
+
+    // 태그 페이지
+    @GetMapping(SETTINGS_TAG_URL)
+    public String tagForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS_TAG_VIEW_NAME;
+    }
+
+    @PostMapping("/settings/tag/add")
+    @ResponseBody
+    public ResponseEntity offerTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagName();
+        Tag byTitle = tagRepository.findByTitle(title);
+        if (byTitle == null) byTitle = tagRepository.save(Tag.builder()
+                .title(tagForm.getTagName())
+                .build());
+
+        accountService.addTag(account, byTitle);
+        return ResponseEntity.ok().build();
+
     }
 
     /**

@@ -9,78 +9,92 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
     <!--  summernote 시작  -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <!--  summernote 끝  -->
+
     <style>
         .container {
             max-width: 100%;
+        }
+
+        .tagify-outside{
+            border: 0;
+            padding: 0;
+            margin: 0;
         }
     </style>
 </head>
 
 <nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="/" th:href="@{/}">
-        MainPage
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container-fluid" style="user-select: auto;">
+        <a class="navbar-brand" href="/" th:href="@{/}">
+            MainPage
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link active" th:href="@{/board}">
+                        커뮤니티
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link active" th:href="@{/study}">
+                        스터디
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">로그인</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/sign-up}">가입</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/notifications}">
+                        <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    </a>
+                </li>
 
-        </ul>
-
-        <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/login}">로그인</a>
-            </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/sign-up}">가입</a>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/notifications}">
-                    <i class="fa fa-bell-o" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link btn btn-outline-primary" th:href="@{/board/write}">
-                    <i class="fa fa-plus" aria-hidden="true"></i> 게시글 작성
-                </a>
-            </li>
-            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
-                         width="24" height="24" class="rounded border bg-light"></svg>
-                    <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
-                         width="24" height="24" class="rounded border"/>
-                </a>
-                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
-                    <h6 class="dropdown-header">
-                        <span sec:authentication="name">Username</span>
-                    </h6>
-                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
-                    <a class="dropdown-item" th:href="@{/board}">게시판</a>
-                    <a class="dropdown-item" >item</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
-                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                        <button class="dropdown-item" type="submit">로그아웃</button>
-                    </form>
-                </div>
-            </li>
-        </ul>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                             width="24" height="24" class="rounded border bg-light"></svg>
+                        <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
+                             width="24" height="24" class="rounded border"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+                        <h6 class="dropdown-header">
+                            <span sec:authentication="name">Username</span>
+                        </h6>
+                        <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
+                        <a class="dropdown-item" th:href="@{/board}">게시판</a>
+                        <a class="dropdown-item" >item</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
+                        <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                            <button class="dropdown-item" type="submit">로그아웃</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -94,7 +108,7 @@
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile-settings}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">패스워드</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">관심 주제</a>
+    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tag'}? active" href="#" th:href="@{/settings/tag}">관심 주제</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">활동 지역</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
     <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'withdraw'}? active" href="#" th:href="@{/settings/withdraw}">탈퇴</a>
