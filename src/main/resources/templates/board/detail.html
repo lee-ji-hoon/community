@@ -8,7 +8,7 @@
     <div class="p-3 d-none">
         <label for="id">글 ID</label>
         <input type="text" id="id" name="id" class="form-control"
-               value="1" th:value="${board.id}" readonly>
+               value="1" th:value="${board.bid}" readonly>
     </div>
     <div class="p-3">
         <h2 class="pt-1 pb-3" th:text="${board.title}"></h2>
@@ -24,12 +24,12 @@
             <a class="text-muted mr-1"> | </a>
             <a class="text-primary mr-1"
                     onclick="location.href='board-write'"
-                    th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.id})}'|"
+                    th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.bid})}'|"
                     type="button">수정</a>
             <a class="text-muted mr-1"> | </a>
             <a class="text-danger mr-1"
                     onclick="location.href='board-write'"
-                    th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.id})}'|"
+                    th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.bid})}'|"
                     type="button">삭제</a>
         </th:block>
         <!--<br>
@@ -41,7 +41,17 @@
         <div id="content" name="content" th:utext="${board.content}"></div>
     </div>
     <hr>
-    <button type="button" class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요</button>
+    <th:block th:if="${likes.isPresent()}">
+        <button type="button"
+                th:onclick="|location.href='@{/board/detail/{boardId}/like-cancel(boardId = ${board.bid})}'|"
+                class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요 취소 미구현</button>
+    </th:block>
+    <th:block th:if="${likes.isEmpty()}">
+        <button type="button"
+                th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
+                class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요</button>
+    </th:block>
+
     <button type="button" class="btn btn-link text-danger">신고하기</button>
     <hr>
     <div class="bg-light">
