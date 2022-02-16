@@ -1,18 +1,25 @@
 package com.community.account.entity;
 
+import com.community.tag.Tag;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
-@Builder @AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(unique = true)
@@ -44,7 +51,8 @@ public class Account {
 
     private String location;
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     // 임시 알림 설정
@@ -60,6 +68,10 @@ public class Account {
 
     private boolean studyUpdatedByWeb = true;
     // 알림 설정 끝
+
+    // 태크
+    @ManyToMany
+    private Set<Tag> tags;
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {

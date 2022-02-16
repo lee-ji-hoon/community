@@ -4,7 +4,7 @@ import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
 import com.community.profile.form.Notifications;
-import com.community.profile.form.Profile;
+import com.community.profile.form.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +22,7 @@ public class ProfileService {
     private final AccountService accountService;
 
     // 프로필 업데이트
-    public void updateProfile(Account account, Profile profile) {
+    public void updateProfile(Account account, ProfileForm profile) {
         account.setUrl(profile.getUrl());
         account.setBio(profile.getBio());
         account.setOccupation(profile.getOccupation());

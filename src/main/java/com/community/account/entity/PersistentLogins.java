@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 
 @Table(name = "persistent_logins")
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class PersistentLogins {
 
     @Id
