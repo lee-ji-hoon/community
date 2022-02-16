@@ -1,6 +1,6 @@
 package com.community;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

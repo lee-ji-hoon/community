@@ -1,6 +1,6 @@
 package com.community;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.board.Board;
 import com.community.board.BoardRepository;
@@ -9,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 @Component

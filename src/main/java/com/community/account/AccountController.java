@@ -1,5 +1,6 @@
 package com.community.account;
 
+import com.community.account.entity.Account;
 import com.community.account.form.SignUpForm;
 import com.community.account.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;

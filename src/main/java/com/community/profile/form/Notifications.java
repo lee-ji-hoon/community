@@ -1,6 +1,6 @@
 package com.community.profile.form;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

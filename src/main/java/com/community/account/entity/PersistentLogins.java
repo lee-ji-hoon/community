@@ -1,4 +1,4 @@
-package com.community.account;
+package com.community.account.entity;
 
 import lombok.Getter;
 import lombok.Setter;

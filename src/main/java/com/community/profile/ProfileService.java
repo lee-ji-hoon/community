@@ -1,6 +1,6 @@
 package com.community.profile;
 
-import com.community.account.Account;
+import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
 import com.community.profile.form.Notifications;
