@@ -14,7 +14,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,7 +36,8 @@ public class ProfileController {
     private static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     private static final String SETTINGS_ACCOUNT_URL = "/settings/account";
 
-    private static final String SETTINGS_DELETE_ACCOUNT_URL = "/settings/accountDelete";
+    private static final String SETTINGS_WITHDRAW_VIEW_NAME = "settings/withdraw";
+    private static final String SETTINGS_WITHDRAW_URL = "/settings/withdraw";
 
     private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
@@ -119,23 +119,15 @@ public class ProfileController {
         return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
     }
 
-    // 닉네임 변경 및 회원탈퇴 페이지
+    // 닉네임 변경 페이지
     @GetMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new AccountForm());
-        model.addAttribute(new WithdrawForm());
         return SETTINGS_ACCOUNT_VIEW_NAME;
     }
 
-    // 닉네임 변경
-
-    /**
-     * TODO
-     * 닉네임 변경이 정상적으로 작동하지만 같은 닉네임이나 유효하지 않은 닉네임의 경우 페이징 오류가뜸
-     * 1. 회원 탈퇴를 따로 둔다
-     * 2. 해결방법을 찾는다.
-     */
+    // 닉네임 변경 요청
     @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {
@@ -149,20 +141,28 @@ public class ProfileController {
         return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 
-    // 회원 탈퇴
-    @PostMapping(SETTINGS_DELETE_ACCOUNT_URL)
+    // 회원 탈퇴 페이지
+    @GetMapping(SETTINGS_WITHDRAW_URL)
+    public String withdrawAccountForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new WithdrawForm());
+        return SETTINGS_WITHDRAW_VIEW_NAME;
+    }
+
+    // 회원 탈퇴 요청
+    @PostMapping(SETTINGS_WITHDRAW_URL)
     public String deleteAccount(@CurrentUser Account account, WithdrawForm withdrawForm,
                                 Errors errors, Model model, RedirectAttributes redirectAttributes) throws Exception {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return SETTINGS_ACCOUNT_VIEW_NAME;
+            return SETTINGS_WITHDRAW_VIEW_NAME;
         }
 
         profileService.withdraw(account, withdrawForm.getCheckPassword());
         if(accountRepository.findByNickname(account.getNickname()) != null){
             model.addAttribute(account);
             redirectAttributes.addFlashAttribute("withdraw_message", "비밀번호를 다시 확인해주세요.");
-            return "redirect:" + SETTINGS_ACCOUNT_URL;
+            return "redirect:" + SETTINGS_WITHDRAW_URL;
         }
         else {
             SecurityContextHolder.clearContext();
