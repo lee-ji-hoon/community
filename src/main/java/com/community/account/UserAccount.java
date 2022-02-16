@@ -1,5 +1,6 @@
 package com.community.account;
 
+import com.community.account.entity.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
