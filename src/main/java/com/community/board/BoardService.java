@@ -96,6 +96,10 @@ public class BoardService {
         return result;
     }
 
+    public List<Board> findPostByWriterId(long writerId) {
+        return boardRepository.findByWriterId(writerId);
+    }
+
     public List<Board> searchPosts(String searchType, String keyword) {
 
         switch (searchType) {

@@ -62,7 +62,7 @@
                             <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
-                            <li><a class="dropdown-item" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}">작성한 게시물 보기</a></li>
+                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
                         </ul>
                     </li>
                 </ul>

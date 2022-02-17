@@ -131,16 +131,16 @@ public class BoardController {
         return "board/board-search";
     }
 
-    // 게시물 작성 후 detail 페이지로 Post
-    //@PostMapping("/board/detail")
-    /*public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
-        if (errors.hasErrors()) {
-            return "board/board-write";
-        }
-        Board savedBoard = boardService.saveNewBoard(boardForm, account);
-        redirectAttributes.addAttribute("boardId", savedBoard.getBid());
-        return "redirect:/board/detail/{boardId}";
-    }*/
+    @GetMapping("/board/search/{writerId}")
+    public String findUserPost(@PathVariable long writerId, Model model) {
+        List<Board> boards = boardService.findPostByWriterId(writerId);
+        model.addAttribute("board", boards);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("service", boardService);
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
+    }
+
 
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
