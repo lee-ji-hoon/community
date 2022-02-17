@@ -1,6 +1,5 @@
 package com.community.profile;
 
-import com.community.account.AccountService;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
@@ -9,6 +8,8 @@ import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.tag.Tag;
 import com.community.tag.TagRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,7 +51,7 @@ public class ProfileController {
     private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
-    private final AccountService accountService;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -110,13 +112,13 @@ public class ProfileController {
     @GetMapping(SETTINGS_NOTIFICATIONS_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new Notifications(account));
+        model.addAttribute(new NotificationsForm(account));
         return SETTINGS_NOTIFICATIONS_VIEW_NAME;
     }
 
     // 알림 설정 변경 요청
     @PostMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications, Errors errors,
+    public String updateNotifications(@CurrentUser Account account, @Valid NotificationsForm notifications, Errors errors,
                                       Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -178,10 +180,14 @@ public class ProfileController {
     }
 
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTags(@CurrentUser Account account, Model model) {
+    public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = profileService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
+
         return SETTINGS_TAGS_VIEW_NAME;
     }
 

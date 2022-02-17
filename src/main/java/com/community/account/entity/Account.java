@@ -1,11 +1,15 @@
 package com.community.account.entity;
 
+import com.community.board.Board;
+import com.community.like.Likes;
 import com.community.tag.Tag;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +20,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Account {
 
     @Id
@@ -50,6 +55,9 @@ public class Account {
     private String occupation;
 
     private String location;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Likes> likesList = new ArrayList<>();
 
     @Lob
     @Basic(fetch = FetchType.EAGER)
