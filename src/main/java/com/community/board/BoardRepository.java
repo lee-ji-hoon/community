@@ -10,7 +10,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Board findAllByBid(long id);
 
-    Board findByBid(long id);
+    boolean existsByBoardTitle(String title);
 
     List<Board> findAllByBoardTitle(String boardTitle);
 

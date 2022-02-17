@@ -97,9 +97,11 @@ public class BoardService {
     }
 
     public List<Board> searchPosts(String keyword) {
-        List<Board> boards = boardRepository.findByTitle(keyword);
-
-        return boards;
+        boolean isTrue = boardRepository.existsByBoardTitle(keyword);
+        if (!isTrue) {
+            return null;
+        }
+        return boardRepository.findByTitle(keyword);
     }
 
     /* 페이지 조회수 증가 서비스 */

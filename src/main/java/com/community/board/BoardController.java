@@ -1,5 +1,6 @@
 package com.community.board;
 
+import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.like.LikeApiController;
@@ -26,6 +27,8 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
+    private final AccountRepository accountRepository;
+
     private final BoardService boardService;
     private final LikeApiController likeApiController;
 
@@ -35,6 +38,7 @@ public class BoardController {
     public String boardList(Model model) {
         List<Board> findAllBoard = boardRepository.findAll();
         model.addAttribute("boards", findAllBoard);
+        model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
         return "board/board-list";
     }
@@ -112,13 +116,23 @@ public class BoardController {
 
     }
 
+    @PostMapping("/board?keyword={keyword}")
+    public String searchPost(@PathVariable String keyword, Model model) {
+        List<Board>boards = boardService.searchPosts(keyword);
+        model.addAttribute("board", boards);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("service", boardService);
+        return "board-search";
+    }
+
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
     public String boardList(@PathVariable String boardTitle, Model model) {
         List<Board> boards = boardRepository.findAllByBoardTitle(boardTitle);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
-        return "board/board-title";
+        model.addAttribute("accountRepo", accountRepository);
+        return "board-search";
     }
 
     // 좋아요 관련 내용
