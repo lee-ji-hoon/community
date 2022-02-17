@@ -7,6 +7,7 @@ import com.community.profile.entity.Zone;
 import com.community.profile.form.*;
 import com.community.profile.repository.TagRepository;
 import com.community.profile.repository.ZoneRepository;
+import com.community.profile.service.ProfileService;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.profile.entity.Tag;

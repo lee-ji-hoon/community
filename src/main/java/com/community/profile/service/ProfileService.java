@@ -1,4 +1,4 @@
-package com.community.profile;
+package com.community.profile.service;
 
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;

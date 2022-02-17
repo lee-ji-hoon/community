@@ -36,7 +36,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100424")) {
             accountRepository.save(new Account(null, "dlwlgns1240@naver.com", "ezhoon", "17-100424", "이지훈", passwordEncoder.encode("12401240"),
                     true, "asdf1", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    "사람", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, true, true,
+                    "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, true, true,
                     true, true, true, true, null, null));
         }
     }

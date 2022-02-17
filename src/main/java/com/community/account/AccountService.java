@@ -35,7 +35,6 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
-    private final JavaMailSender javaMailSender;
 
     // 회원가입
     @Transactional
@@ -131,7 +130,5 @@ public class AccountService implements UserDetailsService {
 
         return new UserAccount(account);
     }
-
-
 }
 

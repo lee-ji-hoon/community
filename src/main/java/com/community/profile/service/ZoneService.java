@@ -1,4 +1,4 @@
-package com.community.profile;
+package com.community.profile.service;
 
 import com.community.profile.entity.Zone;
 import com.community.profile.repository.ZoneRepository;
