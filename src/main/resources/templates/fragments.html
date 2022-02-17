@@ -18,6 +18,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+
     <!--  summernote 시작  -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
@@ -33,6 +35,26 @@
             padding: 0;
             margin: 0;
         }
+        body{
+            background-color: #eeeeee;
+        }
+        .h7{
+            font-size: 0.8rem;
+        }
+        .gedf-wrapper{
+            margin-top: 3rem;
+        }
+
+        @media(min-width:992px){
+            .gedf-main{
+                padding-left: 4rem;
+                padding-right: 4rem;
+            }
+            .gedf-card{
+                margin-bottom: 2.77rem;
+            }
+        }
+
     </style>
 </head>
 
@@ -97,6 +119,32 @@
         </div>
     </div>
 </nav>
+
+<div th:fragment="side-bar" class="col-md-2">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <a class="h6 btn btn-default" th:href=@{/}>홈</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default">내가 쓴 글</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default">저장</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default">좋아요</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default">게시판</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default">팔로우</a>
+        </li>
+        <li class="list-group-item">
+            <a class="h6 btn btn-default" th:href=@{/council/student-council}>학생회 게시판</a>
+        </li>
+    </ul>
+</div>
 
 <footer th:fragment="footer">
     <div class="row justify-content-center">
