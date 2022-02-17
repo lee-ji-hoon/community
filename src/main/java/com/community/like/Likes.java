@@ -22,6 +22,7 @@ public class Likes {
     private Board board;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
     private Account account;
 
     public Likes(Board board, Account account) {
