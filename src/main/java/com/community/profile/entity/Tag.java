@@ -1,4 +1,4 @@
-package com.community.tag;
+package com.community.profile.entity;
 
 import lombok.*;
 

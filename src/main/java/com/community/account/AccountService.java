@@ -5,7 +5,6 @@ import com.community.account.form.SignUpForm;
 import com.community.config.AppProperties;
 import com.community.mail.EmailMessage;
 import com.community.mail.EmailService;
-import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,8 +23,6 @@ import org.thymeleaf.context.Context;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -38,7 +35,6 @@ public class AccountService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
     private final AppProperties appProperties;
-    private final JavaMailSender javaMailSender;
 
     // 회원가입
     @Transactional
@@ -65,21 +61,43 @@ public class AccountService implements UserDetailsService {
     // 이메일 인증 메시지 보내기
     public void sendSignUpConfirmEmail(Account newAccount) {
         Context context = new Context();
-        context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() +
+        context.setVariable("link", "/check-email-token?token=" +
+                newAccount.getEmailCheckToken() +
                 "&email=" + newAccount.getEmail());
         context.setVariable("username", newAccount.getUsername());
         context.setVariable("linkName", "이메일 인증");
         context.setVariable("message", "멀티커뮤니티 사용을 위해서는 아래 링크를 클릭해주세요.");
         context.setVariable("host", appProperties.getHost());
 
-        String process = templateEngine.process("account/send-email-link", context);
+        String message = templateEngine.process("account/send-email-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
                 .subject("멀티커뮤니티, 회원 가입 인증")
-                .message(process)
+                .message(message)
                 .build();
 
+        emailService.sendEmail(emailMessage);
+    }
+
+    // 로그인 링크 보내기
+    public void sendLoginLink(Account account) {
+        Context context = new Context();
+        context.setVariable("link", "/email-login-view?token=" +
+                account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+        context.setVariable("nickname", account.getNickname());
+        context.setVariable("linkName", "멀티커뮤티 로그인하기");
+        context.setVariable("message", "로그인 하려면 아래 링크를 클릭하세요.");
+        context.setVariable("host", appProperties.getHost());
+
+        String message = templateEngine.process("account/send-email-link", context);
+
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("멀티커뮤니티, 로그인 링크")
+                .message(message)
+                .build();
         emailService.sendEmail(emailMessage);
     }
 
@@ -112,18 +130,5 @@ public class AccountService implements UserDetailsService {
 
         return new UserAccount(account);
     }
-
-    // 로그인 링크 보내기
-    public void sendLoginLink(Account account) {
-        account.generateEmailCheckToken();
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(account.getEmail());
-        simpleMailMessage.setSubject("멀티 커뮤니티, 로그인 링크");
-        simpleMailMessage.setText("/email-login-view?token=" + account.getEmailCheckToken() +
-                "&email=" + account.getEmail());
-        javaMailSender.send(simpleMailMessage);
-    }
-
-
 }
 

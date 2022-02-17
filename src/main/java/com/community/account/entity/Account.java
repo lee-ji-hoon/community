@@ -1,17 +1,14 @@
 package com.community.account.entity;
 
-import com.community.board.Board;
 import com.community.like.Likes;
-import com.community.tag.Tag;
+import com.community.profile.entity.Tag;
+import com.community.profile.entity.Zone;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -21,10 +18,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GENERATOR",
+        sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
+        initialValue = 1,
+        allocationSize = 1)
 public class Account {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
 
     @Column(unique = true)
@@ -77,9 +80,13 @@ public class Account {
     private boolean studyUpdatedByWeb = true;
     // 알림 설정 끝
 
-    // 태크
+    // 태그
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
+
+    // 지역 정보
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
