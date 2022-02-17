@@ -3,8 +3,10 @@ package com.community.profile;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
+import com.community.profile.entity.Zone;
 import com.community.profile.form.*;
 import com.community.profile.repository.TagRepository;
+import com.community.profile.repository.ZoneRepository;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.profile.entity.Tag;
@@ -51,9 +53,11 @@ public class ProfileController {
     private static final String SETTINGS_ZONES_VIEW_NAME = "settings/zones";
     private static final String SETTINGS_ZONES_URL = "/settings/zones";
 
-    private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
+    private final ZoneRepository zoneRepository;
+
+    private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
@@ -184,7 +188,7 @@ public class ProfileController {
 
     // 태그 페이지
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
+    public String TagsForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = profileService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
@@ -223,14 +227,45 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
+    // 지역 페이지 이동
     @GetMapping(SETTINGS_ZONES_URL)
-    public String updateZones(@CurrentUser Account account, Model model) {
+    public String ZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
+
+        Set<Zone> zones = profileService.getZones(account);
+        model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
+
+        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
 
         return SETTINGS_ZONES_VIEW_NAME;
     }
 
+    // 지역 등록
+    @PostMapping(SETTINGS_ZONES_URL + "/add")
+    @ResponseBody
+    public ResponseEntity addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if(zone == null){
+            return ResponseEntity.badRequest().build();
+        }
 
+        profileService.addZone(account, zone);
+        return ResponseEntity.ok().build();
+    }
+
+    // 지역 삭제
+    @PostMapping(SETTINGS_ZONES_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity removeZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if(zone == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        profileService.removeZone(account, zone);
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * TODO
