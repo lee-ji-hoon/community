@@ -102,6 +102,7 @@ public class BoardService {
         return boards;
     }
 
+    /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
         Board board = boardRepository.findAllByBid(boardId);
         Integer page = board.getPageView();
@@ -112,12 +113,9 @@ public class BoardService {
     public void viewUpdate(long id, HttpServletRequest request, HttpServletResponse response) {
         Cookie viewCookie=null;
         Cookie[] cookies=request.getCookies();
-
         log.info("cookie : " + Arrays.toString(cookies));
 
-
         if(cookies !=null) {
-
             for (Cookie cookie : cookies) {
                 log.info(cookie.getName());
                 //만들어진 쿠키들을 확인하며, 만약 들어온 적 있다면 생성되었을 쿠키가 있는지 확인
@@ -130,25 +128,21 @@ public class BoardService {
         }else {
             log.info("Cookies Check Logic : None Cookie");
         }
-        //만들어진 쿠키가 없음을 확인
+        // 만들어진 쿠키가 없음을 확인
         if(viewCookie==null) {
             log.info("viewCookies Check Logic : None Cookie");
             try {
-
-                //이 페이지에 왔다는 증거용(?) 쿠키 생성
-                Cookie newCookie=new Cookie("|"+id+"|","readCount");
-                response.addCookie(newCookie);
-
-                //쿠키가 없으니 증가 로직 진행
+                // 만들어진 쿠키가 없으므로 조회수 증가
                 pageViewUpdate(id);
 
+                // 해당 페이지를 다녀갔다는 쿠키 생성
+                Cookie newCookie=new Cookie("|"+id+"|","readCount");
+                response.addCookie(newCookie);
             } catch (Exception e) {
                 log.info("input cookie Error : " + e.getMessage());
                 e.getStackTrace();
-
             }
-
-            //만들어진 쿠키가 있으면 증가로직 진행하지 않음
+            // 만들어진 쿠키가 있으면 증가로직 진행하지 않음
         }else {
             String value=viewCookie.getValue();
             log.info("viewCookie Check Logic : exist Cookie Value = " + value);
