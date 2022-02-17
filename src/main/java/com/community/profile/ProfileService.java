@@ -3,20 +3,16 @@ package com.community.profile;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
-import com.community.board.Board;
 import com.community.board.BoardRepository;
-import com.community.like.LikeRepository;
-import com.community.like.Likes;
 import com.community.profile.form.NotificationsForm;
 import com.community.profile.form.ProfileForm;
-import com.community.tag.Tag;
+import com.community.profile.entity.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 

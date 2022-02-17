@@ -6,8 +6,7 @@ import com.community.account.CurrentUser;
 import com.community.profile.form.*;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
-import com.community.tag.Tag;
-import com.community.tag.TagRepository;
+import com.community.profile.entity.Tag;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,9 @@ public class ProfileController {
 
     private static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
     private static final String SETTINGS_TAGS_URL = "/settings/tags";
+
+    private static final String SETTINGS_ZONES_VIEW_NAME = "settings/zones";
+    private static final String SETTINGS_ZONES_URL = "/settings/zones";
 
     private final NicknameValidator nicknameValidator;
     private final AccountRepository accountRepository;
@@ -179,6 +181,7 @@ public class ProfileController {
         }
     }
 
+    // 태그 페이지
     @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
@@ -191,6 +194,7 @@ public class ProfileController {
         return SETTINGS_TAGS_VIEW_NAME;
     }
 
+    // 태그 추가 요청
     @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
@@ -204,6 +208,7 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
+    // 태그 삭제 요청
     @PostMapping(SETTINGS_TAGS_URL + "/remove")
     @ResponseBody
     public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
@@ -217,9 +222,17 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(SETTINGS_ZONES_URL)
+    public String updateZones(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+
+        return SETTINGS_ZONES_VIEW_NAME;
+    }
+
+
+
     /**
      * TODO
-     * 관심 주제
      * 활동 지역
      */
 
