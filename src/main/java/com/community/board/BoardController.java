@@ -1,5 +1,6 @@
 package com.community.board;
 
+import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.like.LikeApiController;
@@ -13,6 +14,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,8 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
+    private final AccountRepository accountRepository;
+
     private final BoardService boardService;
     private final LikeApiController likeApiController;
 
@@ -33,7 +38,9 @@ public class BoardController {
     public String boardList(Model model) {
         List<Board> findAllBoard = boardRepository.findAll();
         model.addAttribute("boards", findAllBoard);
+        model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute(new SearchForm());
         return "board/board-list";
     }
 
@@ -59,8 +66,10 @@ public class BoardController {
 
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
-    public String boardDetail(@PathVariable long boardId, @CurrentUser Account account, Model model) {
-        boardService.pageViewUpdate(boardId);
+    public String boardDetail(@PathVariable long boardId, @CurrentUser Account account,
+                              HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+        boardService.viewUpdate(boardId, request, response);
         Board detail = boardRepository.findAllByBid(boardId);
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
         model.addAttribute("board", detail);
@@ -108,13 +117,40 @@ public class BoardController {
 
     }
 
+    // 검색 기능
+    @PostMapping("/board/search")
+    public String searchPost(SearchForm searchForm, Model model) {
+        log.info("검색 조건 : " + searchForm.getSearchType());
+        log.info("검색 키워드 : " + searchForm.getKeyword());
+        List<Board>boards = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword());
+
+        model.addAttribute("board", boards);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("service", boardService);
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
+    }
+
+    @GetMapping("/board/search/{writerId}")
+    public String findUserPost(@PathVariable long writerId, Model model) {
+        List<Board> boards = boardService.findPostByWriterId(writerId);
+        model.addAttribute("board", boards);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("service", boardService);
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
+    }
+
+
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
     public String boardList(@PathVariable String boardTitle, Model model) {
         List<Board> boards = boardRepository.findAllByBoardTitle(boardTitle);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
-        return "board/board-title";
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
     }
 
     // 좋아요 관련 내용
