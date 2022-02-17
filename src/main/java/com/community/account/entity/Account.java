@@ -1,6 +1,5 @@
 package com.community.account.entity;
 
-import com.community.board.Board;
 import com.community.like.Likes;
 import com.community.tag.Tag;
 import lombok.*;
@@ -21,10 +20,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@SequenceGenerator(
+        name = "MEMBER_SEQ_GENERATOR",
+        sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
+        initialValue = 1,
+        allocationSize = 1)
 public class Account {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+                    generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
 
     @Column(unique = true)
