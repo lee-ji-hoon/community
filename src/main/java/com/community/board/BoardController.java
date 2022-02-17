@@ -40,6 +40,7 @@ public class BoardController {
         model.addAttribute("boards", findAllBoard);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute(new SearchForm());
         return "board/board-list";
     }
 
@@ -116,14 +117,30 @@ public class BoardController {
 
     }
 
-    @PostMapping("/board?keyword={keyword}")
-    public String searchPost(@PathVariable String keyword, Model model) {
-        List<Board>boards = boardService.searchPosts(keyword);
+    // 검색 기능
+    @PostMapping("/board/search")
+    public String searchPost(SearchForm searchForm, Model model) {
+        log.info("검색 조건 : " + searchForm.getSearchType());
+        log.info("검색 키워드 : " + searchForm.getKeyword());
+        List<Board>boards = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword());
+
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
-        return "board-search";
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
     }
+
+    // 게시물 작성 후 detail 페이지로 Post
+    //@PostMapping("/board/detail")
+    /*public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+        if (errors.hasErrors()) {
+            return "board/board-write";
+        }
+        Board savedBoard = boardService.saveNewBoard(boardForm, account);
+        redirectAttributes.addAttribute("boardId", savedBoard.getBid());
+        return "redirect:/board/detail/{boardId}";
+    }*/
 
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
@@ -132,7 +149,8 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
-        return "board-search";
+        model.addAttribute(new SearchForm());
+        return "board/board-search";
     }
 
     // 좋아요 관련 내용

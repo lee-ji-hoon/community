@@ -6,9 +6,16 @@
 <div class="p-5">
   <div class="row">
     <div class="col-12 mb-3">
-      <form class="form-inline my-2 my-lg-0 float-left">
-        <input class="form-control mr-sm-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search" name="keyword"/>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">미구현</button>
+      <form class="form-inline my-2 my-lg-0 float-left" method="post" th:object="${searchForm}" th:action="@{/board/search}">
+        <select class="custom-select" name="searchType" th:field="*{searchType}">
+          <optgroup selected label="검색 내용 선택">
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
+            <option value="content">내용</option>
+          </optgroup>
+        </select>
+        <input class="form-control mr-sm-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search" name="keyword" th:field="*{keyword}"/>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
       </form>
       <button class="btn btn-primary float-right"
               onclick="location.href='board_write.html'"

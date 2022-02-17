@@ -96,12 +96,27 @@ public class BoardService {
         return result;
     }
 
-    public List<Board> searchPosts(String keyword) {
-        boolean isTrue = boardRepository.existsByBoardTitle(keyword);
-        if (!isTrue) {
-            return null;
+    public List<Board> searchPosts(String searchType, String keyword) {
+
+        switch (searchType) {
+            case "title":
+                log.info("검색 타입 = " + searchType);
+                log.info("키워드 = " + keyword);
+                log.info(String.valueOf(boardRepository.findByTitleContaining(keyword)));
+                return boardRepository.findByTitleContaining(keyword);
+            case "content":
+                log.info("검색 타입 = " + searchType);
+                log.info("키워드 = " + keyword);
+                log.info(String.valueOf(boardRepository.findByContentContaining(keyword)));
+                return boardRepository.findByContentContaining(keyword);
+            case "writer":
+                log.info("검색 타입 = " + searchType);
+                log.info("키워드 = " + keyword);
+                log.info(String.valueOf(boardRepository.findByWriterContaining(keyword)));
+                return boardRepository.findByWriterContaining(keyword);
         }
-        return boardRepository.findByTitle(keyword);
+        log.info("검색 조건 및 키워드가 존재하지 않음으로 전체 검색");
+        return boardRepository.findAll();
     }
 
     /* 페이지 조회수 증가 서비스 */
