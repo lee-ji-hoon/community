@@ -33,10 +33,10 @@ public class TestDataInit {
                     true, true, true, null, null));
         }
 
-        if (!accountRepository.existsByStudentId("17-100001")) {
-            accountRepository.save(new Account(null, "1240@naver.com", "1240", "17-100001", "사람사람", passwordEncoder.encode("12401240"),
+        if (!accountRepository.existsByStudentId("17-100424")) {
+            accountRepository.save(new Account(null, "dlwlgns1240@naver.com", "ezhoon", "17-100424", "이지훈", passwordEncoder.encode("12401240"),
                     true, "asdf1", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    null, null, null, null, null, null, true, true,
+                    "사람", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, true, true,
                     true, true, true, true, null, null));
         }
     }
