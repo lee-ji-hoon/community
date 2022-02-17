@@ -4,6 +4,7 @@ import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
 import com.community.profile.form.*;
+import com.community.profile.repository.TagRepository;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.profile.entity.Tag;
