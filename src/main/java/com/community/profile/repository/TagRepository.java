@@ -1,4 +1,4 @@
-package com.community.profile;
+package com.community.profile.repository;
 
 import com.community.profile.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
