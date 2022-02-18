@@ -2,6 +2,8 @@ package com.community.board;
 
 import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
+import com.community.like.LikeRepository;
+import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final LikeRepository likeRepository;
     public static final int SEC = 60;
     public static final int MIN = 60;
     public static final int HOUR = 24;
