@@ -38,10 +38,9 @@ public class BoardController {
     //전체 게시물 조회
     @GetMapping("/board")
     public String boardList(Model model) {
-        List<Board> findAllBoard = boardRepository.findAll();
-        model.addAttribute("boards", findAllBoard);
-        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("board", boardService.sortBoard());
         model.addAttribute("service", boardService);
+        model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
         model.addAttribute(new SearchForm());
         return "board/board-list";
@@ -130,8 +129,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
     @GetMapping("/board/search/{writerId}")
@@ -140,8 +141,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
 
@@ -152,8 +155,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
     // 좋아요 관련 내용
