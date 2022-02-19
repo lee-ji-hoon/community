@@ -19,6 +19,7 @@ public class Likes {
     private Long id;
 
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_bid")
     private Board board;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)

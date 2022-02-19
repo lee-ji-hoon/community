@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -26,5 +28,14 @@ public class LikeService {
     }
     private boolean isNotAlreadyLike(Account account, Board board) {
         return likeRepository.findByAccountAndBoard(account, board).isEmpty();
+    }
+
+    public int boardLikeSize(Board board) {
+        boolean isTrue = likeRepository.existsAllByBoard(board);
+        if (isTrue) {
+            List<Likes> likeList = likeRepository.findAllByBoard(board);
+            return likeList.size();
+        }
+        return 0;
     }
 }

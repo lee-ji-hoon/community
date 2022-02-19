@@ -21,10 +21,10 @@ public class TestDataInit {
 
     @PostConstruct
     public void init() {
-         boardRepository.save(new Board(null, "자유게시판", "자게", "자게 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "정보공유게시판", "정공게", "정공게 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "신입생게시판", "신게", "신게 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "졸업생게시판", "졸게", "졸게 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목", "자유게시판 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목", "정보공유게시판 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "신입생게시판", "신입생게시판 제목", "신입생게시판 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "졸업생게시판", "졸업생게시판 제목", "졸업생게시판 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
 
         if (!accountRepository.existsByStudentId("17-100000")) {
             accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"),

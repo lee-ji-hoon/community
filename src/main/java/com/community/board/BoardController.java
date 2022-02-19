@@ -5,6 +5,7 @@ import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.like.LikeApiController;
 import com.community.like.LikeRepository;
+import com.community.like.LikeService;
 import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,16 +31,17 @@ public class BoardController {
     private final AccountRepository accountRepository;
 
     private final BoardService boardService;
+    private final LikeService likeService;
     private final LikeApiController likeApiController;
 
 
     //전체 게시물 조회
     @GetMapping("/board")
     public String boardList(Model model) {
-        List<Board> findAllBoard = boardRepository.findAll();
-        model.addAttribute("boards", findAllBoard);
-        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("board", boardService.sortBoard());
         model.addAttribute("service", boardService);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("likeService", likeService);
         model.addAttribute(new SearchForm());
         return "board/board-list";
     }
@@ -100,7 +102,7 @@ public class BoardController {
     @GetMapping("/board/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId) {
         Board board = boardRepository.findAllByBid(boardId);
-        Likes likes = likeRepository.findAllByBoard(board);
+        Likes likes = likeRepository.findByBoard(board);
         boolean existLike = likeRepository.existsByBoard(board);
 
         if (existLike) {
@@ -127,8 +129,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
     @GetMapping("/board/search/{writerId}")
@@ -137,8 +141,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
 
@@ -149,8 +155,10 @@ public class BoardController {
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("likeService", likeService);
+
         model.addAttribute(new SearchForm());
-        return "board/board-search";
+        return "board/board-list";
     }
 
     // 좋아요 관련 내용
