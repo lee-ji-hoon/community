@@ -3,6 +3,7 @@ package com.community.account.entity;
 import com.community.like.Likes;
 import com.community.profile.entity.Tag;
 import com.community.profile.entity.Zone;
+import com.community.study.Study;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -112,5 +113,9 @@ public class Account {
 
     public boolean matchPassword(PasswordEncoder passwordEncoder, String checkPassword) {
         return passwordEncoder.matches(checkPassword, getPassword());
+    }
+
+    public boolean isManager(Study byPath) {
+        return byPath.getManagers().contains(this);
     }
 }
