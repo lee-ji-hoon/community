@@ -1,7 +1,7 @@
 package com.community.profile;
 
 import com.community.account.entity.Account;
-import com.community.account.AccountRepository;
+import com.community.account.repository.AccountRepository;
 import com.community.account.CurrentUser;
 import com.community.tag.TagForm;
 import com.community.tag.TagService;

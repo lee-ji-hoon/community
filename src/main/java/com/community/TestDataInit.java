@@ -1,7 +1,7 @@
 package com.community;
 
 import com.community.account.entity.Account;
-import com.community.account.AccountRepository;
+import com.community.account.repository.AccountRepository;
 import com.community.board.entity.Board;
 import com.community.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
