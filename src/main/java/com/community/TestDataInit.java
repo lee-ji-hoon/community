@@ -2,8 +2,8 @@ package com.community;
 
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
-import com.community.board.Board;
-import com.community.board.BoardRepository;
+import com.community.board.entity.Board;
+import com.community.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

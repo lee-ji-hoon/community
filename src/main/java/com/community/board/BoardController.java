@@ -3,6 +3,13 @@ package com.community.board;
 import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
+import com.community.board.entity.Board;
+import com.community.board.form.BoardForm;
+import com.community.board.form.ReplyForm;
+import com.community.board.repository.BoardRepository;
+import com.community.board.repository.ReplyRepository;
+import com.community.board.service.BoardService;
+import com.community.board.service.ReplyService;
 import com.community.like.LikeApiController;
 import com.community.like.LikeRepository;
 import com.community.like.LikeService;
@@ -29,11 +36,12 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
     private final AccountRepository accountRepository;
+    private final ReplyRepository replyRepository;
 
     private final BoardService boardService;
     private final LikeService likeService;
+    private final ReplyService replyService;
     private final LikeApiController likeApiController;
-
 
     //전체 게시물 조회
     @GetMapping("/board")
@@ -42,14 +50,27 @@ public class BoardController {
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
         model.addAttribute(new SearchForm());
         return "board/board-list";
+    }
+
+    @GetMapping("/board/main")
+    public String boardMain(Model model) {
+        model.addAttribute("board", boardService.sortBoard());
+        model.addAttribute("service", boardService);
+        model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute(new SearchForm());
+        return "board/board-main";
     }
 
     /* 게시물 작성 관련 */
     // 게시물 작성
     @GetMapping("/board/write")
     public String boardForm(@CurrentUser Account account, Model model) {
+
         model.addAttribute("account", account);
         model.addAttribute(new BoardForm());
         return "board/board-write";
@@ -78,6 +99,9 @@ public class BoardController {
         model.addAttribute("account", account);
         model.addAttribute("service", boardService);
         model.addAttribute("likes", likes);
+        model.addAttribute("reply", replyRepository.findAllByBoard(detail));
+        model.addAttribute("replyService", replyService);
+        model.addAttribute(new ReplyForm());
         return "board/detail";
     }
 
@@ -124,12 +148,13 @@ public class BoardController {
     public String searchPost(SearchForm searchForm, Model model) {
         log.info("검색 조건 : " + searchForm.getSearchType());
         log.info("검색 키워드 : " + searchForm.getKeyword());
-        List<Board>boards = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword());
+        List<Board> searchPosts = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword());
 
-        model.addAttribute("board", boards);
+        model.addAttribute("board", searchPosts);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
         model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";
@@ -142,6 +167,7 @@ public class BoardController {
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
         model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";
@@ -156,6 +182,7 @@ public class BoardController {
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";
@@ -167,6 +194,7 @@ public class BoardController {
         likeApiController.addLike(account, boardId);
         return "redirect:/board/detail/{boardId}";
     }
+
     @GetMapping("/board/detail/{boardId}/like-cancel")
     public String cancelLikeLink(@CurrentUser Account account, @PathVariable Long boardId) {
         Board board = boardRepository.findAllByBid(boardId);
@@ -177,6 +205,14 @@ public class BoardController {
         if (existLike) {
             likeApiController.cancelLike(account, board);
         }
+        return "redirect:/board/detail/{boardId}";
+    }
+
+    /* 댓글 작성 관련 로직 */
+    @PostMapping("/board/detail/{boardId}/reply")
+    public String boardReply(@PathVariable Long boardId, ReplyForm replyForm, @CurrentUser Account account) {
+        Board currentBoard = boardRepository.findByBid(boardId);
+        replyService.saveReply(replyForm, account, currentBoard);
         return "redirect:/board/detail/{boardId}";
     }
 }
