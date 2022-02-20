@@ -14,13 +14,10 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
 
     List<Likes> findAllByBoard(Board board);
 
-    Likes findByBoard(Board board);
-
-    void deleteByAccountAndBoard(Account account, Board board);
+    Likes findByBoardAndAccount(Board board, Account account);
 
     boolean existsAllByBoard(Board board);
 
-    boolean existsByBoard(Board board);
     boolean existsByAccountAndBoard(Account account, Board board);
 
 }

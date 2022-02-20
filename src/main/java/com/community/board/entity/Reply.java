@@ -4,6 +4,7 @@ import com.community.account.entity.Account;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,5 +29,7 @@ public class Reply {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    private LocalDateTime uploadTime;
 
 }

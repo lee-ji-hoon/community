@@ -4,6 +4,7 @@ import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.board.entity.Board;
+import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
 import com.community.board.repository.BoardRepository;
@@ -99,7 +100,8 @@ public class BoardController {
         model.addAttribute("account", account);
         model.addAttribute("service", boardService);
         model.addAttribute("likes", likes);
-        model.addAttribute("reply", replyRepository.findAllByBoard(detail));
+        model.addAttribute("likeService", likeService);
+        model.addAttribute("reply", replyRepository.findAllByBoardOrderByUploadTimeDesc(detail));
         model.addAttribute("replyService", replyService);
         model.addAttribute(new ReplyForm());
         return "board/detail";
@@ -126,12 +128,6 @@ public class BoardController {
     @GetMapping("/board/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId) {
         Board board = boardRepository.findAllByBid(boardId);
-        Likes likes = likeRepository.findByBoard(board);
-        boolean existLike = likeRepository.existsByBoard(board);
-
-        if (existLike) {
-            likeRepository.delete(likes);
-        }
 
         boardRepository.delete(board);
 
@@ -162,7 +158,7 @@ public class BoardController {
 
     @GetMapping("/board/search/{writerId}")
     public String findUserPost(@PathVariable long writerId, Model model) {
-        List<Board> boards = boardService.findPostByWriterId(writerId);
+        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTimeDesc(writerId);
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
@@ -177,7 +173,7 @@ public class BoardController {
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
     public String boardList(@PathVariable String boardTitle, Model model) {
-        List<Board> boards = boardRepository.findAllByBoardTitle(boardTitle);
+        List<Board> boards = boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(boardTitle);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
@@ -197,13 +193,16 @@ public class BoardController {
 
     @GetMapping("/board/detail/{boardId}/like-cancel")
     public String cancelLikeLink(@CurrentUser Account account, @PathVariable Long boardId) {
-        Board board = boardRepository.findAllByBid(boardId);
+        Board board = boardRepository.findByBid(boardId);
         boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
-        System.out.println("existLike = " + existLike);
+        log.info("existLike = " + existLike);
         log.info(board.getBid().toString());
         log.info(account.getId().toString());
         if (existLike) {
-            likeApiController.cancelLike(account, board);
+            Likes likes = likeRepository.findByBoardAndAccount(board, account);
+            log.info("likeId = " + likes);
+            likeRepository.delete(likes);
+            return "redirect:/board/detail/{boardId}";
         }
         return "redirect:/board/detail/{boardId}";
     }
@@ -213,6 +212,21 @@ public class BoardController {
     public String boardReply(@PathVariable Long boardId, ReplyForm replyForm, @CurrentUser Account account) {
         Board currentBoard = boardRepository.findByBid(boardId);
         replyService.saveReply(replyForm, account, currentBoard);
+        return "redirect:/board/detail/{boardId}";
+    }
+
+    @PostMapping("/board/detail/{boardId}/reply/update/{rid}")
+    public String boardReplyUpdate(@PathVariable Long boardId,
+                                   @PathVariable Long rid, ReplyForm replyForm) {
+        replyService.updateReply(rid, replyForm);
+        return "redirect:/board/detail/{boardId}";
+    }
+
+    @PostMapping("/board/detail/{boardId}/reply/delete/{rid}")
+    public String boardReplyDelete(@PathVariable Long boardId,
+                                   @PathVariable Long rid) {
+        Reply findReply = replyRepository.findByRid(rid);
+        replyRepository.delete(findReply);
         return "redirect:/board/detail/{boardId}";
     }
 }
