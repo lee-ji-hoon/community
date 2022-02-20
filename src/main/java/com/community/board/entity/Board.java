@@ -1,4 +1,4 @@
-package com.community.board;
+package com.community.board.entity;
 
 import lombok.*;
 

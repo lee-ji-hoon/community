@@ -1,7 +1,7 @@
 package com.community.like;
 
 import com.community.account.entity.Account;
-import com.community.board.Board;
+import com.community.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

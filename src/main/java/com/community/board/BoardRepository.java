@@ -1,5 +1,6 @@
 package com.community.board;
 
+import com.community.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +19,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Board findAllByBid(long id);
 
-    boolean existsByBoardTitle(String title);
+    Board findByBid(long id);
 
     List<Board> findAllByBoardTitle(String boardTitle);
 
-    List<Board> findByTitle(String keyword);
+    List<Board> findTop4ByBoardTitleOrderByBidDesc(String boardTitle);
 
     void deleteAllByWriterId(long writerId);
 }
