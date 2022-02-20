@@ -106,8 +106,43 @@ public class StudyController {
         return "redirect:/study/" + fixPath(path) + "/settings/description";
     }
 
+    @GetMapping("/study/{path}/settings/banner")
+    public String studyImageForm(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+        return "study/settings/banner";
+    }
+
+    @PostMapping("/study/{path}/settings/banner")
+    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image,
+                                     Model model, RedirectAttributes redirectAttributes) {
+
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.getStudyImage(studyUpdate, image);
+
+        redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/study/{path}/settings/banner/enable")
+    public String studyBannerEnable(@CurrentUser Account account, @PathVariable String path) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.studyBannerEnable(studyUpdate);
+
+        return "redirect:/study/" + fixPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/study/{path}/settings/banner/disable")
+    public String studyBannerDisable(@CurrentUser Account account, @PathVariable String path) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.studyBannerDisable(studyUpdate);
+
+        return "redirect:/study/" + fixPath(path) + "/settings/banner";
+    }
+
     private String fixPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
-
 }

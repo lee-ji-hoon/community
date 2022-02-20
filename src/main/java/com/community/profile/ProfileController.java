@@ -267,10 +267,4 @@ public class ProfileController {
         profileService.removeZone(account, zone);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * TODO
-     * 활동 지역
-     */
-
 }

@@ -91,4 +91,8 @@ public class Study {
         return this.managers.contains(userAccount.getAccount());
     }
 
+    public String getImage() {
+        return image != null ? image : "/images/study-banner.jpeg";
+    }
+
 }
