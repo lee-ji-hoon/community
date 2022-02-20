@@ -3,14 +3,17 @@ package com.community.profile;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.CurrentUser;
-import com.community.profile.entity.Zone;
+import com.community.tag.TagForm;
+import com.community.tag.TagService;
+import com.community.zone.Zone;
 import com.community.profile.form.*;
-import com.community.profile.repository.TagRepository;
-import com.community.profile.repository.ZoneRepository;
+import com.community.tag.TagRepository;
+import com.community.zone.ZoneRepository;
 import com.community.profile.service.ProfileService;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
-import com.community.profile.entity.Tag;
+import com.community.tag.Tag;
+import com.community.zone.ZoneForm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +61,7 @@ public class ProfileController {
     private final TagRepository tagRepository;
     private final ZoneRepository zoneRepository;
 
+    private final TagService tagService;
     private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
 
@@ -204,11 +208,7 @@ public class ProfileController {
     @PostMapping(SETTINGS_TAGS_URL + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-            tag = tagRepository.save(Tag.builder().title(title).build());
-        }
+        Tag tag = tagService.findOrAdd(tagForm.getTagTitle());
 
         profileService.addTag(account, tag);
         return ResponseEntity.ok().build();
@@ -267,10 +267,4 @@ public class ProfileController {
         profileService.removeZone(account, zone);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * TODO
-     * 활동 지역
-     */
-
 }
