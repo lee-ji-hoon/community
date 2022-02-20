@@ -2,8 +2,8 @@ package com.community.study;
 
 import com.community.account.UserAccount;
 import com.community.account.entity.Account;
-import com.community.profile.entity.Tag;
-import com.community.profile.entity.Zone;
+import com.community.tag.Tag;
+import com.community.zone.Zone;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +15,18 @@ import java.util.Set;
         @NamedAttributeNode("tags"),
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),
-        @NamedAttributeNode("members")})
+        @NamedAttributeNode("members")
+})
+
+@NamedEntityGraph(name = "Study.withTagsAndManagers", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("managers")
+})
+
+@NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers")
+})
 
 @Entity
 @Getter
@@ -24,7 +35,6 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Study {
 
     @Id
