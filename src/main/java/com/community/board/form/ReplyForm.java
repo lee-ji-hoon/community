@@ -5,6 +5,7 @@ import com.community.board.entity.Board;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 public class ReplyForm {
