@@ -94,7 +94,7 @@ public class BoardService {
     }
 
     public Page<Board> sortBoard() {
-        Sort sort = Sort.by("bid").descending();
+        Sort sort = Sort.by("uploadTime").descending();
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Board> result = boardRepository.findAll(pageable);
         return result;
