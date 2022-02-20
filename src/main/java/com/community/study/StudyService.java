@@ -150,4 +150,16 @@ public class StudyService {
     public void removeMember(Study studyWithMembersByPath, Account account) {
         studyWithMembersByPath.removeMember(account);
     }
+
+    public boolean isValidPath(String newPath) {
+        if(!newPath.matches("^[ㄱ-ㅎ가-힣a-zA-Z0-9_-]{2,20}$")){
+            return false;
+        }
+
+        return !studyRepository.existsByPath(newPath);
+    }
+
+    public void updateStudyPath(Study studyToUpdateStatus, String newPath) {
+        studyToUpdateStatus.setPath(newPath);
+    }
 }

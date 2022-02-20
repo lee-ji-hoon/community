@@ -87,8 +87,8 @@
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link active" th:href="@{/study-form}">
-                        스터디 추가
+                    <a class="nav-link active" th:href="@{/study}">
+                        스터디
                     </a>
                 </li>
             </ul>
@@ -114,7 +114,7 @@
                         </h6>
                         <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
                         <a class="dropdown-item" th:href="@{/board/main}">게시판</a>
-                        <a class="dropdown-item" th:href="@{/notifications}">알림</a>
+                        <a class="dropdown-item" th:href="@{/study-form}">스터디 개설</a>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
@@ -343,6 +343,13 @@
     </button>
 </div>
 
+<div th:fragment="message_danger" th:if="${message_danger}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+    <span th:text="${message_danger}">완료</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
 
 <script th:fragment="tooltip" type="application/javascript">
     $(function () {
@@ -487,6 +494,41 @@
             tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
         });
     </script>
+</div>
+
+<div th:fragment="study-list (studyList)" class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4" th:each="study: ${studyList}">
+            <div class="card mb-4 shadow-sm">
+                <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
+                <div class="card-body">
+                    <a th:href="@{'/study/' + ${study.path}}" class="text-decoration-none">
+                        <h5 class="card-title context" th:text="${study.title}"></h5>
+                    </a>
+                    <p class="card-text" th:text="${study.shortDescription}">Short description</p>
+                    <p class="card-text context">
+                        <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                            <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                                <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                            </a>
+                        </span>
+                        <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                            <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                                <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
+                            </a>
+                        </span>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fa fa-user-circle"></i>
+                            <span th:text="${study.memberCount}"></span>명
+                        </small>
+                        <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </html>

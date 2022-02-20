@@ -36,6 +36,11 @@ import java.util.Set;
         @NamedAttributeNode("members")
 })
 
+@NamedEntityGraph(name = "Study.withZonesTags", attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("tags")
+})
+
 @Entity
 @Getter
 @Setter
@@ -90,8 +95,11 @@ public class Study {
 
     private boolean useBanner;
 
+    private int memberCount;
+
     public void addManager(Account account) {
         this.managers.add(account);
+        this.memberCount++;
     }
 
     public boolean isJoinable(UserAccount userAccount) {
@@ -125,7 +133,6 @@ public class Study {
     public void close() {
         if (this.published) {
             this.published = false;
-            this.publishedDateTime = null;
             this.closedDateTime = LocalDateTime.now();
         }else{
             throw new RuntimeException("스터디를 종료 할 수 없습니다. 존재하지 않거나 이미 종료된 스터디입니다. 다시 확인해주세요.");
@@ -156,9 +163,15 @@ public class Study {
 
     public void addMember(Account account) {
         this.getMembers().add(account);
+        this.memberCount++;
     }
 
     public void removeMember(Account account) {
         this.getMembers().remove(account);
+        this.memberCount--;
+    }
+
+    public boolean UpdateRecruiting() {
+        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusMinutes(30));
     }
 }
