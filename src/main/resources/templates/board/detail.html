@@ -20,7 +20,7 @@
         <th:block th:if="${board.updateTime == null}">
             <a class="text-muted mr-1" th:text="${service.boardDateTime(board.uploadTime)}"></a>
         </th:block>
-        <th:block th:if="${account.nickname == board.writer}">
+        <th:block th:if="${account.id == board.writerId}">
             <a class="text-muted mr-1"> | </a>
             <a class="text-primary mr-1"
                     onclick="location.href='board-write'"
