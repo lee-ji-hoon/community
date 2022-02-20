@@ -6,6 +6,7 @@ import com.community.account.CurrentUser;
 import com.community.board.entity.Board;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
+import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import com.community.board.service.ReplyService;
