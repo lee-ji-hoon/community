@@ -59,17 +59,18 @@
                     <div id="content" name="content" th:utext="${board.content}"></div>
                 </div>
                 <hr>
+                <b><a class="text-primary pl-2" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
+                <br>
                 <th:block th:if="${likes.isPresent()}">
                     <button type="button"
                             th:onclick="|location.href='@{/board/detail/{boardId}/like-cancel(boardId = ${board.bid})}'|"
-                            class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요 취소</button>
+                            class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요 취소</button>
                 </th:block>
                 <th:block th:if="${likes.isEmpty()}">
                     <button type="button"
                             th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
-                            class="btn btn-link"><i class="fa fa-thumbs-up"></i>좋아요</button>
+                            class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</button>
                 </th:block>
-
                 <button type="button" class="btn btn-link text-danger">신고하기</button>
                 <hr>
                 <div class="bg-light">

@@ -104,28 +104,24 @@ public class BoardService {
         return boardRepository.findTop4ByBoardTitleOrderByBidDesc(boardTitle);
     }
 
-    public List<Board> findPostByWriterId(long writerId) {
-        return boardRepository.findByWriterId(writerId);
-    }
-
     public List<Board> searchPosts(String searchType, String keyword) {
 
         switch (searchType) {
             case "title":
                 log.info("검색 타입 = " + searchType);
                 log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByTitleContaining(keyword)));
-                return boardRepository.findByTitleContaining(keyword);
+                log.info(String.valueOf(boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword)));
+                return boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword);
             case "content":
                 log.info("검색 타입 = " + searchType);
                 log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByContentContaining(keyword)));
-                return boardRepository.findByContentContaining(keyword);
+                log.info(String.valueOf(boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword)));
+                return boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword);
             case "writer":
                 log.info("검색 타입 = " + searchType);
                 log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByWriterContaining(keyword)));
-                return boardRepository.findByWriterContaining(keyword);
+                log.info(String.valueOf(boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword)));
+                return boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword);
         }
         log.info("검색 조건 및 키워드가 존재하지 않음으로 전체 검색");
         return boardRepository.findAll();

@@ -100,6 +100,7 @@ public class BoardController {
         model.addAttribute("account", account);
         model.addAttribute("service", boardService);
         model.addAttribute("likes", likes);
+        model.addAttribute("likeService", likeService);
         model.addAttribute("reply", replyRepository.findAllByBoardOrderByUploadTimeDesc(detail));
         model.addAttribute("replyService", replyService);
         model.addAttribute(new ReplyForm());
@@ -157,7 +158,7 @@ public class BoardController {
 
     @GetMapping("/board/search/{writerId}")
     public String findUserPost(@PathVariable long writerId, Model model) {
-        List<Board> boards = boardService.findPostByWriterId(writerId);
+        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTimeDesc(writerId);
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
@@ -172,7 +173,7 @@ public class BoardController {
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
     public String boardList(@PathVariable String boardTitle, Model model) {
-        List<Board> boards = boardRepository.findAllByBoardTitle(boardTitle);
+        List<Board> boards = boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(boardTitle);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
