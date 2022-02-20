@@ -1,5 +1,6 @@
 package com.community.study;
 
+import com.community.account.UserAccount;
 import com.community.account.entity.Account;
 import com.community.profile.entity.Tag;
 import com.community.profile.entity.Zone;
@@ -7,7 +8,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
+
+@NamedEntityGraph(name = "Study.withAll", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers"),
+        @NamedAttributeNode("members")})
 
 @Entity
 @Getter
@@ -16,17 +24,18 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Study {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @ManyToMany
-    private Set<Account> managers;
+    private Set<Account> managers = new HashSet<>();
 
     @ManyToMany
-    private Set<Account> members;
+    private Set<Account> members = new HashSet<>();
 
     @Column(unique = true)
     private String path;
@@ -37,21 +46,25 @@ public class Study {
 
     @Lob
     @Basic(fetch = FetchType.EAGER)
-    private String longDescription;
+    private String fullDescription;
+
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
+    private String image;
 
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany
-    private Set<Zone> zones;
+    private Set<Zone> zones = new HashSet<>();
 
-    private LocalDateTime publishedDateTime; // 스터디 모임 시작
+    private LocalDateTime publishedDateTime;
 
-    private LocalDateTime closeDateTime; // 끝
+    private LocalDateTime closedDateTime;
 
-    private LocalDateTime recruitDateTime; // 스터디원 모집 시작
+    private LocalDateTime recruitingUpdatedDateTime;
 
-    private boolean recruit;
+    private boolean recruiting;
 
     private boolean published;
 
@@ -62,4 +75,20 @@ public class Study {
     public void addManager(Account account) {
         this.managers.add(account);
     }
+
+    public boolean isJoinable(UserAccount userAccount) {
+        Account account = userAccount.getAccount();
+        return this.isPublished() && this.isRecruiting()
+                && !this.members.contains(account) && !this.managers.contains(account);
+
+    }
+
+    public boolean isMember(UserAccount userAccount) {
+        return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(UserAccount userAccount) {
+        return this.managers.contains(userAccount.getAccount());
+    }
+
 }
