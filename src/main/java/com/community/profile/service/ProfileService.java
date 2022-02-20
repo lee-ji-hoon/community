@@ -3,7 +3,7 @@ package com.community.profile.service;
 import com.community.account.entity.Account;
 import com.community.account.AccountRepository;
 import com.community.account.AccountService;
-import com.community.board.repository.BoardRepository;
+import com.community.board.BoardRepository;
 import com.community.profile.entity.Zone;
 import com.community.profile.form.NotificationsForm;
 import com.community.profile.form.ProfileForm;
