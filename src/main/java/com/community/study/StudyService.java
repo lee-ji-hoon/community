@@ -3,7 +3,9 @@ package com.community.study;
 import com.community.account.entity.Account;
 import com.community.study.form.StudyDescriptionForm;
 import com.community.tag.Tag;
+import com.community.zone.Zone;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class StudyService {
 
     private final StudyRepository repository;
@@ -63,6 +66,34 @@ public class StudyService {
         return accountWithTagsByPath;
     }
 
+    public void addTag(Study studyUpdateTag, Tag byTitle) {
+        studyUpdateTag.getTags().add(byTitle);
+    }
+
+    public void removeTag(Study studyUpdateTag, Tag byTitle) {
+        studyUpdateTag.getTags().remove(byTitle);
+    }
+
+    // study start
+    public Study getStudyToUpdateZone(Account account, String path) {
+        Study accountWithZonesByPath = repository.findAccountWithZonesByPath(path);
+        checkExistStudy(path, accountWithZonesByPath);
+        checkManager(account, accountWithZonesByPath);
+
+        return accountWithZonesByPath;
+    }
+
+    public void addZone(Study studyToUpdateZone, Zone zone) {
+        log.info("추가 된 지역 : " + zone );
+        studyToUpdateZone.getZones().add(zone);
+
+    }
+
+    public void removeZone(Study studyToUpdateZone, Zone zone) {
+        studyToUpdateZone.getZones().remove(zone);
+    }
+    // study end
+
     private void checkManager(Account account, Study accountWithTagsByPath) {
         if (!account.isManager(accountWithTagsByPath)) throw new AccessDeniedException("해당 기능을 사용할 권한이 없습니다.");
 
@@ -72,11 +103,7 @@ public class StudyService {
         if (accountWithTagsByPath == null) throw new IllegalArgumentException(path + "해당 하는 스터디가 없습니다.");
     }
 
-    public void addTag(Study studyUpdateTag, Tag byTitle) {
-        studyUpdateTag.getTags().add(byTitle);
-    }
-
-    public void removeTag(Study studyUpdateTag, Tag byTitle) {
-        studyUpdateTag.getTags().remove(byTitle);
+    public void publish(Study studyUpdate) {
+        studyUpdate.publish();
     }
 }

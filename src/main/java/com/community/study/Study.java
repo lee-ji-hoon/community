@@ -105,4 +105,12 @@ public class Study {
         return image != null ? image : "/images/study-banner.jpeg";
     }
 
+    public void publish() {
+        if (!this.closed && !this.published) {
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("스터디를 공개 할 수 없는 상태입니다. 이미 종료됐거나 공개된 스터디인지 다시 확인해주세요");
+        }
+    }
 }

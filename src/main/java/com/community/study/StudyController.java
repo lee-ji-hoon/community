@@ -9,6 +9,9 @@ import com.community.study.form.StudyDescriptionForm;
 import com.community.study.form.StudyForm;
 import com.community.study.validator.StudyFormValidator;
 import com.community.tag.TagService;
+import com.community.zone.Zone;
+import com.community.zone.ZoneForm;
+import com.community.zone.ZoneRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,7 @@ public class StudyController {
     private final TagService tagService;
 
     private final TagRepository tagRepository;
+    private final ZoneRepository zoneRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
     private static final String STUDY_FORM_VIEW = "study/form";
@@ -56,6 +60,7 @@ public class StudyController {
         webDataBinder.addValidators(studyFormValidator);
     }
 
+    // 스터지 추가 시작
     @GetMapping(STUDY_FORM_URL)
     public String newStudyForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
@@ -83,7 +88,9 @@ public class StudyController {
 
         return "study/view";
     }
+    // 스터디 추가 완료
 
+    // 멤버 확인
     @GetMapping(STUDY_PATH_VIEW + "/members")
     public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study bypath = studyService.getPath(path);
@@ -94,6 +101,7 @@ public class StudyController {
         return "study/members";
     }
 
+    // 스터디 설명 수정 시작
     @GetMapping(STUDY_SETTINGS + "description")
     public String viewStudyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -122,6 +130,9 @@ public class StudyController {
         return "redirect:/study/" + fixPath(path) + "/settings/description";
     }
 
+    // 스터디 설명 수정 끝
+
+    // 배너 수정 시작
     @GetMapping(STUDY_SETTINGS + "banner")
     public String studyImageForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -157,7 +168,9 @@ public class StudyController {
 
         return "redirect:/study/" + fixPath(path) + "/settings/banner";
     }
+    // 배너 수정 끝
 
+    // 태그 수정 시작
     @GetMapping(STUDY_SETTINGS + "tags")
     public String studyTagsForm(@CurrentUser Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -183,6 +196,7 @@ public class StudyController {
         System.out.println("studyUpdateTag = " + studyUpdateTag);
         return ResponseEntity.ok().build();
     }
+
     @PostMapping(STUDY_SETTINGS + "tags/remove")
     @ResponseBody
     public ResponseEntity studyTagsRemove(@CurrentUser Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
@@ -196,7 +210,74 @@ public class StudyController {
 
         studyService.removeTag(studyUpdateTag, byTitle);
 
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
+    }
+    // 태그 수정 끝
+
+    // 지역 수정 시작
+    @GetMapping(STUDY_SETTINGS + "zones")
+    public String studyZonesForm(@CurrentUser Account account, @PathVariable String path, Model model) throws JsonProcessingException {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        model.addAttribute("zones", studyUpdate.getZones().stream()
+                .map(Zone::toString).collect(Collectors.toList()));
+        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+
+        return "study/settings/zones";
     }
 
+    @PostMapping(STUDY_SETTINGS + "zones/add")
+    @ResponseBody
+    public ResponseEntity addZone(@CurrentUser Account account, @PathVariable String path,
+                                  @RequestBody ZoneForm zoneForm) {
+        Study studyToUpdateZone = studyService.getStudyToUpdateZone(account, path);
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        studyService.addZone(studyToUpdateZone, zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(STUDY_SETTINGS + "zones/remove")
+    @ResponseBody
+    public ResponseEntity removeZone(@CurrentUser Account account, @PathVariable String path,
+                                     @RequestBody ZoneForm zoneForm) {
+        Study studyToUpdateZone = studyService.getStudyToUpdateZone(account, path);
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        studyService.removeZone(studyToUpdateZone, zone);
+        return ResponseEntity.ok().build();
+    }
+    // 지역 수정 끝
+
+    // 스터디 전체적인 설정 시작
+    @GetMapping(STUDY_SETTINGS + "study")
+    public String studyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        return "study/settings/study";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "study/publish")
+    public String studyPublish(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.publish(studyUpdate);
+        redirectAttributes.addFlashAttribute("message", "스터디가 공개됐습니다. 스터디원을 모집해보세요");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/study";
+
+    }
 }
+
