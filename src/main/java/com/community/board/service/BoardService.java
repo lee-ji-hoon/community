@@ -1,7 +1,7 @@
 package com.community.board.service;
 
 import com.community.account.entity.Account;
-import com.community.board.BoardRepository;
+import com.community.board.repository.BoardRepository;
 import com.community.board.entity.Board;
 import com.community.board.form.BoardForm;
 import com.community.like.LikeRepository;
