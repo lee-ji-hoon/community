@@ -9,19 +9,19 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> findByTitleContaining(String keyword);
+    List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
 
-    List<Board> findByWriterContaining(String keyword);
+    List<Board> findByWriterContainingOrderByUploadTimeDesc(String keyword);
 
-    List<Board> findByContentContaining(String keyword);
+    List<Board> findByContentContainingOrderByUploadTimeDesc(String keyword);
 
-    List<Board> findByWriterId(long id);
+    List<Board> findAllByWriterIdOrderByUploadTimeDesc(long id);
 
     Board findAllByBid(long id);
 
     Board findByBid(long id);
 
-    List<Board> findAllByBoardTitle(String boardTitle);
+    List<Board> findAllByBoardTitleOrderByUploadTimeDesc(String boardTitle);
 
     List<Board> findTop4ByBoardTitleOrderByBidDesc(String boardTitle);
 

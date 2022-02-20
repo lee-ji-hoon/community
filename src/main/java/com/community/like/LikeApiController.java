@@ -27,7 +27,8 @@ public class LikeApiController {
         }
     }
 
-    public void cancelLike(Account account, Board board) {
-        likeRepository.deleteByAccountAndBoard(account, board);
-    }
+/*    public void cancelLike(Account account, Board board) {
+        long likeId = likeRepository.findByBoardAndAccount(board, account);
+        likeRepository.deleteById(likeId);
+    }*/
 }

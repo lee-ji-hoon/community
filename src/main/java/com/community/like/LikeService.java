@@ -26,6 +26,9 @@ public class LikeService {
         }
         return false;
     }
+
+
+
     private boolean isNotAlreadyLike(Account account, Board board) {
         return likeRepository.findByAccountAndBoard(account, board).isEmpty();
     }
