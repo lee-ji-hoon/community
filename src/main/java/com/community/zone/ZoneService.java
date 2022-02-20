@@ -1,7 +1,7 @@
-package com.community.profile.service;
+package com.community.zone;
 
-import com.community.profile.entity.Zone;
-import com.community.profile.repository.ZoneRepository;
+import com.community.zone.Zone;
+import com.community.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

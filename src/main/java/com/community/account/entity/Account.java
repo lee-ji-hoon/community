@@ -1,8 +1,8 @@
 package com.community.account.entity;
 
 import com.community.like.Likes;
-import com.community.profile.entity.Tag;
-import com.community.profile.entity.Zone;
+import com.community.tag.Tag;
+import com.community.zone.Zone;
 import com.community.study.Study;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package com.community.profile.form;
+package com.community.tag;
 
 import lombok.Data;
 
