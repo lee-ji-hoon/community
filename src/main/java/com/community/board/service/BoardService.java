@@ -1,9 +1,10 @@
-package com.community.board;
+package com.community.board.service;
 
-import com.community.account.AccountRepository;
 import com.community.account.entity.Account;
+import com.community.board.BoardRepository;
+import com.community.board.entity.Board;
+import com.community.board.form.BoardForm;
 import com.community.like.LikeRepository;
-import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,7 @@ public class BoardService {
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .writer(boardForm.getWriter())
-                .writerId(account.getId()) // 아이디 추가했어 확인 하면 주석 자워도 돼
+                .writerId(account.getId())
                 .build();
         return boardRepository.save(board);
     }
@@ -97,6 +98,10 @@ public class BoardService {
         Pageable pageable = PageRequest.of(0, 10, sort);
         Page<Board> result = boardRepository.findAll(pageable);
         return result;
+    }
+
+    public List<Board> mainBoardList(String boardTitle) {
+        return boardRepository.findTop4ByBoardTitleOrderByBidDesc(boardTitle);
     }
 
     public List<Board> findPostByWriterId(long writerId) {

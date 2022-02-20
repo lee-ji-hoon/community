@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments.html :: head"></head>
+<style>
+    .rounded border{
+        text-align: center;
+    }
+</style>
+<body class="bg-light">
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div class="container-fluid gedf-wrapper">
+        <div class="row">
+            <!-- 좌측 -->
+            <div th:replace="fragments.html :: side-bar"></div>
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col">
+                        <a class="lead text-dark font-weight-bold mb-2" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='자유게시판')}">자유게시판</a>
+                        <ul class="list-group" th:each="board : ${service.mainBoardList('자유게시판')}">
+                            <li class="list-group-item">
+                                <a class="text-dark" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}"></a>
+                                <a class="text-muted float-right" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.writer}"></a>
+                                <a class="text-muted float-right mr-3" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col">
+                        <a class="lead text-dark font-weight-bold mb-2" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='졸업생게시판')}">졸업생게시판</a>
+                        <ul class="list-group" th:each="board : ${service.mainBoardList('졸업생게시판')}">
+                            <li class="list-group-item">
+                                <a class="text-dark" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}"></a>
+                                <a class="text-muted float-right" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.writer}"></a>
+                                <a class="text-muted float-right mr-3" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="w-100"></div>
+
+                    <div class="col" style="margin-top: 75px;">
+                        <a class="lead text-dark font-weight-bold mb-2" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='신입생게시판')}">신입생게시판</a>
+                        <ul class="list-group" th:each="board : ${service.mainBoardList('신입생게시판')}">
+                            <li class="list-group-item">
+                                <a class="text-dark" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}"></a>
+                                <a class="text-muted float-right" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.writer}"></a>
+                                <a class="text-muted float-right mr-3" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col" style="margin-top: 75px;">
+                        <a class="lead text-dark font-weight-bold mb-2" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='정보공유게시판')}">정보공유게시판</a>
+                        <ul class="list-group" th:each="board : ${service.mainBoardList('정보공유게시판')}">
+                            <li class="list-group-item">
+                                <a class="text-dark" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}"></a>
+                                <a class="text-muted float-right" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.writer}"></a>
+                                <a class="text-muted float-right mr-3" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="col-md-3">
+                <div class="card" sec:authorize="isAuthenticated()">
+                    <ul class="nav justify-content-center" style="padding: 25px">
+                        <li class="nav-item col-12" style="text-align: center; margin: 15px">
+                            <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                                 width="125" height="125" class="rounded border bg-light"></svg>
+                            <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
+                                 width="125" height="125" class="rounded border"/>
+                        </li>
+                        <li class="nav-item col-12">
+                            <h4 style="text-align: center;" th:text="${account.username}"></h4>
+                        </li>
+                        <li class="nav-item col-6" style="text-align: center">
+                            <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">회원설정</a>
+                        </li>
+                        <li class="nav-item col-6" style="text-align: center">
+                            <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                                <a class="dropdown-item" type="submit">로그아웃</a>
+                            </form>
+                        </li>
+                    </ul>
+                </div>-->
+
+                <div class="col" style="margin-top: 40px;">
+                    <h4>인기 게시판</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">게시글1</li>
+                        <li class="list-group-item">게시글2</li>
+                        <li class="list-group-item">게시글3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:replace="fragments.html :: footer"></div>
+</body>
+</html>

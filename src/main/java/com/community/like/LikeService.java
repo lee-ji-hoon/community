@@ -1,7 +1,7 @@
 package com.community.like;
 
 import com.community.account.entity.Account;
-import com.community.board.Board;
+import com.community.board.entity.Board;
 import com.community.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

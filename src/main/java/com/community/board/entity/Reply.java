@@ -1,22 +1,22 @@
-package com.community.like;
+package com.community.board.entity;
 
 import com.community.account.entity.Account;
-import com.community.board.entity.Board;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "rid")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Likes {
+public class Reply {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    private Long rid;
 
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "board_bid")
@@ -26,8 +26,7 @@ public class Likes {
     @JoinColumn(name = "writer_id")
     private Account account;
 
-    public Likes(Board board, Account account) {
-        this.board = board;
-        this.account = account;
-    }
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
 }

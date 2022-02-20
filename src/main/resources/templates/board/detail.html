@@ -55,13 +55,46 @@
     <button type="button" class="btn btn-link text-danger">신고하기</button>
     <hr>
     <div class="bg-light">
-        <form>
-            <ul class="bg-light list-group list-group-flush">
-                <li class="list-group-item bg-light">
-                    <textarea style="resize: none" class="form-control" name="reply" rows="3"></textarea>
-                    <button type="submit" class="btn btn-dark mt-3">댓글 작성</button>
-                </li>
-            </ul>
+        <div th:each="reply : ${reply}">
+            <div class="col-8 mb-5">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${reply.getAccount().nickname}">
+                            <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><h6 class="dropdown-header" th:text="${reply.getAccount().nickname}">Username</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${reply.getAccount().nickname})}">프로필 보기</a></li>
+                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${reply.getAccount().id})}">작성한 게시물 보기</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="card mt-1">
+                    <div class="row no-gutters">
+                        <div class="col-8">
+                            <div class="card-body">
+                                <p class="card-text" th:text="${reply.content}">내용</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form th:action="@{/board/detail/{boardId}/reply(boardId=${board.bid})}" method="post">
+            <div>
+                <h4><small>댓글 작성하기</small></h4>
+                <ul class="bg-light list-group list-group-flush">
+                    <li class="list-group-item bg-light">
+                        <input type="hidden" id="board_id" name="board" class="form-control"
+                               value="1" th:value="${board.bid}" readonly>
+                        <input type="hidden" id="account_id" name="account" class="form-control"
+                               value="1" th:value="${account.id}" readonly>
+                        <textarea style="resize: none" class="form-control" name="content" rows="3"></textarea>
+                        <button type="submit" class="btn btn-dark mt-3">댓글 작성</button>
+                    </li>
+                </ul>
+            </div>
         </form>
     </div>
     <hr>
