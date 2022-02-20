@@ -1,6 +1,6 @@
-package com.community.profile.form;
+package com.community.zone;
 
-import com.community.profile.entity.Zone;
+import com.community.zone.Zone;
 import lombok.Data;
 
 @Data

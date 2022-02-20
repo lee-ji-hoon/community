@@ -1,6 +1,6 @@
-package com.community.profile.repository;
+package com.community.zone;
 
-import com.community.profile.entity.Zone;
+import com.community.zone.Zone;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ZoneRepository extends JpaRepository<Zone, Long> {

@@ -1,6 +1,6 @@
-package com.community.profile.repository;
+package com.community.tag;
 
-import com.community.profile.entity.Tag;
+import com.community.tag.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
