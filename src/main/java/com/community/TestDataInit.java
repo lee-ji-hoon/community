@@ -18,13 +18,14 @@ public class TestDataInit {
     private final AccountRepository accountRepository;
     private final BoardRepository boardRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String BOARD_CONTENT_VALUE = "<p><b>이지훈</b><span style=\"font-family: -apple-system, BlinkMacSystemFont, &quot;Noto Sans KR&quot;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 1rem;\">은 바보다</span></p><p><span style=\"font-family: -apple-system, BlinkMacSystemFont, &quot;Noto Sans KR&quot;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 1rem; background-color: rgb(255, 255, 0);\"><font color=\"#000000\"><i><b>이오&nbsp;</b>밖에 모르는 바보..</i></font></span></p><p><span style=\"font-family: -apple-system, BlinkMacSystemFont, &quot;Noto Sans KR&quot;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 1rem;\"><font color=\"#000000\" style=\"\"><b style=\"\">이오는 바보다.</b></font></span></p><p><span style=\"font-family: -apple-system, BlinkMacSystemFont, &quot;Noto Sans KR&quot;, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 1rem; background-color: rgb(255, 255, 0);\"><font color=\"#000000\" style=\"\"><i><b>츄르</b> 밖에 모르는 바보..</i></font></span></p><p><br></p>";
 
     @PostConstruct
     public void init() {
-         boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목", "자유게시판 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목", "정보공유게시판 내용", "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "신입생게시판", "신입생게시판 제목", "신입생게시판 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
-         boardRepository.save(new Board(null, "졸업생게시판", "졸업생게시판 제목", "졸업생게시판 내용", "1240", 2L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목", BOARD_CONTENT_VALUE, "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목", BOARD_CONTENT_VALUE, "tester", 1L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "신입생게시판", "신입생게시판 제목", BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusHours(1), null));
+         boardRepository.save(new Board(null, "졸업생게시판", "졸업생게시판 제목", BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusHours(1), null));
 
         if (!accountRepository.existsByStudentId("17-100000")) {
             accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"),
