@@ -170,11 +170,13 @@ public class BoardController {
     @GetMapping("/board/search/{writerId}")
     public String findUserPost(@PathVariable long writerId, Model model) {
         List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTimeDesc(writerId);
+        Optional<Account> account = accountRepository.findById(writerId);
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("service", boardService);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
+        model.addAttribute("bt", account.get().getNickname());
 
         model.addAttribute(new SearchForm());
         return "board/board-list";

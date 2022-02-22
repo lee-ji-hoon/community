@@ -129,7 +129,7 @@ public class BoardService {
                     log.info(String.valueOf(boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword)));
                     return boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword);
             }
-        } else {
+        } else if (boardTitle.equals("자유게시판") || boardTitle.equals("정보공유게시판") || boardTitle.equals("신입생게시판") || boardTitle.equals("졸업생게시판")) {
             switch (searchType) {
                 case "title":
                     log.info("검색 타입 = " + searchType);
@@ -149,6 +149,27 @@ public class BoardService {
                     log.info("게시판 = " + boardTitle);
                     log.info(String.valueOf(boardRepository.findByWriterContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle)));
                     return boardRepository.findByWriterContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle);
+            }
+        } else {
+            switch (searchType) {
+                case "title":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByTitleContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByTitleContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
+                case "content":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByWriterContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByWriterContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
+                case "writer":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByContentContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByContentContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
             }
         }
 
