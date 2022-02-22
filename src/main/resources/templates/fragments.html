@@ -129,30 +129,42 @@
     </div>
 </nav>
 
-<div th:fragment="side-bar" class="col-md-2 d-none d-md-block bg-light sidebar">
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            <a class="h6 btn btn-default" th:href=@{/}>홈</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default">내가 쓴 글</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default">저장</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default">좋아요</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default" th:href="@{/board/main}">게시판</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default">팔로우</a>
-        </li>
-        <li class="list-group-item">
-            <a class="h6 btn btn-default" th:href="@{/council/student-council}">학생회 게시판</a>
-        </li>
-    </ul>
+<div th:fragment="side-bar" class="col-md-2 d-none d-md-block">
+    <div class="card mb-3">
+        <div class="card-header text-white bg-secondary">
+            USER
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark" th:href="@{/}">홈</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark">내가 쓴 글</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark">좋아요</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark">저장</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark">팔로우</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card">
+        <div class="card-header text-white bg-secondary">
+            게시판 관련
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark" th:href="@{/council/student-council}">학생회 게시판</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a class="text-dark" th:href="@{/board/main}">게시판</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 
