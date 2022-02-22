@@ -8,6 +8,7 @@ import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
 import com.community.board.form.ReportForm;
+import com.community.board.form.SearchForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
@@ -56,6 +57,7 @@ public class BoardController {
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
+        model.addAttribute("bt", "전체게시판");
         model.addAttribute(new SearchForm());
         return "board/board-list";
     }
@@ -147,10 +149,11 @@ public class BoardController {
     }
 
     // 검색 기능
-    @PostMapping("/board/search")
-    public String searchPost(SearchForm searchForm, Model model) {
+    @PostMapping("/board/search/{boardTitle}")
+    public String searchPost(@PathVariable String boardTitle, SearchForm searchForm, Model model) {
         log.info("검색 조건 : " + searchForm.getSearchType());
         log.info("검색 키워드 : " + searchForm.getKeyword());
+        log.info("검색 게시판 : " + searchForm.getBoardTitle());
         List<Board> searchPosts = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword(), searchForm.getBoardTitle());
 
         model.addAttribute("board", searchPosts);
@@ -158,6 +161,7 @@ public class BoardController {
         model.addAttribute("service", boardService);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
+        model.addAttribute("bt", boardTitle);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";
@@ -186,7 +190,7 @@ public class BoardController {
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
-        model.addAttribute("boardTitle", boardTitle);
+        model.addAttribute("bt", boardTitle);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";

@@ -10,19 +10,21 @@
         <div th:replace="fragments.html :: side-bar"></div>
         <!-- 좌측 끝 -->
         <div class="col-md-7 gedf-main">
-            <th:block th:if="${boardTitle != null}">
-                <h3 th:text="${boardTitle}"></h3>
+            <th:block th:if="${bt != null}">
+                <h3 th:text="${bt}"></h3>
             </th:block>
-            <th:block th:if="${boardTitle == null}">
+            <th:block th:if="${bt == null}">
                 <h3 th:text="전체게시판"></h3>
             </th:block>
             <div class="form-group">
-                <form class="form-inline my-2 my-lg-0 float-left" method="post" th:object="${searchForm}" th:action="@{/board/search}">
-                    <th:block th:if="${boardTitle != null}">
-                        <input class="form-control mr-sm-2" type="hidden" name="boardTitle" th:field="*{boardTitle}" th:value="${boardTitle}"/>
+                <form class="form-inline my-2 my-lg-0 float-left" method="post" th:object="${searchForm}" th:action="@{/board/search/{boardTitle}(boardTitle=${bt})}">
+                    <th:block th:if="${bt != null}">
+                        <input type="hidden" name="boardTitle" th:value="${bt}">
                     </th:block>
-                    <th:block th:if="${boardTitle == null}">
-                        <input class="form-control mr-sm-2" type="hidden" name="boardTitle" th:field="*{boardTitle}" th:value="allBoard"/>
+                    <th:block th:if="${bt == null}">
+                        <label>
+                            <input type="hidden" name="boardTitle" th:value="전체게시판">
+                        </label>
                     </th:block>
                     <select class="custom-select" name="searchType" th:field="*{searchType}">
                         <optgroup selected label="검색 내용 선택">
@@ -31,7 +33,18 @@
                             <option value="content">내용</option>
                         </optgroup>
                     </select>
-                    <input class="form-control mr-sm-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search" name="keyword" th:field="*{keyword}"/>
+                    <th:block th:if="${bt != null}">
+                        <label>
+                            <input class="form-control mr-sm-2" type="search" th:placeholder="|${bt} 내에서 검색|" aria-label="Search" name="keyword" th:field="*{keyword}"/>
+
+                        </label>
+                    </th:block>
+                    <th:block th:if="${bt == null}">
+                        <label>
+                            <input class="form-control mr-sm-2" type="search" th:placeholder="전체게시판 내에서 검색" aria-label="Search" name="keyword" th:field="*{keyword}"/>
+
+                        </label>
+                    </th:block>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
                 </form>
             </div>
