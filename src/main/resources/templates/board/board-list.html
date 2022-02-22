@@ -115,8 +115,8 @@
                         <i class="fa fa-clock-o"></i><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${service.boardDateTime(board.uploadTime)}">작성일</a>
                     </th:block>
                     <br>
-                    <a href="#" class="card-link"><i class="fa fa-gittip"></i><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${likeService.boardLikeSize(board)}">좋아요 수</a></a>
-                    <a href="#" class="card-link"><i class="fa fa-comment"></i><a class="btn btn-default" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${replyService.boardReplySize(board)}">댓글 수</a></a>
+                    <a href="#" class="card-link"><i class="fa fa-gittip"></i><a class="btn btn-default badge" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${likeService.boardLikeSize(board)}">좋아요 수</a></a>
+                    <a href="#" class="card-link"><i class="fa fa-comment"></i><a class="btn btn-default badge" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${replyService.boardReplySize(board)}">댓글 수</a></a>
                 </div>
             </div>
             <!-- 게시글 목록 끝 -->
