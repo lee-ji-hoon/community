@@ -40,6 +40,7 @@
             margin: 0;
         }
         body{
+            padding-top: 3rem;
             font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
         body,
@@ -70,7 +71,7 @@
     </style>
 </head>
 
-<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
     <div class="container-fluid" style="user-select: auto;">
         <a class="navbar-brand" href="/" th:href="@{/}">
             MainPage
@@ -128,7 +129,7 @@
     </div>
 </nav>
 
-<div th:fragment="side-bar" class="col-md-2">
+<div th:fragment="side-bar" class="col-md-2 d-none d-md-block bg-light sidebar">
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <a class="h6 btn btn-default" th:href=@{/}>홈</a>
