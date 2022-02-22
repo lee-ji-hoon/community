@@ -47,6 +47,8 @@ public class BoardService {
                 .boardTitle(boardForm.getBoardTitle())
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
+                .updatableBoard(true)
+                .removableBoard(true)
                 .writer(boardForm.getWriter())
                 .writerId(account.getId())
                 .build();
@@ -54,12 +56,15 @@ public class BoardService {
     }
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
-        Board board = boardRepository.findAllByBid(boardId);
-        board.setTitle(boardForm.getTitle());
-        board.setBoardTitle(boardForm.getBoardTitle());
-        board.setContent(boardForm.getContent());
-        board.setWriter(boardForm.getWriter());
-        board.setUpdateTime(LocalDateTime.now());
+        Board board = boardRepository.findByBid(boardId);
+        if (board.isUpdatableBoard()) {
+            board.setTitle(boardForm.getTitle());
+            board.setBoardTitle(boardForm.getBoardTitle());
+            board.setContent(boardForm.getContent());
+            board.setWriter(boardForm.getWriter());
+            board.setUpdateTime(LocalDateTime.now());
+            return boardRepository.save(board);
+        }
 
         return boardRepository.save(board);
     }
@@ -101,7 +106,7 @@ public class BoardService {
     }
 
     public List<Board> mainBoardList(String boardTitle) {
-        return boardRepository.findTop4ByBoardTitleOrderByBidDesc(boardTitle);
+        return boardRepository.findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(boardTitle, true, true);
     }
 
     public List<Board> searchPosts(String searchType, String keyword) {
@@ -129,7 +134,7 @@ public class BoardService {
 
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
-        Board board = boardRepository.findAllByBid(boardId);
+        Board board = boardRepository.findByBid(boardId);
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);

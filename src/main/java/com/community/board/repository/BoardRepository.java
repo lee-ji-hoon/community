@@ -17,13 +17,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAllByWriterIdOrderByUploadTimeDesc(long id);
 
-    Board findAllByBid(long id);
-
     Board findByBid(long id);
+
+    List<Board> findAllByUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(Boolean updatable, Boolean removable);
 
     List<Board> findAllByBoardTitleOrderByUploadTimeDesc(String boardTitle);
 
-    List<Board> findTop4ByBoardTitleOrderByBidDesc(String boardTitle);
+    List<Board> findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(String boardTitle, Boolean updatable, Boolean removable);
 
     void deleteAllByWriterId(long writerId);
 }

@@ -64,12 +64,7 @@
                             </div>
                             <div class="ml-2">
                                 <div class="h5 m-0">
-                                    <th:block th:if="${board.isRemovableBoard()==true && board.isUpdatableBoard()==true}">
-                                        <a class="card-text text-dark font-weight-bold" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}">글 제목</a>
-                                    </th:block>
-                                    <th:block th:if="${board.isRemovableBoard()==false && board.isUpdatableBoard()==false}">
-                                        <a class="card-text text-dark font-weight-bold" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}">신고된 게시글</a>
-                                    </th:block>
+                                    <a class="card-text text-dark font-weight-bold" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.title}">글 제목</a>
                                 </div>
                                 <div class="h7 text-muted mb-0">
                                     <ul class="navbar-nav">
@@ -96,12 +91,7 @@
                 <div class="card-body">
                     <!--게시판 정보 숨김-->
                     <!--<a class="card-text lead text-muted" href="board" th:href="@{/board/detail/{boardId}(boardId=${board.bid})}" th:text="${board.boardTitle}">게시판</a>-->
-                    <th:block th:if="${board.isRemovableBoard()==true && board.isUpdatableBoard()==true}">
-                        <div class="d-inline-block text-truncate" id="content" name="content" style="max-height: 150px" th:utext="${board.content}"></div>
-                    </th:block>
-                    <th:block th:if="${board.isRemovableBoard()==false && board.isUpdatableBoard()==false}">
-                        <div class="d-inline-block text-truncate" id="content" name="content" style="max-height: 150px">신고된 게시글입니다.<br>확인 후 조치되기 전까지 조회가 불가능합니다.</div>
-                    </th:block>
+                    <div class="d-inline-block text-truncate" id="content" name="content" style="max-height: 150px" th:utext="${board.content}"></div>
                 </div>
                 <div class="card-footer">
                     <th:block th:if="${board.updateTime != null}">

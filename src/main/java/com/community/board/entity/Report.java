@@ -12,23 +12,30 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reply {
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long rid;
+    private Long report_id;
 
-    @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_bid")
-    private Board board;
-
+    // 신고자
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Account account;
 
+    // 신고된 게시글 저장
+    @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_bid")
+    private Board board;
+
+    // 신고된 댓글 저장
+    @ManyToOne(targetEntity = Reply.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "rid")
+    private Reply reply;
+
+    // 신고 내용
     @Column(columnDefinition = "TEXT")
-    private String content;
+    private String report_content;
 
-    private LocalDateTime uploadTime;
-
+    private LocalDateTime reportTime;
 }
