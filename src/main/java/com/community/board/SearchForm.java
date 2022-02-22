@@ -13,4 +13,6 @@ public class SearchForm {
 
     private String keyword;
 
+    private String boardTitle;
+
 }

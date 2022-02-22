@@ -151,7 +151,7 @@ public class BoardController {
     public String searchPost(SearchForm searchForm, Model model) {
         log.info("검색 조건 : " + searchForm.getSearchType());
         log.info("검색 키워드 : " + searchForm.getKeyword());
-        List<Board> searchPosts = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword());
+        List<Board> searchPosts = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword(), searchForm.getBoardTitle());
 
         model.addAttribute("board", searchPosts);
         model.addAttribute("accountRepo", accountRepository);
@@ -186,6 +186,7 @@ public class BoardController {
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
+        model.addAttribute("boardTitle", boardTitle);
 
         model.addAttribute(new SearchForm());
         return "board/board-list";

@@ -10,47 +10,38 @@
         <div th:replace="fragments.html :: side-bar"></div>
         <!-- 좌측 끝 -->
         <div class="col-md-7 gedf-main">
-            <div class="card gedf-card">
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id ="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">검색</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id ="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">게시글 등록</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id ="posts" role="tabpanel" aria-labelledby="posts-tab">
-                            <div class="form-group">
-                                <form class="form-inline my-2 my-lg-0 float-left" method="post" th:object="${searchForm}" th:action="@{/board/search}">
-                                    <select class="custom-select" name="searchType" th:field="*{searchType}">
-                                        <optgroup selected label="검색 내용 선택">
-                                            <option value="title">제목</option>
-                                            <option value="writer">작성자</option>
-                                            <option value="content">내용</option>
-                                        </optgroup>
-                                    </select>
-                                    <input class="form-control mr-sm-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search" name="keyword" th:field="*{keyword}"/>
-                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id ="images" role="tabpanel" aria-labelledby="images-tab">
-                            <div class="form-group">
-                                <div class="custom-file">
-                                    <button class="btn btn-primary float-right"
-                                            onclick="location.href='board_write.html'"
-                                            th:onclick="|location.href='@{/board/write}'|"
-                                            type="button">
-                                        글 작성</button>
-                                </div>
-                            </div>
-                            <div class="py-4"></div>
-                        </div>
-                    </div>
+            <th:block th:if="${boardTitle != null}">
+                <h3 th:text="${boardTitle}"></h3>
+            </th:block>
+            <th:block th:if="${boardTitle == null}">
+                <h3 th:text="전체게시판"></h3>
+            </th:block>
+            <div class="form-group">
+                <form class="form-inline my-2 my-lg-0 float-left" method="post" th:object="${searchForm}" th:action="@{/board/search}">
+                    <th:block th:if="${boardTitle != null}">
+                        <input class="form-control mr-sm-2" type="hidden" name="boardTitle" th:field="*{boardTitle}" th:value="${boardTitle}"/>
+                    </th:block>
+                    <th:block th:if="${boardTitle == null}">
+                        <input class="form-control mr-sm-2" type="hidden" name="boardTitle" th:field="*{boardTitle}" th:value="allBoard"/>
+                    </th:block>
+                    <select class="custom-select" name="searchType" th:field="*{searchType}">
+                        <optgroup selected label="검색 내용 선택">
+                            <option value="title">제목</option>
+                            <option value="writer">작성자</option>
+                            <option value="content">내용</option>
+                        </optgroup>
+                    </select>
+                    <input class="form-control mr-sm-2" type="search" placeholder="검색어를 입력해주세요." aria-label="Search" name="keyword" th:field="*{keyword}"/>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+                </form>
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <button class="btn btn-primary float-right"
+                            onclick="location.href='board_write.html'"
+                            th:onclick="|location.href='@{/board/write}'|"
+                            type="button">
+                        글 작성</button>
                 </div>
             </div>
             <!-- 게시글 작성 끝 -->

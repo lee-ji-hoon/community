@@ -109,8 +109,7 @@ public class BoardService {
         return boardRepository.findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(boardTitle, true, true);
     }
 
-    public List<Board> searchPosts(String searchType, String keyword) {
-
+    public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
         switch (searchType) {
             case "title":
                 log.info("검색 타입 = " + searchType);
