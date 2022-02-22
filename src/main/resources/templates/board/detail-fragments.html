@@ -6,11 +6,8 @@
 <div th:replace="fragments.html :: main-nav"></div>
 <div class="container-fluid gedf-wrapper">
     <div class="row">
-        <!-- 좌측 -->
-        <div th:replace="fragments.html :: side-bar"></div>
-        <!-- 좌측 끝 -->
-            <div class="col-md-7 gedf-main">
-                <!-- 게시글 시작 -->
+
+        <!-- 신고되지 않은 게시물 시작 -->
                 <div th:fragment="none-report-board">
                     <div class="p-3 d-none">
                         <label for="id">글 ID</label>
@@ -227,10 +224,9 @@
 
                     </div>
                 </div>
-                <!-- 게시글 목록 끝 -->
-            </div>
-            <div class="col-md-7 gedf-main">
-                <!-- 게시글 시작 -->
+        <!-- 신고되지 않은 게시물 끝 -->
+
+        <!-- 신고된 게시물 시작 -->
                 <div th:fragment="report-board">
                     <div class="p-3 d-none">
                         <label for="id">글 ID</label>
@@ -289,36 +285,8 @@
 
                     </div>
                 </div>
-                <!-- 게시글 목록 끝 -->
-            </div>
-
-        <!-- 오른쪽 게시글 시작 -->
-        <div class="col-md-3">
-            <div class="card hedf-card">
-                <div class="card-body">
-                    <a class="card-title" href="board" th:href="@{/board}">전체게시판</a>
-                </div>
-                <div class="card-body">
-                    <a class="card-title" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='자유게시판')}">자유게시판</a>
-                </div>
-                <div class="card-body">
-                    <a class="card-title" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='정보공유게시판')}">정보공유게시판</a>
-                </div>
-                <div class="card-body">
-                    <a class="card-title" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='신입생게시판')}">신입생게시판</a>
-                </div>
-                <div class="card-body">
-                    <a class="card-title" href="board" th:href="@{/board/bt/{boardTitle}(boardTitle='졸업생게시판')}">졸업생게시판</a>
-                </div>
-            </div>
-        </div>
-        <!-- 오른쪽 게시글 끝 -->
+        <!-- 신고된 게시물 끝 -->
     </div>
 </div>
-<script>
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-    })
-</script>
 </body>
 </html>
