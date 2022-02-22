@@ -1,8 +1,9 @@
 package com.community.profile.service;
 
 import com.community.account.entity.Account;
-import com.community.account.AccountRepository;
+import com.community.account.repository.AccountRepository;
 import com.community.account.AccountService;
+import com.community.account.repository.PersistentLoginsRepository;
 import com.community.board.repository.BoardRepository;
 import com.community.zone.Zone;
 import com.community.profile.form.NotificationsForm;
@@ -25,8 +26,10 @@ public class ProfileService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AccountService accountService;
     private final BoardRepository boardRepository;
+    private final PersistentLoginsRepository persistentLoginsRepository;
+
+    private final AccountService accountService;
 
     // 프로필 업데이트
     public void updateProfile(Account account, ProfileForm profile) {
@@ -68,6 +71,7 @@ public class ProfileService {
         Account deleteNickname = accountRepository.findByNickname(account.getNickname());
         if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
             boardRepository.deleteAllByWriterId(account.getId());
+            persistentLoginsRepository.deleteByUsername(account.getNickname());
             accountRepository.delete(deleteNickname);
         }
     }

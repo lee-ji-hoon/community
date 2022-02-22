@@ -1,6 +1,7 @@
-package com.community.account;
+package com.community.account.repository;
 
 import com.community.account.entity.Account;
+import com.community.account.entity.PersistentLogins;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

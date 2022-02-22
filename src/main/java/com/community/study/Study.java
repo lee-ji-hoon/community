@@ -28,6 +28,19 @@ import java.util.Set;
         @NamedAttributeNode("managers")
 })
 
+@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
+        @NamedAttributeNode("managers")
+})
+
+@NamedEntityGraph(name = "Study.withMembers", attributeNodes = {
+        @NamedAttributeNode("members")
+})
+
+@NamedEntityGraph(name = "Study.withZonesTags", attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("tags")
+})
+
 @Entity
 @Getter
 @Setter
@@ -82,8 +95,11 @@ public class Study {
 
     private boolean useBanner;
 
+    private int memberCount;
+
     public void addManager(Account account) {
         this.managers.add(account);
+        this.memberCount++;
     }
 
     public boolean isJoinable(UserAccount userAccount) {
@@ -105,4 +121,57 @@ public class Study {
         return image != null ? image : "/images/study-banner.jpeg";
     }
 
+    public void publish() {
+        if (!this.closed && !this.published) {
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("스터디를 공개 할 수 없는 상태입니다. 이미 종료됐거나 공개된 스터디인지 다시 확인해주세요");
+        }
+    }
+
+    public void close() {
+        if (this.published) {
+            this.published = false;
+            this.closedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("스터디를 종료 할 수 없습니다. 존재하지 않거나 이미 종료된 스터디입니다. 다시 확인해주세요.");
+        }
+    }
+
+    public void recruitPublish() {
+        if (!this.recruiting && !this.closed && this.published){
+            this.recruiting = true;
+            this.recruitingUpdatedDateTime = LocalDateTime.now();
+        }else {
+            throw new RuntimeException("스터디원 모집을 시작 할 수 없습니다. 종료됐거나 공개되지 않은 스터디입니다. 다시 확인해주세요.");
+        }
+    }
+
+    public void recruitClose() {
+        if (this.recruiting && !this.closed && this.published) {
+            this.recruiting = false;
+            this.recruitingUpdatedDateTime = LocalDateTime.now();
+        }else {
+            throw new RuntimeException("스터디원 모집을 종료 할 수 없습니다. 이미 종료됐거나 시작하지 않은 스터디입니다. 다시 확인해주세요.");
+        }
+    }
+
+    public boolean isRemovable() {
+        return !this.published;
+    }
+
+    public void addMember(Account account) {
+        this.getMembers().add(account);
+        this.memberCount++;
+    }
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
+        this.memberCount--;
+    }
+
+    public boolean UpdateRecruiting() {
+        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusMinutes(30));
+    }
 }
