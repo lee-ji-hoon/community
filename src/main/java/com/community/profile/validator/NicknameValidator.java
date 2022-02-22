@@ -1,7 +1,7 @@
 package com.community.profile.validator;
 
 import com.community.account.entity.Account;
-import com.community.account.AccountRepository;
+import com.community.account.repository.AccountRepository;
 import com.community.profile.form.AccountForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
