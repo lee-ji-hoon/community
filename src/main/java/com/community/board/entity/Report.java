@@ -20,7 +20,7 @@ public class Report {
 
     // 신고자
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     // 신고된 게시글 저장
@@ -30,7 +30,7 @@ public class Report {
 
     // 신고된 댓글 저장
     @ManyToOne(targetEntity = Reply.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "rid")
+    @JoinColumn(name = "reply_rid")
     private Reply reply;
 
     // 신고 내용

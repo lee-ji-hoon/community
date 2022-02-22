@@ -22,6 +22,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByContentContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
 
     List<Board> findAllByWriterIdOrderByUploadTimeDesc(long id);
+    List<Board> findAllByWriterIdAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(long id, Boolean updatable, Boolean removable);
 
     Board findByBid(long id);
 

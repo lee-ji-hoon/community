@@ -170,6 +170,8 @@ public class BoardController {
     @GetMapping("/board/search/{writerId}")
     public String findUserPost(@PathVariable long writerId, Model model) {
         List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTimeDesc(writerId);
+        // 위에 내용 지우고 아래 주석 풀면 신고된 게시글은 제외하고 보여지게 됌
+        //List<Board> boards = boardRepository.findAllByWriterIdAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(writerId, true, true);
         Optional<Account> account = accountRepository.findById(writerId);
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
@@ -247,7 +249,14 @@ public class BoardController {
     @PostMapping("/board/detail/{boardId}/report")
     public String boardReport(@PathVariable Long boardId, ReportForm reportForm, @CurrentUser Account account) {
         Board currentBoard = boardRepository.findByBid(boardId);
-        reportService.saveReport(currentBoard, account, reportForm);
+        reportService.saveBoardReport(currentBoard, account, reportForm);
+        return "redirect:/board/detail/{boardId}";
+    }
+    @PostMapping("/board/detail/{boardId}/reply/{rid}/report")
+    public String replyReport(@PathVariable Long boardId, @PathVariable Long rid, ReportForm reportForm, @CurrentUser Account account) {
+        Reply currentReply = replyRepository.findByRid(rid);
+        log.info(currentReply.toString());
+        reportService.saveReplyReport(currentReply, account, reportForm);
         return "redirect:/board/detail/{boardId}";
     }
 }

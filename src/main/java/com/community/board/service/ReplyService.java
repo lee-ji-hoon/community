@@ -33,6 +33,7 @@ public class ReplyService {
                 .account(account)
                 .board(board)
                 .uploadTime(LocalDateTime.now())
+                .report(false)
                 .build();
         return replyRepository.save(reply);
     }
