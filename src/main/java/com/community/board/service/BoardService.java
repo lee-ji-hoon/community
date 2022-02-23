@@ -47,6 +47,8 @@ public class BoardService {
                 .boardTitle(boardForm.getBoardTitle())
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
+                .updatableBoard(true)
+                .removableBoard(true)
                 .writer(boardForm.getWriter())
                 .writerId(account.getId())
                 .build();
@@ -54,12 +56,15 @@ public class BoardService {
     }
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
-        Board board = boardRepository.findAllByBid(boardId);
-        board.setTitle(boardForm.getTitle());
-        board.setBoardTitle(boardForm.getBoardTitle());
-        board.setContent(boardForm.getContent());
-        board.setWriter(boardForm.getWriter());
-        board.setUpdateTime(LocalDateTime.now());
+        Board board = boardRepository.findByBid(boardId);
+        if (board.isUpdatableBoard()) {
+            board.setTitle(boardForm.getTitle());
+            board.setBoardTitle(boardForm.getBoardTitle());
+            board.setContent(boardForm.getContent());
+            board.setWriter(boardForm.getWriter());
+            board.setUpdateTime(LocalDateTime.now());
+            return boardRepository.save(board);
+        }
 
         return boardRepository.save(board);
     }
@@ -101,35 +106,80 @@ public class BoardService {
     }
 
     public List<Board> mainBoardList(String boardTitle) {
-        return boardRepository.findTop4ByBoardTitleOrderByBidDesc(boardTitle);
+        return boardRepository.findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(boardTitle, true, true);
     }
 
-    public List<Board> searchPosts(String searchType, String keyword) {
-
-        switch (searchType) {
-            case "title":
-                log.info("검색 타입 = " + searchType);
-                log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword)));
-                return boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword);
-            case "content":
-                log.info("검색 타입 = " + searchType);
-                log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword)));
-                return boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword);
-            case "writer":
-                log.info("검색 타입 = " + searchType);
-                log.info("키워드 = " + keyword);
-                log.info(String.valueOf(boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword)));
-                return boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword);
+    public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
+        //TODO boardTitle 검색 구현하기
+        if (boardTitle.equals("전체게시판")) {
+            switch (searchType) {
+                case "title":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info(String.valueOf(boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword)));
+                    return boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword);
+                case "content":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info(String.valueOf(boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword)));
+                    return boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword);
+                case "writer":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info(String.valueOf(boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword)));
+                    return boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword);
+            }
+        } else if (boardTitle.equals("자유게시판") || boardTitle.equals("정보공유게시판") || boardTitle.equals("신입생게시판") || boardTitle.equals("졸업생게시판")) {
+            switch (searchType) {
+                case "title":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByTitleContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByTitleContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle);
+                case "content":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByContentContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByContentContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle);
+                case "writer":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByWriterContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByWriterContainingAndBoardTitleOrderByUploadTimeDesc(keyword, boardTitle);
+            }
+        } else {
+            switch (searchType) {
+                case "title":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByTitleContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByTitleContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
+                case "content":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByWriterContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByWriterContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
+                case "writer":
+                    log.info("검색 타입 = " + searchType);
+                    log.info("키워드 = " + keyword);
+                    log.info("게시판 = " + boardTitle);
+                    log.info(String.valueOf(boardRepository.findByContentContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle)));
+                    return boardRepository.findByContentContainingAndWriterOrderByUploadTimeDesc(keyword, boardTitle);
+            }
         }
+
         log.info("검색 조건 및 키워드가 존재하지 않음으로 전체 검색");
         return boardRepository.findAll();
     }
 
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
-        Board board = boardRepository.findAllByBid(boardId);
+        Board board = boardRepository.findByBid(boardId);
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);
