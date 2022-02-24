@@ -47,8 +47,7 @@ public class BoardService {
                 .boardTitle(boardForm.getBoardTitle())
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
-                .updatableBoard(true)
-                .removableBoard(true)
+                .isReported(false)
                 .writer(boardForm.getWriter())
                 .writerId(account.getId())
                 .build();
@@ -57,16 +56,16 @@ public class BoardService {
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
         Board board = boardRepository.findByBid(boardId);
-        if (board.isUpdatableBoard()) {
-            board.setTitle(boardForm.getTitle());
-            board.setBoardTitle(boardForm.getBoardTitle());
-            board.setContent(boardForm.getContent());
-            board.setWriter(boardForm.getWriter());
-            board.setUpdateTime(LocalDateTime.now());
+        if (board.getIsReported()) {
             return boardRepository.save(board);
         }
-
+        board.setTitle(boardForm.getTitle());
+        board.setBoardTitle(boardForm.getBoardTitle());
+        board.setContent(boardForm.getContent());
+        board.setWriter(boardForm.getWriter());
+        board.setUpdateTime(LocalDateTime.now());
         return boardRepository.save(board);
+
     }
 
     public String boardDateTime(LocalDateTime localDateTime){
@@ -106,7 +105,7 @@ public class BoardService {
     }
 
     public List<Board> mainBoardList(String boardTitle) {
-        return boardRepository.findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(boardTitle, true, true);
+        return boardRepository.findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
     }
 
     public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {

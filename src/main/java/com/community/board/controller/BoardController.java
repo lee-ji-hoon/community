@@ -1,19 +1,17 @@
-package com.community.board;
+package com.community.board.controller;
 
 import com.community.account.repository.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.board.entity.Board;
-import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
-import com.community.board.form.ReportForm;
+import com.community.report.form.BoardReportForm;
 import com.community.board.form.SearchForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import com.community.board.service.ReplyService;
-import com.community.board.service.ReportService;
 import com.community.like.LikeApiController;
 import com.community.like.LikeRepository;
 import com.community.like.LikeService;
@@ -45,13 +43,12 @@ public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
     private final ReplyService replyService;
-    private final ReportService reportService;
     private final LikeApiController likeApiController;
 
     //전체 게시물 조회
     @GetMapping("/board")
     public String boardList(Model model) {
-        List<Board> boards = boardRepository.findAllByUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(true, true);
+        List<Board> boards = boardRepository.findAllByIsReportedOrderByUploadTimeDesc(false);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
@@ -64,7 +61,7 @@ public class BoardController {
 
     @GetMapping("/board/main")
     public String boardMain(Model model) {
-        List<Board> boards = boardRepository.findAllByUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(true, true);
+        List<Board> boards = boardRepository.findAllByIsReportedOrderByUploadTimeDesc(true);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
@@ -112,7 +109,7 @@ public class BoardController {
         model.addAttribute("reply", replyRepository.findAllByBoardOrderByUploadTimeDesc(detail));
         model.addAttribute("replyService", replyService);
         model.addAttribute(new ReplyForm());
-        model.addAttribute(new ReportForm());
+        model.addAttribute(new BoardReportForm());
         return "board/detail";
     }
 
@@ -169,9 +166,7 @@ public class BoardController {
 
     @GetMapping("/board/search/{writerId}")
     public String findUserPost(@PathVariable long writerId, Model model) {
-        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTimeDesc(writerId);
-        // 위에 내용 지우고 아래 주석 풀면 신고된 게시글은 제외하고 보여지게 됌
-        //List<Board> boards = boardRepository.findAllByWriterIdAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(writerId, true, true);
+        List<Board> boards = boardRepository.findAllByWriterIdAndIsReportedOrderByUploadTime(writerId, false);
         Optional<Account> account = accountRepository.findById(writerId);
         model.addAttribute("board", boards);
         model.addAttribute("accountRepo", accountRepository);
@@ -188,7 +183,7 @@ public class BoardController {
     // 게시판 별로 분류
     @GetMapping("/board/bt/{boardTitle}")
     public String boardList(@PathVariable String boardTitle, Model model) {
-        List<Board> boards = boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(boardTitle);
+        List<Board> boards = boardRepository.findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
@@ -220,43 +215,6 @@ public class BoardController {
             likeRepository.delete(likes);
             return "redirect:/board/detail/{boardId}";
         }
-        return "redirect:/board/detail/{boardId}";
-    }
-
-    /* 댓글 작성 관련 로직 */
-    @PostMapping("/board/detail/{boardId}/reply")
-    public String boardReply(@PathVariable Long boardId, ReplyForm replyForm, @CurrentUser Account account) {
-        Board currentBoard = boardRepository.findByBid(boardId);
-        replyService.saveReply(replyForm, account, currentBoard);
-        return "redirect:/board/detail/{boardId}";
-    }
-
-    @PostMapping("/board/detail/{boardId}/reply/update/{rid}")
-    public String boardReplyUpdate(@PathVariable Long boardId,
-                                   @PathVariable Long rid, ReplyForm replyForm) {
-        replyService.updateReply(rid, replyForm);
-        return "redirect:/board/detail/{boardId}";
-    }
-
-    @PostMapping("/board/detail/{boardId}/reply/delete/{rid}")
-    public String boardReplyDelete(@PathVariable Long boardId,
-                                   @PathVariable Long rid) {
-        Reply findReply = replyRepository.findByRid(rid);
-        replyRepository.delete(findReply);
-        return "redirect:/board/detail/{boardId}";
-    }
-
-    @PostMapping("/board/detail/{boardId}/report")
-    public String boardReport(@PathVariable Long boardId, ReportForm reportForm, @CurrentUser Account account) {
-        Board currentBoard = boardRepository.findByBid(boardId);
-        reportService.saveBoardReport(currentBoard, account, reportForm);
-        return "redirect:/board/detail/{boardId}";
-    }
-    @PostMapping("/board/detail/{boardId}/reply/{rid}/report")
-    public String replyReport(@PathVariable Long boardId, @PathVariable Long rid, ReportForm reportForm, @CurrentUser Account account) {
-        Reply currentReply = replyRepository.findByRid(rid);
-        log.info(currentReply.toString());
-        reportService.saveReplyReport(currentReply, account, reportForm);
         return "redirect:/board/detail/{boardId}";
     }
 }

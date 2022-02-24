@@ -10,10 +10,10 @@
         <div th:replace="fragments.html :: side-bar"></div>
         <!-- 좌측 끝 -->
         <div class="col-md-7 gedf-main">
-            <th:block th:if="${board.isRemovableBoard()==true && board.isUpdatableBoard()==true}">
+            <th:block th:if="${!board.getIsReported}">
                 <div th:replace="board/detail-fragments.html :: none-report-board"></div>
             </th:block>
-            <th:block th:if="${board.isRemovableBoard()==false && board.isUpdatableBoard()==false}">
+            <th:block th:if="${board.getIsReported}">
                 <div th:replace="board/detail-fragments.html :: report-board"></div>
             </th:block>
         </div>
