@@ -68,37 +68,47 @@
                                 th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
                                 class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</button>
                     </th:block>
-                    <!-- Button trigger modal -->
 
-                    <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterBoard'+${board.bid}+'Report'">
-                        <i class="fa fa-exclamation-triangle"></i> 신고하기
-                    </a>
-                    <!-- Modal start -->
-                    <div class="modal fade" th:id="'exampleModalCenterBoard'+${board.bid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${board.bid}+'Title'+'Report'" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" th:id="'exampleModalCenter'+${board.bid}+'Title'+'Report'">게시글 신고하기</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                    <!-- 로그인한 유저와 게시글을 작성한 ID가 같다면 신고하기가 뜨지 않음 -->
+                    <th:block th:if="${account.id != board.writerId}">
+                        <th:block th:if="${!boardReport}">
+                            <!-- Button trigger modal -->
+                            <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterBoard'+${board.bid}+'Report'">
+                                <i class="fa fa-exclamation-triangle"></i> 신고하기
+                            </a>
+                            <!-- Modal start -->
+                            <div class="modal fade" th:id="'exampleModalCenterBoard'+${board.bid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${board.bid}+'Title'+'Report'" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" th:id="'exampleModalCenter'+${board.bid}+'Title'+'Report'">게시글 신고하기</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form th:action="@{/board/detail/{boardId}/report(boardId=${board.bid})}" method="post">
+                                            <div class="modal-body">
+                                                정말 신고하시겠습니까?
+                                                <textarea style="resize: none" class="form-control" name="report_content" rows="3" placeholder="신고 사유를 입력해주세요."></textarea>
+                                                <small class="text-muted">허위 신고 시 신고자가 처벌을 받을 수 있습니다.</small><br>
+                                                <small class="text-muted">신고 기록 및 게시글 내용은 DB에 저장됩니다.</small>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                                <button type="submit" class="btn btn-danger">신고</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                                <form th:action="@{/board/detail/{boardId}/report(boardId=${board.bid})}" method="post">
-                                    <div class="modal-body">
-                                        정말 신고하시겠습니까?
-                                        <textarea style="resize: none" class="form-control" name="report_content" rows="3" placeholder="신고 사유를 입력해주세요."></textarea>
-                                        <small class="text-muted">허위 신고 시 신고자가 처벌을 받을 수 있습니다.</small><br>
-                                        <small class="text-muted">신고 기록 및 게시글 내용은 DB에 저장됩니다.</small>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                        <button type="submit" class="btn btn-danger">신고</button>
-                                    </div>
-                                </form>
                             </div>
-                        </div>
-                    </div>
-                    <!-- Modal end -->
+                            <!-- Modal end -->
+                        </th:block>
+                        <th:block th:if="${boardReport}">
+                            <a type="button" class="text-muted ml-2 float-right">
+                                <i class="fa fa-exclamation-triangle"></i> 신고하기
+                            </a>
+                        </th:block>
+                    </th:block>
 
                     <hr>
                     <div class="bg-light">

@@ -16,6 +16,8 @@ import com.community.like.LikeApiController;
 import com.community.like.LikeRepository;
 import com.community.like.LikeService;
 import com.community.like.Likes;
+import com.community.report.repository.BoardReportRepository;
+import com.community.report.repository.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -39,6 +41,8 @@ public class BoardController {
     private final LikeRepository likeRepository;
     private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
+    private final BoardReportRepository boardReportRepository;
+    private final ReplyReportRepository replyReportRepository;
 
     private final BoardService boardService;
     private final LikeService likeService;
@@ -108,6 +112,8 @@ public class BoardController {
         model.addAttribute("likeService", likeService);
         model.addAttribute("reply", replyRepository.findAllByBoardOrderByUploadTimeDesc(detail));
         model.addAttribute("replyService", replyService);
+        model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
+
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
         return "board/detail";
