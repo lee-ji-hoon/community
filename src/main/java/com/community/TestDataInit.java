@@ -27,6 +27,7 @@ public class TestDataInit {
          boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목",null,null, false,0,BOARD_CONTENT_VALUE2, "tester", 1L, 0, LocalDateTime.now(), null));
          boardRepository.save(new Board(null, "신입생게시판", "신입생게시판 제목",null, null, false,0,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusMinutes(20), null));
          boardRepository.save(new Board(null, "졸업생게시판", "졸업생게시판 제목",null, null, false,0,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusSeconds(40), null));
+         boardRepository.save(new Board(null, "졸업생게시판", "신고된 졸업 게시글",null, null, true,5,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusSeconds(40), null));
 
         if (!accountRepository.existsByStudentId("17-100000")) {
             accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"),
