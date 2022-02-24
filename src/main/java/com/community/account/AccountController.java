@@ -4,6 +4,7 @@ import com.community.account.entity.Account;
 import com.community.account.form.SignUpForm;
 import com.community.account.repository.AccountRepository;
 import com.community.account.validator.SignUpFormValidator;
+import com.community.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ public class AccountController {
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
+    private final StudyRepository studyRepository;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -94,11 +96,15 @@ public class AccountController {
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
         Account byNickname = accountRepository.findByNickname(nickname);
+        Account accountLoaded = accountRepository.findAccountWithTagsAndZonesById(account.getId());
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
 
+        model.addAttribute(accountLoaded);
         model.addAttribute(byNickname);
+        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
+        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
         model.addAttribute("isOwner", byNickname.equals(account));
         return "account/profile";
     }

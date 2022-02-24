@@ -2,7 +2,7 @@
 
 ## 2022 02 08 기초 세팅
 
-- FRONT : 배성현 (HTML / CSS / JS)
+- FRONT : ?? (HTML / CSS / JS)
 - BACKEND : 이지훈, 가준영 (SpringBoot, JPA)
 
 [Notion](https://www.notion.so/c080919d0f1e48c68971c8e96b997072)
@@ -12,6 +12,9 @@
 [ERD](https://www.erdcloud.com/d/c6fnKuozMTH2YMWaS)
 
 [FlowChart](https://app.diagrams.net/#G16A5Jk-hlk1xUnX1pVzuDqR5D5I43Seua)
+
+- npm 
+<img width="115" alt="image" src="https://user-images.githubusercontent.com/53300830/155288339-6e533621-eed1-40f1-a76b-552a3a4ee43c.png">
 
 ### Spring Initializr 세팅 
 ![image](https://user-images.githubusercontent.com/53300830/152991455-f48272b1-a1b2-4267-aa0f-2948daa15546.png)

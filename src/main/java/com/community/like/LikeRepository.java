@@ -20,7 +20,7 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
 
     boolean existsByAccountAndBoard(Account account, Board board);
 
-    List<Likes> findTop4ByBoardOrderByBoard(List<Board> board);
+//    List<Likes> findTop4ByBoardOrderByBoard(List<Board> board);
 
 
 }
