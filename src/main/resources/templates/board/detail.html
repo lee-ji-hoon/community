@@ -10,11 +10,23 @@
         <div th:replace="fragments.html :: side-bar"></div>
         <!-- 좌측 끝 -->
         <div class="col-md-7 gedf-main">
-            <th:block th:if="${board.isRemovableBoard()==true && board.isUpdatableBoard()==true}">
-                <div th:replace="board/detail-fragments.html :: none-report-board"></div>
+            <th:block th:if="${account != null}">
+                <!-- 로그인 유저 시작 -->
+                <th:block th:if="${!board.getIsReported}">
+                    <div th:replace="board/detail-fragments.html :: login-true"></div>
+                </th:block>
+                <th:block th:if="${board.getIsReported}">
+                    <div th:replace="board/detail-fragments.html :: report-board"></div>
+                </th:block>
             </th:block>
-            <th:block th:if="${board.isRemovableBoard()==false && board.isUpdatableBoard()==false}">
-                <div th:replace="board/detail-fragments.html :: report-board"></div>
+            <th:block th:if="${account == null}">
+                <!-- 비로그인 유저 시작 -->
+                <th:block th:if="${!board.getIsReported}">
+                    <div th:replace="board/detail-fragments.html :: login-false"></div>
+                </th:block>
+                <th:block th:if="${board.getIsReported}">
+                    <div th:replace="board/detail-fragments.html :: report-board"></div>
+                </th:block>
             </th:block>
         </div>
         <!-- 오른쪽 게시글 시작 -->
