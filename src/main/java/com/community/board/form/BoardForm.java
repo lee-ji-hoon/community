@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class BoardForm {
-    @NotBlank(message = "제목을 입력해주세요.")
+    @NotBlank
     @Length(min = 5, max = 30)
     private String title;
 

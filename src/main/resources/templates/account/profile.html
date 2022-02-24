@@ -252,7 +252,21 @@
             <label for="study">참여중인 스터디</label>
 
             <section id="community_content">
-                <p>tab menu1의 내용</p>
+                <div class="row row-cols-1 row-cols-md-2">
+                    <div class="col mb-4" th:each="board : ${board}" >
+                        <div class="card"
+                             th:onclick="|location.href='@{/board/detail/{boardId}(boardId=${board.bid})}'|">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted" th:text="${board.boardTitle}">Card subtitle</h6>
+                                <h5 class="card-title text-truncate" th:text="${board.title}">title</h5>
+                                <p class="card-text"></p>
+                                <a href="#" class="card-link"><i class="fa fa-thumbs-up"></i><a class="btn btn-default badge" th:text="${likeService.boardLikeSize(board)}">좋아요 수</a></a>
+                                <a href="#" class="card-link"><i class="fa fa-eye"></i><a class="btn btn-default badge" th:text="${board.pageView}">조회수</a></a>
+                                <h6 class="card-subtitle text-muted float-right" th:text="${boardService.boardDateTime(board.uploadTime)}">시간</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section id="study_content">
