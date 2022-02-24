@@ -5,6 +5,7 @@ import com.community.board.repository.BoardRepository;
 import com.community.board.entity.Board;
 import com.community.board.form.BoardForm;
 import com.community.like.LikeRepository;
+import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -47,8 +48,8 @@ public class BoardService {
                 .boardTitle(boardForm.getBoardTitle())
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
-                .updatableBoard(true)
-                .removableBoard(true)
+                .isReported(false)
+                .reportCount(0)
                 .writer(boardForm.getWriter())
                 .writerId(account.getId())
                 .build();
@@ -57,16 +58,16 @@ public class BoardService {
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
         Board board = boardRepository.findByBid(boardId);
-        if (board.isUpdatableBoard()) {
-            board.setTitle(boardForm.getTitle());
-            board.setBoardTitle(boardForm.getBoardTitle());
-            board.setContent(boardForm.getContent());
-            board.setWriter(boardForm.getWriter());
-            board.setUpdateTime(LocalDateTime.now());
+        if (board.getIsReported()) {
             return boardRepository.save(board);
         }
-
+        board.setTitle(boardForm.getTitle());
+        board.setBoardTitle(boardForm.getBoardTitle());
+        board.setContent(boardForm.getContent());
+        board.setWriter(boardForm.getWriter());
+        board.setUpdateTime(LocalDateTime.now());
         return boardRepository.save(board);
+
     }
 
     public String boardDateTime(LocalDateTime localDateTime){
@@ -106,8 +107,15 @@ public class BoardService {
     }
 
     public List<Board> mainBoardList(String boardTitle) {
-        return boardRepository.findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(boardTitle, true, true);
+        return boardRepository.findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
     }
+
+    /*public List<Board> popularPosts() {
+        List<Board> boards = boardRepository.findAll();
+        List<Likes> likesPosts = likeRepository.findTop4ByBoardOrderByBoard(boards);
+        List<Board> top4Boards = boardRepository.findAllByBidOrderByUploadTime(likesPosts);
+        return null;
+    }*/
 
     public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
         //TODO boardTitle 검색 구현하기

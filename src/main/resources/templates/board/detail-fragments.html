@@ -7,69 +7,132 @@
 <div class="container-fluid gedf-wrapper">
     <div class="row">
 
-        <!-- 신고되지 않은 게시물 시작 -->
-                <div th:fragment="none-report-board">
-                    <div class="p-3 d-none">
-                        <label for="id">글 ID</label>
-                        <input type="text" id="id" name="id" class="form-control"
-                               value="1" th:value="${board.bid}" readonly>
-                    </div>
-                    <div class="p-3">
-                        <h2 class="pt-1 pb-3" th:text="${board.title}"></h2>
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${board.writer}">
-                                    <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
-                                    <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
-                                </ul>
-                            </li>
+        <!-- 신고된 게시물 -->
+        <div th:fragment="report-board">
+            <div class="p-3 d-none">
+                <label for="id">글 ID</label>
+                <input type="text" id="id" name="id" class="form-control"
+                       value="1" th:value="${board.bid}" readonly>
+            </div>
+            <div class="p-3">
+                <h2 class="pt-1 pb-3">신고된 게시물</h2>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${board.writer}">
+                            <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
+                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
                         </ul>
-                        <th:block th:if="${board.updateTime != null}">
-                            <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
-                        </th:block>
-                        <th:block th:if="${board.updateTime == null}">
-                            <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="${service.boardDateTime(board.uploadTime)}"></a>
-                        </th:block>
-                        <th:block th:if="${account.id == board.writerId}">
-                            <a class="text-muted mr-1"> | </a>
-                            <a class="text-primary mr-1"
-                               onclick="location.href='board-write'"
-                               th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.bid})}'|"
-                               type="button">수정</a>
-                            <a class="text-muted mr-1"> | </a>
-                            <a class="text-danger mr-1"
-                               onclick="location.href='board-write'"
-                               th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.bid})}'|"
-                               type="button">삭제</a>
-                        </th:block>
-                        <!--<br>
-                        <a class="text-muted mr-1"> 조회수 | </a>
-                        <a class="text-muted mr-1" th:text="${board.pageView}"></a>-->
-                    </div>
-                    <hr class="mt-0">
-                    <div class="container">
-                        <div id="content" name="content" th:utext="${board.content}"></div>
-                    </div>
-                    <hr>
-                    <b><a class="text-primary pl-2" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
-                    <br>
-                    <th:block th:if="${likes.isPresent()}">
-                        <button type="button" id="heart_cancel"
-                                th:onclick="|location.href='@{/board/detail/{boardId}/like-cancel(boardId = ${board.bid})}'|"
-                                class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요 취소</button>
-                    </th:block>
-                    <th:block th:if="${likes.isEmpty()}">
-                        <button type="button" id="heart"
-                                th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
-                                class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</button>
-                    </th:block>
-                    <!-- Button trigger modal -->
+                    </li>
+                </ul>
+                <th:block th:if="${board.updateTime != null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
+                </th:block>
+                <th:block th:if="${board.updateTime == null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                </th:block>
+                <!--<br>
+                <a class="text-muted mr-1"> 조회수 | </a>
+                <a class="text-muted mr-1" th:text="${board.pageView}"></a>-->
+            </div>
+            <hr class="mt-0">
+            <div class="container">
+                <div id="content" name="content">
+                    신고된 게시물입니다.<br>
+                    확인 후 조치되기 전까지 조회가 불가능합니다.
+                </div>
+            </div>
+            <hr>
+            <div class="bg-light">
+                <div>
+                    <h4><small>댓글 작성하기</small></h4>
+                    <ul class="bg-light list-group list-group-flush">
+                        <li class="list-group-item bg-light">
+                            <textarea style="resize: none" class="form-control" name="content" rows="3" placeholder="신고된 게시물에는 댓글을 남길 수 없습니다." readonly></textarea>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <button class="btn btn-dark float-end"
+                    onclick="location.href='board-write'"
+                    th:onclick="|location.href='@{/board}'|"
+                    type="button"> 글 목록</button>
+            <div class="row text-center p-3" style="width: auto">
 
+            </div>
+        </div>
+
+        <!-- 로그인이 되어있는 상태 -->
+        <div th:fragment="login-true">
+            <div class="p-3 d-none">
+                <label for="id">글 ID</label>
+                <input type="text" id="id" name="id" class="form-control"
+                       value="1" th:value="${board.bid}" readonly>
+            </div>
+            <div class="p-3">
+                <h2 class="pt-1 pb-3" th:text="${board.title}"></h2>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${board.writer}">
+                            <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
+                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <th:block th:if="${board.updateTime != null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
+                </th:block>
+                <th:block th:if="${board.updateTime == null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                </th:block>
+                <th:block th:if="${account.id == board.writerId}">
+                    <a class="text-muted mr-1"> | </a>
+                    <a class="text-primary mr-1"
+                       onclick="location.href='board-write'"
+                       th:onclick="|location.href='@{/board/{boardId}/edit(boardId = ${board.bid})}'|"
+                       type="button">수정</a>
+                    <a class="text-muted mr-1"> | </a>
+                    <a class="text-danger mr-1"
+                       onclick="location.href='board-write'"
+                       th:onclick="|location.href='@{/board/{boardId}/delete(boardId = ${board.bid})}'|"
+                       type="button">삭제</a>
+                </th:block>
+                <!--<br>
+                <a class="text-muted mr-1"> 조회수 | </a>
+                <a class="text-muted mr-1" th:text="${board.pageView}"></a>-->
+            </div>
+            <hr class="mt-0">
+            <div class="container">
+                <div id="content" name="content" th:utext="${board.content}"></div>
+            </div>
+            <hr>
+            <b><a class="text-primary pl-2" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
+            <br>
+            <th:block th:if="${likes.isPresent()}">
+                <button type="button" id="heart_cancel"
+                        th:onclick="|location.href='@{/board/detail/{boardId}/like-cancel(boardId = ${board.bid})}'|"
+                        class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요 취소</button>
+            </th:block>
+            <th:block th:if="${likes.isEmpty()}">
+                <button type="button" id="heart"
+                        th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
+                        class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</button>
+            </th:block>
+
+            <!-- 로그인한 유저와 게시글을 작성한 ID가 같다면 신고하기가 뜨지 않음 -->
+            <th:block th:if="${account.id != board.writerId}">
+                <th:block th:if="${!boardReport}">
+                    <!-- Button trigger modal -->
                     <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterBoard'+${board.bid}+'Report'">
                         <i class="fa fa-exclamation-triangle"></i> 신고하기
                     </a>
@@ -99,42 +162,51 @@
                         </div>
                     </div>
                     <!-- Modal end -->
+                </th:block>
+                <th:block th:if="${boardReport}">
+                    <a type="button" class="text-muted ml-2 float-right">
+                        <i class="fa fa-exclamation-triangle"></i> 신고하기
+                    </a>
+                </th:block>
+            </th:block>
 
-                    <hr>
-                    <div class="bg-light">
-                        <div th:each="reply : ${reply}">
-                            <div class="col-12 mb-3">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${reply.getAccount().nickname}">
-                                            <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li><h6 class="dropdown-header" th:text="${reply.getAccount().nickname}">Username</h6></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${reply.getAccount().nickname})}">프로필 보기</a></li>
-                                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${reply.getAccount().id})}">작성한 게시물 보기</a></li>
+            <hr class="mt-0">
+            <div class="bg-light">
+                <div th:each="reply : ${reply}">
+                    <div class="col-12 mb-3">
+                        <div class="card mt-1">
+                            <div class="row no-gutters">
+                                <div class="col-12">
+                                    <div class="card-header">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${reply.getAccount().nickname}">
+                                                    <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <li><h6 class="dropdown-header" th:text="${reply.getAccount().nickname}">Username</h6></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${reply.getAccount().nickname})}">프로필 보기</a></li>
+                                                    <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${reply.getAccount().id})}">작성한 게시물 보기</a></li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul>
-                                <div class="card mt-1">
-                                    <div class="row no-gutters">
-                                        <div class="col-12">
-                                            <div class="card-body pb-2">
-                                                <th:block th:if="${reply.report==false}">
-                                                    <p class="card-text" th:text="${reply.content}">내용</p>
-                                                </th:block>
-                                                <th:block th:if="${reply.report==true}">
-                                                    <p class="card-text text-danger">신고된 댓글입니다.</p>
-                                                </th:block>
+                                    </div>
+                                    <div class="card-body pb-2">
+                                        <th:block th:if="${!reply.getIsReported}">
+                                            <p class="card-text" th:text="${reply.content}">내용</p>
+                                        </th:block>
+                                        <th:block th:if="${reply.getIsReported}">
+                                            <p class="card-text text-danger">신고된 댓글입니다.</p>
+                                        </th:block>
+                                        <!-- Button trigger modal -->
+
+                                        <th:block th:if="${account.id != reply.getAccount().id}">
+                                            <th:block th:if="${!replyRepo.existsByAccountAndReply(account, reply)}">
                                                 <!-- Button trigger modal -->
-                                                <th:block th:if="${reply.report==false}">
-                                                    <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterReply'+${reply.rid}+'Report'">
-                                                        <i class="fa fa-exclamation-triangle"></i> 신고하기
-                                                    </a>
-                                                </th:block>
-                                                <th:block th:if="${reply.report==true}">
-                                                </th:block>
+                                                <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterReply'+${reply.rid}+'Report'">
+                                                    <i class="fa fa-exclamation-triangle"></i> 신고하기
+                                                </a>
                                                 <!-- Modal start -->
                                                 <div class="modal fade" th:id="'exampleModalCenterReply'+${reply.rid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -161,174 +233,289 @@
                                                     </div>
                                                 </div>
                                                 <!-- Modal end -->
-                                                <i class="fa fa-history text-muted"></i><a class="card-text ml-2 text-muted" th:text="${service.boardDateTime(reply.uploadTime)}">작성 시간</a>
-                                            </div>
-                                            <th:block th:if="${account.id == reply.getAccount().id}">
-                                                <!-- Button trigger modal -->
-                                                <th:block th:if="${reply.report==false}">
-                                                    <a type="button" class="btn text-primary ml-2" data-toggle="modal" th:data-target="'#exampleModalCenter'+${reply.rid}">
-                                                        수정
-                                                    </a>
-                                                    <!-- Modal start -->
-                                                    <div class="modal fade" th:id="'exampleModalCenter'+${reply.rid}" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'Title'" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'Title'">댓글 수정하기</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form th:action="@{/board/detail/{boardId}/reply/update/{rid}(boardId=${board.bid},rid=${reply.rid})}" method="post">
-                                                                    <div class="modal-body">
-                                                                        <div>
-                                                                            <ul class="bg-light list-group list-group-flush">
-                                                                                <li class="list-group-item bg-light">
-                                                                                    <input type="hidden" id="rid" name="rid" class="form-control"
-                                                                                           value="1" th:value="${reply.rid}" readonly>
-                                                                                    <input type="hidden" id="board_id" name="board" class="form-control"
-                                                                                           value="1" th:value="${board.bid}" readonly>
-                                                                                    <input type="hidden" id="account_id" name="account" class="form-control"
-                                                                                           value="1" th:value="${account.id}" readonly>
-                                                                                    <textarea style="resize: none" class="form-control" name="content" rows="3" th:text="${reply.getContent()}"></textarea>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                                                        <button type="submit" class="btn btn-success">수정</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Modal end -->
-                                                    <!-- Button trigger modal -->
-                                                    <a type="button" class="btn text-danger" data-toggle="modal" th:data-target="'#exampleModalCenter'+${reply.rid}+'Cancel'">
-                                                        삭제
-                                                    </a>
-                                                    <!-- Modal start -->
-                                                    <div class="modal fade" th:id="'exampleModalCenter'+${reply.rid}+'Cancel'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'Title'+'Cancel'" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'Title'+'Cancel'">댓글 삭제하기</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form th:action="@{/board/detail/{boardId}/reply/delete/{rid}(boardId=${board.bid},rid=${reply.rid})}" method="post">
-                                                                    <input type="hidden" id="rid" name="rid" class="form-control"
-                                                                           value="1" th:value="${reply.rid}" readonly>
-                                                                    <div class="modal-body">
-                                                                        정말 삭제하시겠습니까?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                                                        <button type="submit" class="btn btn-danger">삭제</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Modal end -->
-                                                </th:block>
-                                                <th:block th:if="${reply.report==true}">
-                                                </th:block>
                                             </th:block>
+                                            <th:block th:if="${replyRepo.existsByAccountAndReply(account, reply)}">
+                                                <a type="button" class="text-muted ml-2 float-right">
+                                                    <i class="fa fa-exclamation-triangle"></i> 신고하기
+                                                </a>
+                                            </th:block>
+                                        </th:block>
+                                        <i class="fa fa-history text-muted"></i><a class="card-text ml-2 text-muted" th:text="${service.boardDateTime(reply.uploadTime)}">작성 시간</a>
+                                    </div>
+                                    <th:block th:if="${account.id == reply.getAccount().id}">
+                                        <!-- Button trigger modal -->
+                                        <th:block th:if="${!reply.getIsReported()}">
+                                            <a type="button" class="btn text-primary ml-2" data-toggle="modal" th:data-target="'#exampleModalCenter'+${reply.rid}">
+                                                수정
+                                            </a>
+                                            <!-- Modal start -->
+                                            <div class="modal fade" th:id="'exampleModalCenter'+${reply.rid}" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'Title'" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'Title'">댓글 수정하기</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form th:action="@{/board/detail/{boardId}/reply/update/{rid}(boardId=${board.bid},rid=${reply.rid})}" method="post">
+                                                            <div class="modal-body">
+                                                                <div>
+                                                                    <ul class="bg-light list-group list-group-flush">
+                                                                        <li class="list-group-item bg-light">
+                                                                            <input type="hidden" id="rid" name="rid" class="form-control"
+                                                                                   value="1" th:value="${reply.rid}" readonly>
+                                                                            <input type="hidden" id="board_id" name="board" class="form-control"
+                                                                                   value="1" th:value="${board.bid}" readonly>
+                                                                            <input type="hidden" id="account_id" name="account" class="form-control"
+                                                                                   value="1" th:value="${account.id}" readonly>
+                                                                            <textarea style="resize: none" class="form-control" name="content" rows="3" th:text="${reply.getContent()}"></textarea>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                                                <button type="submit" class="btn btn-success">수정</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal end -->
+                                            <!-- Button trigger modal -->
+                                            <a type="button" class="btn text-danger" data-toggle="modal" th:data-target="'#exampleModalCenter'+${reply.rid}+'Cancel'">
+                                                삭제
+                                            </a>
+                                            <!-- Modal start -->
+                                            <div class="modal fade" th:id="'exampleModalCenter'+${reply.rid}+'Cancel'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'Title'+'Cancel'" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'Title'+'Cancel'">댓글 삭제하기</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form th:action="@{/board/detail/{boardId}/reply/delete/{rid}(boardId=${board.bid},rid=${reply.rid})}" method="post">
+                                                            <input type="hidden" id="rid" name="rid" class="form-control"
+                                                                   value="1" th:value="${reply.rid}" readonly>
+                                                            <div class="modal-body">
+                                                                정말 삭제하시겠습니까?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                                                <button type="submit" class="btn btn-danger">삭제</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal end -->
+                                        </th:block>
+                                        <th:block th:if="${reply.getIsReported()}">
+                                        </th:block>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form th:action="@{/board/detail/{boardId}/reply(boardId=${board.bid})}" method="post">
+                    <div>
+                        <h4><small>댓글 작성하기</small></h4>
+                        <ul class="bg-light list-group list-group-flush">
+                            <li class="list-group-item bg-light">
+                                <input type="hidden" id="board_id" name="board" class="form-control"
+                                       value="1" th:value="${board.bid}" readonly>
+                                <input type="hidden" id="account_id" name="account" class="form-control"
+                                       value="1" th:value="${account.id}" readonly>
+                                <textarea style="resize: none" class="form-control" name="content" rows="3"></textarea>
+                                <button type="submit" class="btn btn-success mt-3">댓글 작성</button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <hr>
+            <button class="btn btn-dark float-end"
+                    onclick="location.href='board-write'"
+                    th:onclick="|location.href='@{/board}'|"
+                    type="button"> 글 목록</button>
+            <div class="row text-center p-3" style="width: auto">
+
+            </div>
+        </div>
+
+        <!-- 로그인이 되어있지 않은 상태 -->
+        <div th:fragment="login-false">
+            <div class="p-3 d-none">
+                <label for="id">글 ID</label>
+                <input type="text" id="id" name="id" class="form-control"
+                       value="1" th:value="${board.bid}" readonly>
+            </div>
+            <div class="p-3">
+                <h2 class="pt-1 pb-3" th:text="${board.title}"></h2>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${board.writer}">
+                            <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                            <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
+                            <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <th:block th:if="${board.updateTime != null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
+                </th:block>
+                <th:block th:if="${board.updateTime == null}">
+                    <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                </th:block>
+            </div>
+            <hr class="mt-0">
+            <div class="container">
+                <div id="content" name="content" th:utext="${board.content}"></div>
+            </div>
+            <hr>
+            <b><a class="text-primary pl-2" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
+            <br>
+            <!-- Likes Button trigger modal -->
+            <a type="button" class="btn btn-link" data-toggle="modal" th:data-target="'#exampleModalCenterBoardLike'+${board.bid}+'Report'">
+                <i class="fa fa-thumbs-up"></i> 좋아요
+            </a>
+            <!-- Likes Modal start -->
+            <div class="modal fade" th:id="'exampleModalCenterBoardLike'+${board.bid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenterLike'+${board.bid}+'Title'+'Report'" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" th:id="'exampleModalCenterLike'+${board.bid}+'Title'+'Report'">로그인이 필요한 서비스입니다.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            로그인 페이지로 이동하시겠습니까?
+                        </div>
+                        <div class="modal-footer">
+                            <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">돌아가기</a>
+                            <a class="btn btn-success" th:href="@{/login}">로그인</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Likes Modal end -->
+
+            <!-- Board Report Button trigger modal -->
+            <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterBoard'+${board.bid}+'Report'">
+                <i class="fa fa-exclamation-triangle"></i> 신고하기
+            </a>
+            <!-- Board Report Modal start -->
+            <div class="modal fade" th:id="'exampleModalCenterBoard'+${board.bid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${board.bid}+'Title'+'Report'" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" th:id="'exampleModalCenter'+${board.bid}+'Title'+'Report'">로그인이 필요한 서비스입니다.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form th:action="@{/board/detail/{boardId}/report(boardId=${board.bid})}" method="post">
+                            <div class="modal-body">
+                                로그인 페이지로 이동하시겠습니까?
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">돌아가기</a>
+                                <a class="btn btn-success" th:href="@{/login}">로그인</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Board Report Modal end -->
+
+            <hr class="mt-0">
+            <div class="bg-light">
+                <div th:each="reply : ${reply}">
+                    <div class="col-12 mb-3">
+                        <div class="card mt-1">
+                            <div class="row no-gutters">
+                                <div class="col-12">
+                                    <div class="card-header">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${reply.getAccount().nickname}">
+                                                    <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <li><h6 class="dropdown-header" th:text="${reply.getAccount().nickname}">Username</h6></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${reply.getAccount().nickname})}">프로필 보기</a></li>
+                                                    <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${reply.getAccount().id})}">작성한 게시물 보기</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-body pb-2">
+                                        <th:block th:if="${!reply.getIsReported}">
+                                            <p class="card-text" th:text="${reply.content}">내용</p>
+                                        </th:block>
+                                        <th:block th:if="${reply.getIsReported}">
+                                            <p class="card-text text-danger">신고된 댓글입니다.</p>
+                                        </th:block>
+                                        <!-- Reply Report Button trigger modal -->
+                                        <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterReply'+${reply.rid}+'Report'">
+                                            <i class="fa fa-exclamation-triangle"></i> 신고하기
+                                        </a>
+                                        <!-- Reply Report Modal start -->
+                                        <div class="modal fade" th:id="'exampleModalCenterReply'+${reply.rid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'">로그인이 필요한 서비스입니다.</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        로그인 페이지로 이동하시겠습니까?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a type="button" class="btn btn-secondary text-white" data-dismiss="modal">돌아가기</a>
+                                                        <a class="btn btn-success" th:href="@{/login}">로그인</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <!-- Reply Report Modal end -->
+                                        <i class="fa fa-history text-muted"></i><a class="card-text ml-2 text-muted" th:text="${service.boardDateTime(reply.uploadTime)}">작성 시간</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <form th:action="@{/board/detail/{boardId}/reply(boardId=${board.bid})}" method="post">
-                            <div>
-                                <h4><small>댓글 작성하기</small></h4>
-                                <ul class="bg-light list-group list-group-flush">
-                                    <li class="list-group-item bg-light">
-                                        <input type="hidden" id="board_id" name="board" class="form-control"
-                                               value="1" th:value="${board.bid}" readonly>
-                                        <input type="hidden" id="account_id" name="account" class="form-control"
-                                               value="1" th:value="${account.id}" readonly>
-                                        <textarea style="resize: none" class="form-control" name="content" rows="3"></textarea>
-                                        <button type="submit" class="btn btn-success mt-3">댓글 작성</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </form>
-                    </div>
-                    <hr>
-                    <button class="btn btn-dark float-end"
-                            onclick="location.href='board-write'"
-                            th:onclick="|location.href='@{/board}'|"
-                            type="button"> 글 목록</button>
-                    <div class="row text-center p-3" style="width: auto">
-
                     </div>
                 </div>
-        <!-- 신고되지 않은 게시물 끝 -->
-
-        <!-- 신고된 게시물 시작 -->
-                <div th:fragment="report-board">
-                    <div class="p-3 d-none">
-                        <label for="id">글 ID</label>
-                        <input type="text" id="id" name="id" class="form-control"
-                               value="1" th:value="${board.bid}" readonly>
-                    </div>
-                    <div class="p-3">
-                        <h2 class="pt-1 pb-3">신고된 게시물</h2>
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark font-weight-normal" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="${board.writer}">
-                                    <i class="fa fa-user mr-2"></i><a class="btn btn-default">작성자</a>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    <li><h6 class="dropdown-header" th:text="${board.writer}">Username</h6></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#" th:href="@{/profile/{userNickName}(userNickName=${board.writer})}">프로필 보기</a></li>
-                                    <li><a class="dropdown-item" href="board" th:href="@{/board/search/{writerId}(writerId=${board.writerId})}">작성한 게시물 보기</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <th:block th:if="${board.updateTime != null}">
-                            <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="|수정 : ${service.boardDateTime(board.updateTime)}|"></a>
-                        </th:block>
-                        <th:block th:if="${board.updateTime == null}">
-                            <i class="fa fa-history text-muted"></i><a class="text-muted mr-1 ml-2" th:text="${service.boardDateTime(board.uploadTime)}"></a>
-                        </th:block>
-                        <!--<br>
-                        <a class="text-muted mr-1"> 조회수 | </a>
-                        <a class="text-muted mr-1" th:text="${board.pageView}"></a>-->
-                    </div>
-                    <hr class="mt-0">
-                    <div class="container">
-                        <div id="content" name="content">
-                            신고된 게시물입니다.<br>
-                            확인 후 조치되기 전까지 조회가 불가능합니다.
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="bg-light">
-                            <div>
-                                <h4><small>댓글 작성하기</small></h4>
-                                <ul class="bg-light list-group list-group-flush">
-                                    <li class="list-group-item bg-light">
-                                        <textarea style="resize: none" class="form-control" name="content" rows="3" placeholder="신고된 게시물에는 댓글을 남길 수 없습니다." readonly></textarea>
-                                    </li>
-                                </ul>
-                            </div>
-                    </div>
-                    <hr>
-                    <button class="btn btn-dark float-end"
-                            onclick="location.href='board-write'"
-                            th:onclick="|location.href='@{/board}'|"
-                            type="button"> 글 목록</button>
-                    <div class="row text-center p-3" style="width: auto">
-
-                    </div>
+                <div>
+                    <h4><small>댓글 작성하기</small></h4>
+                    <ul class="bg-light list-group list-group-flush">
+                        <li class="list-group-item bg-light">
+                            <textarea style="resize: none" class="form-control" name="content" rows="3" readonly placeholder="로그인이 필요한 서비스입니다."></textarea>
+                        </li>
+                    </ul>
                 </div>
-        <!-- 신고된 게시물 끝 -->
+            </div>
+            <hr>
+            <button class="btn btn-dark float-end"
+                    onclick="location.href='board-write'"
+                    th:onclick="|location.href='@{/board}'|"
+                    type="button"> 글 목록</button>
+            <div class="row text-center p-3" style="width: auto">
+
+            </div>
+        </div>
     </div>
 </div>
 </body>

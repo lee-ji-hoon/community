@@ -3,11 +3,9 @@ package com.community.board.service;
 import com.community.account.entity.Account;
 import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
-import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
-import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,16 +24,16 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
 
-    public Reply saveReply(@Valid ReplyForm replyForm, Account account, Board board) {
-
+    public void saveReply(@Valid ReplyForm replyForm, Account account, Board board) {
         Reply reply = Reply.builder()
                 .content(replyForm.getContent())
                 .account(account)
                 .board(board)
                 .uploadTime(LocalDateTime.now())
-                .report(false)
+                .isReported(false)
+                .reportCount(0)
                 .build();
-        return replyRepository.save(reply);
+        replyRepository.save(reply);
     }
 
     public void updateReply(Long rid, ReplyForm replyForm) {

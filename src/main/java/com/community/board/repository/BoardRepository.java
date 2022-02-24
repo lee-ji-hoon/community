@@ -9,6 +9,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
+    /* 검색 관련 쿼리 */
     List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
     List<Board> findByTitleContainingAndWriterOrderByUploadTimeDesc(String keyword, String writer);
     List<Board> findByTitleContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
@@ -21,16 +22,17 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByContentContainingAndWriterOrderByUploadTimeDesc(String keyword, String writer);
     List<Board> findByContentContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
 
-    List<Board> findAllByWriterIdOrderByUploadTimeDesc(long id);
-    List<Board> findAllByWriterIdAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(long id, Boolean updatable, Boolean removable);
+
+    /* 신고된 게시글 제외 쿼리 */
+    List<Board> findAllByWriterIdAndIsReportedOrderByUploadTime(long id, Boolean isReported);
+    List<Board> findAllByIsReportedOrderByUploadTimeDesc(Boolean isReported);
+    List<Board> findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
+    List<Board> findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
+
 
     Board findByBid(long id);
 
-    List<Board> findAllByUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(Boolean updatable, Boolean removable);
-
-    List<Board> findAllByBoardTitleOrderByUploadTimeDesc(String boardTitle);
-
-    List<Board> findTop4ByBoardTitleAndUpdatableBoardAndRemovableBoardOrderByUploadTimeDesc(String boardTitle, Boolean updatable, Boolean removable);
+    List<Board> findAllByBidOrderByUploadTime(long id);
 
     void deleteAllByWriterId(long writerId);
 }

@@ -1,6 +1,8 @@
-package com.community.board.entity;
+package com.community.report.entity;
 
 import com.community.account.entity.Account;
+import com.community.board.entity.Board;
+import com.community.board.entity.Reply;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Report {
+public class BoardReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -27,11 +29,6 @@ public class Report {
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "board_bid")
     private Board board;
-
-    // 신고된 댓글 저장
-    @ManyToOne(targetEntity = Reply.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_rid")
-    private Reply reply;
 
     // 신고 내용
     @Column(columnDefinition = "TEXT")
