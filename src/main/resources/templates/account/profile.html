@@ -2,111 +2,271 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments.html :: head"></head>
-<body class="bg-light">
-<div th:replace="fragments.html :: main-nav"></div>
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <div class="col-2">
-            <!-- image 아무것도 없으면 jdenticon -->
-            <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                 th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
-            <img th:if="${!#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded img-thumbnail"
-                 th:src="${account.profileImage}"
-                 width="125" height="125"/>
-        </div>
-        <div class="col-8">
-            <h1 class="display-4 " th:text="${account.nickname}">닉네임</h1>
-            <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
-            <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
-                한 줄 소개를 추가하세요.
-            </p>
-        </div>
-    </div>
+<style>
+    .modify_button{
+        text-decoration: none;
+        font-size:14px;
+        width: 120px;
+        height: 45px;
+        line-height: 45px;
+        text-align: center;
+        color:#777;
+        margin:20px;
+        display:inline-block;
+        border-radius: 30px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #777;
+    }
+    body,
+    .empty{
+        background-color: #BDC8CF;
+    }
+    .row{
+        background-color: white;
+    }
 
-    <div class="row mt-3 justify-content-center">
-        <div class="col-2">
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active" id="v-pills-intro-tab" data-toggle="pill" href="#v-pills-profile"
-                   role="tab" aria-controls="v-pills-profile" aria-selected="true">소개</a>
-                <a class="nav-link" id="v-pills-board-tab" data-toggle="pill" href="#v-pills-empty1"
-                   role="tab" aria-controls="v-pills-empty1" aria-selected="false">작성글</a>
-                <a class="nav-link" id="v-pills-study-tab" data-toggle="pill" href="#v-pills-empty2"
-                   role="tab" aria-controls="v-pills-empty2" aria-selected="false">스터디</a>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    ul{
+        list-style:none;
+    }
 
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <p th:if="${!#strings.isEmpty(account.username)}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-star col-1"></i>
-                        </span>
-                        <span th:text="${account.username}" class="col-11"></span>
-                    </p>
+    p {
+        margin: 0 0 20px;
+        line-height: 1.5;
+    }
 
-                    <p th:if="${!#strings.isEmpty(account.studentId)}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-graduation-cap col-1"></i>
-                        </span>
-                        <span th:text="${account.studentId}" class="col-11"></span>
-                    </p>
-                    <p th:if="${!#strings.isEmpty(account.url)}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-link col-1"></i>
-                        </span>
-                        <span th:text="${account.url}" class="col-11"></span>
-                    </p>
-                    <p th:if="${!#strings.isEmpty(account.occupation)}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-briefcase col-1"></i>
-                        </span>
-                        <span th:text="${account.occupation}" class="col-9"></span>
-                    </p>
-                    <p th:if="${!#strings.isEmpty(account.location)}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-location-arrow col-1"></i>
-                        </span>
-                        <span th:text="${account.location}" class="col-9"></span>
-                    </p>
-                    <p th:if="${isOwner}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-envelope col-1"></i>
-                        </span>
-                        <span th:text="${account.email}" class="col-9"></span>
-                    </p>
-                    <p th:if="${isOwner || account.emailVerified}">
-                        <span style="font-size: 20px;">
-                            <i class="fa fa-calendar col-1"></i>
-                        </span>
-                        <span th:if="${isOwner && !account.emailVerified}" class="col-9">
-                                <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">가입을 완료하려면 이메일을 확인하세요.</a>
+    p span{
+      font-size: 14px;
+    }
+    h1 {
+        padding: 50px 0;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    /*커뮤니티 / 스터디 조회 */
+    .main {
+        padding: 50px 25px 50px 25px;
+        margin: 50px 150px 50px 150px;
+        background: #ffffff;}
+
+    section {
+        display: none;
+        padding: 20px 0 0;
+        border-top: 1px solid #ddd;
+    }
+
+    /*라디오버튼 숨김*/
+    input {
+        display: none;}
+
+    label {
+        display: inline-block;
+        margin: 0 0 -1px;
+        padding: 15px 25px;
+        font-weight: 600;
+        text-align: center;
+        color: #bbb;
+        border: 1px solid transparent;}
+
+    label:hover {
+        color: #2e9cdf;
+        cursor: pointer;
+    }
+
+    /*input 클릭시, label 스타일*/
+    input:checked + label {
+        color: #555;
+        border-bottom: 2px solid #2e9cdf;
+        border-top: 1px solid #ffffff;
+    }
+
+
+    #tab1:checked ~ #content1,
+    #tab2:checked ~ #content2,
+    #tab3:checked ~ #content3,
+    #tab4:checked ~ #content4 {
+        display: block;
+    }
+
+</style>
+<body>
+    <div th:replace="fragments.html :: main-nav"></div>
+    <div class="container">
+        <!-- nesting, row안의 row -->
+        <div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
+            <div class="box col-6">
+                <div class="row justify-content-center">
+                    <div class="box col-12 rounded p-4">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-4">
+                                <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded border img-thumbnail" th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+                                <img th:if="${!#strings.isEmpty(account.profileImage)}" class="float-left rounded-circle border" th:src="${account.profileImage}" width="125" height="125"/>
+                            </div>
+                            <div class="col-3" style="float: none; margin: 0 auto; align-items:center; display: flex; font-family: 'Open Sans', sans-serif;">
+                                <h3 class="text-muted" style="text-align: center" th:text="${account.nickname}">닉네임</h3>
+                            </div>
+                            <div th:if="${isOwner}" class="col-4" style="float: none; margin: 0 auto; align-items:center; display: flex;">
+                                <a class="modify_button text-muted" href="#" th:href="@{/settings/profile-settings}">프로필 수정</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="empty col-12 p-3"></div>
+                    <div class="box col-12 rounded p-4">
+                        <!-- Grid container -->
+                        <div class="container p-2">
+                            <!--Grid row-->
+                            <span style="font-size: 20px;">
+                                <i class="fa fa-bookmark"></i>
                             </span>
-                        <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}" class="col-9"></span>
-                    </p>
-                    <div th:if="${isOwner}">
-                        <a class="btn btn-outline-primary" href="#" th:href="@{/settings/profile-settings}">프로필 수정</a>
+                            <span style="font-size: 20px; margin-left: 5px">소개</span>
+
+                            <div class="row mt-4">
+                                <!--Grid column-->
+                                <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                    <h6 class="text-uppercase text-muted font-weight-bold" >학번</h6>
+
+                                    <p th:if="${!#strings.isEmpty(account.studentId)}">
+                                        <span th:text="${account.studentId}"></span>
+                                    </p>
+                                    <h6 class="text-uppercase text-muted font-weight-bold">학년</h6>
+
+                                    <p th:if="${!#strings.isEmpty(account.studentId)}">
+                                        <span>추가 필요</span>
+                                    </p>
+                                </div>
+                                <!--Grid column-->
+
+                                <!--Grid column-->
+                                <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                    <h6 class="text-uppercase text-muted font-weight-bold">전공</h6>
+
+                                    <p th:if="${!#strings.isEmpty(account.occupation)}">
+                                        <span th:text="${account.occupation}"></span>
+                                    </p>
+                                    <p th:if="${#strings.isEmpty(account.occupation)}">
+                                        <span>전공을 정하지 않은 회원입나다.</span>
+                                    </p>
+
+                                    <h6 class="text-uppercase text-muted font-weight-bold">가입일</h6>
+
+                                    <p th:if="${isOwner || account.emailVerified}">
+                                        <span th:if="${isOwner && !account.emailVerified}">
+                                            인증이 된 회원이 아닙니다.
+                                        </span>
+                                        <span th:if="${!isOwner && !account.emailVerified}">
+                                            <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
+                                        </span>
+                                        <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
+                                    </p>
+                                </div>
+                                <!--Grid column-->
+                                <div class="col-lg-6 col-md-6 mb-4 mb-md-0 mt-2">
+                                    <h6 class="text-uppercase text-muted font-weight-bold">한 줄 소개</h6>
+                                    <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
+                                    <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
+                                        한 줄 소개를 추가하세요.
+                                    </p>
+                                    <p class="lead" th:if="${#strings.isEmpty(account.bio) && !isOwner}">
+                                        본인 소개를 아직 적지 않은 회원입니다.
+                                    </p>
+                                </div>
+                            </div>
+                            <!--Grid row-->
+                        </div>
+                        <!-- Grid container -->
                     </div>
                 </div>
-
-                <div class="tab-pane fade" id="v-pills-empty1" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    <div class="row">
-                        <div class="col-md-5 bg-secondary">.col-md-5</div>
-                        <div class="col-md-5 bg-secondary">.col-md-5</div>
+            </div>
+            <div class="empty box col-1"></div>
+            <div class="box col-5 rounded p-5">
+                <div class="h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="mb-0">알림</h6>
+                        <a href="">전체 보기</a>
                     </div>
-                    <div class="row">
-                        <div class="col-md-5 bg-secondary">.col-md-5</div>
-                        <div class="col-md-5 bg-secondary">.col-md-5</div>
+                    <div class="d-flex align-items-center border-bottom py-3 ">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
+                                <small class="text-muted">15 minutes ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-left mt-2">
+                        <small class="text-muted">최대 5개의 알림이 보입니다.</small>
+                    </div>
 
-                <div class="tab-pane fade" id="v-pills-empty2" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    추가 공간2
+                    <div class="mt-4">
+                        <span >알림 스터디 주제</span><br/>
+                        <span th:each="tag: ${account.tags}" class="font-weight-light text-monospace badge badge-pill badge-secondary mr-3 mt-3">
+                            <i class="text-decoration-none text-white">
+                                <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                            </i>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="main">
+            <input id="tab1" type="radio" name="tabs" checked> <!--디폴트 메뉴-->
+            <label for="tab1">게시글</label>
+
+            <input id="tab2" type="radio" name="tabs">
+            <label for="tab2">참여중인 스터디</label>
+
+
+            <section id="content1">
+                <p>tab menu1의 내용</p>
+            </section>
+
+            <section id="content2">
+                <p>tab menu2의 내용</p>
+            </section>
+
+
+        </div>
+
+
     </div>
     <div th:replace="fragments.html :: footer"></div>
-</div>
 </body>
 </html>
