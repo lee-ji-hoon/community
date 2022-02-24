@@ -86,10 +86,8 @@
     }
 
 
-    #tab1:checked ~ #content1,
-    #tab2:checked ~ #content2,
-    #tab3:checked ~ #content3,
-    #tab4:checked ~ #content4 {
+    #community:checked ~ #community_content,
+    #study:checked ~ #study_content {
         display: block;
     }
 
@@ -247,22 +245,103 @@
 
 
         <div class="main">
-            <input id="tab1" type="radio" name="tabs" checked> <!--디폴트 메뉴-->
-            <label for="tab1">게시글</label>
+            <input id="community" type="radio" name="tabs">
+            <label for="community">게시글</label>
 
-            <input id="tab2" type="radio" name="tabs">
-            <label for="tab2">참여중인 스터디</label>
+            <input id="study" type="radio" name="tabs" checked>
+            <label for="study">참여중인 스터디</label>
 
-
-            <section id="content1">
+            <section id="community_content">
                 <p>tab menu1의 내용</p>
             </section>
 
-            <section id="content2">
-                <p>tab menu2의 내용</p>
+            <section id="study_content">
+                <div class="container">
+                    <div class="row justify-content-center pt-3">
+                        <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(studyManager)}">관리중인 스터디가 없습니다.</h5>
+                        <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(studyManager)}">관리중인 스터디</h5>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-4" th:each="study: ${studyManager}">
+                                    <div class="card mb-4 shadow-sm">
+                                        <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
+                                        <div class="card-body">
+                                            <a th:href="@{'/study/' + ${study.path}}" class="text-decoration-none">
+                                                <h5 class="card-title context" th:text="${study.title}"></h5>
+                                            </a>
+                                            <p class="card-text" th:text="${study.shortDescription}">Short description</p>
+                                            <p class="card-text context">
+                                                <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                                                        <i class="fa fa-tag" style="font-size: 10px"></i>
+                                                        <span th:text="${tag.title}" style="font-size: 12px; font-weight: lighter">Tag</span>
+                                                    </a>
+                                                </span>
+                                                    <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                                                        <i class="fa fa-globe" style="font-size: 10px"></i>
+                                                        <span th:text="${zone.localNameOfCity}" class="text-white" style="font-size: 12px">City</span>
+                                                    </a>
+                                                </span>
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">
+                                                    <i class="fa fa-user-circle"></i>
+                                                    <span th:text="${study.memberCount}"></span>명
+                                                </small>
+                                                <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row justify-content-center pt-3">
+                        <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(studyMember)}">참여중인 스터디가 없습니다.</h5>
+                        <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(studyMember)}">참여중인 스터디</h5>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-4" th:each="study: ${studyMember}">
+                                    <div class="card mb-4 shadow-sm">
+                                        <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
+                                        <div class="card-body">
+                                            <a th:href="@{'/study/' + ${study.path}}" class="text-decoration-none">
+                                                <h5 class="card-title context" th:text="${study.title}"></h5>
+                                            </a>
+                                            <p class="card-text" th:text="${study.shortDescription}">Short description</p>
+                                            <p class="card-text context">
+                                                    <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                                        <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                                                            <i class="fa fa-tag" style="font-size: 10px"></i>
+                                                            <span th:text="${tag.title}" style="font-size: 12px; font-weight: lighter">Tag</span>
+                                                        </a>
+                                                    </span>
+                                                <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                                        <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                                                            <i class="fa fa-globe" style="font-size: 10px"></i>
+                                                            <span th:text="${zone.localNameOfCity}" class="text-white" style="font-size: 12px">City</span>
+                                                        </a>
+                                                    </span>
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">
+                                                    <i class="fa fa-user-circle"></i>
+                                                    <span th:text="${study.memberCount}"></span>명
+                                                </small>
+                                                <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-
         </div>
 
 
