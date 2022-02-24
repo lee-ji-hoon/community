@@ -1,10 +1,14 @@
 package com.community.study;
 
+import com.community.account.entity.Account;
+import com.community.tag.Tag;
+import com.community.zone.Zone;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Transactional(readOnly = true)
 public interface StudyRepository extends JpaRepository<Study, Long> {
@@ -31,4 +35,11 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByPublishedAndClosedOrderByIdDesc(boolean published, boolean closed);
+
+    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+
+    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+
 }

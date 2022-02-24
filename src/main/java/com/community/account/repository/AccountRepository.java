@@ -2,6 +2,7 @@ package com.community.account.repository;
 
 import com.community.account.entity.Account;
 import com.community.account.entity.PersistentLogins;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,4 +18,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findByEmail(String email);
 
     Account findByNickname(String emailOrNickname);
+
+    @EntityGraph(attributePaths = {"tags", "zones"})
+    Account findAccountWithTagsAndZonesById(Long id);
 }
