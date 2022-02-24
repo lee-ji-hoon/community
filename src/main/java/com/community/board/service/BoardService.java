@@ -48,6 +48,7 @@ public class BoardService {
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)
+                .reportCount(0)
                 .writer(boardForm.getWriter())
                 .writerId(account.getId())
                 .build();

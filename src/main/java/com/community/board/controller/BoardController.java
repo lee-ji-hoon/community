@@ -4,6 +4,7 @@ import com.community.account.repository.AccountRepository;
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
 import com.community.board.entity.Board;
+import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
 import com.community.report.form.BoardReportForm;
@@ -104,15 +105,17 @@ public class BoardController {
         boardService.viewUpdate(boardId, request, response);
         Board detail = boardRepository.findByBid(boardId);
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
+        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
         model.addAttribute("board", detail);
         model.addAttribute("account", account);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likes", likes);
         model.addAttribute("likeService", likeService);
-        model.addAttribute("reply", replyRepository.findAllByBoardOrderByUploadTimeDesc(detail));
+        model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
         model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
+        model.addAttribute("replyRepo", replyReportRepository);
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());

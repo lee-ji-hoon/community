@@ -110,7 +110,7 @@
                         </th:block>
                     </th:block>
 
-                    <hr>
+                    <hr class="mt-0">
                     <div class="bg-light">
                         <div th:each="reply : ${reply}">
                             <div class="col-12 mb-3">
@@ -131,51 +131,58 @@
                                     <div class="row no-gutters">
                                         <div class="col-12">
                                             <div class="card-body pb-2">
-                                                <th:block th:if="${reply.report==false}">
+                                                <th:block th:if="${!reply.getIsReported}">
                                                     <p class="card-text" th:text="${reply.content}">내용</p>
                                                 </th:block>
-                                                <th:block th:if="${reply.report==true}">
+                                                <th:block th:if="${reply.getIsReported}">
                                                     <p class="card-text text-danger">신고된 댓글입니다.</p>
                                                 </th:block>
                                                 <!-- Button trigger modal -->
-                                                <th:block th:if="${reply.report==false}">
-                                                    <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterReply'+${reply.rid}+'Report'">
-                                                        <i class="fa fa-exclamation-triangle"></i> 신고하기
-                                                    </a>
-                                                </th:block>
-                                                <th:block th:if="${reply.report==true}">
-                                                </th:block>
-                                                <!-- Modal start -->
-                                                <div class="modal fade" th:id="'exampleModalCenterReply'+${reply.rid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'">댓글 신고하기</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+
+                                                <th:block th:if="${account.id != reply.getAccount().id}">
+                                                    <th:block th:if="${!replyRepo.existsByAccountAndReply(account, reply)}">
+                                                        <!-- Button trigger modal -->
+                                                        <a type="button" class="btn text-danger ml-2 float-right" data-toggle="modal" th:data-target="'#exampleModalCenterReply'+${reply.rid}+'Report'">
+                                                            <i class="fa fa-exclamation-triangle"></i> 신고하기
+                                                        </a>
+                                                        <!-- Modal start -->
+                                                        <div class="modal fade" th:id="'exampleModalCenterReply'+${reply.rid}+'Report'" tabindex="-1" role="dialog" th:aria-labelledby="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" th:id="'exampleModalCenter'+${reply.rid}+'ReplyTitle'+'Report'">댓글 신고하기</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form th:action="@{/board/detail/{boardId}/reply/{rid}/report(boardId=${board.bid},rid=${reply.rid})}" method="post">
+                                                                        <div class="modal-body">
+                                                                            정말 신고하시겠습니까?
+                                                                            <textarea style="resize: none" class="form-control" name="report_content" rows="3" placeholder="신고 사유를 입력해주세요."></textarea>
+                                                                            <small class="text-muted">허위 신고 시 신고자가 처벌을 받을 수 있습니다.</small><br>
+                                                                            <small class="text-muted">신고 기록 및 게시글 내용은 DB에 저장됩니다.</small>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                                                            <button type="submit" class="btn btn-danger">신고</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
-                                                            <form th:action="@{/board/detail/{boardId}/reply/{rid}/report(boardId=${board.bid},rid=${reply.rid})}" method="post">
-                                                                <div class="modal-body">
-                                                                    정말 신고하시겠습니까?
-                                                                    <textarea style="resize: none" class="form-control" name="report_content" rows="3" placeholder="신고 사유를 입력해주세요."></textarea>
-                                                                    <small class="text-muted">허위 신고 시 신고자가 처벌을 받을 수 있습니다.</small><br>
-                                                                    <small class="text-muted">신고 기록 및 게시글 내용은 DB에 저장됩니다.</small>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                                                    <button type="submit" class="btn btn-danger">신고</button>
-                                                                </div>
-                                                            </form>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Modal end -->
+                                                        <!-- Modal end -->
+                                                    </th:block>
+                                                    <th:block th:if="${replyRepo.existsByAccountAndReply(account, reply)}">
+                                                        <a type="button" class="text-muted ml-2 float-right">
+                                                            <i class="fa fa-exclamation-triangle"></i> 신고하기
+                                                        </a>
+                                                    </th:block>
+                                                </th:block>
                                                 <i class="fa fa-history text-muted"></i><a class="card-text ml-2 text-muted" th:text="${service.boardDateTime(reply.uploadTime)}">작성 시간</a>
                                             </div>
                                             <th:block th:if="${account.id == reply.getAccount().id}">
                                                 <!-- Button trigger modal -->
-                                                <th:block th:if="${reply.report==false}">
+                                                <th:block th:if="${!reply.getIsReported()}">
                                                     <a type="button" class="btn text-primary ml-2" data-toggle="modal" th:data-target="'#exampleModalCenter'+${reply.rid}">
                                                         수정
                                                     </a>
@@ -244,7 +251,7 @@
                                                     </div>
                                                     <!-- Modal end -->
                                                 </th:block>
-                                                <th:block th:if="${reply.report==true}">
+                                                <th:block th:if="${reply.getIsReported()}">
                                                 </th:block>
                                             </th:block>
                                         </div>

@@ -31,6 +31,8 @@ public class Reply {
 
     private LocalDateTime uploadTime;
 
-    private boolean report;
+    private Boolean isReported;
+
+    private Integer reportCount;
 
 }

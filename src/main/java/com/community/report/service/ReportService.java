@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class ReportService {
 
     // 게시판 최대 신고 카운트
-    private final Integer MAX_BOARD_REPORT_COUNT = 3;
+    private final Integer MAX_BOARD_AND_REPLY_REPORT_COUNT = 3;
 
     private final BoardReportRepository boardReportRepository;
     private final ReplyReportRepository replyReportRepository;
@@ -42,7 +42,7 @@ public class ReportService {
         boardReportRepository.save(Boardreport);
         Integer boardReportCount = board.getReportCount();
         board.setReportCount(++boardReportCount);
-        if (boardReportCount >= MAX_BOARD_REPORT_COUNT) {
+        if (boardReportCount >= MAX_BOARD_AND_REPLY_REPORT_COUNT) {
             board.setIsReported(true);
         }
         boardRepository.save(board);
@@ -55,7 +55,11 @@ public class ReportService {
                 .report_content(replyReportForm.getReport_content())
                 .build();
         replyReportRepository.save(Replyreport);
-        reply.setReport(true);
+        Integer replyReportCount = reply.getReportCount();
+        reply.setReportCount(++replyReportCount);
+        if (replyReportCount >= MAX_BOARD_AND_REPLY_REPORT_COUNT) {
+            reply.setIsReported(true);
+        }
         replyRepository.save(reply);
     }
 }
