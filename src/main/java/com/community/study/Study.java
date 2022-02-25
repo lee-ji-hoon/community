@@ -7,7 +7,9 @@ import com.community.zone.Zone;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -81,6 +83,12 @@ public class Study {
     @ManyToMany
     private Set<Zone> zones = new HashSet<>();
 
+    private LocalDateTime limitStudyDate;
+
+    private LocalDateTime startStudyDate;
+
+    private LocalDateTime limitMemberDate;
+
     private LocalDateTime publishedDateTime;
 
     private LocalDateTime closedDateTime;
@@ -96,6 +104,8 @@ public class Study {
     private boolean useBanner;
 
     private int memberCount;
+
+    private int limitMember;
 
     public void addManager(Account account) {
         this.managers.add(account);

@@ -96,10 +96,10 @@
             </div>
             <div class="card" style="user-select: auto;">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-muted">
-                        <i class="fa fa-user mr-1"></i>
-                        <small th:text="${study.memberCount}"></small>
-                        <small> 명 참여</small>
+                    <li class="list-group-item text-muted d-flex">
+                        <i class="fa fa-user pt-2 pr-2"></i>
+                        <small class="pt-2" th:text="${study.memberCount} +'명 참여'"></small>
+                        <small class="ml-auto p-2" th:text="'최대 :'+${study.limitMember}"></small>
                     </li>
                     <li class="list-group-item text-muted">
                         <i class="fa fa-calendar mr-1"></i>
