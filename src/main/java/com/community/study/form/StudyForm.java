@@ -31,14 +31,14 @@ public class StudyForm {
 
     private int limitMember;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime limitMemberDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate limitMemberDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime startStudyDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startStudyDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime limitStudyDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate limitStudyDate;
 
 
 }

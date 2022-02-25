@@ -83,11 +83,11 @@ public class Study {
     @ManyToMany
     private Set<Zone> zones = new HashSet<>();
 
-    private LocalDateTime limitStudyDate;
+    private LocalDate limitStudyDate;
 
-    private LocalDateTime startStudyDate;
+    private LocalDate startStudyDate;
 
-    private LocalDateTime limitMemberDate;
+    private LocalDate limitMemberDate;
 
     private LocalDateTime publishedDateTime;
 
