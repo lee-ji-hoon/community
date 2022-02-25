@@ -34,5 +34,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAllByBidOrderByUploadTime(long id);
 
+    List<Board> findAllByWriterIdOrderByUploadTime(long id);
+
     void deleteAllByWriterId(long writerId);
 }

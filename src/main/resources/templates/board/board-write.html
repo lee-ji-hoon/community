@@ -10,11 +10,21 @@
         <div th:replace="fragments.html :: side-bar"></div>
         <!-- 좌측 끝 -->
         <div class="col-md-7 gedf-main">
-            <form class="needs-validation container" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post">
+            <form class="needs-validation container" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
+
+                <!--<label for="path">스터디 URL</label>
+                <input id="path" type="text" th:field="*{path}" class="form-control"
+                       placeholder="예) study-path" aria-describedby="pathHelp" required min="2" max="20">
+                <small id="pathHelp" class="form-text text-muted">
+                    공백없이 문자, 숫자, 대시(-)와 언더바(_)만 2자 이상 20자 이내로 입력하세요. 스터디 홈 주소에 사용합니다. 예) /study/<b>study-path</b>
+                </small>
+                <small class="invalid-feedback">스터디 경로를 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Path Error</small>-->
 
                 <div class="form-group">
-                    <label class="form-label">게시판 선택</label>
-                    <select class="form-control" name="boardTitle" th:field="*{boardTitle}">
+                    <label for="boardTitle">게시판 선택</label>
+                    <select id="boardTitle" class="form-control" name="boardTitle" th:field="*{boardTitle}"
+                            aria-describedby="boardTitleHelp" required>
                         <optgroup label="기본게시판">
                             <option value="자유게시판">자유게시판</option>
                             <option value="정보공유게시판">정보공유게시판</option>
@@ -24,25 +34,39 @@
                             <option value="졸업생게시판">졸업생게시판</option>
                         </optgroup>
                     </select>
+                    <small id="boardTitleHelp" class="form-text text-muted">
+                        등록할 게시판을 선택해주세요.
+                    </small>
                 </div>
+
                 <div class="form-group">
-                    <label class="form-label">제목</label>
-                    <input type="text" class="form-control" name="title"
+                    <label for="title">제목</label>
+                    <input type="text" class="form-control" id="title"
                            th:field="*{title}"
+                           aria-describedby="titleHelp"
                            placeholder="제목을 입력해주세요."
-                           minlength="3" maxlength="30"
                            required>
-                    <small class="invalid-feedback">제목을 입력하세요.</small>
-                    <small class="text-muted">제목은 5글자부터 최대 30글자까지 입력 가능합니다.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
+                    <small id="titleHelp" class="form-text text-muted">
+                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                    </small>
+                    <small class="invalid-feedback">제목을 입력해주세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">boardTitle Error</small>
                 </div>
                 <div class="form-group d-none">
                     <label class="form-label">작성자</label>
-                    <input type="text" class="form-control" th:value="${account.nickname}" name="writer" readonly>
+                    <input type="text" id="writer" class="form-control" th:value="${account.nickname}" name="writer" readonly>
+                    <small class="invalid-feedback">내용을 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}">content Error</small>
                 </div>
-                <div class="mb-3">
+                <div class="form-group">
+                    <label for="content">상세 내용</label>
+                    <textarea id="content" type="textarea" th:field="*{content}" class="form-control"
+                              placeholder="내용을 입력해주세요." aria-describedby="contentHelp" required></textarea>
+                    <small id="contentHelp" class="form-text text-muted">
+                        남을 비방하는 글은 제제가 있을 수 있습니다.
+                    </small>
+                    <small class="invalid-feedback">글을 입력해주세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
-                    <textarea id="summernote" class="summernote" name="content" th:field="*{content}" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">작성</button>
                 <a href="/board" type="submit" class="btn btn-danger">취소</a>
@@ -72,9 +96,10 @@
         <!-- 오른쪽 게시글 끝 -->
     </div>
 </div>
+<script th:replace="fragments.html :: form-validation"></script>
 <script>
     $(document).ready(function() {
-        $('#summernote').summernote({
+        $('#content').summernote({
             placeholder: '내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 삭제됩니다.<br/>신고가 누적될 시 처벌을 받을 수 있습니다.',
             tabsize: 2,
             toolbar: [

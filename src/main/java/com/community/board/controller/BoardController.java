@@ -80,7 +80,6 @@ public class BoardController {
     // 게시물 작성
     @GetMapping("/board/write")
     public String boardForm(@CurrentUser Account account, Model model) {
-
         model.addAttribute("account", account);
         model.addAttribute(new BoardForm());
         return "board/board-write";
@@ -92,6 +91,7 @@ public class BoardController {
         if (errors.hasErrors()) {
             return "board/board-write";
         }
+
         Board savedBoard = boardService.saveNewBoard(boardForm, account);
         redirectAttributes.addAttribute("boardId", savedBoard.getBid());
         return "redirect:/board/detail/{boardId}";
