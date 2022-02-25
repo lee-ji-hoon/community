@@ -10,6 +10,36 @@
     .container{
         margin: 50px 150px 50px 150px;
     }
+    section {
+        display: none;
+        padding: 20px 0 0;
+        border-top: 1px solid #ddd;
+    }
+
+    /*라디오버튼 숨김*/
+    input {
+        display: none;}
+
+    label {
+        display: inline-block;
+        margin: 0 0 -1px;
+        padding: 15px 25px;
+        font-weight: 600;
+        text-align: center;
+        color: #bbb;
+        border: 1px solid transparent;}
+
+    label:hover {
+        color: #2e9cdf;
+        cursor: pointer;
+    }
+
+    /*input 클릭시, label 스타일*/
+    input:checked + label {
+        color: #555;
+        border-bottom: 2px solid #2e9cdf;
+        border-top: 1px solid #ffffff;
+    }
 
 </style>
 <head th:replace="fragments.html :: head"></head>
@@ -26,47 +56,23 @@
                     <img th:src="${study.image}" width="100%" height="200px">
                 </div>
 
-                <div class="card-body" style="user-select: auto;">
-                    <h5 class="card-title" style="user-select: auto;" th:text="${study.title}">Special title treatment</h5>
+                <div class="card-body" style="user-select: auto; margin-bottom: -20px">
+                    <div class="row d-flex">
+                        <h5 class="mr-auto p-2 ml-2" style="text-align: left;" th:text="${study.title}">Special title treatment</h5>
+                        <span th:if="${!study.published}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="공개 준비중">
+                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+                        </span>
+                        <span th:if="${study.closed}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="종료">
+                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+                        </span>
+                        <span th:if="${!study.recruiting}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="팀원 모집 종료">
+                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+                        </span>
+                    </div>
                     <h6 class="card-subtitle text-muted" style="user-select: auto;" th:text="${study.shortDescription}">Support card subtitle</h6>
                 </div>
-
-                <div class="card-body" style="user-select: auto;">
-                    <span th:if="${!study.published}"
-                          class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
-                          title="스터디 공개 준비중">
-                    <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
-                    </span>
-                    <span th:if="${study.closed}"
-                          class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="스터디 종료함">
-                        <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
-                    </span>
-                    <span th:if="${!study.recruiting}"
-                          class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="팀원 모집중 아님">
-                    <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
-                    </span>
-                    <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}"
-                          class="btn-group" role="group" aria-label="Basic example">
-                    <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
-                        스터디 가입
-                    </a>
-                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
-                       th:text="${study.members.size()}">1</a>
-                    </span>
-                    <span sec:authorize="isAuthenticated()" th:if="${!study.closed && study.isMember(#authentication.principal)}" class="btn-group" role="group">
-                    <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/remove'}">
-                        스터디 탈퇴
-                    </a>
-                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
-                       th:text="${study.members.size()}">1</a>
-                    </span>
-                </div>
-
-
-            </div>
-            <div class="card" style="user-select: auto;">
-                <ul class="list-group list-group-flush" style="user-select: auto;">
-                    <li class="list-group-item text-muted" style="user-select: auto;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-muted" style="border-bottom: none; margin-bottom: -10px;">
                         <span th:if="${study.tags.size() == 0}">
                             <b>주제는 추후 업데이트 예정입니다.</b>
                         </span>
@@ -76,29 +82,47 @@
                             </a>
                         </span>
                     </li>
-                    <li class="list-group-item text-muted" style="user-select: auto;">
+                    <li class="list-group-item text-muted" style="border-bottom: none;">
                         <span th:if="${study.zones.size() == 0}">
                             <b>지역은 추후 업데이트 예정입니다.</b>
                         </span>
                         <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                            <a class="text-decoration-none text-white">
-                                <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
-                            </a>
-                         </span>
+                        <a class="text-decoration-none text-white">
+                            <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
+                         </a>
+                     </span>
                     </li>
                 </ul>
             </div>
-            <ul class="list-group list-group-flush mt-3">
-                <li class="list-group-item text-muted">
-                    <i class="fa fa-user mr-1"></i>
-                    <small th:text="${study.memberCount}"></small>
-                    <small> 명 참여</small>
-                </li>
-                <li class="list-group-item text-muted">
-                    <i class="fa fa-calendar mr-1"></i>
-                    <small>2022-02-08 ~ 2022-02-25</small>
-                </li>
-            </ul>
+            <div class="card" style="user-select: auto;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">
+                        <i class="fa fa-user mr-1"></i>
+                        <small th:text="${study.memberCount}"></small>
+                        <small> 명 참여</small>
+                    </li>
+                    <li class="list-group-item text-muted">
+                        <i class="fa fa-calendar mr-1"></i>
+                        <small>2022-02-08 ~ 2022-02-25</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="mt-2" th:if="${study.isJoinable(#authentication.principal) || !study.closed && study.isMember(#authentication.principal)} ">
+                <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}" class="btn-group" role="group">
+                    <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
+                        스터디 가입
+                    </a>
+                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}" th:text="${study.members.size()}">1</a>
+                </span>
+                <span sec:authorize="isAuthenticated()" th:if="${!study.closed && study.isMember(#authentication.principal)}" class="btn-group" role="group">
+                    <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/remove'}">
+                        스터디 탈퇴
+                    </a>
+                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}" th:text="${study.members.size()}">1</a>
+                </span>
+            </div>
+
+
         </div>
         <div class="col-6">
             <p class="lead" th:utext="${study.fullDescription}"></p>
