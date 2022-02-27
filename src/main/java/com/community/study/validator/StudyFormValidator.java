@@ -3,12 +3,14 @@ package com.community.study.validator;
 import com.community.study.StudyRepository;
 import com.community.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class StudyFormValidator implements Validator {
 
     private final StudyRepository studyRepository;
@@ -25,13 +27,31 @@ public class StudyFormValidator implements Validator {
             errors.rejectValue("path", "wrong.path", "해당 스터디 경로를 사용할 수 없습니다 다시 작성해주세요.");
         }
 
-/*        if(isNotValidLimitMemberDate(studyForm)){
-            errors.rejectValue("limitMemberDate", "wrong.path", "인원 모집 종료 일시를 다시 확인해주세요.");
-        }*/
+        if(!isNotValidLimitMemberDate(studyForm)){
+            errors.rejectValue("limitMemberDate", "wrong.date", "인원 모집 종료 일시를 다시 확인해주세요.");
+        }
 
+        if (!isNotValidLimitStudyDate(studyForm)) {
+            errors.rejectValue("limitStudyDate", "wrong.date", "스터디 종료일을 다시 확인해주세요");
+        }
+
+        if (!isNotValidStartStudyDate(studyForm)) {
+            errors.rejectValue("startStudyDate", "wrong.date", "스터디 시작일을 다시 확인해주세요.");
+        }
     }
 
-/*    private boolean isNotValidLimitMemberDate(StudyForm studyForm) {
-        return studyForm.getStartStudyDate().isBefore(studyForm.getLimitMemberDate());
-    }*/
+    private boolean isNotValidStartStudyDate(StudyForm studyForm) {
+        log.info(String.valueOf(studyForm.getStartStudyDate().isBefore(studyForm.getLimitStudyDate())));
+        return studyForm.getStartStudyDate().isBefore(studyForm.getLimitStudyDate());
+    }
+
+    private boolean isNotValidLimitStudyDate(StudyForm studyForm) {
+        log.info(String.valueOf(studyForm.getLimitStudyDate().isAfter(studyForm.getStartStudyDate())));
+        return studyForm.getLimitStudyDate().isAfter(studyForm.getStartStudyDate());
+    }
+
+    private boolean isNotValidLimitMemberDate(StudyForm studyForm) {
+        log.info(String.valueOf(studyForm.getLimitMemberDate().isBefore(studyForm.getStartStudyDate())));
+        return studyForm.getLimitMemberDate().isBefore(studyForm.getStartStudyDate());
+    }
 }
