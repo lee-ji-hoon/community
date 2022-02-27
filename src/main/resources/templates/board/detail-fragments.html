@@ -65,6 +65,11 @@
             <div class="row text-center p-3" style="width: auto">
 
             </div>
+            <script type="application/javascript">
+                $('#myModal').on('shown.bs.modal', function () {
+                    $('#myInput').trigger('focus')
+                });
+            </script>
         </div>
 
         <!-- 로그인이 되어있는 상태 -->
@@ -116,17 +121,21 @@
                 <div id="content" name="content" th:utext="${board.content}"></div>
             </div>
             <hr>
-            <b><a class="text-primary pl-2" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
+            <b><a class="text-primary pl-2" id="like_result" th:text="${likeService.boardLikeSize(board)}"></a></b><a> 명이 이 게시글을 좋아합니다.</a>
             <br>
-            <th:block th:if="${likes.isPresent()}">
-                <button type="button" id="heart_cancel"
-                        th:onclick="|location.href='@{/board/detail/{boardId}/like-cancel(boardId = ${board.bid})}'|"
-                        class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요 취소</button>
-            </th:block>
             <th:block th:if="${likes.isEmpty()}">
-                <button type="button" id="heart"
-                        th:onclick="|location.href='@{/board/detail/{boardId}/like(boardId = ${board.bid})}'|"
-                        class="btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</button>
+                <form id="like_add">
+                    <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                    <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                    <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</a>
+                </form>
+            </th:block>
+            <th:block th:if="${likes.isPresent()}">
+                <form id="like_cancel">
+                    <input type="hidden" name="like_boardId" th:value="${board.bid}"/>
+                    <input type="hidden" name="like_accountId" th:value="${account.id}"/>
+                    <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
+                </form>
             </th:block>
 
             <!-- 로그인한 유저와 게시글을 작성한 ID가 같다면 신고하기가 뜨지 않음 -->
@@ -345,6 +354,56 @@
             <div class="row text-center p-3" style="width: auto">
 
             </div>
+            <script type="application/javascript">
+                $(document).ready(function (){
+                    $('#myModal').on('shown.bs.modal', function () {
+                        $('#myInput').trigger('focus')
+                    });
+                })
+                $(".like_heart_click").click(function (){
+                    // .like_heart_click은 <a></a>태그의 class 이름
+                    // 해당 태그를 클릭하면 진행되는 메소드
+                    if($(this).children('i').attr('class') == "fa fa-thumbs-up"){
+                        // this는 클릭한 태그 전역
+                        // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
+                        console.log("hit + 1");
+                        $.ajax({
+                            url:'/board/detail/like',
+                            type:'get',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $('#like_add').serialize(),
+                            dataType : "json",
+                            success : function (like_size){
+                                console.log("Like Hit Success");
+                                $("#like_result").html(like_size);
+                                $(".like_heart_click").html("<i class=\"fa fa-thumbs-down\"></i> 좋아요 취소");
+                            },
+                            error : function (request, status, error){
+                                console.log("Like Hit Fail" + error);
+                            }
+                        });
+                    }else if($(this).children('i').attr('class') == "fa fa-thumbs-down"){
+                        console.log("hit - 1");
+                        $.ajax({
+                            url:'/board/detail/like-cancel',
+                            type:'get',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $('#like_cancel').serialize(),
+                            dataType : "json",
+                            success : function (like_size){
+                                console.log("Like Hit Success");
+                                $("#like_result").html(like_size);
+                                $(".like_heart_click").html("<i class=\"fa fa-thumbs-up\"></i> 좋아요");
+                            },
+                            error : function (request, status, error){
+                                console.log("Like Hit Fail" + error);
+                            }
+                        });
+                    }
+                });
+
+            </script>
+
         </div>
 
         <!-- 로그인이 되어있지 않은 상태 -->
@@ -515,6 +574,11 @@
             <div class="row text-center p-3" style="width: auto">
 
             </div>
+            <script type="application/javascript">
+                $('#myModal').on('shown.bs.modal', function () {
+                    $('#myInput').trigger('focus')
+                });
+            </script>
         </div>
     </div>
 </div>
