@@ -7,7 +7,7 @@
         <div class="row justify-content-center pt-3">
             <div class="col-sm-12">
                 <div class="row">
-                    <div class="col-md-4" th:each="study: ${studyListPublished}">
+                    <div class="col-md-4" th:each="study: ${studyListId}">
                         <div class="card mb-4 shadow-sm">
                             <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
                             <div class="card-body">
@@ -32,7 +32,7 @@
                                         <i class="fa fa-user-circle"></i>
                                         <span th:text="${study.memberCount}"></span>명
                                     </small>
-                                    <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
+                                    <small class="text-muted date" th:text="${#temporals.format(study.publishedDateTime, 'yyyy-MM-dd')}"></small>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center pt-3">
+        <!--<div class="row justify-content-center pt-3">
             <div class="col-sm-12">
                 <div class="row">
                     <div class="col-md-4" th:each="study: ${studyListClosed}">
@@ -69,14 +69,14 @@
                                         <i class="fa fa-user-circle"></i>
                                         <span th:text="${study.memberCount}"></span>명
                                     </small>
-                                    <!--<small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>-->
+                                    &lt;!&ndash;<small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>&ndash;&gt;
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 
 

@@ -111,18 +111,6 @@ public class StudyService {
         if (accountWithTagsByPath == null) throw new IllegalArgumentException(path + "해당 하는 스터디가 없습니다.");
     }
 
-    public void publish(Study studyUpdate) {
-        studyUpdate.publish();
-    }
-
-    public void close(Study studyUpdate) {
-        studyUpdate.close();
-    }
-
-    public void recruitPublish(Study studyUpdate) {
-        studyUpdate.recruitPublish();
-    }
-
     public void recruitClose(Study studyUpdate) {
         studyUpdate.recruitClose();
     }
@@ -133,14 +121,6 @@ public class StudyService {
 
     public boolean isValidTitle(String newTitle) {
         return newTitle.length() <= 50;
-    }
-
-    public void remove(Study study) {
-        if (study.isRemovable()) {
-            studyRepository.delete(study);
-        } else {
-            throw new IllegalArgumentException("스터디를 삭제할 수 없습니다.");
-        }
     }
 
     public void addMember(Study studyWithMembersByPath, Account account) {
@@ -161,5 +141,9 @@ public class StudyService {
 
     public void updateStudyPath(Study studyToUpdateStatus, String newPath) {
         studyToUpdateStatus.setPath(newPath);
+    }
+
+    public void remove(Study study) {
+        studyRepository.delete(study);
     }
 }

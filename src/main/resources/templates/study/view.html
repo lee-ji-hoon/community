@@ -46,9 +46,8 @@
 <body>
 
 <div th:replace="fragments.html :: main-nav"></div>
-<!--    <div th:replace="fragments.html :: study-banner"></div>-->
 <div class="container">
-        <!-- Side navigation -->
+    <!-- Side navigation -->
     <div class="row mt-5 justify-content-center">
         <div class="col-3">
             <div class="card mb-3" style="user-select: auto;">
@@ -59,14 +58,20 @@
                 <div class="card-body" style="user-select: auto; margin-bottom: -20px">
                     <div class="row d-flex">
                         <h5 class="mr-auto p-2 ml-2" style="text-align: left;" th:text="${study.title}">Special title treatment</h5>
-                        <span th:if="${!study.published}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="공개 준비중">
-                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+                        <span th:if="${study.openStudy}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 시작">
+                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>스터디 시작</button>
                         </span>
-                        <span th:if="${study.closed}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="종료">
-                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+                        <span th:if="${!study.openStudy && !study.endStudy()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 준비중">
+                            <button class="btn btn-secondary btn-sm" style="pointer-events: none;" type="button" disabled>스터디 준비중</button>
                         </span>
-                        <span th:if="${!study.recruiting}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="팀원 모집 종료">
-                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+                        <span th:if="${!study.openStudy && study.endStudy()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 종료">
+                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>스터디 종료</button>
+                        </span>
+                        <span th:if="${study.recruiting() && !study.isLimitMember()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="인원 모집 중">
+                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>인원 모집 중</button>
+                        </span>
+                        <span th:if="${!study.recruiting() || study.isLimitMember()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="인원 모집 종료">
+                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>인원 모집 종료</button>
                         </span>
                     </div>
                     <h6 class="card-subtitle text-muted" style="user-select: auto;" th:text="${study.shortDescription}">Support card subtitle</h6>
@@ -99,7 +104,7 @@
                     <li class="list-group-item text-muted d-flex">
                         <i class="fa fa-user pt-2 pr-2"></i>
                         <small class="pt-2" th:text="${study.memberCount} +'명 참여'"></small>
-                        <small class="ml-auto p-2" th:text="'최대 :'+${study.limitMember}"></small>
+                        <small class="ml-auto p-2" th:text="${study.limitMember} + '명 모집중 '"></small>
                     </li>
                     <li class="list-group-item text-muted">
                         <i class="fa fa-calendar mr-1"></i>
@@ -107,51 +112,36 @@
                     </li>
                 </ul>
             </div>
-            <div class="mt-2" th:if="${study.isJoinable(#authentication.principal) || !study.closed && study.isMember(#authentication.principal)} ">
+            <div class="mt-2" th:if="${study.isJoinable(#authentication.principal) && !study.isLimitMember() || study.isMember(#authentication.principal)} ">
                 <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}" class="btn-group" role="group">
                     <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
                         스터디 가입
                     </a>
-                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}" th:text="${study.members.size()}">1</a>
+                    <a class="btn btn-outline-primary" th:text="${study.memberCount}">1</a>
                 </span>
-                <span sec:authorize="isAuthenticated()" th:if="${!study.closed && study.isMember(#authentication.principal)}" class="btn-group" role="group">
+                <span sec:authorize="isAuthenticated()" th:if="${study.recruiting() && study.isMember(#authentication.principal)}" class="btn-group" role="group">
                     <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/remove'}">
                         스터디 탈퇴
                     </a>
-                    <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}" th:text="${study.members.size()}">1</a>
+                    <a class="btn btn-outline-primary" th:text="${study.memberCount}">1</a>
                 </span>
             </div>
-
-
+            <span sec:authorize="isAuthenticated()" th:if="${study.isManager(#authentication.principal)}" class="btn-group mt-2" role="group">
+                <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/settings/description'}">
+                스터디 설정
+                </a>
+            </span>
         </div>
         <div class="col-6">
             <p class="lead" th:utext="${study.fullDescription}"></p>
         </div>
     </div>
 </div>
-<div th:fragment="study-menu (studyMenu)" class="row px-3 justify-content-center bg-light">
-    <a sec:authorize="isAuthenticated()" th:if="${study.isManager(#authentication.principal)}"
-       class="nav-item nav-link" th:classappend="${studyMenu == 'settings'}? active" href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">
-        설정
-    </a>
-</div>
+
 
 </body>
 </html>
 
-
-<!--    <div th:replace="fragments.html :: main-nav"></div>
-    <div th:replace="fragments.html :: study-banner"></div>
-    <div class="container">
-        <div th:replace="fragments.html :: study-info"></div>
-        <div th:replace="fragments.html :: study-menu(studyMenu='info')"></div>
-
-        <div class="row px-3 justify-content-center">
-            <div class="col-10 pt-3" th:utext="${study.fullDescription}"></div>
-        </div>
-
-        <div th:replace="fragments.html :: footer"></div>
-    </div>-->
     <script type="application/javascript">
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

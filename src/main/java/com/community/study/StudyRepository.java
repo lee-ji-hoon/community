@@ -31,15 +31,15 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     Study findStudyWithMembersByPath(String path);
 
     @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
+    List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
 
     @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByPublishedAndClosedOrderByIdDesc(boolean published, boolean closed);
+    List<Study> findFirst9ByOrderByIdDesc();
 
     @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+    List<Study> findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(Account account);
 
     @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+    List<Study> findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(Account account);
 
 }
