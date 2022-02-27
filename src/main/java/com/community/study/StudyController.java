@@ -15,6 +15,7 @@ import com.community.zone.ZoneRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class StudyController {
 
     private final StudyService studyService;
@@ -68,7 +71,7 @@ public class StudyController {
         return "study/study-list";
     }
 
-    // 스터지 추가 뷰
+    // 스터디 추가 뷰
     @GetMapping(STUDY_FORM_URL)
     public String newStudyForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
@@ -78,11 +81,18 @@ public class StudyController {
 
     // 스터디 추가
     @PostMapping(STUDY_FORM_URL)
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model, HttpServletRequest httpServletRequest) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
         }
+
+        String parameter = httpServletRequest.getParameter("startStudyDate");
+        String parameter1 = httpServletRequest.getParameter("limitStudyDate");
+        String parameter2 = httpServletRequest.getParameter("limitMemberDate");
+        log.info("스티더 시작일 = " + parameter);
+        log.info("스티더 종료일 = " + parameter1);
+        log.info("인원모집 종료일 = " + parameter2);
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);

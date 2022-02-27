@@ -22,7 +22,16 @@ public class StudyFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
         StudyForm studyForm = (StudyForm)target;
         if (studyRepository.existsByPath(studyForm.getPath())) {
-            errors.rejectValue("path", "wrong.path", "해당 스터디 경로값을 사용할 수 없습니다.");
+            errors.rejectValue("path", "wrong.path", "해당 스터디 경로를 사용할 수 없습니다 다시 작성해주세요.");
         }
+
+/*        if(isNotValidLimitMemberDate(studyForm)){
+            errors.rejectValue("limitMemberDate", "wrong.path", "인원 모집 종료 일시를 다시 확인해주세요.");
+        }*/
+
     }
+
+/*    private boolean isNotValidLimitMemberDate(StudyForm studyForm) {
+        return studyForm.getStartStudyDate().isBefore(studyForm.getLimitMemberDate());
+    }*/
 }
