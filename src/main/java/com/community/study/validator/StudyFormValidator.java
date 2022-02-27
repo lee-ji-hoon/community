@@ -38,6 +38,10 @@ public class StudyFormValidator implements Validator {
         if (!isNotValidStartStudyDate(studyForm)) {
             errors.rejectValue("startStudyDate", "wrong.date", "스터디 시작일을 다시 확인해주세요.");
         }
+
+        if (studyForm.getLimitMember() < 2 && studyForm.getLimitMember() > 30) {
+            errors.rejectValue("limitMember", "wrong.member", "인원은 2~30명 사이로 선택해주세요");
+        }
     }
 
     private boolean isNotValidStartStudyDate(StudyForm studyForm) {
