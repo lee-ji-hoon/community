@@ -21,15 +21,18 @@ import com.community.report.repository.BoardReportRepository;
 import com.community.report.repository.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -205,25 +208,45 @@ public class BoardController {
     }
 
     // 좋아요 관련 내용
-    @GetMapping("/board/detail/{boardId}/like")
-    public String addLikeLink(@CurrentUser Account account, @PathVariable Long boardId) {
-        likeApiController.addLike(account, boardId);
-        return "redirect:/board/detail/{boardId}";
+    @ResponseBody
+    @RequestMapping(value = "/board/detail/like")
+    public int addLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
+        log.info("좋아요 호출");
+        Board board = boardRepository.findByBid(like_boardId);
+        Optional<Account> findAccount = accountRepository.findById(like_accountId);
+        if (findAccount.isPresent()) {
+            String accountEmail = findAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            likeApiController.addLike(account, like_boardId);
+        }
+        List<Likes> likes = likeRepository.findAllByBoard(board);
+        int like_size = likes.size();
+
+
+        return like_size;
     }
 
-    @GetMapping("/board/detail/{boardId}/like-cancel")
-    public String cancelLikeLink(@CurrentUser Account account, @PathVariable Long boardId) {
-        Board board = boardRepository.findByBid(boardId);
-        boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
-        log.info("existLike = " + existLike);
-        log.info(board.getBid().toString());
-        log.info(account.getId().toString());
-        if (existLike) {
-            Likes likes = likeRepository.findByBoardAndAccount(board, account);
-            log.info("likeId = " + likes);
-            likeRepository.delete(likes);
-            return "redirect:/board/detail/{boardId}";
+    @ResponseBody
+    @RequestMapping(value = "/board/detail/like-cancel")
+    public int removeLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
+        log.info("좋아요 취소 호출");
+        Board board = boardRepository.findByBid(like_boardId);
+        Optional<Account> findAccount = accountRepository.findById(like_accountId);
+        if (findAccount.isPresent()) {
+            String accountEmail = findAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
+            if (existLike) {
+                Likes likes = likeRepository.findByBoardAndAccount(board, account);
+                log.info("likeId = " + likes);
+                likeRepository.delete(likes);
+                List<Likes> likesList = likeRepository.findAllByBoard(board);
+                int likesSize = likesList.size();
+                return likesSize;
+            }
         }
-        return "redirect:/board/detail/{boardId}";
+        List<Likes> likesList = likeRepository.findAllByBoard(board);
+        int like_size = likesList.size();
+        return like_size;
     }
 }
