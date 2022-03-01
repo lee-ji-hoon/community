@@ -91,16 +91,6 @@ public class Study {
 
     private LocalDateTime publishedDateTime;
 
-    private LocalDateTime closedDateTime;
-
-    private LocalDateTime recruitingUpdatedDateTime;
-
-    private boolean recruiting;
-
-    private boolean published;
-
-    private boolean closed;
-
     private boolean useBanner;
 
     private int memberCount;
@@ -108,14 +98,14 @@ public class Study {
     private int limitMember;
 
     public void addManager(Account account) {
+        this.publishedDateTime = LocalDateTime.now();
         this.managers.add(account);
         this.memberCount++;
     }
 
     public boolean isJoinable(UserAccount userAccount) {
         Account account = userAccount.getAccount();
-        return this.isPublished() && this.isRecruiting()
-                && !this.members.contains(account) && !this.managers.contains(account);
+        return this.recruiting() && !this.members.contains(account) && !this.managers.contains(account);
 
     }
 
@@ -131,44 +121,45 @@ public class Study {
         return image != null ? image : "/images/study-banner.jpeg";
     }
 
-    public void publish() {
-        if (!this.closed && !this.published) {
-            this.published = true;
-            this.publishedDateTime = LocalDateTime.now();
-        }else{
-            throw new RuntimeException("스터디를 공개 할 수 없는 상태입니다. 이미 종료됐거나 공개된 스터디인지 다시 확인해주세요");
-        }
+    public boolean openStudy(){
+
+        return isNotOpenAndClosed();
     }
 
-    public void close() {
-        if (this.published) {
-            this.published = false;
-            this.closedDateTime = LocalDateTime.now();
-        }else{
-            throw new RuntimeException("스터디를 종료 할 수 없습니다. 존재하지 않거나 이미 종료된 스터디입니다. 다시 확인해주세요.");
-        }
+    public boolean endStudy() {
+        return isClosed();
     }
 
-    public void recruitPublish() {
-        if (!this.recruiting && !this.closed && this.published){
-            this.recruiting = true;
-            this.recruitingUpdatedDateTime = LocalDateTime.now();
-        }else {
-            throw new RuntimeException("스터디원 모집을 시작 할 수 없습니다. 종료됐거나 공개되지 않은 스터디입니다. 다시 확인해주세요.");
-        }
+    public boolean recruiting() {
+        return isRecruiting();
+    }
+
+    public boolean isLimitMember() {
+        return limitMemberEquals();
+    }
+
+    private boolean limitMemberEquals() {
+        return this.memberCount >= limitMember;
+    }
+
+    private boolean isRecruiting() {
+        return this.limitMemberDate.isAfter(LocalDate.now());
+    }
+
+    private boolean isClosed() {
+        return this.limitStudyDate.isBefore(LocalDate.now());
+    }
+
+    private boolean isNotOpenAndClosed() {
+        return this.startStudyDate.isBefore(LocalDate.now()) && limitStudyDate.isAfter(LocalDate.now());
     }
 
     public void recruitClose() {
-        if (this.recruiting && !this.closed && this.published) {
-            this.recruiting = false;
-            this.recruitingUpdatedDateTime = LocalDateTime.now();
+        if (this.recruiting()) {
+            this.limitMemberDate = LocalDate.now();
         }else {
             throw new RuntimeException("스터디원 모집을 종료 할 수 없습니다. 이미 종료됐거나 시작하지 않은 스터디입니다. 다시 확인해주세요.");
         }
-    }
-
-    public boolean isRemovable() {
-        return !this.published;
     }
 
     public void addMember(Account account) {
@@ -179,9 +170,5 @@ public class Study {
     public void removeMember(Account account) {
         this.getMembers().remove(account);
         this.memberCount--;
-    }
-
-    public boolean UpdateRecruiting() {
-        return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusMinutes(30));
     }
 }

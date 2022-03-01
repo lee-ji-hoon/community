@@ -113,8 +113,8 @@ public class AccountController {
 
         model.addAttribute(accountLoaded);
         model.addAttribute(byNickname);
-        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
-        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false));
+        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("isOwner", byNickname.equals(account));
         model.addAttribute("board", boards);
         model.addAttribute("likeService", likeService);

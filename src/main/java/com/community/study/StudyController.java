@@ -66,8 +66,7 @@ public class StudyController {
 
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model) {
-        model.addAttribute("studyListPublished", studyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false));
-        model.addAttribute("studyListClosed", studyRepository.findFirst9ByPublishedAndClosedOrderByIdDesc(false, false));
+        model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByIdDesc());
         return "study/study-list";
     }
 
@@ -124,9 +123,10 @@ public class StudyController {
     @GetMapping(STUDY_PATH_VIEW + "/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
+
         studyService.addMember(studyWithMembersByPath, account);
 
-        return "redirect:/study/" + fixPath(path) + "/members";
+        return "redirect:/study/" + fixPath(path);
     }
 
     // 스터디 탈퇴
@@ -135,7 +135,7 @@ public class StudyController {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
         studyService.removeMember(studyWithMembersByPath, account);
 
-        return "redirect:/study/" + fixPath(path) + "/members";
+        return "redirect:/study/" + fixPath(path);
     }
 
     // 스터디 설명 수정 시작
@@ -150,7 +150,7 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "description")
-    public String updateStudyForm(@CurrentUser Account account, @PathVariable String path,
+    public String updateStudyForm(@CurrentUser Account account, @PathVariable String path, String image,
                                   @Valid StudyDescriptionForm studyDescriptionForm,
                                   Errors errors, Model model, RedirectAttributes redirectAttributes) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -168,41 +168,15 @@ public class StudyController {
     }
     // 스터디 설명 수정 끝
 
-    // 배너 수정 시작
-    @GetMapping(STUDY_SETTINGS + "banner")
-    public String studyImageForm(@CurrentUser Account account, @PathVariable String path, Model model) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        model.addAttribute(account);
-        model.addAttribute(studyUpdate);
-        return "study/settings/banner";
-    }
-
     @PostMapping(STUDY_SETTINGS + "banner")
-    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image,
-                                     Model model, RedirectAttributes redirectAttributes) {
+    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, Model model, RedirectAttributes redirectAttributes) {
 
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         studyService.getStudyImage(studyUpdate, image);
 
         redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
 
-        return "redirect:/study/" + fixPath(path) + "/settings/banner";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "banner/enable")
-    public String studyBannerEnable(@CurrentUser Account account, @PathVariable String path) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.studyBannerEnable(studyUpdate);
-
-        return "redirect:/study/" + fixPath(path) + "/settings/banner";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "banner/disable")
-    public String studyBannerDisable(@CurrentUser Account account, @PathVariable String path) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.studyBannerDisable(studyUpdate);
-
-        return "redirect:/study/" + fixPath(path) + "/settings/banner";
+        return "redirect:/study/" + fixPath(path) + "/settings/description";
     }
     // 배너 수정 끝
 
@@ -296,7 +270,7 @@ public class StudyController {
     // 지역 수정 끝
 
     /* 스터디 전체적인 설정 시작 */
-    // 스터디 공개 설정 시작
+    // 스터디 설정 시작
     @GetMapping(STUDY_SETTINGS + "study")
     public String studyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -306,55 +280,6 @@ public class StudyController {
 
         return "study/settings/study";
     }
-
-    @PostMapping(STUDY_SETTINGS + "study/publish")
-    public String studyPublish(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.publish(studyUpdate);
-        redirectAttributes.addFlashAttribute("message", "스터디가 공개됐습니다.");
-
-        return "redirect:/study/" + fixPath(path) + "/settings/study";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "study/close")
-    public String studyClose(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.close(studyUpdate);
-        redirectAttributes.addFlashAttribute("message", "스터디가 종료됐습니다.");
-
-        return "redirect:/study/" + fixPath(path) + "/settings/study";
-    }
-    // 스터디 공개 설정 끝
-
-    // 스터디 인원 모집 시작
-    @PostMapping(STUDY_SETTINGS + "study/recruit-publish")
-    public String studyRecruitPublish(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        if (!studyUpdate.UpdateRecruiting()) {
-            redirectAttributes.addFlashAttribute("message_danger", "30분에 한 번만 인원 모집 설정이 변경 가능합니다. 잠시 뒤에 이용해주시기 바랍니다.");
-            return "redirect:/study/" + fixPath(path) + "/settings/study";
-        }
-
-        studyService.recruitPublish(studyUpdate);
-        redirectAttributes.addFlashAttribute("message", "인원 모집이 시작됐습니다. 스터디원을 모집해보세요");
-
-        return "redirect:/study/" + fixPath(path) + "/settings/study";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "study/recruit-close")
-    public String studyRecruitClose(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-
-        if (!studyUpdate.UpdateRecruiting()) {
-            redirectAttributes.addFlashAttribute("message_danger", "30분에 한 번만 인원 모집 설정이 변경 가능합니다. 잠시 뒤에 이용해주시기 바랍니다.");
-            return "redirect:/study/" + fixPath(path) + "/settings/study";
-        }
-        studyService.recruitClose(studyUpdate);
-
-        redirectAttributes.addFlashAttribute("message", "인원 모집이 종료됐습니다.");
-        return "redirect:/study/" + fixPath(path) + "/settings/study";
-    }
-    // 스터디 인원 모집 끝
 
     // 스터디 이름 변경
     @PostMapping(STUDY_SETTINGS + "study/title")
