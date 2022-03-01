@@ -206,47 +206,4 @@ public class BoardController {
         model.addAttribute(new SearchForm());
         return "board/board-list";
     }
-
-    // 좋아요 관련 내용
-    @ResponseBody
-    @RequestMapping(value = "/board/detail/like")
-    public int addLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
-        log.info("좋아요 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            likeApiController.addLike(account, like_boardId);
-        }
-        List<Likes> likes = likeRepository.findAllByBoard(board);
-        int like_size = likes.size();
-
-
-        return like_size;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/board/detail/like-cancel")
-    public int removeLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
-        log.info("좋아요 취소 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
-            if (existLike) {
-                Likes likes = likeRepository.findByBoardAndAccount(board, account);
-                log.info("likeId = " + likes);
-                likeRepository.delete(likes);
-                List<Likes> likesList = likeRepository.findAllByBoard(board);
-                int likesSize = likesList.size();
-                return likesSize;
-            }
-        }
-        List<Likes> likesList = likeRepository.findAllByBoard(board);
-        int like_size = likesList.size();
-        return like_size;
-    }
 }
