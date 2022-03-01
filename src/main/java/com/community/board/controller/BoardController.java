@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.Position;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -128,10 +129,14 @@ public class BoardController {
     /* 게시물 수정 및 관련 */
     // 게시글 수정
     @GetMapping("/board/{boardId}/edit")
-    public String boardUpdateForm(@PathVariable long boardId, Model model) {
-        Board board = boardRepository.findByBid(boardId);
-        model.addAttribute("board", board);
-        return "board/edit";
+    public String boardUpdateForm(@PathVariable long boardId, @CurrentUser Account account , Model model) {
+        Board currentBoard = boardRepository.findByBid(boardId);
+        if (account.getId().equals(currentBoard.getWriterId())) {
+            Board board = boardRepository.findByBid(boardId);
+            model.addAttribute("board", board);
+            return "board/edit";
+        }
+        return "redirect:/board/detail/{boardId}";
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트
@@ -144,12 +149,13 @@ public class BoardController {
 
     // 게시물 삭제
     @GetMapping("/board/{boardId}/delete")
-    public String boardDelete(@PathVariable long boardId) {
-        Board board = boardRepository.findByBid(boardId);
-
-        boardRepository.delete(board);
-
-        return "redirect:/board";
+    public String boardDelete(@PathVariable long boardId, @CurrentUser Account account) {
+        Board currentBoard = boardRepository.findByBid(boardId);
+        if (account.getId().equals(currentBoard.getWriterId())) {
+            boardRepository.delete(currentBoard);
+            return "redirect:/board";
+        }
+        return "redirect:/board/detail/{boardId}";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.
