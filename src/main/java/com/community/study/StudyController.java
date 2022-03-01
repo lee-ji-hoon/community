@@ -169,12 +169,28 @@ public class StudyController {
     // 스터디 설명 수정 끝
 
     @PostMapping(STUDY_SETTINGS + "banner")
-    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, Model model, RedirectAttributes redirectAttributes) {
+    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
 
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         studyService.getStudyImage(studyUpdate, image);
 
         redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/description";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "banner/enable")
+    public String studyBannerEnable(@CurrentUser Account account, @PathVariable String path) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.studyBannerEnable(studyUpdate);
+
+        return "redirect:/study/" + fixPath(path) + "/settings/description";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "banner/disable")
+    public String studyBannerDisable(@CurrentUser Account account, @PathVariable String path) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        studyService.studyBannerDisable(studyUpdate);
 
         return "redirect:/study/" + fixPath(path) + "/settings/description";
     }
