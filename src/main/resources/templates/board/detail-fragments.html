@@ -184,7 +184,7 @@
 
             <!-- 댓글 기능 -->
             <hr class="mt-0">
-            <div class="bg-light">
+            <div class="reply_div bg-light">
                 <!-- 댓글 리스트 -->
                 <div th:each="reply : ${reply}">
                     <div class="col-12 mb-3">
@@ -337,20 +337,20 @@
                 </div>
 
                 <!-- 댓글 작성 -->
-                <form class="needs-validation" th:action="@{/board/detail/{boardId}/reply(boardId=${board.bid})}" method="post" th:object="${replyForm}" novalidate>
+                <form class="needs-validation" id="reply_form" th:object="${replyForm}" novalidate>
                     <div>
                         <h4><small>댓글 작성하기</small></h4>
                         <ul class="bg-light list-group list-group-flush">
                             <li class="list-group-item bg-light">
-                                <input type="hidden" id="board_id" name="board" class="form-control"
+                                <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
                                        value="1" th:value="${board.bid}" readonly>
-                                <input type="hidden" id="account_id" name="account" class="form-control"
+                                <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
                                        value="1" th:value="${account.id}" readonly>
-                                <textarea style="resize: none" id="content" class="form-control" th:field="*{content}" name="content" rows="3"
+                                <textarea style="resize: none" id="r_content" class="form-control" th:field="*{content}" name="r_content" rows="3"
                                           placeholder="남을 비방하는 댓글은 제제가 있을 수 있습니다." aria-describedby="contentHelp" required></textarea>
                                 <small class="invalid-feedback">댓글을 작성해주세요.</small>
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
-                                <button type="submit" class="btn btn-success mt-3">댓글 작성</button>
+                                <a class="btn btn-success mt-3 write_reply">댓글 작성</a>
                             </li>
                         </ul>
                     </div>
@@ -411,6 +411,23 @@
                                 }
                             });
                         }
+                    });
+                    $(document).on('click', '.write_reply', function() {
+                        console.log("댓글 작성");
+                        $.ajax({
+                            url:'/board/detail/reply',
+                            type:'get',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $('#reply_form').serialize(),
+                            dataType : "json",
+                            success : function (){
+                                console.log("Write Reply Success");
+                                $('.reply_div').load(location.href+' .reply_div');
+                            },
+                            error : function (request, status, error){
+                                console.log("Write Reply Fail" + error);
+                            }
+                        });
                     });
                 })
             </script>
