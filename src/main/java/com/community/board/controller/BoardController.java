@@ -21,18 +21,15 @@ import com.community.report.repository.BoardReportRepository;
 import com.community.report.repository.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +48,6 @@ public class BoardController {
     private final BoardService boardService;
     private final LikeService likeService;
     private final ReplyService replyService;
-    private final LikeApiController likeApiController;
 
     //전체 게시물 조회
     @GetMapping("/board")
@@ -128,10 +124,14 @@ public class BoardController {
     /* 게시물 수정 및 관련 */
     // 게시글 수정
     @GetMapping("/board/{boardId}/edit")
-    public String boardUpdateForm(@PathVariable long boardId, Model model) {
-        Board board = boardRepository.findByBid(boardId);
-        model.addAttribute("board", board);
-        return "board/edit";
+    public String boardUpdateForm(@PathVariable long boardId, @CurrentUser Account account , Model model) {
+        Board currentBoard = boardRepository.findByBid(boardId);
+        if (account.getId().equals(currentBoard.getWriterId())) {
+            Board board = boardRepository.findByBid(boardId);
+            model.addAttribute("board", board);
+            return "board/edit";
+        }
+        return "redirect:/board/detail/{boardId}";
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트
@@ -144,12 +144,13 @@ public class BoardController {
 
     // 게시물 삭제
     @GetMapping("/board/{boardId}/delete")
-    public String boardDelete(@PathVariable long boardId) {
-        Board board = boardRepository.findByBid(boardId);
-
-        boardRepository.delete(board);
-
-        return "redirect:/board";
+    public String boardDelete(@PathVariable long boardId, @CurrentUser Account account) {
+        Board currentBoard = boardRepository.findByBid(boardId);
+        if (account.getId().equals(currentBoard.getWriterId())) {
+            boardRepository.delete(currentBoard);
+            return "redirect:/board";
+        }
+        return "redirect:/board/detail/{boardId}";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.
@@ -205,48 +206,5 @@ public class BoardController {
 
         model.addAttribute(new SearchForm());
         return "board/board-list";
-    }
-
-    // 좋아요 관련 내용
-    @ResponseBody
-    @RequestMapping(value = "/board/detail/like")
-    public int addLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
-        log.info("좋아요 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            likeApiController.addLike(account, like_boardId);
-        }
-        List<Likes> likes = likeRepository.findAllByBoard(board);
-        int like_size = likes.size();
-
-
-        return like_size;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/board/detail/like-cancel")
-    public int removeLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
-        log.info("좋아요 취소 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
-            if (existLike) {
-                Likes likes = likeRepository.findByBoardAndAccount(board, account);
-                log.info("likeId = " + likes);
-                likeRepository.delete(likes);
-                List<Likes> likesList = likeRepository.findAllByBoard(board);
-                int likesSize = likesList.size();
-                return likesSize;
-            }
-        }
-        List<Likes> likesList = likeRepository.findAllByBoard(board);
-        int like_size = likesList.size();
-        return like_size;
     }
 }
