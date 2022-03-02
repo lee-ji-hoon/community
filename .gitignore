@@ -38,7 +38,7 @@ out/
 
 # Project exclude paths
 /src/main/resources/static/node_modules/
-theme-template/
+src/main/resources/static/theme-template
 
 
 .gradle
