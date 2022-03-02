@@ -38,6 +38,8 @@ out/
 
 # Project exclude paths
 /src/main/resources/static/node_modules/
+theme_template/
+
 
 .gradle
 /build/
@@ -65,3 +67,4 @@ dist/
 nbdist/
 .nb-gradle/
 src/main/resources/application-dev.properties
+
