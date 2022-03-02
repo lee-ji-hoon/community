@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +34,10 @@ public class ReplyController {
     // 좋아요 관련 내용
     @ResponseBody
     @RequestMapping(value = "/board/detail/reply")
-    public int addLikeLink(@RequestParam(value = "r_board_id", required=false) Long r_board_id,
-                           @RequestParam(value = "r_account_id", required=false) Long r_account_id,
-                           @RequestParam(value = "r_content", required=false) String r_content,
-                           ReplyForm replyForm){
+    public int addLikeLink(@RequestParam(value = "r_board_id") Long r_board_id,
+                           @RequestParam(value = "r_account_id") Long r_account_id,
+                           @RequestParam(value = "r_content") String r_content,
+                           ReplyForm replyForm) throws IOException {
         log.info("댓글 작성 호출");
         log.info(r_board_id + "r_board_id");
         log.info(r_account_id + "r_account_id");
