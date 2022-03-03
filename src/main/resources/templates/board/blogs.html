@@ -20,17 +20,16 @@
                 <div class="lg:flex  lg:space-x-12">
 
                     <div class="lg:w-3/4">
-                        
+
                         <div class="flex justify-between items-center relative md:mb-4 mb-3">
                             <div class="flex-1">
                                 <h2 class="text-2xl font-semibold"> Blog </h2>
                                 <nav class="responsive-nav md:m-0 -mx-4 style-2">
                                     <ul>
-                                        <li class="active"><a href="#" class="lg:px-2"> Top5 </a></li>
+                                        <li class="active"><a href="#" class="lg:px-2"> 🔥 Top5 🔥 </a></li>
                                         <li><a href="#" class="lg:px-2"> 자유게시판 </a></li>
                                         <li><a href="#" class="lg:px-2"> 신입생게시판 </a></li>
                                         <li><a href="#" class="lg:px-2"> 졸업생게시판 </a></li>
-                                        <li><a href="#" class="lg:px-2"> Coming </a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -173,42 +172,15 @@
   
                           <h2 class="text-lg font-semibold mb-3"> Recently Posted </h2>
                           <ul> 
-                              <li>
-                                  <a href="blog-read.html" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                      <h3 class="font-medium line-clamp-2"> Awesome Web Dev Tools and Resources For 2021 </h3>
+                              <li th:each="recent : ${recentlyBoards}">
+                                  <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                      <h3 class="font-medium line-clamp-2" th:text="${recent.title}"></h3>
                                       <div class="flex items-center my-auto text-xs space-x-1.5">
-                                        <div> Sep 12, 2020</div> <div class="pb-1"> . </div> 
-                                        <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div> 23</div>
+                                        <div th:text="${service.boardDateTime(recent.uploadTime)}"></div> <div class="pb-1"> . </div>
+                                        <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div th:text="${replyService.boardReplySize(recent)}"></div>
                                      </div> 
                                   </a>
                               </li>
-                              <li>
-                                <a href="blog-read.html" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                    <h3 class="font-medium line-clamp-2">  Awesome Web Dev Tools and Resources For 2021</h3>
-                                    <div class="flex items-center my-auto text-xs space-x-1.5">
-                                      <div> Sep 12, 2020</div> <div class="pb-1"> . </div> 
-                                      <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div> 23</div>
-                                   </div> 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="blog-read.html" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                    <h3 class="font-medium line-clamp-2">Interesting JavaScript and CSS Libraries in 2021 </h3>
-                                    <div class="flex items-center my-auto text-xs space-x-1.5">
-                                      <div> Sep 12, 2020</div> <div class="pb-1"> . </div> 
-                                      <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div> 23</div>
-                                   </div> 
-                                </a>
-                            </li>
-                            <li>
-                                <a href="blog-read.html" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                    <h3 class="font-medium line-clamp-2">Awesome Web Dev Tools and Resources For 2021 </h3>
-                                    <div class="flex items-center my-auto text-xs space-x-1.5">
-                                      <div> Sep 12, 2020</div> <div class="pb-1"> . </div> 
-                                      <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div> 23</div>
-                                   </div> 
-                                </a>
-                            </li>
                           </ul>
                           <br>
                            

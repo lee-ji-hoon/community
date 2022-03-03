@@ -15,4 +15,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     Reply findByRid(Long rid);
 
+    List<Reply> findAllByBoard(Board board);
+
 }

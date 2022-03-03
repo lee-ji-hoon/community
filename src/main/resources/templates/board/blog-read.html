@@ -34,6 +34,8 @@
         
                                 <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
                                     <img th:src="${account.profileImage}" alt="" class="w-10 rounded-full">
+                                    <!--<svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${account.nickname}" alt="" class="w-10 rounded-full"></svg>
+                                    <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account?.profileImage}" alt="" class="w-10 rounded-full"/>-->
                                     <div>
                                         <div class="text-base font-semibold" th:text="${board.writer}">작성자</div>
                                         <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
@@ -49,93 +51,40 @@
 
                         <!-- related articles -->
                         <div class="card p-6 relative">
-    
-                            <h1 class="block text-lg font-semibold"> Related Articales </h1>
-    
-                              <div class="relative" uk-slider="finite: true">
-    
-                                  <div class="uk-slider-container px-1 py-3">
-                                      <ul class="uk-slider-items uk-child-width-1-3@s uk-child-width-1-2 uk-grid-small uk-grid">
-                                        <li>
-                                            <div>
-                                                <a href="blog-read.html" class="w-full md:h-32 h-28 overflow-hidden rounded-lg relative block">
-                                                    <img src="/static/assets/images/blog/img-1.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                                </a>
-                                                <div class="pt-3">
-                                                    <a href="blog-read.html" class="font-semibold line-clamp-2"> Top Amazing web demos and experiments in 2021 Should Know About</a>
-                                                    <div class="flex space-x-2 items-center text-sm pt-2">
-                                                        <div>  Feb 4, 2020 </div>
-                                                        <div class="md:block hidden">·</div>
-                                                        <div class="flex items-center"> <ion-icon name="chatbox-ellipses-outline" class="text-base leading-0 mr-2"></ion-icon>  12 </div>
-                                                    </div>
-                                                </div>
+
+                            <!-- Add comment -->
+                            <h3 class="mb-8 mt-2 font-semibold text-xl"> Add your comment </h3>
+                            <div class="flex space-x-4 mb-5 relative">
+                                <div class="flex-1">
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <form id="reply_form">
+                                            <div class="col-span-2">
+                                                <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
+                                                       value="1" th:value="${board.bid}" readonly>
+                                                <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
+                                                       value="1" th:value="${account.id}" readonly>
+                                                <textarea id="r_content" name="r_content" cols="30" rows="3" style="resize: none"
+                                                          class="bg-gradient-to-b p-2 from-gray-100 to-gray-100"></textarea>
                                             </div>
-                                          </li> 
-                                          <li>
-                                            <div>
-                                                <a href="blog-read.html" class="w-full md:h-32 h-28 overflow-hidden rounded-lg relative block">
-                                                    <img src="/static/assets/images/blog/img-3.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                                </a>
-                                                <div class="pt-3">
-                                                    <a href="blog-read.html" class="font-semibold line-clamp-2"> Interesting JavaScript and CSS libraries for 2021 Should Know About</a>
-                                                    <div class="flex space-x-2 items-center text-sm pt-2">
-                                                        <div>  Feb 4, 2020 </div>
-                                                        <div class="md:block hidden">·</div>
-                                                        <div class="flex items-center"> <ion-icon name="chatbox-ellipses-outline" class="text-base leading-0 mr-2"></ion-icon>  12 </div>
-                                                    </div>
-                                                </div>
+                                            <div class="col-span-2 flex justify-between py-4">
+                                                <a class="btn btn-success mt-3 write_reply">댓글 작성</a>
                                             </div>
-                                          </li> 
-                                          <li>
-                                            <div>
-                                                <a href="blog-read.html" class="w-full md:h-32 h-28 overflow-hidden rounded-lg relative block">
-                                                    <img src="/static/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                                </a>
-                                                <div class="pt-3">
-                                                    <a href="blog-read.html" class="font-semibold line-clamp-2">  Interesting JavaScript and CSS Libraries in 2021 you should be know</a>
-                                                    <div class="flex space-x-2 items-center text-sm pt-2">
-                                                        <div>  Feb 4, 2020 </div>
-                                                        <div class="md:block hidden">·</div>
-                                                        <div class="flex items-center"> <ion-icon name="chatbox-ellipses-outline" class="text-base leading-0 mr-2"></ion-icon>  12 </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                          </li> 
-                                          <li>
-                                            <div>
-                                                <a href="blog-read.html" class="w-full md:h-32 h-28 overflow-hidden rounded-lg relative block">
-                                                    <img src="/static/assets/images/blog/img-2.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                                </a>
-                                                <div class="pt-3">
-                                                    <a href="blog-read.html" class="font-semibold line-clamp-2"> Awesome Web Dev Tools and Resources For 2021 in 30 Minutes </a>
-                                                    <div class="flex space-x-2 items-center text-sm pt-2">
-                                                        <div>  Feb 4, 2020 </div>
-                                                        <div class="md:block hidden">·</div>
-                                                        <div class="flex items-center"> <ion-icon name="chatbox-ellipses-outline" class="text-base leading-0 mr-2"></ion-icon>  12 </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                          </li> 
-                                      </ul>
-    
-                                      <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous">  <ion-icon name="chevron-back-outline"></ion-icon></ion-icon> </a>
-                                      <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <ion-icon name="chevron-forward-outline"></ion-icon></a>
-    
-                                  </div>
-    
-                              </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                               
                         </div>
-    
+
                         <div class="card p-6">
-    
+
                             <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
-    
-                            <div class="space-y-5">
-                            
+
+                            <div class="space-y-5 reply_div">
+
                                 <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
-                                    <svg th:if="${#strings.isEmpty(account.profileImage)}" alt="" class="rounded-full shadow w-12 h-12" th:data-jdenticon-value="${account.nickname}"></svg>
-                                    <img th:if="${!#strings.isEmpty(account.profileImage)}" alt="" class="rounded-full shadow w-12 h-12" th:src="${account.profileImage}"/>
+                                    <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}" th:data-jdenticon-value="${reply.getAccount().nickname}" alt="" class="rounded-full shadow w-12 h-12"></svg>
+                                    <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}" th:src="${reply.getAccount()?.profileImage}" alt="" class="rounded-full shadow w-12 h-12"/>
                                     <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>
                                     <div>
                                         <h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4>
@@ -149,11 +98,11 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="flex justify-center mt-9">
                                 <a href="#" class="bg-gray-50 border hover:bg-gray-100 px-4 py-1.5 rounded-full text-sm">More Comments ..</a>
                             </div>
-    
+
                         </div>
 
 
@@ -425,52 +374,70 @@
         </div>
     </div>
 
-    
-    <!-- For Night mode -->
-    <script>
-        (function (window, document, undefined) {
-            'use strict';
-            if (!('localStorage' in window)) return;
-            var nightMode = localStorage.getItem('gmtNightMode');
-            if (nightMode) {
-                document.documentElement.className += ' night-mode';
-            }
-        })(window, document);
-    
-        (function (window, document, undefined) {
-    
-            'use strict';
-    
-            // Feature test
-            if (!('localStorage' in window)) return;
-    
-            // Get our newly insert toggle
-            var nightMode = document.querySelector('#night-mode');
-            if (!nightMode) return;
-    
-            // When clicked, toggle night mode on or off
-            nightMode.addEventListener('click', function (event) {
-                event.preventDefault();
-                document.documentElement.classList.toggle('dark');
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.setItem('gmtNightMode', true);
-                    return;
+    <script type="application/javascript">
+        $(document).ready(function (){
+            $(document).on('click', '.like_heart_click', function() {
+                // .like_heart_click은 <a></a>태그의 class 이름
+                // 해당 태그를 클릭하면 진행되는 메소드
+                if($(this).children('i').attr('class') == "fa fa-thumbs-up"){
+                    // this는 클릭한 태그 전역
+                    // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
+                    console.log("좋아요 실행");
+                    $.ajax({
+                        url:'/board/detail/like',
+                        type:'get',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data : $('#like_add').serialize(),
+                        dataType : "json",
+                        success : function (like_size){
+                            console.log("Like Hit Success");
+                            $("#like_result").html(like_size);
+                            $('.like_div').load(location.href+' .like_div');
+                            $(".like_heart_click").html("<i class=\"fa fa-thumbs-down\"></i> 좋아요 취소");
+                        },
+                        error : function (request, status, error){
+                            console.log("Like Hit Fail" + error);
+                        }
+                    });
+                }else if($(this).children('i').attr('class') == "fa fa-thumbs-down"){
+                    console.log("좋아요 취소 실행");
+                    $.ajax({
+                        url:'/board/detail/like-cancel',
+                        type:'get',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data : $('#like_cancel').serialize(),
+                        dataType : "json",
+                        success : function (like_size){
+                            console.log("Like Hit Success");
+                            $("#like_result").html(like_size);
+                            $('.like_div').load(location.href+' .like_div');
+                            $(".like_heart_click").html("<i class=\"fa fa-thumbs-up\"></i> 좋아요");
+                        },
+                        error : function (request, status, error){
+                            console.log("Like Hit Fail");
+                        }
+                    });
                 }
-                localStorage.removeItem('gmtNightMode');
-            }, false);
-    
-        })(window, document);
+            });
+            $(document).on('click', '.write_reply', function() {
+                console.log("댓글 작성");
+                $.ajax({
+                    url:'/board/detail/reply',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $('#reply_form').serialize(),
+                    dataType : "json",
+                    success : function (){
+                        console.log("Write Reply Success");
+                        $('.reply_div').load(location.href+' .reply_div');
+                    },
+                    error : function (request, status, error){
+                        console.log("Write Reply Fail" + error);
+                    }
+                });
+            });
+        })
     </script>
-  
-    <!-- Javascript
-    ================================================== -->
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="/static/assets/js/tippy.all.min.js"></script>
-    <script src="/static/assets/js/uikit.js"></script>
-    <script src="/static/assets/js/simplebar.js"></script>
-    <script src="/static/assets/js/custom.js"></script>
-    <script src="/static/assets/js/bootstrap-select.min.js"></script>
-    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 
 </body>
 </html>
