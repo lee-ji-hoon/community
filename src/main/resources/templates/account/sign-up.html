@@ -1,86 +1,99 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
-<head th:replace="fragments.html :: head"></head>
+<head th:replace="theme-fragments.html :: head"></head>
+<body class="bg-gray-100">
+    <div id="wrapper" class="flex flex-col justify-between h-screen">
+    <!-- header-->
+    <header th:replace="theme-fragments.html :: header"></header>
+    <!-- Content-->
+        <div>
+            <div class="lg:p-12 max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
 
-<body class="bg-light">
-    <div th:replace="fragments.html :: main-nav"></div>
-    <div class="container">
-        <div class="py-5 text-center">
-            <h2>계정 만들기</h2>
+                <form class="needs-validation lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md"
+                      th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+                    <h1 class="lg:text-2xl text-xl font-semibold mb-6"> 회원가입 </h1>
+
+
+                    <div class="form-group">
+                        <label class="mb-0" for="username"><b>성함</b></label>
+                        <input id="username" type="text" th:field="*{username}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                               placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$">
+                        <small id="usernameHelp" class="form-text text-muted">
+                            이름을 입력해주세요
+                        </small>
+                        <small class="invalid-feedback">이름을 양식에 맞게 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</small>
+                    </div>
+                    <hr>
+
+                    <div class="form-group">
+                        <label class="mb-0" for="nickname">닉네임</label>
+                        <input id="nickname" type="text" th:field="*{nickname}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                               placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$">
+                        <small id="nicknameHelp" class="form-text text-muted ">
+                            공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+                        </small>
+                        <small class="invalid-feedback">닉네임을 양식에 맞게 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="mb-0" for="email">이메일</label>
+                        <input id="email" type="email" th:field="*{email}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                               placeholder="Info@example.com" aria-describedby="emailHelp" required>
+                        <small id="emailHelp" class="form-text text-muted">
+                            인증이 필요하므로 사용하는 이메일로 입력해주시기 바랍니다.
+                        </small>
+                        <small class="invalid-feedback">이메일을 양식에 맞게 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="mb-0" for="studentId">학번</label>
+                        <input id="studentId" type="text" th:field="*{studentId}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                               placeholder="17-100459" aria-describedby="studentIdHelp" required pattern="\d{2}-\d{2,10}$">
+                        <small id="studentIdHelp" class="form-text text-muted">
+                            예시) 17-100459 <br>
+                            위의 예시처럼 작생해주시기 바랍니다.
+                        </small>
+                        <small class="invalid-feedback">학번을 양식에 맞게 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}">StudentId Error</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="mb-0" for="password">패스워드</label>
+                        <input id="password" type="password" th:field="*{password}" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
+                               aria-describedby="passwordHelp" required minlength="8" maxlength="50">
+                        <small id="passwordHelp" class="form-text text-muted">
+                            8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+                        </small>
+                        <small class="invalid-feedback">패스워드를 양식에 맞게 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" id="chekcbox1" required>
+                        <label for="chekcbox1">
+                            <span class="checkbox-icon"></span>
+                            이용약관에 <a href="#" target="_blank" class="uk-text-bold uk-text-small uk-link-reset"> 동의해주세요 </a>
+                        </label>
+                        <small class="invalid-feedback">이용약관에 동의해주세요.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="bg-blue-600 font-semibold p-2 mt-5 rounded-md text-center text-white w-full"
+                                aria-describedby="submitHelp">가입하기</button>
+                        <small id="submitHelp" class="form-text text-muted">
+                            프로필페이지에서 추가적인 설정이 가능합니다.
+                        </small>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="row justify-content-center">
-            <form class="needs-validation col-sm-6" action="#"
-                  th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+    </div>
 
-                <div class="form-group">
-                    <label for="username">이름</label>
-                    <input id="username" type="text" th:field="*{username}" class="form-control"
-                           placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$">
-                    <small id="usernameHelp" class="form-text text-muted">
-                        이름을 입력해주세요
-                    </small>
-                    <small class="invalid-feedback">이름을 양식에 맞게 입력해주세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="nickname">닉네임</label>
-                    <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
-                           placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$">
-                    <small id="nicknameHelp" class="form-text text-muted">
-                        공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
-                    </small>
-                    <small class="invalid-feedback">닉네임을 양식에 맞게 입력해주세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <input id="email" type="email" th:field="*{email}" class="form-control"
-                           placeholder="your@email.com" aria-describedby="emailHelp" required>
-                    <small id="emailHelp" class="form-text text-muted">
-                        인증이 필요하므로 사용하는 이메일로 입력해주시기 바랍니다.
-                    </small>
-                    <small class="invalid-feedback">이메일을 양식에 맞게 입력해주세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="studentId">학번</label>
-                    <input id="studentId" type="text" th:field="*{studentId}" class="form-control"
-                           placeholder="17-100459" aria-describedby="studentIdHelp" required pattern="\d{2}-\d{2,10}$">
-                    <small id="studentIdHelp" class="form-text text-muted">
-                        예시) 17-100459 <br>
-                        위의 예시처럼 작생해주시기 바랍니다.
-                    </small>
-                    <small class="invalid-feedback">학번을 양식에 맞게 입력해주세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}">StudentId Error</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">패스워드</label>
-                    <input id="password" type="password" th:field="*{password}" class="form-control"
-                           aria-describedby="passwordHelp" required minlength="8" maxlength="50">
-                    <small id="passwordHelp" class="form-text text-muted">
-                        8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
-                    </small>
-                    <small class="invalid-feedback">패스워드를 양식에 맞게 입력해주세요.</small>
-                    <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
-                </div>
-
-                <div class="form-group">
-                    <button class="btn btn-primary btn-block" type="submit"
-                            aria-describedby="submitHelp">가입하기</button>
-                    <small id="submitHelp" class="form-text text-muted">
-                        프로필페이지에서 추가적인 설정이 가능합니다.
-                    </small>
-                </div>
-            </form>
-        </div>
-    <div th:replace="fragments.html :: footer"></div>
-</div>
-
-<script th:replace="fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: form-validation"></script>
 </body>
+
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
+<head th:replace="theme-fragments.html :: head"></head>
 <body class="bg-light">
-    <div th:replace="fragments.html :: main-nav"></div>
+<header th:replace="theme-fragments.html :: header"></header>
 
     <div class="py-5 text-center" th:if="${error}">
         <p class="lead">멀티커뮤니티 이메일 확인</p>
