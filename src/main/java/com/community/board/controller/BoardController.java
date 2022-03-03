@@ -55,8 +55,10 @@ public class BoardController {
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTime(false);
 
         // Top5 게시물
-        List<Board> boards = boardRepository.findAllByIsReportedOrderByUploadTimeDesc(false);
-        model.addAttribute("board", boards);
+        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+
+        model.addAttribute("board", top5Board);
+        model.addAttribute("recentlyBoards", recentlyBoards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likeService", likeService);
