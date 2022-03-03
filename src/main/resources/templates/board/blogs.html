@@ -4,9 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="theme-fragments.html :: head"></head>
 <body>
-   
-    
-
 
     <div id="wrapper">
 
@@ -50,15 +47,15 @@
                                 <a href="blog-read.html">
                                     <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm"> 
                                          <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5">
-                                            JavaScript
+                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
+
                                          </div>
                                     </div>
                                 </a>
                                 <div class="flex-1 lg:pt-0 pt-4">
                                      
                                     <a href="blog-read.html" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                    <p class="line-clamp-2 pt-3 text-truncate d-inline-block" style="max-height: 200px" th:utext="${board.content}"></p>
+                                    <div class="line-clamp-3 pt-3 truncate ..." style="max-height: 100px" th:utext="${board.content}"></div>
                                     
                                     <div class="flex items-center pt-3">
                                         <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon>  12 </div>
@@ -434,53 +431,6 @@
             </div>
         </div>
     </div>
-
-    
-    <!-- For Night mode -->
-    <script>
-        (function (window, document, undefined) {
-            'use strict';
-            if (!('localStorage' in window)) return;
-            var nightMode = localStorage.getItem('gmtNightMode');
-            if (nightMode) {
-                document.documentElement.className += ' night-mode';
-            }
-        })(window, document);
-    
-        (function (window, document, undefined) {
-    
-            'use strict';
-    
-            // Feature test
-            if (!('localStorage' in window)) return;
-    
-            // Get our newly insert toggle
-            var nightMode = document.querySelector('#night-mode');
-            if (!nightMode) return;
-    
-            // When clicked, toggle night mode on or off
-            nightMode.addEventListener('click', function (event) {
-                event.preventDefault();
-                document.documentElement.classList.toggle('dark');
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.setItem('gmtNightMode', true);
-                    return;
-                }
-                localStorage.removeItem('gmtNightMode');
-            }, false);
-    
-        })(window, document);
-    </script>
-  
-    <!-- Javascript
-    ================================================== -->
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="/assets/js/tippy.all.min.js"></script>
-    <script src="/assets/js/uikit.js"></script>
-    <script src="/assets/js/simplebar.js"></script>
-    <script src="/assets/js/custom.js"></script>
-    <script src="/assets/js/bootstrap-select.min.js"></script>
-    <script src="/https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 
 </body>
 </html>
