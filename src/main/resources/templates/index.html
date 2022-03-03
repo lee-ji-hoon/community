@@ -1,80 +1,20 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments.html :: head"></head>
-<style>
-    .rounded border{
-        text-align: center;
-    }
-</style>
-<body class="bg-light">
-    <div th:replace="fragments.html :: main-nav"></div>
+<head th:replace="theme-fragments.html :: head"></head>
+
+<body class="bg-gray-100">
+
+
+<div id="wrapper" class="flex flex-col justify-between h-screen">
+    <!-- header-->
+    <header sec:authorize="!isAuthenticated()" th:replace="theme-fragments.html :: need_login_header"></header>
+    <header sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: header"></header>
+    <div sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: side_bar"></div>
+
     <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
         멀티커뮤니티 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
     </div>
-
-    <div class="container-fluid gedf-wrapper">
-        <div class="row">
-            <!-- 좌측 -->
-            <div th:replace="fragments.html :: side-bar"></div>
-            <div class="col-md-7">
-                <p class="text-center align-middel">
-                    <a class="badge badge-warning text-wrap"> <i class="fa fa-warning"></i>공사중<i class="fa fa-warning"></i></a>
-                    <br>
-                    <br>
-                    <a class="h2">무</a>
-                    <a class="h6">엇</a>
-                    <a class="h1">을</a>
-                    <a class="h4">넣</a>
-                    <a class="h6">을</a>
-                    <a class="h2">까</a>
-                    <a class="h5">요</a>
-                    <a class="h1">~</a>
-                    <a class="h6">??</a>
-                    <br>
-                    <br>
-                    <br>
-                    <img src="https://avatars.githubusercontent.com/u/53300830?v=4" width="250px" height="250px">
-                    <br>
-                    <br>
-                    <small class="text-muted">일해라 집사야</small>
-                </p>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card" sec:authorize="isAuthenticated()">
-                    <ul class="nav justify-content-center" style="padding: 25px">
-                        <li class="nav-item col-12" style="text-align: center; margin: 15px">
-                            <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
-                                 width="125" height="125" class="rounded border bg-light"></svg>
-                            <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
-                                 width="125" height="125" class="rounded border"/>
-                        </li>
-                        <li class="nav-item col-12">
-                            <h4 style="text-align: center;" th:text="${account.username}"></h4>
-                        </li>
-                        <li class="nav-item col-6" style="text-align: center">
-                            <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">회원설정</a>
-                        </li>
-                        <li class="nav-item col-6" style="text-align: center">
-                            <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                                <a class="dropdown-item" type="submit">로그아웃</a>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col" style="margin-top: 40px;">
-                    <h4>인기 게시판</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item">게시글1</li>
-                        <li class="list-group-item">게시글2</li>
-                        <li class="list-group-item">게시글3</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-<div th:replace="fragments.html :: footer"></div>
+</div>
 </body>
 </html>
