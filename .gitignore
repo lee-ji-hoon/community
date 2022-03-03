@@ -40,7 +40,6 @@ out/
 /src/main/resources/static/node_modules/
 theme_template/
 
-
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar

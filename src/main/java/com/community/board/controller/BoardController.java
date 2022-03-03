@@ -60,7 +60,7 @@ public class BoardController {
         model.addAttribute("replyService", replyService);
         model.addAttribute("bt", "전체게시판");
         model.addAttribute(new SearchForm());
-        return "board/board-list";
+        return "board/blogs";
     }
 
     @GetMapping("/board/main")
