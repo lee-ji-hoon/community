@@ -47,50 +47,61 @@
     <!-- script -->
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>-->
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
 
     <!-- css -->
     <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
     <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
-
-
-    <!-- 아래부터 기존에 쓰던 link 및 script
-    ================================================== -->
-
-    <!--
-    <meta charset="UTF-8">
-    <title>멀티커뮤니티</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
-
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-
-    -->
-
 </head>
+
+<!-- 아래부터 기존에 쓰던 link 및 script
+================================================== -->
+
+<!--
+<meta charset="UTF-8">
+<title>멀티커뮤니티</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+-->
+
+<header th:fragment="need_login_header" class="bg-white py-4 shadow dark:bg-gray-800">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex items-center lg:justify-between justify-around">
+            <a th:href="@{/}">
+                <img src="assets/images/logo.png" alt="" class="w-32">
+            </a>
+            <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">
+                <a th:href="@{/login}" class="py-3 px-4">로그인</a>
+                <a href="form-register.html" class="bg-purple-500 purple-500 px-6 py-3 rounded-md shadow text-white">회원가입</a>
+            </div>
+        </div>
+    </div>
+</header>
 
 <!-- Header -->
 <header th:fragment="header">
     <div class="header_wrap">
         <div class="header_inner mcontainer">
             <div class="left_side">
-                        <span class="slide_menu" uk-toggle="target: #wrapper ; cls: is-collapse is-active">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M3 4h18v2H3V4zm0 7h12v2H3v-2zm0 7h18v2H3v-2z" fill="currentColor"></path></svg>
-                        </span>
-
+                    <span class="slide_menu" uk-toggle="target: #wrapper ; cls: is-collapse is-active">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M3 4h18v2H3V4zm0 7h12v2H3v-2zm0 7h18v2H3v-2z" fill="currentColor"></path></svg>
+                    </span>
                 <div id="logo">
                     <a href="/">
                         <img src="/assets/images/logo.png" alt="">
@@ -104,7 +115,6 @@
             <div class="header_search"><i class="uil-search-alt"></i>
                 <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.." autocomplete="off">
                 <div uk-drop="mode: click" class="header_search_dropdown">
-
                     <h4 class="search_title"> Recently </h4>
                     <ul>
                         <li>
@@ -138,24 +148,20 @@
                             </a>
                         </li>
                     </ul>
-
                 </div>
             </div>
 
             <div class="right_side">
-
                 <div class="header_widgets">
                     <a href="pages-upgrade.html" class="is_link">  Upgrade </a>
                     <a href="#" class="is_icon" uk-tooltip="title: Cart">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path></svg>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown dropdown_cart">
-
                         <div class="drop_headline">
                             <h4>  My Cart </h4>
                             <a href="#" class="btn_action hover:bg-gray-100 mr-2 px-2 py-1 rounded-md underline"> Checkout </a>
                         </div>
-
                         <ul class="dropdown_cart_scrollbar" data-simplebar>
                             <li>
                                 <div class="cart_avatar">
@@ -580,11 +586,13 @@
                                         <span class="uk-switch-button"></span>
                                     </span>
                         </a>
-                        <a href="group-feed.html">
+                        <a href="#" id="night-mode" class="btn-night-mode">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                </path>
                             </svg>
-                            Log Out
+                            로그아웃
                         </a>
 
 
@@ -603,7 +611,7 @@
     <div class="sidebar_inner" data-simplebar>
 
         <ul>
-            <li><a href="feed.html">
+            <li><a href="/" th:href="@{/}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-600">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                 </svg>
