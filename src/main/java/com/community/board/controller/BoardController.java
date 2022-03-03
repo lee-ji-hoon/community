@@ -50,9 +50,9 @@ public class BoardController {
 
     //전체 게시물 조회
     @GetMapping("/board")
-    public String boardList(Model model) {
+    public String boardList(Model model, @CurrentUser Account account) {
         // 최근에 올라온 게시물
-        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTime(false);
+        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // Top5 게시물
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
@@ -61,10 +61,12 @@ public class BoardController {
         model.addAttribute("recentlyBoards", recentlyBoards);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
+        model.addAttribute("account", account);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
         model.addAttribute("bt", "전체게시판");
         model.addAttribute(new SearchForm());
+        model.addAttribute(new BoardForm());
         return "board/blogs";
     }
 
@@ -110,6 +112,10 @@ public class BoardController {
         Board detail = boardRepository.findByBid(boardId);
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
         List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
+
+        // 최근에 올라온 게시물
+        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
+
         model.addAttribute("board", detail);
         model.addAttribute("account", account);
         model.addAttribute("service", boardService);
@@ -120,6 +126,7 @@ public class BoardController {
         model.addAttribute("replyService", replyService);
         model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
         model.addAttribute("replyRepo", replyReportRepository);
+        model.addAttribute("recentlyBoards", recentlyBoards);
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
