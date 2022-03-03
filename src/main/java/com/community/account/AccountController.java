@@ -126,7 +126,6 @@ public class AccountController {
     // 이메일 로그인
     @GetMapping("/email-login")
     public String sendEmailLoginLinkView(Account account, Model model) {
-        model.addAttribute(account);
         return "account/email-login";
     }
 
@@ -155,6 +154,8 @@ public class AccountController {
     @GetMapping("/email-login-view")
     public String EmailLoginView(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
+        model.addAttribute(account);
+
 
         if (account == null || !account.isValidToken(token)) {
             model.addAttribute("error", "로그인 할 수 없습니다.");
