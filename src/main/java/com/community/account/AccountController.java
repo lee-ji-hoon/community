@@ -76,6 +76,7 @@ public class AccountController {
         }
 
         accountService.completeSignUp(account);
+        model.addAttribute(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return "account/checked-email";

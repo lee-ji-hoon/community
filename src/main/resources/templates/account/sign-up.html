@@ -5,7 +5,6 @@
 <head th:replace="theme-fragments.html :: head"></head>
 <body class="bg-gray-100">
     <div id="wrapper" class="flex flex-col justify-between h-screen">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- header-->
     <header th:replace="theme-fragments.html :: header"></header>
     <!-- Content-->
@@ -16,9 +15,8 @@
                       th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
                     <h1 class="lg:text-2xl text-xl font-semibold mb-6"> 회원가입 </h1>
 
-
                     <div class="form-group">
-                        <label class="mb-0" for="username"><b>성함</b></label>
+                        <label class="mb-0" for="username"><b>이름</b></label>
                         <input id="username" type="text" th:field="*{username}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
                                placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$">
                         <small id="usernameHelp" class="form-text text-muted">
@@ -34,23 +32,23 @@
                         <input id="nickname" type="text" th:field="*{nickname}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
                                placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$">
                         <small id="nicknameHelp" class="form-text text-muted ">
-                            공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+                            공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. <br>가입후에 변경할 수 있습니다.
                         </small>
                         <small class="invalid-feedback">닉네임을 양식에 맞게 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Nickname Error</small>
                     </div>
-
+                    <hr>
                     <div class="form-group">
                         <label class="mb-0" for="email">이메일</label>
                         <input id="email" type="email" th:field="*{email}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
                                placeholder="Info@example.com" aria-describedby="emailHelp" required>
                         <small id="emailHelp" class="form-text text-muted">
                             인증이 필요하므로 사용하는 이메일로 입력해주시기 바랍니다.
-                        </small>
+                        </small><br>
                         <small class="invalid-feedback">이메일을 양식에 맞게 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
                     </div>
-
+                    <hr>
                     <div class="form-group">
                         <label class="mb-0" for="studentId">학번</label>
                         <input id="studentId" type="text" th:field="*{studentId}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
@@ -62,6 +60,7 @@
                         <small class="invalid-feedback">학번을 양식에 맞게 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}">StudentId Error</small>
                     </div>
+                    <hr>
                     <div class="form-group">
                         <label class="mb-0" for="password">패스워드</label>
                         <input id="password" type="password" th:field="*{password}" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
@@ -72,12 +71,12 @@
                         <small class="invalid-feedback">패스워드를 양식에 맞게 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
                     </div>
-
+                    <hr>
                     <div class="checkbox">
                         <input type="checkbox" id="chekcbox1" required>
                         <label for="chekcbox1">
                             <span class="checkbox-icon"></span>
-                            <b>이용약관에</b> <a href="#" target="_blank" class="uk-text-bold uk-text-small uk-link-reset"> 동의해주세요 </a>
+                            <a target="_blank" class="uk-text-bold uk-text-small uk-link-reset"> <b>이용약관에</b>  동의해주세요 </a>
                         </label>
                         <small class="invalid-feedback">이용약관에 동의해주세요.</small>
                     </div>

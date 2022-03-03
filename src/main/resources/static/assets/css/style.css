@@ -9,6 +9,17 @@
 .fade {
   transition: opacity 0.15s linear;
 }
+
+.form-text {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #6c757d;
+}
+
+.text-danger {
+  --bs-text-opacity: 1;
+  color: red !important;
+}
 /* -------------------------------------------------------------- */
 /* alert
 ----------------------------------------------------------------- */
