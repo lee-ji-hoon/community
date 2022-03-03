@@ -54,53 +54,64 @@
                                         </div>
                                     </div>
 
-
+                                    <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
                                         <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
-                                            <form class="needs-validation space-y-4 g:w-8/12" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
+                                            <div class="space-y-4 g:w-8/12">
 
                                                 <div class="px-2 space-y-2">
                                                     <div class="font-semibold text-base"> 게시판 선택 </div>
-                                                    <select class="selectpicker">
+                                                    <select class="selectpicker" th:field="*{boardTitle}">
                                                         <option data-icon="icon-material-outline-assignment" value="자유게시판" selected>자유게시판</option>
                                                         <option data-icon="icon-material-outline-access-alarm" value="신입생게시판">신입생게시판</option>
                                                         <option data-icon="icon-material-outline-account-circle" value="졸업생게시판">졸업생게시판</option>
                                                     </select>
                                                 </div>
                                                 <div class="font-semibold text-lg"> Details </div>
-                                                <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md">
-                                                    <input type="hidden" id="writer" class="form-control" th:value="${account.nickname}" name="writer" readonly>
+                                                <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group d-none">
+                                                    <label for="writer" class="mb-0 ml-2 text-gray-600 text-sm">작성자</label>
+                                                    <input type="hidden" placeholder="제목을 입력해주세요." id="writer"
+                                                           th:value="${account.nickname}" name="writer" readonly
+                                                           aria-describedby="writerHelp"
+                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                    <small id="writerHelp" class="form-text text-muted">
+                                                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                                    </small>
+                                                    <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}">writer Error</small>
+                                                </div>
+                                                <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
                                                     <label for="title" class="mb-0 ml-2 text-gray-600 text-sm">Title</label>
                                                     <input type="text" placeholder="제목을 입력해주세요." id="title"
-                                                           th:field="*{title}"
-                                                           aria-describedby="titleHelp"
-                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full">
+                                                           th:field="*{title}" aria-describedby="titleHelp" required
+                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                    <small id="titleHelp" class="form-text text-muted">
+                                                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                                    </small>
+                                                    <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
                                                 </div>
-                                                <small id="titleHelp" class="form-text text-muted">
-                                                    제목은 5글자부터 최대 30글자까지 입력 가능합니다.
-                                                </small>
-                                                <small class="invalid-feedback">제목을 입력해주세요.</small>
-                                                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">boardTitle Error</small>
-                                                <div class="border focus-within:border-blue-300 p-3 rounded-md">
+                                                <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
                                                     <label for="content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
                                                     <textarea type="text" rows="5" placeholder="내용을 입력해주세요." id="content"
                                                               th:field="*{content}" aria-describedby="contentHelp" required
-                                                              class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full"></textarea>
+                                                              class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
+                                                    <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                                                    <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
                                                 </div>
-                                                <small id="contentHelp" class="form-text text-muted">
-                                                    남을 비방하는 글은 제제가 있을 수 있습니다.
-                                                </small>
-                                                <small class="invalid-feedback">글을 입력해주세요.</small>
-                                                <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
-                                                <!--<div class="keywords-container">
+
+                                                <!--
+                                                <div class="keywords-container">
                                                     <div class="keyword-input-container shadow-none">
                                                         <input type="text" class="keyword-input with-border" placeholder="Add Keywords" />
                                                         <button type="button" class="keyword-input-button ripple-effect">
                                                             <i class="icon-feather-plus"></i></button>
                                                     </div>
                                                     <div class="keywords-list">
-                              <span class="keyword">
-                                  <span class="keyword-remove">Javascript</span> <span class="keyword-text"></span>
-                              </span>
+                                                    <span class="keyword">
+                                                    <span class="keyword-remove">Javascript</span>
+                                                    <span class="keyword-text"></span>
+                                                    </span>
                                                         <span class="keyword">
                                   <span class="keyword-remove">Node</span> <span class="keyword-text"></span>
                               </span>
@@ -150,8 +161,9 @@
                                                             <label for="radio-2"><span class="radio-label"></span>No, it's not made for kids </label>
                                                         </div>
                                                     </div>
-                                                </div>-->
-                                            </form>
+                                                </div>
+                                                -->
+                                            </div>
 
                                         </div>
 
@@ -175,16 +187,18 @@
                                                         </path>
                                                     </svg>
                                                     Live </a>
-                                                <a href="#"
+                                                <button type="submit"
+                                                   id = "board_form_send"
                                                    class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                                                    Share </a>
+                                                    Share </button>
                                             </div>
 
-                                            <a href="#" hidden
+                                            <button type="submit" hidden
+                                                    id = "board_form_send"
                                                class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold">
-                                                Share </a>
+                                                Share </button>
                                         </div>
-
+                                    </form>
 
                                 </div>
                             </div>
@@ -553,7 +567,12 @@
             </div>
         </div>
     </div>
-    <script th:replace="fragments.html :: form-validation"></script>
+    <script th:replace="theme-fragments.html :: form-validation"></script>
+    <script type="application/javascript">
+        $(document).ready(function (){
+
+        })
+    </script>
 
 </body>
 </html>

@@ -94,8 +94,12 @@ public class BoardController {
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
     public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+        log.info(boardForm.getBoardTitle().toString());
+        log.info(boardForm.getTitle().toString());
+        log.info(boardForm.getWriter().toString());
+        log.info(boardForm.getContent().toString());
         if (errors.hasErrors()) {
-            return "board/board-write";
+            return "board/blogs";
         }
 
         Board savedBoard = boardService.saveNewBoard(boardForm, account);
