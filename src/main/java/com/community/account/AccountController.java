@@ -111,6 +111,7 @@ public class AccountController {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
 
+        model.addAttribute(account);
         model.addAttribute(accountLoaded);
         model.addAttribute(byNickname);
         model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
@@ -124,7 +125,8 @@ public class AccountController {
 
     // 이메일 로그인
     @GetMapping("/email-login")
-    public String sendEmailLoginLinkView() {
+    public String sendEmailLoginLinkView(Account account, Model model) {
+        model.addAttribute(account);
         return "account/email-login";
     }
 

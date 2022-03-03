@@ -66,6 +66,7 @@ public class StudyController {
 
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
         model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByIdDesc());
         return "study/study-list";
     }
