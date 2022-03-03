@@ -22,6 +22,7 @@ import org.thymeleaf.context.Context;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -128,6 +129,10 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    public Account loadUserProfile(String userNickname) {
+        return accountRepository.findByNickname(userNickname);
     }
 }
 
