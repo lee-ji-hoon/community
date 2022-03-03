@@ -1,99 +1,16 @@
-
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
-<style>
-    .modify_button{
-        text-decoration: none;
-        font-size:14px;
-        width: 120px;
-        height: 45px;
-        line-height: 45px;
-        text-align: center;
-        color:#777;
-        margin:20px;
-        display:inline-block;
-        border-radius: 30px;
-        border-style: solid;
-        border-width: 1px;
-        border-color: #777;
-    }
-    body,
-    .empty{
-        background-color: #BDC8CF;
-    }
-    .row{
-        background-color: white;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    ul{
-        list-style:none;
-    }
-
-    p {
-        margin: 0 0 20px;
-        line-height: 1.5;
-    }
-
-    p span{
-        font-size: 14px;
-    }
-    h1 {
-        padding: 50px 0;
-        font-weight: 400;
-        text-align: center;
-    }
-
-    /*커뮤니티 / 스터디 조회 */
-    .main {
-        padding: 50px 25px 50px 25px;
-        margin: 50px 150px 50px 150px;
-        background: #ffffff;}
-
-    section {
-        display: none;
-        padding: 20px 0 0;
-        border-top: 1px solid #ddd;
-    }
-
-    /*라디오버튼 숨김*/
-    input {
-        display: none;}
-
-    label {
-        display: inline-block;
-        margin: 0 0 -1px;
-        padding: 15px 25px;
-        font-weight: 600;
-        text-align: center;
-        color: #bbb;
-        border: 1px solid transparent;}
-
-    label:hover {
-        color: #2e9cdf;
-        cursor: pointer;
-    }
-
-    /*input 클릭시, label 스타일*/
-    input:checked + label {
-        color: #555;
-        border-bottom: 2px solid #2e9cdf;
-        border-top: 1px solid #ffffff;
-    }
-
-
-    #community:checked ~ #community_content,
-    #study:checked ~ #study_content {
-        display: block;
-    }
-
-</style>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
 <body>
-<div th:replace="fragments.html :: main-nav"></div>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <!-- sidebar -->
 <div class="container">
     <!-- nesting, row안의 row -->
     <div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
