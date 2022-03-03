@@ -13,7 +13,6 @@ import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import com.community.board.service.ReplyService;
-import com.community.like.LikeApiController;
 import com.community.like.LikeRepository;
 import com.community.like.LikeService;
 import com.community.like.Likes;
@@ -52,6 +51,10 @@ public class BoardController {
     //전체 게시물 조회
     @GetMapping("/board")
     public String boardList(Model model) {
+        // 최근에 올라온 게시물
+        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTime(false);
+
+        // Top5 게시물
         List<Board> boards = boardRepository.findAllByIsReportedOrderByUploadTimeDesc(false);
         model.addAttribute("board", boards);
         model.addAttribute("service", boardService);
@@ -118,7 +121,7 @@ public class BoardController {
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
-        return "board/detail";
+        return "board/blog-read";
     }
 
     /* 게시물 수정 및 관련 */

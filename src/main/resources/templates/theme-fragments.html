@@ -16,7 +16,7 @@
 
     <!-- Basic Page Needs
         ================================================== -->
-    <title>Socialite Template</title>
+    <title>멀티커뮤니티</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Socialite is - Professional A unique and beautiful collection of UI elements">
@@ -31,10 +31,35 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
+    <!-- Javascript
+    ================================================== -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="/assets/js/tippy.all.min.js"></script>
+    <script src="/assets/js/uikit.js"></script>
+    <script src="/assets/js/simplebar.js"></script>
+    <script src="/assets/js/custom.js"></script>
+    <script src="/assets/js/bootstrap-select.min.js"></script>
+    <script src="/assets/js/for-nightmode.js"></script>
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+    <!-- 기존에서 불러온 것
+    ================================================== -->
+    <!-- script -->
+    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>-->
+    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
+    <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
+
+
     <!-- 아래부터 기존에 쓰던 link 및 script
     ================================================== -->
 
-    <!--<meta charset="UTF-8">
+    <!--
+    <meta charset="UTF-8">
     <title>멀티커뮤니티</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,22 +70,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
-    <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
 
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>-->
 
-    <!--  summernote 시작  -->
-<!--    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>-->
-    <!--  summernote 끝  -->
+    -->
 
 </head>
 
@@ -603,22 +621,22 @@
                 </svg>
                 <span> Video</span></a>
             </li>
-            <li><a href="groups.html">
+            <li><a th:href="@{/study}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-500">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                </svg><span> Groups </span></a>
+                </svg><span> 스터디 </span></a>
             </li>
             <li class="active"><a href="jobs.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-pink-500">
                     <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
                     <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                </svg> <span> Jobs</span> </a>
+                </svg> <span> 장비 대여 </span> </a>
             </li>
             <li><a href="courses.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-indigo-500">
                     <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
                 </svg>
-                <span> Course</span></a>
+                <span> 정보 공유 </span></a>
             </li>
             <li><a href="games.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-green-500">
@@ -642,12 +660,12 @@
                     <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                 </svg>  <span>  Photos </span></a>
             </li>
-            <li id="more-veiw" hidden><a href="blogs.html">
+            <li id="more-veiw" hidden><a th:href="@{/board}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-pink-500">
                     <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd" />
                     <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z" />
                 </svg>
-                <span> Blog</span></a>
+                <span> 게시판 </span></a>
             </li>
             <li id="more-veiw" hidden><a href="forums.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-500">
@@ -676,39 +694,6 @@
                         See Less
                     </span>
         </a>
-
-        <h3 class="side-title"> Contacts </h3>
-
-        <div class="contact-list my-2 ml-1">
-
-            <a href="chats-friend.html">
-                <div class="contact-avatar">
-                    <img src="/assets/images/avatars/avatar-1.jpg" alt="">
-                    <span class="user_status status_online"></span>
-                </div>
-                <div class="contact-username"> Dennis Han</div>
-            </a>
-            <a href="chats-friend.html">
-                <div class="contact-avatar">
-                    <img src="/assets/images/avatars/avatar-2.jpg" alt="">
-                    <span class="user_status"></span>
-                </div>
-                <div class="contact-username"> Erica Jones</div>
-            </a>
-            <a href="chats-friend.html">
-                <div class="contact-avatar">
-                    <img src="/assets/images/avatars/avatar-7.jpg" alt="">
-                </div>
-                <div class="contact-username">Stella Johnson</div>
-            </a>
-            <a href="chats-friend.html">
-                <div class="contact-avatar">
-                    <img src="/assets/images/avatars/avatar-4.jpg" alt="">
-                </div>
-                <div class="contact-username"> Alex Dolgove</div>
-            </a>
-
-        </div>
 
         <ul class="side_links" data-sub-title="Pages">
 
@@ -764,6 +749,8 @@
     <div class="side_overly" uk-toggle="target: #wrapper ; cls: is-collapse is-active"></div>
 
 </div>
+
+
 
 
 <!-- 아래부터는 기존에 있던 fragments -->

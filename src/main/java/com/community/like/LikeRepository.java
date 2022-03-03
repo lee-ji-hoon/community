@@ -3,6 +3,7 @@ package com.community.like;
 import com.community.account.entity.Account;
 import com.community.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -21,6 +22,5 @@ public interface LikeRepository extends JpaRepository<Likes, Long> {
     boolean existsByAccountAndBoard(Account account, Board board);
 
 //    List<Likes> findTop4ByBoardOrderByBoard(List<Board> board);
-
 
 }
