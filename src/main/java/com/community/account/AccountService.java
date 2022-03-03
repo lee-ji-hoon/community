@@ -130,9 +130,5 @@ public class AccountService implements UserDetailsService {
 
         return new UserAccount(account);
     }
-
-    public Account loadUserProfile(String userNickname) {
-        return accountRepository.findByNickname(userNickname);
-    }
 }
 
