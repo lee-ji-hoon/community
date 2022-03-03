@@ -586,32 +586,14 @@
                                         <span class="uk-switch-button"></span>
                                     </span>
                         </a>
-                        <form class="" action="#" th:action="@{/logout}" method="post">
-                            <a onclick="function return_chk_form() {
-                                   if(document.getElementById("wr_name").value==''){
-                                    alert("성명을 입력해주십시오.");
-                                    return false;
-                                    }
-                                    if(document.getElementById("wr_password").value==''){
-                                    alert("비밀번호를 입력해주십시오.");
-                                    return false;
-                                    }
-                                    if ( ! $('input[name=agreeBtm]:checked').val()) {
-                                    alert('개인정보 활용에 동의해주십시오.');
-                                    return false;
-                                    }
-                                    document.getElementById('frm').submit();
-                                    }
-                            }
-                            return_chk_form()">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                    </path>
-                                </svg> 로그아웃
-                            </a>
-                        </form>
-
+                        <a href="#" id="night-mode" class="btn-night-mode">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                </path>
+                            </svg>
+                            로그아웃
+                        </a>
 
 
                     </div>
@@ -629,7 +611,7 @@
     <div class="sidebar_inner" data-simplebar>
 
         <ul>
-            <li><a th:href="/">
+            <li><a href="/" th:href="@{/}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-600">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                 </svg>
