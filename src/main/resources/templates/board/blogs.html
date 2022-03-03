@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
 <body>
 
@@ -27,10 +26,10 @@
                                 <h2 class="text-2xl font-semibold"> Blog </h2>
                                 <nav class="responsive-nav md:m-0 -mx-4 style-2">
                                     <ul>
-                                        <li class="active"><a href="#" class="lg:px-2">   Suggestions </a></li>
-                                        <li><a href="#" class="lg:px-2"> Joined </a></li>
-                                        <li><a href="#" class="lg:px-2"> Interested </a></li>
-                                        <li><a href="#" class="lg:px-2"> Past </a></li>
+                                        <li class="active"><a href="#" class="lg:px-2"> Top5 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 자유게시판 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 신입생게시판 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 졸업생게시판 </a></li>
                                         <li><a href="#" class="lg:px-2"> Coming </a></li>
                                     </ul>
                                 </nav>
@@ -44,7 +43,7 @@
                         <div class="card divide-y divide-gray-100 px-4">
                             
                             <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
-                                <a href="blog-read.html">
+                                <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                     <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm"> 
                                          <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
                                          <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
@@ -54,13 +53,13 @@
                                 </a>
                                 <div class="flex-1 lg:pt-0 pt-4">
                                      
-                                    <a href="blog-read.html" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                    <div class="line-clamp-3 pt-3 truncate ..." style="max-height: 100px" th:utext="${board.content}"></div>
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
+                                    <div class="line-clamp-3 pt-3 truncate md:text-clip" th:utext="${board.content}"></div>
                                     
                                     <div class="flex items-center pt-3">
-                                        <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon>  12 </div>
+                                        <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
                                         <div class="flex items-center mx-4"> 
-                                            <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon>  12 
+                                            <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
                                             <div class="-space-x-2 flex items-center ml-1">
                                                 <img alt="Image placeholder" src="/assets/images/avatars/avatar-6.jpg" class="border-2 border-white rounded-full w-7">
                                                 <img alt="Image placeholder" src="/assets/images/avatars/avatar-5.jpg" class="border-2 border-white rounded-full w-7">
