@@ -3,53 +3,72 @@
       xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="theme-fragments.html :: head"></head>
+<style>
+    body{
+        background-color: #f0f2f5;
+    }
+</style>
 
-
-<body class="bg-gray-100">
+<body>
     <div id="wrapper" class="flex flex-col justify-between h-screen">
         <!-- header-->
-        <header th:replace="theme-fragments.html :: header"></header>
         <!-- Content-->
         <div>
-            <div class="lg:p-12 max-w-xl lg:my-0 my-12 mx-auto p-6 space-y- "
-                style="margin-top: 50px">
-                <form class="needs-validation lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md"
-                      action="#" method="post" th:action="@{/login}" novalidate>
-                    <h1 class="lg:text-2xl text-xl font-semibold mb-6"> 로그인 </h1>
-                    <div class="form-group">
-                        <label for="username" class="mb-0">닉네임 또는 이메일</label>
-                        <input id="username" type="text" name="username"
-                               placeholder="Info@example.com" aria-describedby="emailHelp" required
-                               class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
-                        <small id="emailHelp" class="form-text text-muted">
-                            가입할 때 사용한 <b>이메일</b> 또는 <b>닉네임</b>을 입력하세요.
-                        </small>
-                        <small class="invalid-feedback">이메일을 입력하세요.</small>
+            <div class="lg:flex max-w-5xl min-h-screen mx-auto p-6 py-10" >
+                <div class="flex flex-col items-center lg: lg:flex-row lg:space-x-10">
+
+                    <div class="lg:mb-12 flex-1 lg:text-left text-center">
+                        <img src="assets/images/logo.png" alt="" class="lg:mx-0 lg:w-52 mx-auto w-40">
+                        <p class="font-medium lg:mx-0 md:text-2xl mt-6 mx-auto sm:w-3/4 text-xl">멀티미디어 학과 학우생분들의 커뮤니티 플랫폼입니다. </p>
                     </div>
-                    <div class="form-group">
-                        <label for="password" class="mb-0">패스워드</label>
-                        <input id="password" type="password" name="password"
-                               aria-describedby="passwordHelp" placeholder="******" required
-                               class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full">
-                        <small id="passwordHelp" class="form-text text-muted">
-                            패스워드가 기억나지 않는다면, <a href="#" th:href="@{/email-login}"><b>패스워드 없이 로그인하기</b></a>
-                        </small>
-                        <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                    <div class="lg:mt-0 lg:w-96 md:w-1/2 sm:w-2/3 mt-10 w-full">
+
+                        <form class="needs-validation p-6 space-y-4 relative bg-white shadow-lg rounded-lg"
+                              action="#" method="post" th:action="@{/login}" novalidate>
+                            <div class="form-group">
+                                <label for="username" class="mb-0">닉네임 또는 이메일</label>
+                                <input id="username" type="text" name="username"
+                                       placeholder="Info@example.com" aria-describedby="emailHelp" required
+                                       class="form-control with-border">
+                                <small id="emailHelp" class="form-text text-muted">
+                                    가입할 때 사용한 <b>이메일</b> 또는 <b>닉네임</b>을 입력하세요.
+                                </small>
+                                <small class="invalid-feedback">이메일을 입력하세요.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="mb-0">패스워드</label>
+                                <input id="password" type="password" name="password"
+                                       aria-describedby="passwordHelp" placeholder="******" required
+                                       class="form-control with-border">
+                                <small id="passwordHelp" class="form-text text-muted">
+                                    패스워드가 기억나지 않는다면, <a href="#" th:href="@{/email-login}"><b>패스워드 없이 로그인하기</b></a>
+                                </small>
+                                <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" checked>
+                                <label class="form-check-label" for="rememberMe" aria-describedby="rememberMeHelp">로그인 유지</label>
+                            </div>
+                            <div th:if="${param.error}" class="alert alert-danger p-4" role="alert"> <!-- 로그인 오류 -->
+                                <p></p>
+                                <p>이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
+                                <p>확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용하세요. </p>
+                            </div>
+                            <div>
+                                <button type="submit" aria-describedby="submitHelp"
+                                        class="bg-blue-600 font-semibold p-2 rounded-md text-center text-white w-full">로그인
+                                </button>
+                                <hr class="pb-3.5">
+                                <div class="flex">
+                                    <a th:href="@{/sign-up}" type="button"
+                                       class="bg-green-600 hover:bg-green-500 hover:text-white font-semibold py-3 px-5 rounded-md text-center text-white mx-auto" uk-toggle>
+                                        회원가입
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div th:if="${param.error}" class="alert alert-danger p-4" role="alert"> <!-- 로그인 오류 -->
-                        <p></p>
-                        <p>이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
-                        <p>확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용하세요. </p>
-                    </div>
-                    <div>
-                        <button type="submit" aria-describedby="submitHelp"
-                                class="bg-blue-600 font-semibold p-2 mt-5 rounded-md text-center text-white w-full">로그인
-                        </button>
-                        <small id="submitHelp" class="form-text text-muted">
-                            멀티커뮤니티에 처음 오신거라면 <a href="#" th:href="@{/sign-up}"><b>계정을 먼저 만드세요.</b></a>
-                        </small>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

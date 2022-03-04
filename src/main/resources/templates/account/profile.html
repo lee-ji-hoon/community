@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="theme-fragments.html :: head"></head>
+
+<style>
+    .custom-file label {
+        color: white;
+        cursor: pointer;
+    }
+
+    .custom-file input[type="file"] {  /* 파일 필드 숨기기 */
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip:rect(0,0,0,0);
+        border: 0;
+    }
+
+</style>
 <body>
 
 <div id="wrapper">
@@ -8,12 +28,279 @@
     <!-- Header -->
     <header th:replace="theme-fragments.html :: header"></header>
 
+    <!-- sidebar -->
     <div th:replace="theme-fragments.html :: side_bar"></div>
 
-    <!-- sidebar -->
-<div class="container">
+    <div class="main_content">
+        <div class="mcontainer">
+            <!-- Profile cover -->
+            <div id="new-profile-image"></div>
+
+            <div th:if="${message}" class="callout bg-blue-600" data-closable style="border-radius: 10px; margin-bottom: 20px; padding: 15px; color: white">
+                <button class="close-button" aria-label="Close alert" type="button" data-close="" >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span th:text="${message}">메시지</span>
+            </div>
+
+            <div class="profile user-profile">
+                <div id="profile-banner-image" class="profiles_banner">
+                    <div id="current-profile-image">
+                        <img alt="" th:src="${account.getBannerImage()}"/>
+                    </div>
+                    <div id="cropped-new-profile-image"></div>
+                    <div id="new-profile-banner"></div>
+
+                    <form name="update_banner_form" th:object="${profileForm}" action="#"
+                          th:action="@{'/profile/' + ${#authentication.name} + '/update-banner'}" method="post">
+                        <div class="form-group">
+                            <input id="profileBanner" type="hidden" th:field="*{profileBanner}" class="form-control" />
+                        </div>
+                    <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex" th:if="${isOwner}">
+                        <div class="custom-file">
+                            <label for="profile-banner-image-file" id="update-banner"
+                                   class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
+                                배너 이미지 수정
+                            </label>
+                            <input type="file" id="profile-banner-image-file" name="uploadfile" accept="*">
+                        </div>
+                        <span id="cut-button"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                            자르기
+                        </span>
+                        <span id="confirm-button"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                            확인
+                        </span>
+                        <span id="reset-button"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                            취소
+                        </span>
+
+                        <a type="submit" id="banner-submit"
+                           href="javascript:update_banner_form.submit();"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                            <span> 저장 </span>
+                        </a>
+                        <a th:href="@{/settings/profile-settings}" id="update-profile"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                            <ion-icon name="create-outline" class="text-xl"></ion-icon>
+                            <span> 프로필 수정 </span>
+                        </a>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="profiles_content">
+                    <div class="profile_avatar">
+                        <div class="profile_avatar_holder" th:if="${isOwner}">
+                            <svg th:if="${#strings.isEmpty(account.profileImage)}"
+                                 th:data-jdenticon-value="${#authentication.name}"
+                                style="width: 160px; height: 160px"></svg>
+                            <img th:if="${!#strings.isEmpty(account.profileImage)}"
+                                 th:src="${account.profileImage}" />
+                        </div>
+                        <div class="profile_avatar_holder" th:if="${!isOwner}">
+                            <svg th:if="${#strings.isEmpty(account.profileImage)}"
+                                 th:data-jdenticon-value="${account.studentId}"
+                                 style="width: 160px; height: 160px"></svg>
+                            <img th:if="${!#strings.isEmpty(account.profileImage)}"
+                                 th:src="${account.profileImage}" />
+                        </div>
+                        <div class="user_status status_online"></div>
+                        <div class="icon_change_photo" hidden> <ion-icon name="camera" class="text-xl"></ion-icon> </div>
+                    </div>
+
+                    <div class="profile_info">
+                        <h1 th:text="${account.username}"></h1>
+                        <p th:text="${account.getBio()}"></p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between lg:border-t border-gray-100 flex-col-reverse lg:flex-row pt-2">
+                    <nav class="responsive-nav pl-3">
+                        <ul  uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
+                            <li><a href="#">Timeline</a></li>
+                            <li><a href="#">Friend <span>3,243</span> </a></li>
+                            <li><a href="#">Photoes </a></li>
+                            <li><a href="#">Pages</a></li>
+                            <li><a href="#">Groups</a></li>
+                            <li><a href="#">Videos</a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- button actions -->
+                    <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
+
+                        <!-- add story -->
+                        <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-blue-600 text-white space-x-1.5 hover:text-white"  uk-toggle="target: #create-post-modal">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>게시글 작성</span>
+                        </a>
+
+                        <!-- search icon -->
+                        <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-gray-100 space-x-1.5" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small">
+                            <ion-icon name="search" class="text-xl"></ion-icon>
+                            <span>
+                                스터디 찾기
+                            </span>
+                        </a>
+
+                        <!-- search dropdown -->
+                        <div class="absolute right-3 bg-white z-10 w-full flex items-center border rounded-md"
+                             id="profile-search" hidden>
+                            <input type="text" placeholder="Search.." class="flex-1">
+                            <ion-icon name="close-outline" class="text-2xl hover:bg-gray-100 p-1 rounded-full mr-2 cursor-pointer" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small"></ion-icon>
+                        </div>
+
+                        <!-- more icon -->
+                        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
+                            <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
+                        </a>
+                        <!-- more drowpdown -->
+                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
+                             uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
+                            <ul class="space-y-1">
+                                <li>
+                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                        <ion-icon name="arrow-redo-outline" class="pr-2 text-xl"></ion-icon> Share Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                        <ion-icon name="create-outline" class="pr-2 text-xl"></ion-icon>  Account setting
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                        <ion-icon name="notifications-off-outline" class="pr-2 text-lg"></ion-icon>   Disable notifications
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                        <ion-icon name="star-outline"  class="pr-2 text-xl"></ion-icon>  Add favorites
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="-mx-2 my-2 dark:border-gray-800">
+                                </li>
+                                <li>
+                                    <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                        <ion-icon name="stop-circle-outline" class="pr-2 text-xl"></ion-icon>  Unfriend
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+<script src="/node_modules/cropper/dist/cropper.min.js"></script>
+<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+<script type="application/javascript">
+    $(function() {
+        cropper = '';
+        let $confirmBtn = $("#confirm-button");
+        let $resetBtn = $("#reset-button");
+        let $cutBtn = $("#cut-button");
+        let $newProfileImage = $("#new-profile-image");
+        let $newProfileBannerImage = $("#new-profile-banner");
+        let $currentProfileImage = $("#current-profile-image");
+        let $resultImage = $("#cropped-new-profile-image");
+        let $profileImage = $("#profileImage");
+        let $bannerSubmit = $("#banner-submit");
+        let $updateBanner = $("#update-banner");
+        let $updateProfile = $("#update-profile");
+        let $profileBanner = $("#profileBanner");
+
+        $newProfileImage.hide();
+        $cutBtn.hide();
+        $resetBtn.hide();
+        $confirmBtn.hide();
+        $bannerSubmit.hide();
+
+        $("#profile-image-file").change(function(e) {
+            if (e.target.files.length === 1) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    if (e.target.result) {
+                        let img = document.createElement("img");
+                        img.id = 'new-profile';
+                        img.src = e.target.result;
+                        img.setAttribute('width', '100%');
+
+                        $newProfileImage.html(img);
+                        $newProfileImage.show();
+                        $currentProfileImage.hide();
+
+                        let $newImage = $(img);
+                        $newImage.cropper({aspectRatio: 3.5/1});
+                        cropper = $newImage.data('cropper');
+
+                        $cutBtn.show();
+                        $confirmBtn.hide();
+                        $resetBtn.show();
+                        $updateBanner.hide();
+                        $updateProfile.hide();
+                    }
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        $resetBtn.click(function() {
+            $currentProfileImage.show();
+            $newProfileImage.hide();
+            $resultImage.hide();
+            $resetBtn.hide();
+            $cutBtn.hide();
+            $confirmBtn.hide();
+            $profileImage.val('');
+            $newProfileBannerImage.hide('');
+            $updateBanner.show();
+            $updateProfile.show();
+            $bannerSubmit.hide();
+        });
+
+        $cutBtn.click(function () {
+            let dataUrl = cropper.getCroppedCanvas().toDataURL();
+            let newImage = document.createElement("img");
+            newImage.id = "cropped-new-profile-image";
+            newImage.src = dataUrl;
+            newImage.width = 125;
+            $resultImage.html(newImage);
+            $resultImage.show();
+            $currentProfileImage.hide();
+            $confirmBtn.show();
+
+
+            $confirmBtn.click(function () {
+                $newProfileImage.hide();
+                $newProfileBannerImage.html(newImage);
+                $cutBtn.hide();
+                $confirmBtn.hide();
+                $updateBanner.hide();
+                $bannerSubmit.show();
+                $profileBanner.val(dataUrl)
+                console.log(dataUrl);
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+
     <!-- nesting, row안의 row -->
-    <div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
+    <!--<div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
         <div class="box col-6">
             <div class="row justify-content-center">
                 <div class="box col-12 rounded p-4">
@@ -32,16 +319,16 @@
                 </div>
                 <div class="empty col-12 p-3"></div>
                 <div class="box col-12 rounded p-4">
-                    <!-- Grid container -->
+                    &lt;!&ndash; Grid container &ndash;&gt;
                     <div class="container p-2">
-                        <!--Grid row-->
+                        &lt;!&ndash;Grid row&ndash;&gt;
                         <span style="font-size: 20px;">
                                 <i class="fa fa-bookmark"></i>
                             </span>
                         <span style="font-size: 20px; margin-left: 5px">소개</span>
 
                         <div class="row mt-4">
-                            <!--Grid column-->
+                            &lt;!&ndash;Grid column&ndash;&gt;
                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                 <h6 class="text-uppercase text-muted font-weight-bold" >학번</h6>
 
@@ -54,9 +341,9 @@
                                     <span>추가 필요</span>
                                 </p>
                             </div>
-                            <!--Grid column-->
+                            &lt;!&ndash;Grid column&ndash;&gt;
 
-                            <!--Grid column-->
+                            &lt;!&ndash;Grid column&ndash;&gt;
                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                 <h6 class="text-uppercase text-muted font-weight-bold">전공</h6>
 
@@ -79,7 +366,7 @@
                                     <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
                                 </p>
                             </div>
-                            <!--Grid column-->
+                            &lt;!&ndash;Grid column&ndash;&gt;
                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0 mt-2">
                                 <h6 class="text-uppercase text-muted font-weight-bold">한 줄 소개</h6>
                                 <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
@@ -91,9 +378,9 @@
                                 </p>
                             </div>
                         </div>
-                        <!--Grid row-->
+                        &lt;!&ndash;Grid row&ndash;&gt;
                     </div>
-                    <!-- Grid container -->
+                    &lt;!&ndash; Grid container &ndash;&gt;
                 </div>
             </div>
         </div>
@@ -158,10 +445,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
 
-    <div class="main">
+   <!-- <div class="main">
         <input id="community" type="radio" name="tabs">
         <label for="community">게시글</label>
 
@@ -274,10 +561,5 @@
                 </div>
             </div>
         </section>
-    </div>
+    </div>-->
 
-
-</div>
-<div th:replace="fragments.html :: footer"></div>
-</body>
-</html>
