@@ -109,23 +109,27 @@ public class BoardController {
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
-        boardService.viewUpdate(boardId, request, response);
+        model.addAttribute("account", account);
         Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
+        if (hasBoardError) {
+            return "board/board-error";
+        }
+
+        boardService.viewUpdate(boardId, request, response);
         Board detail = boardRepository.findByBid(boardId);
 
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
+        // 좋아요 및 댓글
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
         List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
-
 
         // 게시물 작성자 account 불러오는 로직
         Board currentBoard = boardRepository.findByBid(boardId);
         Account boardOwner = accountRepository.findByNickname(currentBoard.getWriter());
 
         model.addAttribute("board", detail);
-        model.addAttribute("account", account);
         model.addAttribute("boardOwner", boardOwner);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
@@ -136,10 +140,6 @@ public class BoardController {
         model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
         model.addAttribute("replyRepo", replyReportRepository);
         model.addAttribute("recentlyBoards", recentlyBoards);
-
-        if (hasBoardError) {
-            return "board/board-error";
-        }
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
