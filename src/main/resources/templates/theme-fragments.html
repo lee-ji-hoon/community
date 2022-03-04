@@ -5,6 +5,10 @@
 
 <head th:fragment="head">
 
+    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
+            integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+            crossorigin="anonymous">
+    </script>
     <!-- theme header
     ================================================== -->
 
@@ -46,15 +50,22 @@
     ================================================== -->
     <!-- script -->
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+
+    <script>
+        window.jdenticon_config = {
+            replaceMode: "observe"
+        };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"></script>
 
     <!-- css -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">-->
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
     <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
@@ -123,7 +134,7 @@
                 <div id="logo">
                     <a href="/">
                         <img  alt="">
-                        <img src="/assets/images/logo-mobile.png" class="logo_mobile" alt="">
+                        <img src="" class="logo_mobile" alt="">
                     </a>
                 </div>
             </div>
@@ -137,7 +148,7 @@
                     <ul>
                         <li>
                             <a href="#">
-                                <img src="/assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
+                                <img src="" alt="" class="list-avatar">
                                 <div class="list-name">  Erica Jones </div>
                             </a>
                         </li>
@@ -146,46 +157,14 @@
             </div>
 
             <div class="right_side">
-
                 <div class="header_widgets">
-                    <a href="#" class="is_icon" uk-tooltip="title: Cart">
-                        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path></svg>
-                    </a>
-                    <div uk-drop="mode: click" class="header_dropdown dropdown_cart">
-
-                        <div class="drop_headline">
-                            <h4>  My Cart </h4>
-                            <a href="#" class="btn_action hover:bg-gray-100 mr-2 px-2 py-1 rounded-md underline"> Checkout </a>
-                        </div>
-
-                        <ul class="dropdown_cart_scrollbar" data-simplebar>
-                            <li>
-                                <div class="cart_avatar">
-                                    <img src="assets/images/product/2.jpg" alt="">
-                                </div>
-                                <div class="cart_text">
-                                    <div class=" font-semibold leading-4 mb-1.5 text-base line-clamp-1"> Wireless headphones </div>
-                                    <p class="text-sm">Type Accessories  </p>
-                                </div>
-                                <div class="cart_price">
-                                    <span> $14.99 </span>
-                                    <button class="type"> Remove</button>
-                                </div>
-                            </li>
-                        </ul>
-
-                        <div class="cart_footer">
-                            <p> Subtotal : $ 320 </p>
-                            <h1> Total :  <strong> $ 320</strong> </h1>
-                        </div>
-                    </div>
 
                     <a href="#" class="is_icon" uk-tooltip="title: Notifications">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
                         <span>3</span>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown">
-                        <div  class="dropdown_scrollbar" data-simplebar>
+                        <div class="dropdown_scrollbar" data-simplebar>
                             <div class="drop_headline">
                                 <h4>Notifications </h4>
                                 <div class="btn_action">
@@ -201,7 +180,7 @@
                                 <li>
                                     <a href="#">
                                         <div class="drop_avatar">
-                                            <img src="assets/images/avatars/avatar-1.jpg" alt="">
+                                            <img src="" alt="">
                                         </div>
                                         <span class="drop_icon bg-gradient-primary">
                                                      <i class="icon-feather-thumbs-up"></i>
@@ -215,7 +194,6 @@
                                         </div>
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -242,31 +220,11 @@
                             <ul>
                                 <li class="un-read">
                                     <a href="#">
-                                        <div class="drop_avatar"> <img src="assets/images/avatars/avatar-7.jpg" alt="">
+                                        <div class="drop_avatar"> <img src="" alt="">
                                         </div>
                                         <div class="drop_text">
                                             <strong> Stella Johnson </strong> <time>12:43 PM</time>
                                             <p>  Alex will explain you how ...  </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar"> <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                                        </div>
-                                        <div class="drop_text">
-                                            <strong> Adrian Mohani </strong> <time> 6:43 PM</time>
-                                            <p> Thanks for The Answer sit amet...  </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar"> <img src="assets/images/avatars/avatar-6.jpg" alt="">
-                                        </div>
-                                        <div class="drop_text">
-                                            <strong>Alia Dolgove </strong> <time> Wed </time>
-                                            <p>  Alia just joined Messenger!  </p>
                                         </div>
                                     </a>
                                 </li>
@@ -276,26 +234,24 @@
                         <a href="#" class="see-all"> See all in Messages</a>
                     </div>
 
-                    <a href="#">
-                        <svg th:if="${#strings.isEmpty(account.profileImage)}"
-                             th:data-jdenticon-value="${#authentication.name}"
-                             class="is_avatar">
-                        </svg>
-                        <img th:if="${!#strings.isEmpty(account.profileImage)}"
-                             th:src="${account.profileImage}" class="is_avatar"/>
+                    <a href="#" sec:authorize="isAuthenticated()">
+
+                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                             width="24" height="24" class="is_avatar"></svg>
+                        <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
+                             width="24" height="24" class="is_avatar"/>
                     </a>
                     <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
 
                         <a href="#" th:href="@{'/profile/' + ${#authentication.name}}" class="user">
                             <div class="user_avatar">
-                                <svg th:if="${#strings.isEmpty(account.profileImage)}" class=""
+                                <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
                                      th:data-jdenticon-value="${#authentication.name}"></svg>
-                                <img th:if="${!#strings.isEmpty(account.profileImage)}"
+                                <img th:if="${!#strings.isEmpty(account?.profileImage)}" class="user_avatar"
                                      th:src="${account.profileImage}"/>
                             </div>
                             <div class="user_name">
-                                <h1 th:text="${account.username}">유저 이름</h1>
-                                <span th:text="${account.studentId}">학번</span>
+                                <span sec:authentication="name">유저이름</span>
                             </div>
                         </a>
                         <hr>
@@ -353,7 +309,6 @@
                 </svg>
                 <span> 홈 </span> </a>
             </li>
-
             <li><a th:href="@{/study}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-500">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
@@ -625,6 +580,171 @@
                 </span>
             </p>
         </div>
+    </div>
+</div>
+
+<div id="create-post-modal" class="create-post" uk-modal th:fragment="board-write">
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
+
+        <div class="py-4 border-b flex  justify-between px-6">
+            <h3 class="text-lg font-semibold"> 게시글 작성하기 </h3>
+            <div>
+                <div class="font-semibold px-2.5 py-1 bg-gray-100  rounded-md text text-gray-500 text-sm mr-8">
+                    Saved as draft
+                </div>
+                <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                        type="button" uk-close>
+                    <i class="icon-feather-close"></i>
+                </button>
+            </div>
+        </div>
+
+        <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
+            <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
+                <div class="space-y-4 g:w-8/12">
+
+                    <div class="px-2 space-y-2">
+                        <div class="font-semibold text-base"> 게시판 선택 </div>
+                        <select class="selectpicker" th:field="*{boardTitle}">
+                            <option data-icon="icon-material-outline-assignment" value="자유게시판" selected>자유게시판</option>
+                            <option data-icon="icon-material-outline-access-alarm" value="신입생게시판">신입생게시판</option>
+                            <option data-icon="icon-material-outline-account-circle" value="졸업생게시판">졸업생게시판</option>
+                        </select>
+                    </div>
+                    <div class="font-semibold text-lg"> Details </div>
+                    <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group d-none">
+                        <label for="writer" class="mb-0 ml-2 text-gray-600 text-sm">작성자</label>
+                        <input type="hidden" placeholder="제목을 입력해주세요." id="writer"
+                               th:value="${account.nickname}" name="writer" readonly
+                               aria-describedby="writerHelp"
+                               class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                        <small id="writerHelp" class="form-text text-muted">
+                            제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                        </small>
+                        <small class="invalid-feedback">제목을 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}">writer Error</small>
+                    </div>
+                    <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
+                        <label for="title" class="mb-0 ml-2 text-gray-600 text-sm">Title</label>
+                        <input type="text" placeholder="제목을 입력해주세요." id="title"
+                               th:field="*{title}" aria-describedby="titleHelp" required
+                               class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                        <small id="titleHelp" class="form-text text-muted">
+                            제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                        </small>
+                        <small class="invalid-feedback">제목을 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
+                    </div>
+                    <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
+                        <label for="content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
+                        <textarea type="text" rows="5" placeholder="내용을 입력해주세요." id="content"
+                                  th:field="*{content}" aria-describedby="contentHelp" required
+                                  class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
+                        <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                        <small class="invalid-feedback">글을 입력해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
+                    </div>
+
+                    <!--
+                    <div class="keywords-container">
+                        <div class="keyword-input-container shadow-none">
+                            <input type="text" class="keyword-input with-border" placeholder="Add Keywords" />
+                            <button type="button" class="keyword-input-button ripple-effect">
+                                <i class="icon-feather-plus"></i></button>
+                        </div>
+                        <div class="keywords-list">
+                        <span class="keyword">
+                        <span class="keyword-remove">Javascript</span>
+                        <span class="keyword-text"></span>
+                        </span>
+                            <span class="keyword">
+      <span class="keyword-remove">Node</span> <span class="keyword-text"></span>
+  </span>
+                            <span class="keyword">
+      <span class="keyword-remove">Typescript</span> <span class="keyword-text"></span>
+  </span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="px-2 space-y-2">
+                        <div class="font-semibold text-base"> Playlists </div>
+                        <div> Add your video to one or more playlists. Playlists can help viewers discover your content
+                            faster. <a href="#" class="text-blue-500"> Learn more</a> </div>
+                        <select class="selectpicker">
+                            <option data-icon="icon-material-outline-assignment">Assignment</option>
+                            <option data-icon="icon-material-outline-access-alarm">Alarm</option>
+                            <option data-icon="icon-material-outline-account-circle">Account</option>
+                            <option data-icon="icon-material-outline-cake">Cake</option>
+                        </select>
+                    </div>
+
+                    <div class="px-2 space-y-2">
+                        <div class="font-semibold text-base"> Visibilty </div>
+                        <div> Manage your videos or your contents who want to see your videos and share with theme across
+                            the website. </div>
+                        <select class="selectpicker">
+                            <option data-icon="uil-bullseye"> Private </option>
+                            <option data-icon="uil-chat-bubble-user">My Following</option>
+                            <option data-icon="uil-layer-group-slash">Unlisted</option>
+                            <option data-icon="uil-globe" selected>Puplic</option>
+                        </select>
+                    </div>
+
+                    <div class="px-2 space-y-2">
+                        <div class="font-semibold text-base"> Age Restrict </div>
+                        <div> Do you want to restrict your video to an adult audience? </div>
+                        <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
+                            tincidunt utmagna</div>
+                        <div class="flex flex-col">
+                            <div class="radio">
+                                <input id="radio-1" name="radio" type="radio" checked>
+                                <label for="radio-1"><span class="radio-label"></span> Yes, it's made for kids </label>
+                            </div>
+                            <div class="radio">
+                                <input id="radio-2" name="radio" type="radio">
+                                <label for="radio-2"><span class="radio-label"></span>No, it's not made for kids </label>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+
+            </div>
+
+            <div class="flex items-center w-full justify-between p-3 border-t">
+
+                <div class="flex items-center space-x-2">
+
+                    <ion-icon name="checkmark-circle" class="text-green-600 text-xl"></ion-icon>
+                    <div> You are successfuly uploaded</div>
+
+                </div>
+
+                <div class="flex space-x-2">
+                    <a href="#"
+                       class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+                        <svg class="h-5 pr-1 rounded-full text-red-500 w-6 fill-current" id="veiw-more" fill="none"
+                             stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="false"
+                             style="">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Live </a>
+                    <button type="submit"
+                            id = "board_form_send"
+                            class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                        Share </button>
+                </div>
+
+                <button type="submit" hidden
+                        id = "board_form_send"
+                        class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold">
+                    Share </button>
+            </div>
+        </form>
+
     </div>
 </div>
 

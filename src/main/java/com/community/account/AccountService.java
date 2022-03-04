@@ -6,6 +6,7 @@ import com.community.account.repository.AccountRepository;
 import com.community.config.AppProperties;
 import com.community.mail.EmailMessage;
 import com.community.mail.EmailService;
+import com.community.profile.form.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -129,6 +130,20 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    public Account getAccount(String nickname) {
+        Account account = accountRepository.findByNickname(nickname);
+        if (account == null) {
+            log.info(nickname);
+            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
+        }
+        return account;
+    }
+
+    public void updateProfileBanner(Account account, ProfileForm profileForm) {
+        account.setBannerImage(profileForm.getProfileBanner());
+        accountRepository.save(account);
     }
 }
 

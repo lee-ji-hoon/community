@@ -18,11 +18,14 @@ public class ProfileForm {
 
     private String profileImage;
 
+    private String profileBanner;
+
     public ProfileForm(Account account) {
         this.bio = account.getBio();
         this.url = account.getUrl();
         this.occupation = account.getOccupation();
         this.location = account.getLocation();
         this.profileImage = account.getProfileImage();
+        this.profileBanner = account.getBannerImage();
     }
 }
