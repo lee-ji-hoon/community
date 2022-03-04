@@ -120,8 +120,13 @@ public class BoardController {
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
+        // 게시물 작성자 account 불러오는 로직
+        Board currentBoard = boardRepository.findByBid(boardId);
+        Account boardOwner = accountRepository.findByNickname(currentBoard.getWriter());
+
         model.addAttribute("board", detail);
         model.addAttribute("account", account);
+        model.addAttribute("boardOwner", boardOwner);
         model.addAttribute("service", boardService);
         model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likes", likes);
