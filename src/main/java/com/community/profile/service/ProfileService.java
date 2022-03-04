@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
@@ -112,4 +113,8 @@ public class ProfileService {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getZones().remove(zone));
     }
+
+    /*public void updateBannerImage(Account account, byte[] profileBannerImage) {
+        account.setBannerImage(Arrays.toString(profileBannerImage));
+    }*/
 }

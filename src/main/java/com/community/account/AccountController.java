@@ -8,21 +8,28 @@ import com.community.board.entity.Board;
 import com.community.board.repository.BoardRepository;
 import com.community.board.service.BoardService;
 import com.community.like.LikeService;
+import com.community.profile.form.ProfileForm;
 import com.community.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
@@ -76,6 +83,7 @@ public class AccountController {
         }
 
         accountService.completeSignUp(account);
+        model.addAttribute(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return "account/checked-email";
@@ -104,28 +112,39 @@ public class AccountController {
     // 프로필 진입
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
-        Account byNickname = accountRepository.findByNickname(nickname);
-        Account accountLoaded = accountRepository.findAccountWithTagsAndZonesById(account.getId());
-        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTime(byNickname.getId());
+        Account byAccount = accountService.getAccount(nickname);
+        model.addAttribute(new ProfileForm(account));
+//        Account accountLoaded = accountRepository.findAccountWithTagsAndZonesById(account.getId());
+//        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTime(byNickname.getId());
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
-
+        log.info(String.valueOf(byAccount));
         model.addAttribute(account);
-        model.addAttribute(accountLoaded);
-        model.addAttribute(byNickname);
-        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
-        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(account));
-        model.addAttribute("isOwner", byNickname.equals(account));
-        model.addAttribute("board", boards);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("boardService", boardService);
+//        model.addAttribute(accountLoaded);
+        model.addAttribute(byAccount);
+//        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
+//        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("isOwner", byAccount.equals(account));
+//        model.addAttribute("board", boards);
+//        model.addAttribute("likeService", likeService);
+//        model.addAttribute("boardService", boardService);
         return "account/profile";
+    }
+
+    // 프로필 배너 이미지 변경
+    @PostMapping("/profile/{nickname}/update-banner")
+    public String updateBanner(@CurrentUser Account account, @PathVariable String nickname,
+                               RedirectAttributes redirectAttributes, Model model, ProfileForm profileForm) {
+        accountService.updateProfileBanner(account, profileForm);
+        redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
+
+        return "redirect:/profile/{nickname}";
     }
 
     // 이메일 로그인
     @GetMapping("/email-login")
-    public String sendEmailLoginLinkView(Account account, Model model) {
+    public String sendEmailLoginLinkView(@CurrentUser Account account, Model model) {
         return "account/email-login";
     }
 
