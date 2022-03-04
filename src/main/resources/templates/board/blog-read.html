@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
         
-                                <div class="space-y-3" th:utext="${board.content}">
+                                <div style="white-space:pre;" class="space-y-3" th:text="${board.content}">
                                 </div>
 
                             </div>
@@ -51,29 +51,27 @@
                         <div class="card p-6 relative">
                             <div class="flex space-x-4 lg:font-bold">
                                 <a href="#" class="flex items-center space-x-2">
-                                    <div class="p-2 rounded-full text-black lg:bg-gray-10">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
+                                    <div class="p-2 rounded-full text-black lg:bg-gray-10 like_div">
+                                        <th:block th:if="${likes.isEmpty()}">
+                                            <form id="like_add" class="float-left">
+                                                <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                                                <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</a>
+                                            </form>
+                                        </th:block>
+                                        <th:block th:if="${likes.isPresent()}">
+                                            <form id="like_cancel" class="float-left">
+                                                <input type="hidden" name="like_boardId" th:value="${board.bid}"/>
+                                                <input type="hidden" name="like_accountId" th:value="${account.id}"/>
+                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
+                                            </form>
+                                        </th:block>
+                                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
                                             <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                        </svg>
+                                        </svg>-->
                                     </div>
-                                    <div> Like</div>
+                                    <!--<div> Like</div>-->
                                 </a>
-                                <!-- 좋아요 및 신고 기능 -->
-                                <!--<div class="clearfix like_div">
-                                    <th:block th:if="${likes.isEmpty()}">
-                                        <form id="like_add" class="float-left">
-                                            <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
-                                            <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
-                                            <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</a>
-                                        </form>
-                                    </th:block>
-                                    <th:block th:if="${likes.isPresent()}">
-                                        <form id="like_cancel" class="float-left">
-                                            <input type="hidden" name="like_boardId" th:value="${board.bid}"/>
-                                            <input type="hidden" name="like_accountId" th:value="${account.id}"/>
-                                            <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
-                                        </form>
-                                    </th:block>-->
                                 <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
                                     <div class="p-2 rounded-full text-black lg:bg-gray-10">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
@@ -134,8 +132,12 @@
                             <div class="space-y-5 reply_div">
 
                                 <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
-                                    <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}" th:data-jdenticon-value="${reply.getAccount().nickname}" alt="" class="rounded-full shadow w-12 h-12"></svg>
-                                    <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}" th:src="${reply.getAccount()?.profileImage}" alt="" class="rounded-full shadow w-12 h-12"/>
+                                    <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
+                                         th:data-jdenticon-value="${reply.getAccount().nickname}"
+                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                    <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
+                                         th:src="${reply.getAccount()?.profileImage}"
+                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                     <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>
                                     <div>
                                         <h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4>
@@ -404,7 +406,10 @@
             // input에 있는 값을 가져옴
             var input = document.getElementById("r_content");
             input.addEventListener('keypress', function(key){
-                if(key.key == 'Enter'){
+                if (input.value == '' && key.key == 'Enter') {
+                    alert("댓글을 입력해주세요.");
+                }
+                if(input.value != '' && key.key == 'Enter'){
                     $.ajax({
                         url:'/board/detail/reply',
                         type:'get',
@@ -414,13 +419,13 @@
                         success : function (){
                             console.log("Write Reply Success");
                             $('.reply_div').load(location.href+' .reply_div');
+                            input.value ='';
                         },
                         error : function (request, status, error){
                             console.log("Write Reply Fail" + error);
                         }
                     });
                 }
-                input.value ='';
             });
             $(document).on('click', '.like_heart_click', function() {
                 // .like_heart_click은 <a></a>태그의 class 이름
@@ -466,22 +471,27 @@
                 }
             });
             $(document).on('click', '.write_reply', function() {
-                console.log("댓글 작성");
-                $.ajax({
-                    url:'/board/detail/reply',
-                    type:'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#reply_form').serialize(),
-                    dataType : "json",
-                    success : function (){
-                        console.log("Write Reply Success");
-                        $('.reply_div').load(location.href+' .reply_div');
-                    },
-                    error : function (request, status, error){
-                        console.log("Write Reply Fail" + error);
-                    }
-                });
-                input.value ='';
+                if (input.value == '') {
+                    alert("댓글을 입력해주세요.");
+                }
+                if (input.value != '') {
+                    console.log("댓글 작성");
+                    $.ajax({
+                        url:'/board/detail/reply',
+                        type:'get',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data : $('#reply_form').serialize(),
+                        dataType : "json",
+                        success : function (){
+                            console.log("Write Reply Success");
+                            $('.reply_div').load(location.href+' .reply_div');
+                            input.value ='';
+                        },
+                        error : function (request, status, error){
+                            console.log("Write Reply Fail" + error);
+                        }
+                    });
+                }
             });
         })
     </script>
