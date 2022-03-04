@@ -1,3 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="theme-fragments.html :: head"></head>
+
+<style>
+    .custom-file label {
+        color: white;
+        cursor: pointer;
+    }
+    .custom-file input[type="file"] {  /* 파일 필드 숨기기 */
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip:rect(0,0,0,0);
+        border: 0;
+    }
+</style>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header th:replace="theme-fragments.html :: header"></header>
+
+        <!-- sidebar -->
+        <div th:replace="theme-fragments.html :: side_bar"></div>
+
+        <div class="main_content">
+            <div class="mcontainer">
+
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div class="lg:w-1/3">
+
+                    <nav class="responsive-nav setting-nav setting-menu"
+                         uk-sticky="top:30 ; offset:80 ; media:@m ;bottom:true; animation: uk-animation-slide-top">
+                        <h4 class="mb-0 p-3 uk-visible@m hidden"> Setting Navigation </h4>
+                        <ul>
+                            <li class="uk-active"><a href="#"> <i class="uil-user"></i>프로필</a></li>
+                            <li><a href="#"> <i class="uil-unlock-alt"></i> 패스워드 </a></li>
+                            <li><a href="#"> <i class="uil-scenery"></i>사진변경</a></li>
+                            <li><a href="#"> <i class="icon-material-outline-location-on"></i> 지역</a></li>
+                            <li><a href="#"> <i class="icon-material-outline-local-offer"></i> 태그</a></li>
+                            <li><a href="#"> <i class="uil-trash-alt"></i> 회원탈퇴</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+
+                <div class="lg:w-2/3">
+
+                    <div class="lg:flex lg:flex-col justify-between lg:h-full">
+
+                        <!-- form header -->
+                        <div class="lg:px-10 lg:py-8 p-6">
+                            <h3 class="font-bold mb-2 text-xl">프로필</h3>
+                            <p class=""> 본인 소개 설정을 추가해주세요 </p>
+                        </div>
+
+                        <!-- form body -->
+                        <div class="lg:py-8 lg:px-20 flex-1 space-y-4 p-6">
+                            <div class="line">
+                                <input class="line__input" id="password" autocomplete="off" name="password" type="text" onkeyup="this.setAttribute('value', this.value);" value="">
+                                <span for="username" class="line__placeholder"> First Name   </span>
+                            </div>
+                            <div class="line">
+                                <input class="line__input" id="password" autocomplete="off" name="password" type="text" onkeyup="this.setAttribute('value', this.value);" value="">
+                                <span for="username" class="line__placeholder"> Last Name </span>
+                            </div>
+                            <div class="line">
+                                <input class="line__input" id="password" autocomplete="off" name="password" type="text" onkeyup="this.setAttribute('value', this.value);" value="">
+                                <span for="username" class="line__placeholder">Email </span>
+                            </div>
+                            <div class="col-span-2" hidden>
+                                <label for="about">About me</label>
+                                <textarea class="shadow-none with-border"></textarea>
+                            </div>
+                            <div class="line h-32">
+                                <textarea class="line__input h-32"  autocomplete="off"  type="text" onkeyup="this.setAttribute('value', this.value);" value=""></textarea>
+                                <span for="username" class="line__placeholder">About me </span>
+                            </div>
+                            <div class="line">
+                                <input class="line__input" id="password" autocomplete="off" name="password" type="text" onkeyup="this.setAttribute('value', this.value);" value="">
+                                <span for="username" class="line__placeholder">Location </span>
+                            </div>
+                            <div class="line">
+                                <input class="line__input" id="password" autocomplete="off" name="password" type="text" onkeyup="this.setAttribute('value', this.value);" value="">
+                                <span for="username" class="line__placeholder">Working at </span>
+                            </div>
+                            <div>
+                                <label for=""> Relationship </label>
+                                <select id="relationship" name="relationship"  class="shadow-none selectpicker with-border ">
+                                    <option value="0">None</option>
+                                    <option value="1">Single</option>
+                                    <option value="2">In a relationship</option>
+                                    <option value="3">Married</option>
+                                    <option value="4">Engaged</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                            <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel </button>
+                            <button type="button" class="button bg-blue-700"> Save </button>
+                        </div>
+
+
+                    </div>
+
+                    <div class="bg-white rounded-md lg:shadow-md shadow" hidden>
+
+                        <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                            <div>
+                                <label for=""> First name</label>
+                                <input type="text" placeholder="" class="shadow-none with-border">
+                            </div>
+                            <div>
+                                <label for=""> Last name</label>
+                                <input type="text" placeholder="" class="shadow-none with-border">
+                            </div>
+                            <div class="col-span-2">
+                                <label for=""> Email</label>
+                                <input type="text" placeholder="" class="shadow-none with-border">
+                            </div>
+                            <div class="col-span-2">
+                                <label for="about">About me</label>
+                                <textarea id="about" name="about" rows="3"  class="shadow-none bg-gray-100 with-border"></textarea>
+                            </div>
+                            <div class="col-span-2">
+                                <label for=""> Location</label>
+                                <input type="text" placeholder="" class="shadow-none with-border">
+                            </div>
+                            <div>
+                                <label for=""> Working at</label>
+                                <input type="text" placeholder="" class="shadow-none with-border">
+                            </div>
+                            <div>
+                                <label for=""> Relationship </label>
+                                <select id="relationship" name="relationship"  class="shadow-none selectpicker with-border ">
+                                    <option value="0">None</option>
+                                    <option value="1">Single</option>
+                                    <option value="2">In a relationship</option>
+                                    <option value="3">Married</option>
+                                    <option value="4">Engaged</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                            <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel </button>
+                            <button type="button" class="button bg-blue-700"> Save </button>
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <div class="bg-white rounded-md lg:shadow-md shadow" hidden>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4> Who can follow me ?</h4>
+                                    <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, </div>
+                                </div>
+                                <div class="switches-list -mt-8 is-large">
+                                    <div class="switch-container">
+                                        <label class="switch"><input type="checkbox" checked><span class="switch-button"></span> </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4> Show my activities  </h4>
+                                    <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, </div>
+                                </div>
+                                <div class="switches-list -mt-8 is-large">
+                                    <div class="switch-container">
+                                        <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4> Search engines </h4>
+                                    <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, </div>
+                                </div>
+                                <div class="switches-list -mt-8 is-large">
+                                    <div class="switch-container">
+                                        <label class="switch"><input type="checkbox" checked><span class="switch-button"></span> </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4> Allow Commenting </h4>
+                                    <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, </div>
+                                </div>
+                                <div class="switches-list -mt-8 is-large">
+                                    <div class="switch-container">
+                                        <label class="switch"><input type="checkbox"><span class="switch-button"></span> </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </body>
+</html>
+
+<!--
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
@@ -20,58 +241,7 @@
                     <h2 class="col-sm-12" th:text="${account.nickname}">이지훈</h2>
                 </div>
                 <div class="row mt-3">
-                    <form class="col-sm-6" action="#"
-                          th:action="@{/settings/profile-settings}" th:object="${profileForm}" method="post" novalidate>
-                        <div class="form-group">
-                            <label for="bio">한 줄 소개</label>
-                            <input id="bio" type="text" th:field="*{bio}" class="form-control"
-                                   placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
-                            <small id="bioHelp" class="form-text text-muted">
-                                길지 않게 35자 이내로 입력하세요.
-                            </small>
-                            <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">
-                                조금 길어요.
-                            </small>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="url">링크</label>
-                            <input id="url" type="url" th:field="*{url}" class="form-control"
-                                   placeholder="http://ezhoon.com" aria-describedby="urlHelp" required>
-                            <small id="urlHelp" class="form-text text-muted">
-                                블로그, 유튜브 또는 포트폴리오나 좋아하는 웹 사이트 등 본인을 표현할 수 있는 링크를 추가하세요.
-                            </small>
-                            <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">
-                                옳바른 URL이 아닙니다. 예시처럼 입력해 주세요.
-                            </small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="company">직업</label>
-                            <input id="company" type="text" th:field="*{occupation}" class="form-control"
-                                   placeholder="어떤 일을 하고 계신가요?" aria-describedby="occupationHelp" required>
-                            <small id="occupationHelp" class="form-text text-muted">
-                                개발자? 매니저? 취준생? 대표님?
-                            </small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="location">활동 지역</label>
-                            <input id="location" type="text" th:field="*{location}" class="form-control"
-                                   placeholder="Redmond, WA, USA"
-                                   aria-describedby="locationdHelp" required>
-                            <small id="locationdHelp" class="form-text text-muted">
-                                주요 활동(사는 곳이나 직장을 다니는 곳 또는 놀러 다니는 곳) 지역의 도시 이름을 알려주세요.
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <input id="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit"
-                                    aria-describedby="submitHelp">수정하기</button>
-                        </div>
-                    </form>
                     <div class="col-sm-6">
                         <div class="card text-center">
                             <div class="card-header">
@@ -181,4 +351,4 @@
         });
     </script>
 </body>
-</html>
+</html>-->
