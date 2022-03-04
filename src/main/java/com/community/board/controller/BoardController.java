@@ -94,10 +94,6 @@ public class BoardController {
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
     public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
-        log.info(boardForm.getBoardTitle().toString());
-        log.info(boardForm.getTitle().toString());
-        log.info(boardForm.getWriter().toString());
-        log.info(boardForm.getContent().toString());
         if (errors.hasErrors()) {
             return "board/blogs";
         }
@@ -112,13 +108,17 @@ public class BoardController {
     public String boardDetail(@PathVariable long boardId, @CurrentUser Account account,
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
+
         boardService.viewUpdate(boardId, request, response);
+        Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
         Board detail = boardRepository.findByBid(boardId);
-        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
-        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
 
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
+
+        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
+        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
+
 
         // 게시물 작성자 account 불러오는 로직
         Board currentBoard = boardRepository.findByBid(boardId);
@@ -137,8 +137,14 @@ public class BoardController {
         model.addAttribute("replyRepo", replyReportRepository);
         model.addAttribute("recentlyBoards", recentlyBoards);
 
+        if (hasBoardError) {
+            return "board/board-error";
+        }
+
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
+        model.addAttribute(new BoardForm());
+
         return "board/blog-read";
     }
 
@@ -156,11 +162,25 @@ public class BoardController {
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트
-    @PostMapping("/board/detail/{boardId}")
-    public String boardUpdate(@PathVariable long boardId, BoardForm boardForm, Model model) {
-        Board board = boardService.updateBoard(boardId, boardForm);
-        model.addAttribute("board", board);
-        return "redirect:/board/detail/{boardId}";
+    @ResponseBody
+    @RequestMapping(value = "/board/detail/update")
+    public void boardUpdate(BoardForm boardForm,
+                              @RequestParam(value = "bid") String bid,
+                              @RequestParam(value = "boardTitle") String boardTitle,
+                              @RequestParam(value = "writer") String writer,
+                              @RequestParam(value = "title") String title,
+                              @RequestParam(value = "content") String content) {
+        Long boardId = Long.valueOf(bid);
+        log.info("bid : " + bid);
+        log.info("boardTitle : " + boardTitle);
+        log.info("writer : " + writer);
+        log.info("title : " + title);
+        log.info("content : " + content);
+        boardForm.setBoardTitle(boardTitle);
+        boardForm.setWriter(writer);
+        boardForm.setTitle(title);
+        boardForm.setContent(content);
+        boardService.updateBoard(boardId, boardForm);
     }
 
     // 게시물 삭제
