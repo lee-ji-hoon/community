@@ -1,23 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
-<body class="bg-light">
-<nav th:replace="fragments.html :: main-nav"></nav>
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <div class="col-2">
-            <div th:replace="fragments.html :: settings-menu(currentMenu='withdraw')"></div>
-        </div>
-        <div class="col-8">
-            <div class="row">
-                <h2 class="col-12" style="color: red">회원 탈퇴</h2>
-            </div>
-            <div class="row">
-                <form class="needs-validation col-12" th:object="${withdrawForm}" th:action="@{/settings/withdraw}" method="post" novalidate>
-                    <div class="col-sm-12">
-                        <div class="form-group">
+
+<head th:replace="theme-fragments.html :: head"></head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: profile-settings-menu(currentMenu='withdraw')"></div>
+
+                <div class="lg:w-2/3">
+                    <div class="lg:px-10 lg:py-6 p-6" style="padding-bottom: 0.5rem" th:fragment="profile-form">
+                        <h3 class="font-bold mb-2 text-xl">회원탈퇴</h3>
+                        <p class="text-red-500">한 번 삭제한 계정은 다시 복구가 불가능합니다. </p>
+                    </div>
+                    <form class="needs-validation lg:py-8 lg:px-20 flex-1 space-y-4 p-6" action="#"
+                          th:object="${withdrawForm}"
+                          th:action="@{/settings/withdraw}"
+                          method="post" novalidate>
+                        <div class="col-span-2">
                             <label for="checkPassword">비밀번호 확인</label>
-                            <input id="checkPassword" type="password" th:field="*{checkPassword}" class="form-control"
+                            <input id="checkPassword" type="password" th:field="*{checkPassword}" class="shadow-none with-border"
                                    aria-describedby="checkPasswordHelp" required min="8" max="50">
                             <div th:if="${withdraw_message}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
                                 <small class="form-text text-danger" th:text="${withdraw_message}">비밀번호 확인</small>
@@ -26,10 +38,29 @@
                                 </button>
                             </div>
                             <small id="newPasswordHelp" class="form-text text-muted">
-                                계정 삭제를 위해서는 현재 비밀번호를 입력이 필요합니다.
+                                계정 삭제를 위해서는 <b>현재 비밀번호</b>를 입력이 필요합니다.
                             </small>
                             <small class="invalid-feedback">패스워드를 입력하세요.</small>
                             <small class="form-text text-danger" th:if="${#fields.hasErrors('checkPassword')}" th:errors="*{checkPassword}">checkPassword Error</small>
+                        </div>
+                        <button type="submit" aria-describedby="submitHelp" class="button"> 탈퇴 </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!--<div class="col-8">
+            <div class="row">
+                <h2 class="col-12" style="color: red">회원 탈퇴</h2>
+            </div>
+            <div class="row">
+                <form class="needs-validation col-12" th:object="${withdrawForm}" th:action="@{/settings/withdraw}" method="post" novalidate>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+
                         </div>
                         <div class="alert alert-danger" role="alert">
                             한 번 삭제된 계정은 다시 복구가 불가능합니다.
@@ -43,7 +74,7 @@
         </div>
     </div>
     <div th:replace="fragments.html :: footer"></div>
-</div>
+</div>-->
 <script th:replace="fragments.html :: form-validation"></script>
 </body>
 </html>

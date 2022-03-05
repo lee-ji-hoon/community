@@ -142,6 +142,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfileBanner(Account account, ProfileForm profileForm) {
+
         account.setBannerImage(profileForm.getProfileBanner());
         accountRepository.save(account);
     }

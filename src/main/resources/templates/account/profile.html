@@ -56,39 +56,40 @@
                         <div class="form-group">
                             <input id="profileBanner" type="hidden" th:field="*{profileBanner}" class="form-control" />
                         </div>
-                    <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex" th:if="${isOwner}">
-                        <div class="custom-file">
-                            <label for="profile-image-file" id="update-banner"
-                                   class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                                <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
-                                배너 이미지 수정
-                            </label>
-                            <input type="file" id="profile-image-file" name="uploadfile" accept="*">
-                        </div>
-                        <span id="cut-button"
-                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                            자르기
-                        </span>
-                        <span id="confirm-button"
-                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                            확인
-                        </span>
-                        <span id="reset-button"
-                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                            취소
-                        </span>
+                        <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex" th:if="${isOwner}">
+                            <div class="custom-file">
+                                <label for="profile-image-file" id="update-banner"
+                                       class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                    <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
+                                    배너 이미지 수정
+                                </label>
+                                <input type="file" id="profile-image-file" name="uploadfile" accept="*">
+                            </div>
+                            <span id="cut-button"
+                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                자르기
+                            </span>
+                            <span id="confirm-button"
+                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                확인
+                            </span>
+                            <span id="reset-button"
+                               class="flex items-center justify-center h-8 px-3 bg-red-600
+                               rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                취소
+                            </span>
 
-                        <a type="submit" id="banner-submit"
-                           href="javascript:update_banner_form.submit();"
-                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                            <span> 저장 </span>
-                        </a>
-                        <a th:href="@{/settings/profile-settings}" id="update-profile"
-                           class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                            <ion-icon name="create-outline" class="text-xl"></ion-icon>
-                            <span> 프로필 수정 </span>
-                        </a>
-                    </div>
+                            <a type="submit" id="banner-submit"
+                               href="javascript:update_banner_form.submit();"
+                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                <span> 저장 </span>
+                            </a>
+                            <a th:href="@{/settings/profile-settings}" id="update-profile"
+                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                                <ion-icon name="create-outline" class="text-xl"></ion-icon>
+                                <span> 프로필 수정 </span>
+                            </a>
+                        </div>
                     </form>
                 </div>
 
