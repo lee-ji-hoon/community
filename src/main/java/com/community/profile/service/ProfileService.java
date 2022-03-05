@@ -5,6 +5,7 @@ import com.community.account.repository.AccountRepository;
 import com.community.account.AccountService;
 import com.community.account.repository.PersistentLoginsRepository;
 import com.community.board.repository.BoardRepository;
+import com.community.profile.form.ProfileImgForm;
 import com.community.zone.Zone;
 import com.community.profile.form.NotificationsForm;
 import com.community.profile.form.ProfileForm;
@@ -38,7 +39,6 @@ public class ProfileService {
         account.setBio(profile.getBio());
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
-        account.setProfileImage(profile.getProfileImage());
 
         accountRepository.save(account);
     }
@@ -112,6 +112,11 @@ public class ProfileService {
     public void removeZone(Account account, Zone zone) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getZones().remove(zone));
+    }
+
+    public void updateProfileImage(Account account, ProfileForm profileForm) {
+        account.setProfileImage(profileForm.getProfileImage());
+        accountRepository.save(account);
     }
 
     /*public void updateBannerImage(Account account, byte[] profileBannerImage) {

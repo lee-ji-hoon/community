@@ -4,6 +4,13 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head">
+    <style>
+        .tagify-outside{
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
             integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
@@ -183,8 +190,8 @@
                                             <img src="" alt="">
                                         </div>
                                         <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
+                                            <i class="icon-feather-thumbs-up"></i>
+                                        </span>
                                         <div class="drop_text">
                                             <p>
                                                 <strong>Adrian Mohani</strong> Like Your Comment On Video
@@ -260,7 +267,7 @@
                             설정
                         </a>
                         <hr>
-                        <a href="group-feed.html">
+                        <!--<a href="group-feed.html">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z"  clip-rule="evenodd" />
                             </svg>
@@ -269,7 +276,7 @@
                         <a href="group-feed.html">
                             <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
                             My Billing
-                        </a>
+                        </a>-->
                         <a href="#" id="night-mode" class="btn-night-mode">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -478,6 +485,21 @@
     </script>
 </div>
 
+<div th:fragment="profile-settings-menu (currentMenu)" class="lg:w-1/3">
+    <nav class="responsive-nav setting-nav setting-menu"
+         uk-sticky="top:30 ; offset:80 ; media:@m ;bottom:true; animation: uk-animation-slide-top">
+        <h4 class="mb-0 p-3 uk-visible@m hidden"> Setting Navigation </h4>
+        <ul>
+            <li class="" th:classappend="${currentMenu == 'profile'}? uk-active"><a href="#" th:href="@{/settings/profile-settings}"> <i class="uil-user"></i>프로필</a></li>
+            <li class="" th:classappend="${currentMenu == 'profile-img'}? uk-active" ><a href="#" th:href="@{/settings/profile-img}"> <i class="uil-scenery"></i>사진변경</a></li>
+            <li class="" th:classappend="${currentMenu == 'tag'}? uk-active"><a href="#" th:href="@{/settings/tags}"> <i class="icon-material-outline-local-offer"></i> 태그</a></li>
+<!--            <li class="" th:classappend="${currentMenu == 'zones'}? uk-active"><a href="#" th:href="@{/settings/zones}"> <i class="icon-material-outline-location-on"></i> 지역</a></li>-->
+            <li class="" th:classappend="${currentMenu == 'notifications'}? uk-active"><a href="#" th:href="@{/settings/notifications}"> <i class="icon-material-baseline-notifications-none"></i> 알림</a></li>
+            <li class="" th:classappend="${currentMenu == 'password'}? uk-active"><a href="#" th:href="@{/settings/password}"> <i class="uil-unlock-alt"></i> 패스워드 </a></li>
+            <li class="" th:classappend="${currentMenu == 'withdraw'}? uk-active"><a href="#" th:href="@{/settings/withdraw}"> <i class="uil-trash-alt"></i> 회원탈퇴</a></li>
+        </ul>
+    </nav>
+</div>
 
 
 
@@ -489,15 +511,7 @@
     </div>
 </footer>
 
-<div th:fragment="settings-menu (currentMenu)" class="list-group">
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" href="#" th:href="@{/settings/profile-settings}">프로필</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" href="#" th:href="@{/settings/password}">패스워드</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" href="#" th:href="@{/settings/notifications}">알림</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active" href="#" th:href="@{/settings/tags}">관심 주제</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active" href="#" th:href="@{/settings/zones}">활동 지역</a>
-    <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'account'}? active" href="#" th:href="@{/settings/account}">계정</a>
-    <a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'withdraw'}? active" href="#" th:href="@{/settings/withdraw}">탈퇴</a>
-</div>
+
 
 <script type="application/javascript" th:fragment="form-validation">
     (function () {

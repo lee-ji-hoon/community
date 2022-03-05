@@ -17,6 +17,7 @@ import com.community.zone.ZoneForm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,11 +41,15 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ProfileController {
     private final ProfileService profileService;
 
     private static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile-settings";
     private static final String SETTINGS_PROFILE_URL = "/settings/profile-settings";
+
+    private static final String SETTINGS_PROFILE_IMG_VIEW_NAME = "settings/profile-img";
+    private static final String SETTINGS_PROFILE_IMG_URL = "/settings/profile-img";
 
     private static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
     private static final String SETTINGS_PASSWORD_URL = "/settings/password";
@@ -103,6 +109,31 @@ public class ProfileController {
         profileService.updateProfile(account, profile);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:" + SETTINGS_PROFILE_URL;
+    }
+
+    // 프로필 이미지 변경
+    @GetMapping(SETTINGS_PROFILE_IMG_URL)
+    public String updateProfileImageForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new ProfileForm(account));
+
+        return SETTINGS_PROFILE_IMG_VIEW_NAME;
+    }
+
+    // 프로필 이미지 변경 요청
+    @PostMapping(SETTINGS_PROFILE_IMG_URL)
+    public String updateProfileImageForm(@CurrentUser Account account, ProfileForm profileForm,
+                                         Model model, Errors errors, RedirectAttributes redirectAttributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS_PROFILE_IMG_VIEW_NAME;
+        }
+
+        log.info(profileForm.getProfileImage());
+        profileService.updateProfileImage(account, profileForm);
+        redirectAttributes.addFlashAttribute("message", "프로필이미지를 수정했습니다.");
+
+        return "redirect:" + SETTINGS_PROFILE_IMG_URL;
     }
 
     // 패스워드 변경 페이지
@@ -206,7 +237,7 @@ public class ProfileController {
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
 
         List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
+        model.addAttribute("tagList", objectMapper.writeValueAsString(allTags));
 
         return SETTINGS_TAGS_VIEW_NAME;
     }
@@ -244,7 +275,7 @@ public class ProfileController {
         model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
 
         List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        model.addAttribute("zoneList", objectMapper.writeValueAsString(allZones));
 
         return SETTINGS_ZONES_VIEW_NAME;
     }
