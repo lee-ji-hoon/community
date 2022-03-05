@@ -25,7 +25,7 @@
                             <div class="flex-1">
                                 <h2 class="text-2xl font-semibold"> Blog </h2>
                                 <nav class="responsive-nav md:m-0 -mx-4 style-2">
-                                    <ul>
+                                    <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                         <li class="active"><a href="#" class="lg:px-2"> 🔥 Top5 🔥 </a></li>
                                         <li><a href="#" class="lg:px-2"> 자유게시판 </a></li>
                                         <li><a href="#" class="lg:px-2"> 신입생게시판 </a></li>
@@ -194,44 +194,158 @@
                         </div>
 
                         <div class="card divide-y divide-gray-100 px-4">
-                            
-                            <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
-                                <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
-                                    <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm"> 
-                                         <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
+                            <div class="uk-switcher" id="timeline-tab">
+                                <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
+                                        <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
+                                            <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                            <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
 
-                                         </div>
-                                    </div>
-                                </a>
-                                <div class="flex-1 lg:pt-0 pt-4">
-                                     
-                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                    <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
-                                    
-                                    <div class="flex items-center pt-3">
-                                        <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
-                                        <div class="flex items-center mx-4"> 
-                                            <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
-                                            <th:block th:if="${replyService.boardReplyPresent(board)}">
-                                                <div class="-space-x-2 flex items-center ml-1">
-                                                    <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                        <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                             th:data-jdenticon-value="${topReply.getAccount().nickname}"
-                                                             alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
-                                                        <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                             th:src="${topReply.getAccount()?.profileImage}"
-                                                             alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
-                                                    </div>
-                                                </div>
-                                            </th:block>
-
+                                            </div>
                                         </div>
-                                        <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                                    </a>
+                                    <div class="flex-1 lg:pt-0 pt-4">
+
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
+                                        <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
+
+                                        <div class="flex items-center pt-3">
+                                            <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
+                                            <div class="flex items-center mx-4">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
+                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                    <div class="-space-x-2 flex items-center ml-1">
+                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                            <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:data-jdenticon-value="${topReply.getAccount().nickname}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:src="${topReply.getAccount()?.profileImage}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+
+                                            </div>
+                                            <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                                        </div>
+
                                     </div>
-        
                                 </div>
+                                <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
+                                        <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
+                                            <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                            <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="flex-1 lg:pt-0 pt-4">
+
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
+                                        <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
+
+                                        <div class="flex items-center pt-3">
+                                            <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
+                                            <div class="flex items-center mx-4">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
+                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                    <div class="-space-x-2 flex items-center ml-1">
+                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                            <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:data-jdenticon-value="${topReply.getAccount().nickname}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:src="${topReply.getAccount()?.profileImage}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+
+                                            </div>
+                                            <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
+                                        <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
+                                            <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                            <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="flex-1 lg:pt-0 pt-4">
+
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
+                                        <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
+
+                                        <div class="flex items-center pt-3">
+                                            <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
+                                            <div class="flex items-center mx-4">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
+                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                    <div class="-space-x-2 flex items-center ml-1">
+                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                            <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:data-jdenticon-value="${topReply.getAccount().nickname}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:src="${topReply.getAccount()?.profileImage}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+
+                                            </div>
+                                            <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
+                                        <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
+                                            <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                            <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="flex-1 lg:pt-0 pt-4">
+
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
+                                        <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
+
+                                        <div class="flex items-center pt-3">
+                                            <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
+                                            <div class="flex items-center mx-4">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
+                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                    <div class="-space-x-2 flex items-center ml-1">
+                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                            <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:data-jdenticon-value="${topReply.getAccount().nickname}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                 th:src="${topReply.getAccount()?.profileImage}"
+                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                        </div>
+                                                    </div>
+                                                </th:block>
+
+                                            </div>
+                                            <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
+                            
                         </div>
 
                     </div>
