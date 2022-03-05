@@ -235,7 +235,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('자유게시판')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
@@ -274,7 +274,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('신입생게시판')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
@@ -313,7 +313,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('졸업생게시판')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">

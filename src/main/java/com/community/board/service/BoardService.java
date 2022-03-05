@@ -193,6 +193,10 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    public List<Board> boardTitleList(String boardTitle) {
+        return boardRepository.findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
+    }
+
     public void viewUpdate(long id, HttpServletRequest request, HttpServletResponse response) {
         Cookie viewCookie=null;
         Cookie[] cookies=request.getCookies();
