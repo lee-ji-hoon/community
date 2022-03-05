@@ -150,7 +150,7 @@ public class BoardController {
 
     /* 게시물 수정 및 관련 */
     // 게시글 수정
-    @GetMapping("/board/{boardId}/edit")
+    @GetMapping("/board/detail/{boardId}/edit")
     public String boardUpdateForm(@PathVariable long boardId, @CurrentUser Account account , Model model) {
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriterId())) {
@@ -158,40 +158,44 @@ public class BoardController {
             model.addAttribute("board", board);
             return "board/edit";
         }
-        return "redirect:/board/detail/{boardId}";
+        return "board/board-error";
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
     @RequestMapping(value = "/board/detail/update")
-    public void boardUpdate(BoardForm boardForm,
+    public void boardUpdate(BoardForm boardForm, @CurrentUser Account account,
                               @RequestParam(value = "bid") String bid,
                               @RequestParam(value = "boardTitle") String boardTitle,
                               @RequestParam(value = "writer") String writer,
                               @RequestParam(value = "title") String title,
                               @RequestParam(value = "content") String content) {
         Long boardId = Long.valueOf(bid);
-        log.info("bid : " + bid);
-        log.info("boardTitle : " + boardTitle);
-        log.info("writer : " + writer);
-        log.info("title : " + title);
-        log.info("content : " + content);
-        boardForm.setBoardTitle(boardTitle);
-        boardForm.setWriter(writer);
-        boardForm.setTitle(title);
-        boardForm.setContent(content);
-        boardService.updateBoard(boardId, boardForm);
+        Board board = boardRepository.findByBid(boardId);
+        if (account.getId().equals(board.getWriterId())) {
+            log.info("bid : " + bid);
+            log.info("boardTitle : " + boardTitle);
+            log.info("writer : " + writer);
+            log.info("title : " + title);
+            log.info("content : " + content);
+            boardForm.setBoardTitle(boardTitle);
+            boardForm.setWriter(writer);
+            boardForm.setTitle(title);
+            boardForm.setContent(content);
+            boardService.updateBoard(boardId, boardForm);
+        }
+        log.info("잘못된 게시물 수정 요청 : bid = " + boardId + " accountId = " + account.getId());
     }
 
     // 게시물 삭제
-    @GetMapping("/board/{boardId}/delete")
+    @GetMapping("/board/detail/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account) {
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriterId())) {
             boardRepository.delete(currentBoard);
             return "redirect:/board";
         }
-        return "redirect:/board/detail/{boardId}";
+        return "board/board-error";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.
