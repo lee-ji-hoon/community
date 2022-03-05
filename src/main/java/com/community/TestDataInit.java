@@ -55,7 +55,6 @@ public class TestDataInit {
                     "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산",  null, null, true, true,
                     true, true, true, true, null, null));
             boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목",null, null, false, 0,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusHours(1), null));
-            boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목",null,null, false,0,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now(), null));
         }
 
         if (!accountRepository.existsByStudentId("17-100444")) {
@@ -64,7 +63,6 @@ public class TestDataInit {
                     "hello", "https://github.com/Jwhyee", "대학생", "경기도, 수원", null, null, true, true,
                     true, true, true, true, null, null));
             boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목",null, null, false, 0,BOARD_CONTENT_VALUE2, "jwhy", 3L, 0, LocalDateTime.now().minusHours(1), null));
-            boardRepository.save(new Board(null, "정보공유게시판", "정보공유게시판 제목",null,null, false,0,BOARD_CONTENT_VALUE2, "jwhy", 3L, 0, LocalDateTime.now(), null));
         }
     }
 }

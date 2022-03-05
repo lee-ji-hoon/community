@@ -43,17 +43,6 @@ public class ReplyService {
         replyRepository.save(reply);
     }
 
-    /*public Board updateBoard(Long boardId, BoardForm boardForm) {
-        Board board = boardRepository.findAllByBid(boardId);
-        board.setTitle(boardForm.getTitle());
-        board.setBoardTitle(boardForm.getBoardTitle());
-        board.setContent(boardForm.getContent());
-        board.setWriter(boardForm.getWriter());
-        board.setUpdateTime(LocalDateTime.now());
-
-        return boardRepository.save(board);
-    }*/
-
     public int boardReplySize(Board board) {
         boolean isTrue = replyRepository.existsAllByBoard(board);
         if (isTrue) {
@@ -61,5 +50,20 @@ public class ReplyService {
             return replyList.size();
         }
         return 0;
+    }
+
+    public Boolean boardReplyPresent(Board board) {
+        Boolean isTrue = null;
+        List<Reply> replies = replyRepository.findAllByBoard(board);
+        if (replies.isEmpty()) {
+            isTrue = false;
+            return isTrue;
+        }
+        isTrue = true;
+        return isTrue;
+    }
+
+    public List<Reply> boardsReplyTop3List(Board board) {
+        return replyRepository.findTop3ByBoardOrderByUploadTimeDesc(board);
     }
 }

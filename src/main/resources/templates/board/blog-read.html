@@ -75,14 +75,6 @@
                                                                                    class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
 
                                                                         </div>
-                                                                        <div class="px-2 space-y-2">
-                                                                            <div class="font-semibold text-base"> 게시판 선택 </div>
-                                                                            <select class="selectpicker" th:value="${board.boardTitle}" name="boardTitle">
-                                                                                <option data-icon="icon-material-outline-assignment" value="자유게시판" th:selected="${board.boardTitle}=='자유게시판'">자유게시판</option>
-                                                                                <option data-icon="icon-material-outline-access-alarm" value="신입생게시판" th:selected="${board.boardTitle}=='신입생게시판'">신입생게시판</option>
-                                                                                <option data-icon="icon-material-outline-account-circle" value="졸업생게시판" th:selected="${board.boardTitle}=='졸업생게시판'">졸업생게시판</option>
-                                                                            </select>
-                                                                        </div>
                                                                         <div class="font-semibold text-lg"> Details </div>
                                                                         <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group d-none">
                                                                             <label for="writer" class="mb-0 ml-2 text-gray-600 text-sm">작성자</label>
@@ -90,6 +82,14 @@
                                                                                    th:value="${boardOwner.nickname}" name="writer" readonly
                                                                                    aria-describedby="writerHelp"
                                                                                    class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                                        </div>
+                                                                        <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
+                                                                            <label for="boardTitle" class="mb-0 ml-2 text-gray-600 text-sm">게시판 선택</label>
+                                                                            <select class="" th:value="${board.boardTitle}" name="boardTitle" id="boardTitle">
+                                                                                <option data-icon="icon-material-outline-assignment" value="자유게시판" th:selected="${board.boardTitle}=='자유게시판'">자유게시판</option>
+                                                                                <option data-icon="icon-material-outline-access-alarm" value="신입생게시판" th:selected="${board.boardTitle}=='신입생게시판'">신입생게시판</option>
+                                                                                <option data-icon="icon-material-outline-account-circle" value="졸업생게시판" th:selected="${board.boardTitle}=='졸업생게시판'">졸업생게시판</option>
+                                                                            </select>
                                                                         </div>
                                                                         <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
                                                                             <label for="title" class="mb-0 ml-2 text-gray-600 text-sm">Title</label>
@@ -121,7 +121,7 @@
                                                                     </div>
 
                                                                     <div class="flex space-x-2">
-                                                                        <a th:href="@{/board/{boardId}/delete(boardId=${board.bid})}"
+                                                                        <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}"
                                                                            class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                                                                             Delete </a>
                                                                         <button
@@ -363,7 +363,6 @@
                     success : function (){
                         console.log("Board Update Success");
                         $('.form_refresh').load(window.location.href+' .form_refresh');
-                        UIkit.modal('create-post-modal').hide();
                     },
                     error : function (request, status, error){
                         console.log("Board Update " + error);
