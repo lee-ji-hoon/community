@@ -112,7 +112,7 @@ public class BoardController {
         model.addAttribute("account", account);
         Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
         if (hasBoardError) {
-            return "board/board-error";
+            return "error-page";
         }
 
         boardService.viewUpdate(boardId, request, response);
@@ -195,7 +195,7 @@ public class BoardController {
             boardRepository.delete(currentBoard);
             return "redirect:/board";
         }
-        return "board/board-error";
+        return "error-page";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.
