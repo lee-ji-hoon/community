@@ -224,13 +224,21 @@
                                         <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
                                         <div class="flex items-center mx-4"> 
                                             <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
-                                            <div class="-space-x-2 flex items-center ml-1">
-                                                <img alt="Image placeholder" src="/assets/images/avatars/avatar-6.jpg" class="border-2 border-white rounded-full w-7">
-                                                <img alt="Image placeholder" src="/assets/images/avatars/avatar-5.jpg" class="border-2 border-white rounded-full w-7">
-                                                <img alt="Image placeholder" src="/assets/images/avatars/avatar-2.jpg" class="border-2 border-white rounded-full w-7">
-                                            </div> 
+                                            <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                <div class="-space-x-2 flex items-center ml-1">
+                                                    <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                        <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                             th:data-jdenticon-value="${topReply.getAccount().nickname}"
+                                                             alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                        <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                             th:src="${topReply.getAccount()?.profileImage}"
+                                                             alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                    </div>
+                                                </div>
+                                            </th:block>
+
                                         </div>
-                                        <div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>
+                                        <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
                                     </div>
         
                                 </div>

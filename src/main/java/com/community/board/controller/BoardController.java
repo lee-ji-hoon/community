@@ -150,7 +150,7 @@ public class BoardController {
 
     /* 게시물 수정 및 관련 */
     // 게시글 수정
-    @GetMapping("/board/detail/{boardId}/edit")
+    /*@GetMapping("/board/detail/{boardId}/edit")
     public String boardUpdateForm(@PathVariable long boardId, @CurrentUser Account account , Model model) {
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriterId())) {
@@ -159,7 +159,7 @@ public class BoardController {
             return "board/edit";
         }
         return "board/board-error";
-    }
+    }*/
 
     // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
