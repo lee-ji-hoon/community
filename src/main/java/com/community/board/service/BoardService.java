@@ -5,7 +5,6 @@ import com.community.board.repository.BoardRepository;
 import com.community.board.entity.Board;
 import com.community.board.form.BoardForm;
 import com.community.like.LikeRepository;
-import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +24,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -230,6 +230,17 @@ public class BoardService {
             String value=viewCookie.getValue();
             log.info("viewCookie Check Logic : exist Cookie Value = " + value);
         }
+    }
+
+    public Boolean boardReportedOrNull(long bid) {
+        Boolean errorBoard = null;
+        Optional<Board> currentBoard = boardRepository.findById(bid);
+        if (currentBoard.isEmpty() || currentBoard.get().getIsReported().equals(true)) {
+            errorBoard = true;
+            return errorBoard;
+        }
+        errorBoard = false;
+        return errorBoard;
     }
 
 }
