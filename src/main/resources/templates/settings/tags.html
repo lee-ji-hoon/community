@@ -1,32 +1,61 @@
+
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
-<body class="bg-light">
-<div th:replace="fragments.html :: main-nav"></div>
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <div class="col-2">
-            <div th:replace="fragments.html :: settings-menu(currentMenu='tags')"></div>
-        </div>
-        <div class="col-8">
-            <div class="row">
-                <h2 class="col-12">관심있는 스터디 주제</h2>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="alert alert-info" role="alert">
-                        참여하고 싶은 스터디 주제를 입력해 주세요. 해당 주제의 스터디가 생기면 알림을 받을 수 있습니다. 태그를 입력하고 콤마(,)
-                        또는 엔터를 입력하세요.
+
+<head th:replace="theme-fragments.html :: head"></head>
+<style>
+    .tagify-outside{
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+    .tagify__input {
+        outline: none;
+        font-size: 15px;
+        color: #808080;
+        width: 30%;
+        background-color: #fff;
+        font-weight: 400;
+        opacity: 1;
+        border-radius: 3px;
+        border: 1px solid #e0e0e0;
+        padding: 5px;
+    }
+</style>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: profile-settings-menu(currentMenu='tag')"></div>
+
+                <div class="lg:w-2/3">
+                    <div class="lg:px-10 lg:py-6 p-6" style="padding-bottom: 0.5rem">
+                        <h3 class="font-bold mb-2 text-xl">태그</h3>
+                        <p class=""> 본인이 관심있거나 공부하고 있는 주제를 입력해주세요. </p>
+                        <div class="" id="tagList" th:text="${tagList}" hidden></div>
+                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
+                               placeholder="태그를 입력해주세요"
+                               class="tagify-outside" aria-describedby="tagHelp" style="background-color: black"/>
                     </div>
-                    <div id="whitelist" th:text="${whitelist}" hidden></div>
-                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
-                           class="tagify-outside" aria-describedby="tagHelp"/>
+
+                    <div class="alert alert-info alert-dismissible fade show m-5" data-closable role="alert">
+                        <span>태그로 등록된 게시물이 생기면 알람을 드립니다.</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div th:replace="fragments.html :: footer"></div>
 </div>
+
 <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
     $(function() {
@@ -67,7 +96,7 @@
 
         var tagify = new Tagify(tagInput, {
             pattern: /^.{0,20}$/,
-            whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+            tagList: JSON.parse(document.querySelector("#tagList").textContent),
             dropdown : {
                 enabled: 1, // suggest tags after a single character input
             } // map tags

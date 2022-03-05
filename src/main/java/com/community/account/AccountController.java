@@ -137,7 +137,7 @@ public class AccountController {
     public String updateBanner(@CurrentUser Account account, @PathVariable String nickname,
                                RedirectAttributes redirectAttributes, Model model, ProfileForm profileForm) {
         accountService.updateProfileBanner(account, profileForm);
-        redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
+        redirectAttributes.addFlashAttribute("message", "프로필을 수정했습니다.");
 
         return "redirect:/profile/{nickname}";
     }
