@@ -5,11 +5,150 @@
 
 <head th:fragment="head">
     <style>
+        .custom-file label {
+            color: white;
+            cursor: pointer;
+        }
+
+        .custom-file input[type="file"] {  /* 파일 필드 숨기기 */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip:rect(0,0,0,0);
+            border: 0;
+        }
         .tagify-outside{
             border: 0;
             padding: 0;
             margin: 0;
         }
+
+        /* 툴팁 기본 스타일 설정 시작 */
+
+        .tooltip {
+            position: relative;
+            display: block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 100px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            font-size: 12px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+
+        /* 툴팁 기본 스타일 설정 끝 */
+
+        /* -------------------------- */
+
+        /* 툴팁 화살표 기본 스타일 설정 시작 */
+
+        .tooltip .tooltiptext::after {
+            content: " ";
+            position: absolute;
+            border-style: solid;
+            border-width: 5px;
+        }
+
+        /* 툴팁 화살표 기본 스타일 설정 끝 */
+
+
+        /* 툴팁 화살표 기본 스타일 설정 시작 */
+
+        .tooltip .tooltiptext::after {
+            content: " ";
+            position: absolute;
+            border-style: solid;
+            border-width: 5px;
+        }
+
+        /* 툴팁 화살표 기본 스타일 설정 끝 */
+
+        /* -------------------------- */
+
+        /* 툴팁 방향 설정 시작 */
+
+        /* 왼쪽 툴팁 시작 */
+
+        .tooltip .tooltip-left {
+            top: -5px;
+            right: 105%;
+        }
+
+        .tooltip .tooltip-left::after {
+            top: 50%;
+            left: 100%;
+            margin-top: -5px;
+            border-color: transparent transparent transparent black;
+        }
+
+        /* 왼쪽 툴팁 끝 */
+
+        /* 오른쪽 툴팁 시작 */
+
+        .tooltip .tooltip-right {
+            top: -5px;
+            left: 105%;
+        }
+
+        .tooltip .tooltip-right::after {
+            top: 50%;
+            right: 100%;
+            margin-top: -5px;
+            border-color: transparent black transparent transparent;
+        }
+
+        /* 오른쪽 툴팁 끝 */
+
+        /* 위쪽 툴팁 시작 */
+
+        .tooltip .tooltip-top {
+            width: 120px;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -60px;
+        }
+
+        .tooltip .tooltip-top::after {
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-color: black transparent transparent transparent;
+        }
+
+        /* 아래쪽 툴팁 시작 */
+
+        .tooltip .tooltip-bottom {
+            width: 120px;
+            top: 150%;
+            left: 50%;
+            margin-left: -60px;
+        }
+
+
+        .tooltip .tooltip-bottom::after {
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-color: transparent transparent black transparent;
+        }
+
+        /* 아래쪽 툴팁 시작 */
+
+        /* 아래쪽 툴팁 끝 */
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
@@ -70,12 +209,16 @@
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"></script>
+    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
+    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 
     <!-- css -->
     <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">-->
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css">
     <link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
+    <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -499,18 +642,6 @@
     </nav>
 </div>
 
-
-
-<!-- 아래부터는 기존에 있던 fragments -->
-
-<footer th:fragment="footer" class="page-footer font-small blue">
-    <div class="footer-copyright text-center py-3">© 2022 Copyright:
-        <a href="https://github.com/lee-ji-hoon/community">LeeJiHoon / KaJunYoung</a>
-    </div>
-</footer>
-
-
-
 <script type="application/javascript" th:fragment="form-validation">
     (function () {
         'use strict';
@@ -533,6 +664,16 @@
     }())
 </script>
 
+
+<!-- 아래부터는 기존에 있던 fragments -->
+
+<footer th:fragment="footer" class="page-footer font-small blue">
+    <div class="footer-copyright text-center py-3">© 2022 Copyright:
+        <a href="https://github.com/lee-ji-hoon/community">LeeJiHoon / KaJunYoung</a>
+    </div>
+</footer>
+
+
 <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf">
     $(function() {
         var csrfToken = /*[[${_csrf.token}]]*/ null;
@@ -542,12 +683,6 @@
         });
     });
 </script>
-
-<div th:fragment="study-banner" th:if="${study.useBanner}" class="row" id="study-logo" style="float: none; margin: 0 auto">
-    <div class="row" style="float:none; margin: 0 auto">
-        <img th:src="${study.image}"/>
-    </div>
-</div>
 
 <div th:fragment="study-info">
     <div class="row pt-4 text-left justify-content-center bg-light">
@@ -656,70 +791,6 @@
                         <small class="invalid-feedback">글을 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
                     </div>
-
-                    <!--
-                    <div class="keywords-container">
-                        <div class="keyword-input-container shadow-none">
-                            <input type="text" class="keyword-input with-border" placeholder="Add Keywords" />
-                            <button type="button" class="keyword-input-button ripple-effect">
-                                <i class="icon-feather-plus"></i></button>
-                        </div>
-                        <div class="keywords-list">
-                        <span class="keyword">
-                        <span class="keyword-remove">Javascript</span>
-                        <span class="keyword-text"></span>
-                        </span>
-                            <span class="keyword">
-      <span class="keyword-remove">Node</span> <span class="keyword-text"></span>
-  </span>
-                            <span class="keyword">
-      <span class="keyword-remove">Typescript</span> <span class="keyword-text"></span>
-  </span>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div class="px-2 space-y-2">
-                        <div class="font-semibold text-base"> Playlists </div>
-                        <div> Add your video to one or more playlists. Playlists can help viewers discover your content
-                            faster. <a href="#" class="text-blue-500"> Learn more</a> </div>
-                        <select class="selectpicker">
-                            <option data-icon="icon-material-outline-assignment">Assignment</option>
-                            <option data-icon="icon-material-outline-access-alarm">Alarm</option>
-                            <option data-icon="icon-material-outline-account-circle">Account</option>
-                            <option data-icon="icon-material-outline-cake">Cake</option>
-                        </select>
-                    </div>
-
-                    <div class="px-2 space-y-2">
-                        <div class="font-semibold text-base"> Visibilty </div>
-                        <div> Manage your videos or your contents who want to see your videos and share with theme across
-                            the website. </div>
-                        <select class="selectpicker">
-                            <option data-icon="uil-bullseye"> Private </option>
-                            <option data-icon="uil-chat-bubble-user">My Following</option>
-                            <option data-icon="uil-layer-group-slash">Unlisted</option>
-                            <option data-icon="uil-globe" selected>Puplic</option>
-                        </select>
-                    </div>
-
-                    <div class="px-2 space-y-2">
-                        <div class="font-semibold text-base"> Age Restrict </div>
-                        <div> Do you want to restrict your video to an adult audience? </div>
-                        <div> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod
-                            tincidunt utmagna</div>
-                        <div class="flex flex-col">
-                            <div class="radio">
-                                <input id="radio-1" name="radio" type="radio" checked>
-                                <label for="radio-1"><span class="radio-label"></span> Yes, it's made for kids </label>
-                            </div>
-                            <div class="radio">
-                                <input id="radio-2" name="radio" type="radio">
-                                <label for="radio-2"><span class="radio-label"></span>No, it's not made for kids </label>
-                            </div>
-                        </div>
-                    </div>
-                    -->
                 </div>
 
             </div>
@@ -759,8 +830,6 @@
 
     </div>
 </div>
-
-
 
 <div th:fragment="study-settings-menu (currentMenu)" class="list-group">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
@@ -947,6 +1016,99 @@
     </script>
 </div>
 
+<script th:fragment="studyBanner" type="application/javascript">
+    $(function() {
+        cropper = '';
+        let $confirmBtn = $("#confirm-button");
+        let $resetBtn = $("#reset-button");
+        let $cutBtn = $("#cut-button");
+        let $saveBtn = $("#save-button");
+        let $newStudyImage = $("#new-study-image");
+        let $currentStudyImage = $("#current-study-image");
+        let $resultImage = $("#cropped-new-study-image");
+        let $studyImage = $("#studyImage");
+
+        $newStudyImage.hide();
+        $cutBtn.hide();
+        $resetBtn.hide();
+        $confirmBtn.hide();
+        $saveBtn.hide();
+
+        $("#study-image-file").change(function(e) {
+            if (e.target.files.length === 1) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    if (e.target.result) {
+                        if (!e.target.result.startsWith("data:image")) {
+                            alert("이미지 파일을 선택하세요.");
+                            return;
+                        }
+
+                        $currentStudyImage.hide();
+
+                        let img = document.createElement("img");
+                        img.id = 'new-study';
+                        img.src = e.target.result;
+                        img.width = 1000;
+                        img.height = 150;
+
+                        $newStudyImage.html(img);
+                        $newStudyImage.show();
+
+
+                        let $newImage = $(img);
+                        $newImage.cropper({aspectRatio: 3/1});
+                        cropper = $newImage.data('cropper');
+
+                        $cutBtn.show();
+                        $confirmBtn.hide();
+                        $resetBtn.show();
+                    }
+                };
+
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        $resetBtn.click(function() {
+            $currentStudyImage.show();
+            $newStudyImage.hide();
+            $resultImage.hide();
+            $resetBtn.hide();
+            $cutBtn.hide();
+            $confirmBtn.hide();
+            $saveBtn.hide();
+            $studyImage.val('');
+        });
+
+        $cutBtn.click(function () {
+            let dataUrl = cropper.getCroppedCanvas().toDataURL();
+
+            let newImage = document.createElement("img");
+            newImage.id = "cropped-new-study-image";
+            newImage.src = dataUrl;
+            newImage.width = 1000;
+            $resultImage.html(newImage);
+            $resultImage.show();
+            $confirmBtn.show();
+
+            $confirmBtn.click(function () {
+                $newStudyImage.html(newImage);
+                $cutBtn.hide();
+                $confirmBtn.hide();
+                $studyImage.val(dataUrl);
+                $saveBtn.show();
+            });
+        });
+
+        $saveBtn.click(function() {
+            $("#imageForm").submit();
+        })
+    });
+</script>
+
+
+
 <div th:fragment="study-list (studyList)" class="col-sm-12">
     <div class="row">
         <div class="col-md-4" th:each="study: ${studyList}">
@@ -980,6 +1142,100 @@
             </div>
         </div>
     </div>
+</div>
+
+<div th:fragment="study-menu (currentStudyMenu)" class="profile">
+    <div id="current-study-image">
+        <img class="rounded" th:src="${study.image}" width="100%" height="150px">
+    </div>
+    <div id="new-study-image"></div>
+    <div id="cropped-new-study-image" class="mt-3"></div>
+    <form id="imageForm" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/banner'}"
+          method="post" novalidate>
+        <div class="form-group">
+            <input id="studyImage" type="hidden" name="image" class="form-control" />
+        </div>
+    </form>
+    <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex"
+         th:if="${study.isManager(#authentication.principal)}">
+        <div class="custom-file">
+            <label for="study-image-file" id="update-banner"
+                   class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
+                배너 이미지 수정
+            </label>
+            <input type="file" id="study-image-file" name="uploadfile" accept="*">
+        </div>
+        <span id="cut-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+            자르기
+        </span>
+        <span id="confirm-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+            확인
+        </span>
+        <span class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5" id="save-button">
+            저장
+        </span>
+        <span id="reset-button" class="flex items-center justify-center h-8 px-3 bg-red-600 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+            취소
+        </span>
+    </div>
+
+
+    <div class="study_content">
+        <div class="study_info">
+            <h1 th:text="${study.title}"> Webinar - Raising ducks for egg production </h1>
+            <div class="flex space-x-2 items-center md:pt-3 text-base -mt-2 md:justify-start justify-center">
+                <div th:text="${study.shortDescription}"> Free</div>
+            </div>
+        </div>
+        <div class="items-center space-x-2 text-center grid grid-cols-4 tooltip"
+             th:attrappend="uk-countdown = ${study.limitMemberDate}"
+             uk-countdown="date: ">
+            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
+                <span class="uk-countdown-days text-lg font-bold"></span>
+                <span class="">일 </span>
+            </div>
+            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
+                <span class="uk-countdown-hours text-lg font-bold"></span>
+                <span class="">시 </span>
+            </div>
+            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
+                <span class="uk-countdown-minutes text-lg font-bold"></span>
+                <span class="">분 </span>
+            </div>
+            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
+                <span class=" uk-countdown-seconds text-lg font-bold"></span>
+                <span class="">초 </span>
+            </div>
+            <span class="tooltiptext tooltip-left">모집 남은 시간</span>
+        </div>
+    </div>
+    <div class="flex items-center space-x-4 lg:absolute bottom-0 right-0 p-3 z-10 justify-center">
+        <div th:if="${study.isJoinable(#authentication.principal)
+                                && !study.isLimitMember()
+                                || study.isMember(#authentication.principal)} ">
+            <a th:if="${study.isJoinable(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/join'}"
+               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-blue-600 text-white font-semibold space-x-1.5">
+                <span> 참여 </span>
+            </a>
+
+            <a th:if="${study.recruiting() && study.isMember(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/remove'}"
+               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-red-600 text-white font-semibold space-x-1.5">
+                <span> 탈퇴 </span>
+            </a>
+        </div>
+    </div>
+    <nav class="responsive-nav border-t -mb-0.5 lg:pl-2">
+        <ul>
+            <li th:classappend="${currentStudyMenu == 'view'}? active"><a th:href="@{'/study/' + ${study.path}}"> 소개</a></li>
+            <li th:classappend="${currentStudyMenu == 'meeting'}? active"><a href="#">모임</a></li>
+            <li th:if="${study.isManager(#authentication.principal)}"
+                th:classappend="${currentStudyMenu == 'settings'}? active"> <a th:href="@{'/study/' + ${study.path} + '/settings/description'}">설정</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 </html>
