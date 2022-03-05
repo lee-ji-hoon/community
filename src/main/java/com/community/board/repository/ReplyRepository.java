@@ -17,4 +17,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     List<Reply> findAllByBoard(Board board);
 
+    List<Reply> findTop3ByBoardOrderByUploadTimeDesc(Board board);
+
 }
