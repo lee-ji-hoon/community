@@ -2,6 +2,7 @@ package com.community.forum;
 
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ForumController {
 
     private final ForumService forumService;
+    private final BoardService boardService;
     private final ForumRepository forumRepository;
 
     @GetMapping("courses.html")
@@ -47,8 +49,9 @@ public class ForumController {
 
     @GetMapping("/forum/detail/{fid}")
     public String detailForum(@PathVariable Long fid, @CurrentUser Account account, Model model) {
+        model.addAttribute(boardService);
         model.addAttribute(account);
-        model.addAttribute(forumRepository.findByFid(fid));
+        model.addAttribute("forum", forumRepository.findByFid(fid));
         return "forum/forum-detail";
     }
 }

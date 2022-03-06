@@ -2,6 +2,11 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
+<style>
+    #forumTitlesub, #postTitleSub, #keywordListForm{
+        display: none;
+    }
+</style>
 <body>
 
     <div id="wrapper">
@@ -51,14 +56,30 @@
                             </div>
                             <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/forum/write" th:action="@{/forum/write}" th:object="${forumForm}" method="post" novalidate>
                                 <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
-                                    <div class="space-y-4 g:w-8/12">
-                                        <div class="font-semibold text-lg">종류 선택</div>
-                                        <div class="px-2 space-y-2">
-                                            <select class="selectpicker" id="selectBox" name="selectBox" th:field="*{forumTitle}" aria-describedby="forumTitleHelp">
-                                                <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
-                                                <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
-                                            </select>
+                                    <div class="grid grid-cols-2 mb-3">
+                                        <div>
+                                            <div class="font-semibold text-lg mb-2">종류 선택</div>
+                                            <div class="px-2 space-y-2">
+                                                <select class="selectpicker" id="selectBox" name="selectBox" th:field="*{forumTitle}" aria-describedby="forumTitleHelp">
+                                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <div id="forumTitlesub">
+                                            <div class="font-semibold text-lg mb-2">분야 선택</div>
+                                            <div class="px-2 space-y-2">
+                                                <select class="selectpicker" id="selectBoxSub" name="selectBox" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
+                                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
+                                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4 g:w-8/12">
                                         <div class="font-semibold text-lg"> Details </div>
                                         <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
                                             <label for="postTitle" class="mb-0 ml-2 text-gray-600 text-sm">Q&A Title</label>
@@ -69,6 +90,25 @@
                                             <small id="postTitleHelp" class="form-text text-muted">
                                                 제목은 5글자부터 최대 30글자까지 입력 가능합니다.
                                             </small>
+                                        </div>
+                                        <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group" id="postTitleSub">
+                                            <label for="postSubTitle" class="mb-0 ml-2 text-gray-600 text-sm">Forum SubTitle</label>
+                                            <input type="text" placeholder="정보에 대한 주제를 간단하게 요약해주세요." id="postSubtitle"
+                                                   th:field="*{postSubtitle}"
+                                                   aria-describedby="postSubtitleHelp" required
+                                                   class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                            <small id="postSubtitleHelp" class="form-text text-muted">
+                                                예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
+                                            </small>
+                                        </div>
+                                        <div class="keywords-container" id="keywordListForm">
+                                            <div class="keyword-input-container shadow-none">
+                                                <input type="text" class="keyword-input with-border" placeholder="Add Keywords" />
+                                                <button type="button" class="keyword-input-button ripple-effect">
+                                                    <i class="icon-feather-plus"></i></button>
+                                            </div>
+                                            <div class="keywords-list"></div>
+                                            <div class="clearfix"></div>
                                         </div>
                                         <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
                                             <label for="postContent" class="mb-0 ml-2 text-gray-600 text-sm"> Q&A Description</label>
@@ -114,7 +154,7 @@
                 <div class="divide-y card px-4">
                     <div class="uk-switcher" id="timeline-tab">
                         <div>
-                            <div class="flex md:space-x-6 space-x-4 md:py-5 py-3 relative" th:each="recentlyPosts : ${top5Posts}">
+                            <div class="flex md:space-x-6 space-x-4 md:py-5 py-3 relative--" th:each="recentlyPosts : ${top5Posts}">
                                 <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:w-64 md:h-40 w-36 h-24 overflow-hidden rounded-lg relative shadow-sm">
                                     <img src="assets/images/courses/img-5.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
                                     <th:block th:if="${recentlyPosts.getForumTitle().equals('qna')}">
@@ -325,21 +365,35 @@
     </div>
 <script>
     $( document ).ready( function() {
+        $('#postTitle').val('');
         jQuery('#selectBox').change(function() {
             var state = jQuery('#selectBox option:selected').val();
             if (state == 'qna') {
+                $('#postTitle').val('');
+                $('#postSubtitle').val('');
+                $('#postContent').val('');
+                $("#selectBoxSub").val("").prop("selected", true);
                 $('#postTitle').attr("placeholder", "무엇이 궁금한가요?");
                 $('#postContent').attr("placeholder", "궁금한 내용을 자세하게 설명해주세요.");
                 $("label[for='postTitle']").text('Q&A Title');
                 $("label[for='postContent']").text('Q&A Description');
                 $("#forum_head").text('Q&A 작성하기');
+                jQuery('#forumTitlesub').hide();
+                jQuery('#postTitleSub').hide();
+                jQuery('#keywordListForm').hide();
             }
             if (state == 'forum') {
-                $('#postTitle').attr("placeholder", "공유할 정보의 제목을 입력해주세요.");
+                $('#postTitle').val('');
+                $('#postSubtitle').val('');
+                $('#postContent').val('');
+                $("#selectBoxSub option:eq(1)").prop("selected", true);
+                $('#postTitle').attr("placeholder", "공유할 정보의 대제목을 입력해주세요.");
                 $('#postContent').attr("placeholder", "정보의 자세한 내용을 설명해주세요.");
                 $("label[for='postTitle']").text('Forum Title');
                 $("label[for='postContent']").text('Forum Description');
                 $("#forum_head").text('정보 작성하기');
+                jQuery('#forumTitlesub').show();
+                jQuery('#postTitleSub').show();
             }
         });
     });

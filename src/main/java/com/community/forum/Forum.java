@@ -21,11 +21,17 @@ public class Forum {
 
     private String forumTitle;
 
+    private String forumTitleSub;
+
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Account postWriter;
 
     private String postTitle;
+
+    private String postSubtitle;
+
+    private String keywordList;
 
     private LocalDateTime postUploadTime;
 

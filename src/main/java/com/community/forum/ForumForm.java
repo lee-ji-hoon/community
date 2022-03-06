@@ -13,8 +13,14 @@ public class ForumForm {
     @Length(min = 5, max = 30)
     private String postTitle;
 
+    private String postSubtitle;
+
     @NotBlank
     private String postContent;
 
     private String forumTitle;
+
+    private String forumTitleSub;
+
+    private String[] keywordList;
 }

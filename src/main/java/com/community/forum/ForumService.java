@@ -24,7 +24,9 @@ public class ForumService {
 
         Forum forum = Forum.builder()
                 .forumTitle(forumForm.getForumTitle())
+                .forumTitleSub(forumForm.getForumTitleSub())
                 .postTitle(forumForm.getPostTitle())
+                .postSubtitle(forumForm.getPostSubtitle())
                 .postWriter(account)
                 .isReported(false)
                 .postContent(forumForm.getPostContent())
