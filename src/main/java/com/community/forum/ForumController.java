@@ -23,7 +23,7 @@ public class ForumController {
     private final BoardService boardService;
     private final ForumRepository forumRepository;
 
-    @GetMapping("courses.html")
+    @GetMapping("/forum")
     public String forumMainPage(@CurrentUser Account account, Model model) {
         List<Forum> recentlyPosts = forumRepository.findAllTop5ByIsReportedOrderByPostUploadTime(false);
 
