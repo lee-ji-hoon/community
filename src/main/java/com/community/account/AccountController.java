@@ -114,21 +114,12 @@ public class AccountController {
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
         Account byAccount = accountService.getAccount(nickname);
         model.addAttribute(new ProfileForm(account));
-//        Account accountLoaded = accountRepository.findAccountWithTagsAndZonesById(account.getId());
-//        List<Board> boards = boardRepository.findAllByWriterIdOrderByUploadTime(byNickname.getId());
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
-        log.info(String.valueOf(byAccount));
         model.addAttribute(account);
-//        model.addAttribute(accountLoaded);
-        model.addAttribute(byAccount);
-//        model.addAttribute("studyManager", studyRepository.findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(account));
-//        model.addAttribute("studyMember", studyRepository.findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("byAccount", byAccount);
         model.addAttribute("isOwner", byAccount.equals(account));
-//        model.addAttribute("board", boards);
-//        model.addAttribute("likeService", likeService);
-//        model.addAttribute("boardService", boardService);
         return "account/profile";
     }
 
