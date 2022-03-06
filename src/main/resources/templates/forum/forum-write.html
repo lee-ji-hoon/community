@@ -50,6 +50,23 @@
                         <!-- form body -->
                         <div class="p-10 space-y-7">
                             <div>
+                                <label for="selectBox"> 유형 선택 </label>
+                                <select id="selectBox" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitle}">
+                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
+                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
+                                </select>
+                            </div>
+                            <div  id="forumTitlesub">
+                                <label for="selectBoxSub"> 전공 선택 </label>
+                                <select id="selectBoxSub" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
+                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
+                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                </select>
+                            </div>
+                            <div>
                                 <div class="line">
                                     <input class="line__input form-group" id="postTitle" th:field="*{postTitle}"
                                            type="text" onkeyup="this.setAttribute('value', this.value);"
@@ -70,23 +87,6 @@
                                 <small id="postSubtitleHelp" class="form-text text-muted">
                                     예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
                                 </small>
-                            </div>
-                            <div>
-                                <label for="selectBox"> 유형 선택 </label>
-                                <select id="selectBox" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitle}">
-                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
-                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
-                                </select>
-                            </div>
-                            <div  id="forumTitlesub">
-                                <label for="selectBoxSub"> 전공 선택 </label>
-                                <select id="selectBoxSub" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
-                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
-                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
-                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
-                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
-                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
-                                </select>
                             </div>
                             <div>
                                 <div class="form-group">

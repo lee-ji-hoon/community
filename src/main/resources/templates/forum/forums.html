@@ -61,7 +61,7 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${recentlyPosts.postTitle}"></a>
-                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${recentlyPosts.postContent}"></p>
+                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
                                     <a href="#" class="font-semibold block text-sm" th:text="${recentlyPosts.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
@@ -127,7 +127,7 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${qnaList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${qnaList.postTitle}"></a>
-                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${qnaList.postContent}"></p>
+                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${qnaList.postSubtitle}"></div>
                                     <a href="#" class="font-semibold block text-sm" th:text="${qnaList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
@@ -192,7 +192,7 @@
                                 </a>
                                 <div class="flex-1 space-y-2">
                                     <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${forumList.postTitle}"></a>
-                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:utext="${forumList.postContent}"></p>
+                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${forumList.postSubtitle}"></div>
                                     <a href="#" class="font-semibold block text-sm" th:text="${forumList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
