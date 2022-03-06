@@ -137,7 +137,7 @@ public class BoardService {
                     log.info(String.valueOf(boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword)));
                     return boardRepository.findByWriterContainingOrderByUploadTimeDesc(keyword);
             }
-        } else if (boardTitle.equals("자유게시판") || boardTitle.equals("정보공유게시판") || boardTitle.equals("신입생게시판") || boardTitle.equals("졸업생게시판")) {
+        } else if (boardTitle.equals("자유게시판") || boardTitle.equals("신입생게시판") || boardTitle.equals("졸업생게시판")) {
             switch (searchType) {
                 case "title":
                     log.info("검색 타입 = " + searchType);

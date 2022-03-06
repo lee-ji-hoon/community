@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<style>
+    #forumTitlesub, #postTitleSub, #keywordListForm{
+        display: none;
+    }
+</style>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header th:replace="theme-fragments.html :: header"></header>
+
+        <!-- sidebar -->
+        <div th:replace="theme-fragments.html :: side_bar"></div>
+
+        <!-- Main Contents -->
+        <div class="main_content">
+            <div class="mcontainer">
+
+                <div class="flex justify-between relative md:mb-4 mb-3">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-semibold"> Forum </h2>
+                        <nav class="responsive-nav border-b md:m-0 -mx-4">
+                            <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
+                                <li><a href="#" class="lg:px-2"> 최근 </a></li>
+                                <li><a href="#" class="lg:px-2"> Q&A </a></li>
+                                <li><a href="#" class="lg:px-2"> Forum </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0"
+                       data-tippy-placement="left" title="Create New Forum">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="md:block hidden"> Create </span>
+                    </a>
+                    <!-- Craete video post modal -->
+                    <div id="create-post-modal" class="create-post" uk-modal>
+                        <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
+
+                            <div class="py-4 border-b flex  justify-between px-6">
+                                <h3 class="text-lg font-semibold" id="forum_head"> Q&A 작성하기 </h3>
+                                <div>
+                                    <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                            type="button" uk-close>
+                                        <i class="icon-feather-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/forum/write" th:action="@{/forum/write}" th:object="${forumForm}" method="post" novalidate>
+                                <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
+                                    <div class="grid grid-cols-2 mb-3">
+                                        <div>
+                                            <div class="font-semibold text-lg mb-2">종류 선택</div>
+                                            <div class="px-2 space-y-2">
+                                                <select class="selectpicker" id="selectBox" name="selectBox" th:field="*{forumTitle}" aria-describedby="forumTitleHelp">
+                                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="forumTitlesub">
+                                            <div class="font-semibold text-lg mb-2">분야 선택</div>
+                                            <div class="px-2 space-y-2">
+                                                <select class="selectpicker" id="selectBoxSub" name="selectBox" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
+                                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
+                                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-4 g:w-8/12">
+                                        <div class="font-semibold text-lg"> Details </div>
+                                        <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
+                                            <label for="postTitle" class="mb-0 ml-2 text-gray-600 text-sm">Q&A Title</label>
+                                            <input type="text" placeholder="무엇이 궁금한가요?" id="postTitle"
+                                                   th:field="*{postTitle}"
+                                                   aria-describedby="postTitleHelp" required
+                                                   class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                            <small id="postTitleHelp" class="form-text text-muted">
+                                                제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                            </small>
+                                        </div>
+                                        <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group" id="postTitleSub">
+                                            <label for="postSubTitle" class="mb-0 ml-2 text-gray-600 text-sm">Forum SubTitle</label>
+                                            <input type="text" placeholder="정보에 대한 주제를 간단하게 요약해주세요." id="postSubtitle"
+                                                   th:field="*{postSubtitle}"
+                                                   aria-describedby="postSubtitleHelp" required
+                                                   class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                            <small id="postSubtitleHelp" class="form-text text-muted">
+                                                예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
+                                            </small>
+                                        </div>
+                                        <div class="keywords-container" id="keywordListForm">
+                                            <div class="keyword-input-container shadow-none">
+                                                <input type="text" class="keyword-input with-border" placeholder="Add Keywords" />
+                                                <button type="button" class="keyword-input-button ripple-effect">
+                                                    <i class="icon-feather-plus"></i></button>
+                                            </div>
+                                            <div class="keywords-list"></div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
+                                            <label for="postContent" class="mb-0 ml-2 text-gray-600 text-sm"> Q&A Description</label>
+                                            <textarea type="text" rows="5" placeholder="궁금한 내용을 자세하게 설명해주세요." id="postContent"
+                                                      th:field="*{postContent}"
+                                                      aria-describedby="postContentHelp" required
+                                                      class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
+                                            <small id="postContentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                                            <small class="invalid-feedback">글을 입력해주세요.</small>
+                                            <small class="form-text text-danger">content Error</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="flex items-center w-full justify-between p-3 border-t">
+                                    <div class="flex items-center space-x-2">
+
+                                        <div></div>
+
+                                    </div>
+
+                                    <div class="flex space-x-2">
+                                        <a href="#"
+                                           class="uk-modal-close bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+                                            Cancel </a>
+                                        <button type="submit"
+                                                id = "board_form_send"
+                                                class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                                            Post </button>
+                                    </div>
+
+                                    <button type="submit" hidden
+                                            class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold">
+                                        Post </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divide-y card px-4">
+                    <div class="uk-switcher" id="timeline-tab">
+                        <div>
+                            <div class="flex md:space-x-6 space-x-4 md:py-5 py-3 relative--" th:each="recentlyPosts : ${top5Posts}">
+                                <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:w-64 md:h-40 w-36 h-24 overflow-hidden rounded-lg relative shadow-sm">
+                                    <img src="assets/images/courses/img-5.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                    <th:block th:if="${recentlyPosts.getForumTitle().equals('qna')}">
+                                        <div class="absolute bg-yellow-100 font-semibold px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5" th:text="${recentlyPosts.forumTitle}"></div>
+                                    </th:block>
+                                    <th:block th:if="${recentlyPosts.getForumTitle().equals('forum')}">
+                                        <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5" th:text="${recentlyPosts.forumTitle}"></div>
+                                    </th:block>
+
+                                </a>
+                                <div class="flex-1 space-y-2">
+
+                                    <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${recentlyPosts.postTitle}"></a>
+                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${recentlyPosts.postContent}"></p>
+                                    <a href="#" class="font-semibold block text-sm" th:text="${recentlyPosts.getPostWriter().nickname}"></a>
+
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
+                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
+                                            <div class="md:block hidden">·</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                        </div>
+                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기.</a>
+                                    </div>
+
+                                    <div class="absolute top-1 right-0 md:inline hidden">
+                                        <a href="#" class="hover:bg-gray-200 p-1.5 inline-block rounded-full" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                            </svg>
+                                        </a>
+                                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop uk-drop-bottom-right" uk-drop="mode: hover;pos: top-right" style="left: -188px; top: -12px;">
+
+                                            <ul class="space-y-1">
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-share-alt mr-1"></i> Share
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-edit-alt mr-1"></i>  Edit Post
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-comment-slash mr-1"></i>   Disable comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-favorite mr-1"></i>  Add favorites
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="-mx-2 my-2 dark:border-gray-800">
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                                        <i class="uil-trash-alt mr-1"></i>  Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex md:space-x-6 space-x-4 md:py-5 py-3 relative" th:each="qnaList : ${forumService.postsTitleList('qna')}">
+                                <a th:href="@{/forum/detail/{fid}(fid=${qnaList.fid})}" class="md:w-64 md:h-40 w-36 h-24 overflow-hidden rounded-lg relative shadow-sm">
+                                    <img src="assets/images/courses/img-5.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                    <div class="absolute bg-yellow-100 font-semibold px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5" th:text="${qnaList.forumTitle}"></div>
+                                </a>
+                                <div class="flex-1 space-y-2">
+
+                                    <a th:href="@{/forum/detail/{fid}(fid=${qnaList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${qnaList.postTitle}"></a>
+                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${qnaList.postContent}"></p>
+                                    <a href="#" class="font-semibold block text-sm" th:text="${qnaList.getPostWriter().nickname}"></a>
+
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
+                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
+                                            <div class="md:block hidden">·</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                        </div>
+                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기.</a>
+                                    </div>
+
+                                    <div class="absolute top-1 right-0 md:inline hidden">
+                                        <a href="#" class="hover:bg-gray-200 p-1.5 inline-block rounded-full" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                            </svg>
+                                        </a>
+                                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop uk-drop-bottom-right" uk-drop="mode: hover;pos: top-right" style="left: -188px; top: -12px;">
+
+                                            <ul class="space-y-1">
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-share-alt mr-1"></i> Share
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-edit-alt mr-1"></i>  Edit Post
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-comment-slash mr-1"></i>   Disable comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-favorite mr-1"></i>  Add favorites
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="-mx-2 my-2 dark:border-gray-800">
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                                        <i class="uil-trash-alt mr-1"></i>  Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex md:space-x-6 space-x-4 md:py-5 py-3 relative" th:each="forumList : ${forumService.postsTitleList('forum')}">
+                                <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:w-64 md:h-40 w-36 h-24 overflow-hidden rounded-lg relative shadow-sm">
+                                    <img src="assets/images/courses/img-5.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
+                                    <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5" th:text="${forumList.forumTitle}"></div>
+                                </a>
+                                <div class="flex-1 space-y-2">
+
+                                    <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${forumList.postTitle}"></a>
+                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${forumList.postContent}"></p>
+                                    <a href="#" class="font-semibold block text-sm" th:text="${forumList.getPostWriter().nickname}"></a>
+
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
+                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
+                                            <div class="md:block hidden">·</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                        </div>
+                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기</a>
+                                    </div>
+
+                                    <div class="absolute top-1 right-0 md:inline hidden">
+                                        <a href="#" class="hover:bg-gray-200 p-1.5 inline-block rounded-full" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                                            </svg>
+                                        </a>
+                                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop uk-drop-bottom-right" uk-drop="mode: hover;pos: top-right" style="left: -188px; top: -12px;">
+
+                                            <ul class="space-y-1">
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-share-alt mr-1"></i> Share
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-edit-alt mr-1"></i>  Edit Post
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-comment-slash mr-1"></i>   Disable comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                        <i class="uil-favorite mr-1"></i>  Add favorites
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="-mx-2 my-2 dark:border-gray-800">
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                                        <i class="uil-trash-alt mr-1"></i>  Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+<script>
+    $( document ).ready( function() {
+        $('#postTitle').val('');
+        jQuery('#selectBox').change(function() {
+            var state = jQuery('#selectBox option:selected').val();
+            if (state == 'qna') {
+                $('#postTitle').val('');
+                $('#postSubtitle').val('');
+                $('#postContent').val('');
+                $("#selectBoxSub").val("").prop("selected", true);
+                $('#postTitle').attr("placeholder", "무엇이 궁금한가요?");
+                $('#postContent').attr("placeholder", "궁금한 내용을 자세하게 설명해주세요.");
+                $("label[for='postTitle']").text('Q&A Title');
+                $("label[for='postContent']").text('Q&A Description');
+                $("#forum_head").text('Q&A 작성하기');
+                jQuery('#forumTitlesub').hide();
+                jQuery('#postTitleSub').hide();
+                jQuery('#keywordListForm').hide();
+            }
+            if (state == 'forum') {
+                $('#postTitle').val('');
+                $('#postSubtitle').val('');
+                $('#postContent').val('');
+                $("#selectBoxSub option:eq(1)").prop("selected", true);
+                $('#postTitle').attr("placeholder", "공유할 정보의 대제목을 입력해주세요.");
+                $('#postContent').attr("placeholder", "정보의 자세한 내용을 설명해주세요.");
+                $("label[for='postTitle']").text('Forum Title');
+                $("label[for='postContent']").text('Forum Description');
+                $("#forum_head").text('정보 작성하기');
+                jQuery('#forumTitlesub').show();
+                jQuery('#postTitleSub').show();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
