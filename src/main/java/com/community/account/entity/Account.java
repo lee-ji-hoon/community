@@ -2,9 +2,9 @@ package com.community.account.entity;
 
 import com.community.like.Likes;
 import com.community.tag.Tag;
-import com.community.zone.Zone;
 import com.community.study.Study;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -92,10 +92,6 @@ public class Account {
     // 태그
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
-
-    // 지역 정보
-    @ManyToMany
-    private Set<Zone> zones = new HashSet<>();
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {

@@ -6,7 +6,6 @@ import com.community.account.AccountService;
 import com.community.account.repository.PersistentLoginsRepository;
 import com.community.board.repository.BoardRepository;
 import com.community.profile.form.ProfileImgForm;
-import com.community.zone.Zone;
 import com.community.profile.form.NotificationsForm;
 import com.community.profile.form.ProfileForm;
 import com.community.tag.Tag;
@@ -94,24 +93,6 @@ public class ProfileService {
     public void removeTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
-    }
-
-    // 지역 정보 갖고 오기
-    public Set<Zone> getZones(Account account) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        return byId.orElseThrow().getZones();
-    }
-
-    // 지역 정보 계정에 추가
-    public void addZone(Account account, Zone zone) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getZones().add(zone));
-    }
-
-    // 지역 정보 계정에서 삭제
-    public void removeZone(Account account, Zone zone) {
-        Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.ifPresent(a -> a.getZones().remove(zone));
     }
 
     public void updateProfileImage(Account account, ProfileForm profileForm) {
