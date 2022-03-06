@@ -61,10 +61,10 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${recentlyPosts.postTitle}"></a>
-                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
+                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
                                         <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
                                     </th:block>
-                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
+                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
                                         <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
                                     </th:block>
                                     <a href="#" class="font-semibold block text-sm" th:text="${recentlyPosts.getPostWriter().nickname}"></a>
@@ -130,12 +130,7 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${qnaList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${qnaList.postTitle}"></a>
-                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
-                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
-                                    </th:block>
-                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
-                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
-                                    </th:block>
+                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
                                     <a href="#" class="font-semibold block text-sm" th:text="${qnaList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
@@ -198,12 +193,7 @@
                                 </a>
                                 <div class="flex-1 space-y-2">
                                     <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${forumList.postTitle}"></a>
-                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
-                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
-                                    </th:block>
-                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
-                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
-                                    </th:block>
+                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${forumList.postSubtitle}"></div>
                                     <a href="#" class="font-semibold block text-sm" th:text="${forumList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
