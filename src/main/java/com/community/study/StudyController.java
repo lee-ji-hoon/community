@@ -9,9 +9,6 @@ import com.community.study.form.StudyDescriptionForm;
 import com.community.study.form.StudyForm;
 import com.community.study.validator.StudyFormValidator;
 import com.community.tag.TagService;
-import com.community.zone.Zone;
-import com.community.zone.ZoneForm;
-import com.community.zone.ZoneRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -44,7 +42,6 @@ public class StudyController {
     private final TagService tagService;
 
     private final TagRepository tagRepository;
-    private final ZoneRepository zoneRepository;
     private final StudyRepository studyRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
@@ -67,7 +64,7 @@ public class StudyController {
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByIdDesc());
+        model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByPublishedDateTimeDesc());
         return "study/study-list";
     }
 
@@ -248,51 +245,6 @@ public class StudyController {
         return ResponseEntity.ok().build();
     }
     // 태그 수정 끝
-
-    // 지역 수정 시작
-    @GetMapping(STUDY_SETTINGS + "zones")
-    public String studyZonesForm(@CurrentUser Account account, @PathVariable String path, Model model) throws JsonProcessingException {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-
-        model.addAttribute(account);
-        model.addAttribute(studyUpdate);
-
-        model.addAttribute("zones", studyUpdate.getZones().stream()
-                .map(Zone::toString).collect(Collectors.toList()));
-        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
-
-        return "study/settings/zones";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "zones/add")
-    @ResponseBody
-    public ResponseEntity addZone(@CurrentUser Account account, @PathVariable String path,
-                                  @RequestBody ZoneForm zoneForm) {
-        Study studyToUpdateZone = studyService.getStudyToUpdateZone(account, path);
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if (zone == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        studyService.addZone(studyToUpdateZone, zone);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(STUDY_SETTINGS + "zones/remove")
-    @ResponseBody
-    public ResponseEntity removeZone(@CurrentUser Account account, @PathVariable String path,
-                                     @RequestBody ZoneForm zoneForm) {
-        Study studyToUpdateZone = studyService.getStudyToUpdateZone(account, path);
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if (zone == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        studyService.removeZone(studyToUpdateZone, zone);
-        return ResponseEntity.ok().build();
-    }
-    // 지역 수정 끝
 
     /* 스터디 전체적인 설정 시작 */
     // 스터디 설정 시작

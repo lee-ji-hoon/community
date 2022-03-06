@@ -2,7 +2,6 @@ package com.community.study;
 
 import com.community.account.entity.Account;
 import com.community.tag.Tag;
-import com.community.zone.Zone;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,25 +20,22 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     Study findAccountWithTagsByPath(String path);
 
-    @EntityGraph(value = "Study.withZonesAndManagers", type = EntityGraph.EntityGraphType.FETCH)
-    Study findAccountWithZonesByPath(String path);
-
     @EntityGraph(value = "Study.withManagers", type = EntityGraph.EntityGraphType.FETCH)
     Study findAccountWithManagersByPath(String path);
 
     @EntityGraph(value = "Study.withMembers", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithMembersByPath(String path);
 
-    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
 
-    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByIdDesc();
 
-    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(Account account);
 
-    @EntityGraph(value = "Study.withZonesTags", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(Account account);
 
 }
