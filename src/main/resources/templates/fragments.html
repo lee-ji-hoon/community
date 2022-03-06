@@ -608,6 +608,122 @@
     </div>
 </div>
 
+<div class="container">
+    <div class="m-5 text-center">
+        <h2>스터디 개설</h2>
+    </div>
+    <div class="row justify-content-center">
+        <form class="needs-validation col-sm-10" th:action="@{/study-form}" th:object="${studyForm}" method="post" novalidate>
+            <div class="form-group">
+                <label for="path">스터디 주소</label>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">https://multi-comunity/study/</span>
+                    <input type="text" th:field="*{path}" class="form-control" id="path" placeholder="예) study-path" aria-describedby="pathHelp" required min="2" max="20">
+                </div>
+                <small id="pathHelp" class="form-text text-muted">
+                    공백없이 문자, 숫자, -와 _만 2자 이상 20자 이내로 입력하세요. <br>
+                    스터디 홈 주소에 사용합니다. 예) /study/<b>study-path</b>
+                </small>
+                <small class="invalid-feedback">스터디 경로를 확인해주세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">Path Error</small>
+            </div>
+
+            <div class="form-group">
+                <label for="title">스터디 이름</label>
+                <input id="title" type="text" th:field="*{title}" class="form-control" placeholder="스터디 이름 입력해주세요" aria-describedby="titleHelp" required max="50">
+                <small id="titleHelp" class="form-text text-muted">
+                    스터디 이름을 50자 이내로 입력해주세요
+                </small>
+                <small class="invalid-feedback">스터디 이름을 확인해주세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+            </div>
+
+            <div class="form-group">
+                <label for="shortDescription">소개</label>
+                <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control" placeholder="스터디를 짧게 소개해 주세요." aria-describedby="shortDescriptionHelp" required maxlength="100"></textarea>
+                <small id="shortDescriptionHelp" class="form-text text-muted">
+                    스터디를 간단하게 소개해 주세요.
+                </small>
+                <small class="invalid-feedback">짧은 소개를 확인해주세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">ShortDescription Error</small>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class='col-md-6 col-xs-4'>
+                        <label for="startStudyDate">스터디 시작일</label>
+                        <div class="form-group">
+                            <input id="startStudyDate" type="date" th:field="*{startStudyDate}" class="form-control"
+                                   aria-describedby="startStudyDateHelp" required>
+                        </div>
+                        <small id="startStudyDateHelp" class="form-text text-muted">
+                            스터디 시작 날짜를 선택해주세요
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('startStudyDate')}" th:errors="*{startStudyDate}">startStudyDate Error</small>
+                        <small class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</small>
+                    </div>
+
+                    <div class='col-md-6 col-xs-4'>
+                        <label for="limitStudyDate">스터디 종료일</label>
+                        <div class="form-group">
+                            <input id="limitStudyDate" type="date" th:field="*{limitStudyDate}" class="form-control"
+                                   aria-describedby="limitStudyDateHelp" required>
+                        </div>
+                        <small id="limitStudyDateHelp" class="form-text text-muted">
+                            스터디 인원 모집 마감일을 설정해주세요<br>
+                            인원 모집 시작은 설정에서 가능합니다.
+                        </small>
+                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="from-group">
+                <div class="row">
+                    <div class='col-md-6 col-xs-4'>
+                        <label for="limitMember">인원</label>
+                        <input id="limitMember" type="number" th:field="*{limitMember}" class="form-control" placeholder="2" aria-describedby="limitMembersHelp" min="2" max="30">
+                        <small id="limitMemberHelp" class="form-text text-muted">
+                            스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
+                        </small>
+                        <small class="invalid-feedback"> 스터디 모집 인원을 확인해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</small>
+                    </div>
+                    <div class='col-md-6 col-xs-4'>
+                        <label for="limitMemberDate">인원 모집 기간</label>
+                        <div class="form-group">
+                            <input id="limitMemberDate" type="date" th:field="*{limitMemberDate}" class="form-control"
+                                   aria-describedby="limitPersonDateHelp" required>
+                        </div>
+                        <small id="limitPersonDateHelp" class="form-text text-muted">
+                            스터디 인원 모집 마감일을 설정해주세요<br>
+                            인원 모집 시작은 설정에서 가능합니다.
+                        </small>
+                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fullDescription">상세 소개</label>
+                <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="form-control" placeholder="스터디를 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp" required></textarea>
+                <small id="fullDescriptionHelp" class="form-text text-muted">
+                    목표, 일정, 진행방식, 위치, 모집인원 등 최대한 자세히 적어주세요
+                </small>
+                <small class="invalid-feedback">상세 소개를 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">FullDescription Error</small>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">스터디 만들기</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="fragments.html :: footer"></div>
+</div>
+
 
 </body>
 </html>
