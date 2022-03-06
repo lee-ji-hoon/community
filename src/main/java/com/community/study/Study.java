@@ -73,6 +73,12 @@ public class Study {
     @Basic(fetch = FetchType.EAGER)
     private String fullDescription;
 
+    private String managerEmail;
+
+    private String studyMethod;
+
+    private String studyPlaces;
+
     @Lob
     @Basic(fetch = FetchType.EAGER)
     private String image;
