@@ -21,10 +21,11 @@
 
                 <div class="lg:flex lg:space-x-10">
                       
-                    <div class="lg:w-3/4 space-y-5"> 
-                       
+                    <div class="lg:w-3/4 space-y-5">
+                        <div id="isUpdatedForm">
+                            <div id="isUpdated"></div>
+                        </div>
                         <div class="card">
-
                             <div class="h-44 mb-4 md:h-72 overflow-hidden relative rounded-t-lg w-full">
                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
                             </div>
@@ -40,15 +41,15 @@
                                              alt="" class="w-10 rounded-full is_avatar"/>
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <div class="text-base font-semibold" th:text="${board.writer}">작성자</div>
+                                                <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.writer})}" th:text="${board.writer}"></a></div>
                                                 <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
                                             </div>
                                             <!-- Board 작성자면 뜨는 수정폼 -->
                                             <th:block th:if="${boardOwner.id==account.id}">
                                                 <div>
-                                                    <a href="#create-post-modal" uk-toggle  class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
+                                                    <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
                                                        data-tippy-placement="right" title="Update Article">
-                                                        <i class="fa fa-cog fa-2x"></i>
+                                                        <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
                                                     </a>
                                                     <!-- Craete video post modal -->
                                                     <div id="create-post-modal" class="create-post" uk-modal>
@@ -213,7 +214,7 @@
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                         <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>
                                         <div>
-                                            <h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4>
+                                            <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                             <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                             <th:block th:if="${!reply.getIsReported}">
                                                 <p class="mt-3 md:ml-0 -ml-16" th:text="${reply.content}">내용</p>
@@ -329,6 +330,12 @@
                     });
                 }
             });
+            /*$('#updateFormBtn').click(function () {
+                console.log("업데이트 폼 버튼 클릭");
+                console.log("isUpdated 비움");
+                $('#isUpdated').load(window.location.href+' #isUpdated');
+                console.log("isUpdated 새로고침");
+            });*/
             $(document).on('click', '.write_reply', function() {
                 if (input.value == '') {
                     alert("댓글을 입력해주세요.");
@@ -359,9 +366,11 @@
                     type:'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data : $('#board_form').serialize(),
-                    success : function (){
+                    success : function (message){
                         console.log("Board Update Success");
                         $('.form_refresh').load(window.location.href+' .form_refresh');
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
                     },
                     error : function (request, status, error){
                         console.log("Board Update " + error);
