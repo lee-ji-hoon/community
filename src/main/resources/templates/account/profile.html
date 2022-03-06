@@ -44,7 +44,7 @@
             </div>
 
             <div class="profile user-profile">
-                <div id="profile-banner-image" class="profiles_banner">
+                <div id="profile-banner-image" class="study_banner">
                     <div id="current-profile-image">
                         <img alt="" th:src="${account.getBannerImage()}"/>
                     </div>
@@ -81,7 +81,7 @@
 
                             <a type="submit" id="banner-submit"
                                href="javascript:update_banner_form.submit();"
-                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+                               class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5">
                                 <span> 저장 </span>
                             </a>
                             <a th:href="@{/settings/profile-settings}" id="update-profile"
@@ -93,7 +93,7 @@
                     </form>
                 </div>
 
-                <div class="profiles_content">
+                <div class="study_content">
                     <div class="profile_avatar">
                         <div class="profile_avatar_holder" th:if="${isOwner}">
                             <svg th:if="${#strings.isEmpty(account.profileImage)}"
@@ -113,7 +113,7 @@
                         <div class="icon_change_photo" hidden> <ion-icon name="camera" class="text-xl"></ion-icon> </div>
                     </div>
 
-                    <div class="profile_info">
+                    <div class="study_info">
                         <h1 th:text="${account.username}"></h1>
                         <p th:text="${account.getBio()}"></p>
                     </div>

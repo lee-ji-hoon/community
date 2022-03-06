@@ -87,9 +87,17 @@ public class StudyController {
             return STUDY_FORM_VIEW;
         }
 
+        System.out.println("========================");
+        System.out.println(studyForm.getStudyPlaces());
+        System.out.println(studyForm.getPath());
+        System.out.println("========================");
+
         String parameter = httpServletRequest.getParameter("startStudyDate");
         String parameter1 = httpServletRequest.getParameter("limitStudyDate");
         String parameter2 = httpServletRequest.getParameter("limitMemberDate");
+        String studyPlaces = httpServletRequest.getParameter("studyPlaces");
+
+        log.info("스티더 위치 = " + studyPlaces);
         log.info("스티더 시작일 = " + parameter);
         log.info("스티더 종료일 = " + parameter1);
         log.info("인원모집 종료일 = " + parameter2);

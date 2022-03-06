@@ -9,7 +9,7 @@
 <div id="wrapper">
     <!-- header-->
     <header th:replace="theme-fragments.html :: header"></header>
-    <div sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: side_bar"></div>
+    <div sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: side_bar(currentSideMenu='index')"></div>
 
     <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
         멀티커뮤니티 가입을 완료하려면 <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
