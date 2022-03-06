@@ -133,12 +133,12 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account getAccount(String nickname) {
-        Account account = accountRepository.findByNickname(nickname);
-        if (account == null) {
+        Account byNickname = accountRepository.findByNickname(nickname);
+        if (byNickname == null) {
             log.info(nickname);
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
-        return account;
+        return byNickname;
     }
 
     public void updateProfileBanner(Account account, ProfileForm profileForm) {

@@ -39,7 +39,7 @@ public class TestDataInit {
                 "sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
         if (!accountRepository.existsByStudentId("17-100000")) {
-            accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "사람", passwordEncoder.encode("test1234!"),
+            accountRepository.save(new Account(null, "test@naver.com", "tester", "17-100000", "테스터", passwordEncoder.encode("test1234!"),
                     true, "asdf", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null,
                     null, null, null, null, null, null, true, true, true,
                     true, true, true, null));
@@ -55,6 +55,13 @@ public class TestDataInit {
                     "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, true, true,
                     true, true, true, true, null));
             boardRepository.save(new Board(null, "자유게시판", "자유게시판 제목",null, null, false, 0,BOARD_CONTENT_VALUE, "ezhoon", 2L, 0, LocalDateTime.now().minusHours(1), null));
+        }
+
+        if (!accountRepository.existsByStudentId("17-100425")) {
+            accountRepository.save(new Account(null, "test1@naver.com", "tester1", "17-100425", "테스터", passwordEncoder.encode("12401240"),
+                    true, "asdf1", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null,
+                    "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, true, true,
+                    true, true, true, true, null));
         }
 
         if (!accountRepository.existsByStudentId("17-100444")) {

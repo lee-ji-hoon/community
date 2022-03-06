@@ -1,32 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments.html :: head"></head>
+
+<head th:replace="theme-fragments.html :: head"></head>
+<style>
+    .tagify-outside{
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+    .tagify__input {
+        outline: none;
+        font-size: 15px;
+        color: #808080;
+        width: 30%;
+        background-color: #fff;
+        font-weight: 400;
+        opacity: 1;
+        border-radius: 3px;
+        border: 1px solid #e0e0e0;
+        padding: 5px;
+    }
+</style>
 <body>
-<nav th:replace="fragments.html :: main-nav"></nav>
-<div class="container">
-    <div class="row mt-5 justify-content-center">
-        <div class="col-2">
-            <div th:replace="fragments.html :: study-settings-menu(currentMenu='tags')"></div>
-        </div>
-        <div class="col-8">
-            <div class="row">
-                <h2 class="col-sm-12">스터디 주제</h2>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="alert alert-info" role="alert">
-                        스터디에서 주로 다루는 주제를 태그로 등록하세요. 태그를 입력하고 콤마(,) 또는 엔터를 입력하세요.
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'settings')"></div>
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='tag')"></div>
+                <div class="lg:w-2/3">
+                    <div class="lg:px-10 lg:py-6 p-6" style="padding-bottom: 0.5rem">
+                        <h3 class="font-bold mb-2 text-xl">스터디 주제</h3>
+                        <p class=""> 스터디에서 주로 다루는 주제를 태그로 등록하세요. <p>태그를 입력하고 콤마(,) 또는 엔터를 입력하세요. </p>
+                        <div class="" id="tagList" th:text="${tagList}" hidden></div>
+
+                        <div class="keywords-container max-w-lg flow-root">
+                            <div class="keyword-input-container">
+                                <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
+                                       placeholder="Add Keywords" class="tagify-outside" aria-describedby="tagHelp"/>
+                            </div>
+                        </div>
+
                     </div>
-                    <div id="whitelist" th:text="${whitelist}" hidden>
+                    <div class="alert alert-info alert-dismissible fade show m-5" data-closable role="alert">
+                        <span>태그로 등록된 게시물이 생기면 알람을 드립니다.</span>
                     </div>
-                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}" class="tagify-outside" aria-describedby="tagHelp">
                 </div>
             </div>
         </div>
     </div>
-    <div th:replace="fragments.html :: footer"></div>
 </div>
-<script th:replace="fragments.html :: ajax-csrf"></script>
-<script th:replace="fragments.html :: update-tags(baseUrl='/study/' + ${study.path} + '/settings/tags')"></script>
+<script th:replace="theme-fragments.html :: ajax-csrf"></script>
+<script th:replace="theme-fragments.html :: studyBanner"></script>
+<script th:replace="theme-fragments.html :: update-tags(baseUrl='/study/' + ${study.path} + '/settings/tags')"></script>
 </body>
 </html>
+

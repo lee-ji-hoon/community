@@ -3,13 +3,6 @@
 
 <head th:replace="theme-fragments.html :: head"></head>
 
-<body>
-
-<style>
-
-
-</style>
-
 <div id="wrapper">
 
     <!-- Header -->
@@ -20,10 +13,14 @@
 
     <div class="main_content">
         <div class="mcontainer">
-            <!-- Profile event cover -->
-            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'settings')"></div>
-            <!-- 설정 칸 -->
+            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'description')"></div>
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='description')"></div>
+            </div>
 
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+
+            </div>
 
         </div>
     </div>
