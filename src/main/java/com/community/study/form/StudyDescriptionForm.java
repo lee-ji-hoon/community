@@ -17,4 +17,14 @@ public class StudyDescriptionForm {
     @NotBlank
     private String fullDescription;
 
+    @NotBlank
+    private String managerEmail;
+
+    @NotBlank
+    private String studyPlaces;
+
+    @NotBlank
+    private String studyMethod;
+
+
 }
