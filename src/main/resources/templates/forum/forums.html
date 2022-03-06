@@ -61,16 +61,19 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${recentlyPosts.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${recentlyPosts.postTitle}"></a>
-                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
+                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
+                                    </th:block>
+                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
+                                    </th:block>
                                     <a href="#" class="font-semibold block text-sm" th:text="${recentlyPosts.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
                                         <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
-                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
-                                            <div class="md:block hidden">·</div>
-                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 View</div>
                                         </div>
-                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기.</a>
+                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기</a>
                                     </div>
 
                                     <div class="absolute top-1 right-0 md:inline hidden">
@@ -127,16 +130,19 @@
                                 <div class="flex-1 space-y-2">
 
                                     <a th:href="@{/forum/detail/{fid}(fid=${qnaList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${qnaList.postTitle}"></a>
-                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${qnaList.postSubtitle}"></div>
+                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
+                                    </th:block>
+                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
+                                    </th:block>
                                     <a href="#" class="font-semibold block text-sm" th:text="${qnaList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
                                         <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
-                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
-                                            <div class="md:block hidden">·</div>
-                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 View</div>
                                         </div>
-                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기.</a>
+                                        <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기</a>
                                     </div>
 
                                     <div class="absolute top-1 right-0 md:inline hidden">
@@ -192,14 +198,17 @@
                                 </a>
                                 <div class="flex-1 space-y-2">
                                     <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${forumList.postTitle}"></a>
-                                    <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${forumList.postSubtitle}"></div>
+                                    <th:block th:if="${recentlyPosts.forumTitle =='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px" th:utext="${recentlyPosts.postSubtitle}"></div>
+                                    </th:block>
+                                    <th:block th:if="${recentlyPosts.forumTitle !='qna'}">
+                                        <div class="leading-6 pr-4 line-clamp-2 md:block hidden" style="max-height: 50px">질문글</div>
+                                    </th:block>
                                     <a href="#" class="font-semibold block text-sm" th:text="${forumList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
                                         <div class="flex space-x-3 items-center text-sm md:pt-3 font-medium">
-                                            <div> <i class="icon-feather-sliders mr-2"></i> Advance level </div>
-                                            <div class="md:block hidden">·</div>
-                                            <div> <i class="icon-feather-users mr-2"></i> 120 Enrolled</div>
+                                            <div> <i class="icon-feather-users mr-2"></i> 120 View</div>
                                         </div>
                                         <a href="#" class="md:flex items-center justify-center h-9 px-8 rounded-md border hidden bg-gray-100">확인하기</a>
                                     </div>
