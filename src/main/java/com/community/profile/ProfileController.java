@@ -5,15 +5,12 @@ import com.community.account.repository.AccountRepository;
 import com.community.account.CurrentUser;
 import com.community.tag.TagForm;
 import com.community.tag.TagService;
-import com.community.zone.Zone;
 import com.community.profile.form.*;
 import com.community.tag.TagRepository;
-import com.community.zone.ZoneRepository;
 import com.community.profile.service.ProfileService;
 import com.community.profile.validator.NicknameValidator;
 import com.community.profile.validator.PasswordFormValidator;
 import com.community.tag.Tag;
-import com.community.zone.ZoneForm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +68,6 @@ public class ProfileController {
 
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
-    private final ZoneRepository zoneRepository;
 
     private final TagService tagService;
     private final NicknameValidator nicknameValidator;
@@ -263,46 +259,6 @@ public class ProfileController {
         }
 
         profileService.removeTag(account, tag);
-        return ResponseEntity.ok().build();
-    }
-
-    // 지역 페이지 이동
-    @GetMapping(SETTINGS_ZONES_URL)
-    public String ZonesForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
-        model.addAttribute(account);
-
-        Set<Zone> zones = profileService.getZones(account);
-        model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
-
-        List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        model.addAttribute("zoneList", objectMapper.writeValueAsString(allZones));
-
-        return SETTINGS_ZONES_VIEW_NAME;
-    }
-
-    // 지역 등록
-    @PostMapping(SETTINGS_ZONES_URL + "/add")
-    @ResponseBody
-    public ResponseEntity addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if(zone == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        profileService.addZone(account, zone);
-        return ResponseEntity.ok().build();
-    }
-
-    // 지역 삭제
-    @PostMapping(SETTINGS_ZONES_URL + "/remove")
-    @ResponseBody
-    public ResponseEntity removeZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm) {
-        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
-        if(zone == null){
-            return ResponseEntity.badRequest().build();
-        }
-
-        profileService.removeZone(account, zone);
         return ResponseEntity.ok().build();
     }
 }

@@ -3,7 +3,6 @@ package com.community.study;
 import com.community.account.entity.Account;
 import com.community.study.form.StudyDescriptionForm;
 import com.community.tag.Tag;
-import com.community.zone.Zone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -74,13 +73,6 @@ public class StudyService {
         return accountWithTagsByPath;
     }
 
-    public Study getStudyToUpdateZone(Account account, String path) {
-        Study accountWithZonesByPath = studyRepository.findAccountWithZonesByPath(path);
-        checkExistStudy(path, accountWithZonesByPath);
-        checkManager(account, accountWithZonesByPath);
-
-        return accountWithZonesByPath;
-    }
 
     public void addTag(Study studyUpdateTag, Tag byTitle) {
         studyUpdateTag.getTags().add(byTitle);
@@ -90,15 +82,6 @@ public class StudyService {
     }
 
     // study start
-
-    public void addZone(Study studyToUpdateZone, Zone zone) {
-        log.info("추가 된 지역 : " + zone );
-        studyToUpdateZone.getZones().add(zone);
-
-    }
-    public void removeZone(Study studyToUpdateZone, Zone zone) {
-        studyToUpdateZone.getZones().remove(zone);
-    }
 
     // study end
 

@@ -3,7 +3,6 @@ package com.community.study;
 import com.community.account.UserAccount;
 import com.community.account.entity.Account;
 import com.community.tag.Tag;
-import com.community.zone.Zone;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,18 +14,12 @@ import java.util.Set;
 
 @NamedEntityGraph(name = "Study.withAll", attributeNodes = {
         @NamedAttributeNode("tags"),
-        @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),
         @NamedAttributeNode("members")
 })
 
 @NamedEntityGraph(name = "Study.withTagsAndManagers", attributeNodes = {
         @NamedAttributeNode("tags"),
-        @NamedAttributeNode("managers")
-})
-
-@NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
-        @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers")
 })
 
@@ -38,8 +31,7 @@ import java.util.Set;
         @NamedAttributeNode("members")
 })
 
-@NamedEntityGraph(name = "Study.withZonesTags", attributeNodes = {
-        @NamedAttributeNode("zones"),
+@NamedEntityGraph(name = "Study.withTags", attributeNodes = {
         @NamedAttributeNode("tags")
 })
 
@@ -85,9 +77,6 @@ public class Study {
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
-
-    @ManyToMany
-    private Set<Zone> zones = new HashSet<>();
 
     private LocalDate limitStudyDate;
 
