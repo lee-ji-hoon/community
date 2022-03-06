@@ -1,151 +1,176 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<style>
-    body{
-        background-color: white;
-    }
-    card{
-        border: none;
-    }
-    .container{
-        margin: 50px 150px 50px 150px;
-    }
-    section {
-        display: none;
-        padding: 20px 0 0;
-        border-top: 1px solid #ddd;
-    }
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-    /*라디오버튼 숨김*/
-    input {
-        display: none;}
+<head th:replace="theme-fragments.html :: head"></head>
 
-    label {
-        display: inline-block;
-        margin: 0 0 -1px;
-        padding: 15px 25px;
-        font-weight: 600;
-        text-align: center;
-        color: #bbb;
-        border: 1px solid transparent;}
-
-    label:hover {
-        color: #2e9cdf;
-        cursor: pointer;
-    }
-
-    /*input 클릭시, label 스타일*/
-    input:checked + label {
-        color: #555;
-        border-bottom: 2px solid #2e9cdf;
-        border-top: 1px solid #ffffff;
-    }
-
-</style>
-<head th:replace="fragments.html :: head"></head>
 <body>
 
-<div th:replace="fragments.html :: main-nav"></div>
-<div class="container">
-    <!-- Side navigation -->
-    <div class="row mt-5 justify-content-center">
-        <div class="col-3">
-            <div class="card mb-3" style="user-select: auto;">
-                <div th:if="${study.useBanner}">
-                    <img th:src="${study.image}" width="100%" height="200px">
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <!-- Profile event cover -->
+            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'view')"></div>
+
+            <div class="md:flex  md:space-x-8 lg:mx-14">
+                <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                    <div class="card p-5">
+                        <h1 class="block text-lg font-bold"> 정보  </h1>
+                        <div class="space-y-4 mt-3">
+                            <div class="flex items-center space-x-3">
+                                <ion-icon name="alert-circle" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                <div class="flex-1">
+                                    <div th:text="${study.shortDescription}">  We Plan ,We Desing, We Estimate for Approval to Build.. </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                <div class="flex-1">
+                                    <div th:text="${study.limitMember} + '명 모집'" class="font-semibold"> 3.3K people responded </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <ion-icon name="calendar-outline" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                <div class="flex-1">
+                                    <div th:text="${study.limitMemberDate}"> Tuesday, 2 February 2021 at 13:00 MST </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <ion-icon name="globe" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                <div class="flex-1">
+                                    <div th:text="${study.studyMethod} + '으로 진행됩니다.'"> Online: </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <ion-icon name="mail-open" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                <div class="flex-1">
+                                    <span th:text="${study.managerEmail}">문의 사항 </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-1">
+                                    <span th:if="${study.tags.size() == 0}">
+                                        <b>주제는 추후 업데이트 예정입니다.</b>
+                                    </span>
+                                    <span th:each="tag: ${study.tags}" class="bg-gray-100 rounded-full
+                                    font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                        <a class="text-decoration-none text-white">
+                                            <i class="fa fa fa-stack-overflow ml"></i> <span th:text="${tag.title}">Tag</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-5">
+                        <h1 class="block text-lg font-bold"> 설명  </h1>
+                        <div class="line-clamp-3" id="more-text" th:utext="${study.fullDescription}">
+                        </div>
+                        <a href="#" id="more-text" uk-toggle="target: #more-text ; cls: line-clamp-3"> 자세히 보기 </a>
+                    </div>
                 </div>
 
-                <div class="card-body" style="user-select: auto; margin-bottom: -20px">
-                    <div class="row d-flex">
-                        <h5 class="mr-auto p-2 ml-2" style="text-align: left;" th:text="${study.title}">Special title treatment</h5>
-                        <span th:if="${study.openStudy}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 시작">
-                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>스터디 시작</button>
-                        </span>
-                        <span th:if="${!study.openStudy && !study.endStudy()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 준비중">
-                            <button class="btn btn-secondary btn-sm" style="pointer-events: none;" type="button" disabled>스터디 준비중</button>
-                        </span>
-                        <span th:if="${!study.openStudy && study.endStudy()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="스터디 종료">
-                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>스터디 종료</button>
-                        </span>
-                        <span th:if="${study.recruiting() && !study.isLimitMember()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="인원 모집 중">
-                            <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>인원 모집 중</button>
-                        </span>
-                        <span th:if="${!study.recruiting() || study.isLimitMember()}" class="d-inline-block mb-3 p-1" tabindex="0" data-toggle="tooltip" data-placement="top" title="인원 모집 종료">
-                            <button class="btn btn-danger btn-sm" style="pointer-events: none;" type="button" disabled>인원 모집 종료</button>
-                        </span>
+                <!-- Sidebar -->
+                <div class="w-full flex-shirink-0">
+
+                    <div class="card p-4">
+                        <div class="">
+                            <div class="py-2 flex items-center space-x-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>
+                                    <div class="text-base font-semibold"> 스터디 시작 </div>
+                                    <div th:text="${study.startStudyDate}"> 02-02-21 - 11:31</div>
+                                </div>
+                            </div>
+                            <div class="py-2 flex items-center space-x-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>
+                                    <div class="text-base font-semibold"> 스터디 종료 </div>
+                                    <div th:text="${study.limitStudyDate}"> 03-02-21 - 11:31</div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="-mx-4 my-4">
+
+                        <!--  widget  -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <h4 class="text-lg -mb-0.5 font-semibold">스터디 참여 인원</h4>
+                                </div>
+                            </div>
+                            <div>
+                                <div th:each="member : ${study.members}"
+                                     class="flex items-center  hover:bg-gray-100 rounded-md -mx-2 p-2 pr-0">
+                                    <div class="flex-shrink-0 h-16 mr-3 relative rounded-md w-16">
+                                        <svg th:if="${#strings.isEmpty(member?.profileImage)}"
+                                             th:data-jdenticon-value="${member.nickname}" class="absolute w-full h-full inset-0 rounded-md object-cover"></svg>
+                                        <img th:if="${!#strings.isEmpty(member?.profileImage)}"
+                                             th:src="${member?.profileImage}" class="absolute w-full h-full inset-0 rounded-md object-cover"/>
+                                    </div>
+                                    <div class="flex-1">
+                                        <a href="#" th:text="${member.nickname}" class="capitalize font-semibold line-clamp-1 mb-1 text-base">스프링 스터디</a>
+                                        <div th:text="${member.bio}" class="text-xs uppercase font-semibold">이지훈</div>
+                                    </div>
+                                    <a href="#" class="bg-gray-100 flex flex-col font-semibold items-center justify-center py-1.5 px-4 rounded-md"> 15
+                                        <div class="text-sm"> 이동 </div>
+                                    </a>
+                                </div>
+
+                                <!--<div class="flex items-center  hover:bg-gray-100 rounded-md -mx-2 p-2 pr-0">
+                                    <div class="flex-shrink-0 h-16 mr-3 relative rounded-md w-16">
+                                        <img src="/images/study-banner.jpeg" class="absolute w-full h-full inset-0 rounded-md object-cover" alt="">
+                                    </div>
+                                    <div class="flex-1">
+                                        <a href="#" class="capitalize font-semibold line-clamp-1 mb-1 text-base">자바 스터디</a>
+                                        <div class="text-xs uppercase font-semibold">곽민정</div>
+                                    </div>
+                                    <a href="#" class="bg-gray-100 flex flex-col font-semibold items-center justify-center py-1.5 px-4 rounded-md"> 15
+                                        <div class="text-sm"> 이동 </div>
+                                    </a>
+                                </div>
+                                <div class="flex items-center  hover:bg-gray-100 rounded-md -mx-2 p-2 pr-0">
+                                    <div class="flex-shrink-0 h-16 mr-3 relative rounded-md w-16">
+                                        <img src="/images/study-banner.jpeg" class="absolute w-full h-full inset-0 rounded-md object-cover" alt="">
+                                    </div>
+                                    <div class="flex-1">
+                                        <a href="#" class="capitalize font-semibold line-clamp-1 mb-1 text-base">JPA 스터디</a>
+                                        <div class="text-xs uppercase  font-semibold">최수용</div>
+                                    </div>
+                                    <a href="#" class="bg-gray-100 flex flex-col font-semibold items-center justify-center py-1.5 px-4 rounded-md"> 15
+                                        <div class="text-sm"> 이동 </div>
+                                    </a>
+                                </div>
+                                <div class="flex items-center  hover:bg-gray-100 rounded-md -mx-2 p-2 pr-0">
+                                    <div class="flex-shrink-0 h-16 mr-3 relative rounded-md w-16">
+                                        <img src="/images/study-banner.jpeg" class="absolute w-full h-full inset-0 rounded-md object-cover" alt="">
+                                    </div>
+                                    <div class="flex-1">
+                                        <a href="#" class="capitalize font-semibold line-clamp-1 mb-1 text-base">Querydsl 스터디</a>
+                                        <div class="text-xs uppercasefont-semibold">가준영</div>
+                                    </div>
+                                    <a href="#" class="bg-gray-100 flex flex-col font-semibold items-center justify-center py-1.5 px-4 rounded-md"> 15
+                                        <div class="text-sm"> 이동 </div>
+                                    </a>
+                                </div>-->
+                            </div>
+                        </div>
                     </div>
-                    <h6 class="card-subtitle text-muted" style="user-select: auto;" th:text="${study.shortDescription}">Support card subtitle</h6>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-muted" style="border-bottom: none; margin-bottom: -10px;">
-                        <span th:if="${study.tags.size() == 0}">
-                            <b>주제는 추후 업데이트 예정입니다.</b>
-                        </span>
-                        <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                            <a class="text-decoration-none text-white">
-                                <i class="fa fa-tag ml"></i> <span th:text="${tag.title}">Tag</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li class="list-group-item text-muted" style="border-bottom: none;">
-                        <span th:if="${study.zones.size() == 0}">
-                            <b>지역은 추후 업데이트 예정입니다.</b>
-                        </span>
-                        <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                        <a class="text-decoration-none text-white">
-                            <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
-                         </a>
-                     </span>
-                    </li>
-                </ul>
             </div>
-            <div class="card" style="user-select: auto;">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-muted d-flex">
-                        <i class="fa fa-user pt-2 pr-2"></i>
-                        <small class="pt-2" th:text="${study.memberCount} +'명 참여'"></small>
-                        <small class="ml-auto p-2" th:text="${study.limitMember} + '명 모집중 '"></small>
-                    </li>
-                    <li class="list-group-item text-muted">
-                        <i class="fa fa-calendar mr-1"></i>
-                        <small th:text="${study.startStudyDate} + '~' + ${study.limitStudyDate}">2022-02-08 ~ 2022-02-25</small>
-                    </li>
-                </ul>
-            </div>
-            <div class="mt-2" th:if="${study.isJoinable(#authentication.principal) && !study.isLimitMember() || study.isMember(#authentication.principal)} ">
-                <span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}" class="btn-group" role="group">
-                    <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
-                        스터디 가입
-                    </a>
-                    <a class="btn btn-outline-primary" th:text="${study.memberCount}">1</a>
-                </span>
-                <span sec:authorize="isAuthenticated()" th:if="${study.recruiting() && study.isMember(#authentication.principal)}" class="btn-group" role="group">
-                    <a class="btn btn-outline-warning" th:href="@{'/study/' + ${study.path} + '/remove'}">
-                        스터디 탈퇴
-                    </a>
-                    <a class="btn btn-outline-primary" th:text="${study.memberCount}">1</a>
-                </span>
-            </div>
-            <span sec:authorize="isAuthenticated()" th:if="${study.isManager(#authentication.principal)}" class="btn-group mt-2" role="group">
-                <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/settings/description'}">
-                스터디 설정
-                </a>
-            </span>
-        </div>
-        <div class="col-6">
-            <p class="lead" th:utext="${study.fullDescription}"></p>
         </div>
     </div>
 </div>
-
-
-</body>
-</html>
-
-    <script type="application/javascript">
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
+<script th:replace="theme-fragments.html :: studyBanner"></script>
 </body>
 </html>

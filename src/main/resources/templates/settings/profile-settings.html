@@ -1,12 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="theme-fragments.html :: head"></head>
 
 <body>
-
     <div id="wrapper">
 
         <!-- Header -->
@@ -22,20 +19,23 @@
                     <div class="lg:w-2/3">
 
                         <div class="lg:flex lg:flex-col justify-between lg:h-full">
-                            <div th:if="${message}" class="alert alert-info alert-dismissible fade show m-5"
+                            <div th:if="${message}" class="m-5">
+                                <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
+                            </div>
+                            <!--<div th:if="${message}" class="alert alert-info alert-dismissible fade show m-5"
                                  data-closable role="alert">
                                 <span th:text="${message}">메시지</span>
                                 <button type="button" class="close-button" aria-label="Close alert" data-dismiss="alert" data-close="">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
-                            </div>
+                            </div>-->
                             <!-- form header -->
                             <div class="lg:px-10 lg:py-6 p-6" style="padding-bottom: 0.5rem">
                                 <h3 class="font-bold mb-2 text-xl">프로필</h3>
                                 <p class=""> 간단하게 본인을 소개해주세요. </p>
                             </div>
 
-                            <form class="lg:py-8 lg:px-20 flex-1 space-y-4 p-6"
+                            <form class="lg:py-8 lg:px-10 flex-1 space-y-4 p-6"
                                   th:action="@{/settings/profile-settings}"
                                   th:object="${profileForm}" method="post" novalidate>
 

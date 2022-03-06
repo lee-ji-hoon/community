@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
@@ -29,6 +30,16 @@ public class StudyForm {
     @NotBlank
     private String fullDescription;
 
+    @NotBlank
+    @Email
+    private String managerEmail;
+
+    private String studyMethod;
+
+    private String studyPlaces;
+
+    private String studyType;
+
     private int limitMember;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -39,6 +50,7 @@ public class StudyForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate limitStudyDate;
+
 
 
 }
