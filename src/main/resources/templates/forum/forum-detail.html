@@ -67,15 +67,22 @@
                                             </svg>
                                         </div>
                                     </li>
-                                    <li> <i class="icon-feather-users"></i> 1200 Enerolled </li>
+                                    <li> <i class="icon-feather-users"></i> 120 View </li>
                                 </ul>
                                 <ul class="flex items-center text-gray-500 text-sm">
-                                    <li> Created by <a th:href="@{/profile/{nickname}(nickname = ${forum.getPostWriter().nickname})}" class="font-bold" th:text="${forum.getPostWriter().nickname}"></a> </li>
+                                    <th:block th:if="${forum.forumTitle == 'qna'}">
+                                        <li> Questioned by <a th:href="@{/profile/{nickname}(nickname = ${forum.getPostWriter().nickname})}" class="font-bold" th:text="${forum.getPostWriter().nickname}"></a> </li>
+                                    </th:block>
+                                    <th:block th:if="${forum.forumTitle != 'qna'}">
+                                        <li> Created by <a th:href="@{/profile/{nickname}(nickname = ${forum.getPostWriter().nickname})}" class="font-bold" th:text="${forum.getPostWriter().nickname}"></a> </li>
+                                    </th:block>
+
                                     <span class="middot mx-3 text-2xl">·</span>
                                     <li><a th:text="${boardService.boardDateTime(forum.postUploadTime)}"></a></li>
                                 </ul>
                                
                             </div>
+                            <!--
                             <nav class="responsive-nav border-b md:mx-0 -mx-4 mt-4 text-4xl" uk-sticky="offset:45; cls-active:bg-gray-50">
                                 <ul class="space-x-3" uk-scrollspy-nav="closest: li; scroll: true">
                                     <li><a href="#Overview" uk-scroll>Overview</a></li>
@@ -85,14 +92,14 @@
                                     <li><a href="#reviews">Reviews</a></li>
                                 </ul>
                             </nav>
-
+                            -->
 
                             <div class="lg:mt-9 mt-5">
         
                                 <!-- course description -->
                                 <div class="space-y-5">
                                     <div>
-                                        <h3 class="font-semibold mb-2 text-xl"> Description </h3>
+                                        <hr>
                                         <div th:utext="${forum.postContent}"></div>
                                     </div>
                                 </div>
@@ -595,7 +602,7 @@
                                 </div>
                 
                                 <!-- Add comment -->
-                                <h3 class="mb-8 mt-20 font-semibold text-xl"> Add your comment </h3>
+                                <h3 class="mb-8 mt-20 font-semibold text-xl"> 댓글 작성 </h3>
                                 <div class="flex space-x-4 mb-5 relative">
                                     <svg th:if="${#strings.isEmpty(account?.profileImage)}"
                                          th:data-jdenticon-value="${account.nickname}"
@@ -615,8 +622,13 @@
                                                 <textarea name="" id="" cols="30" rows="6"  class="bg-gradient-to-b from-gray-100 to-gray-100"></textarea>
                                             </div>
                                             <div class="col-span-2 flex justify-between py-4">
-                                                <p class="m-0 text-gray-600"> Some HTML is okay </p>
-                                                <input type="submit" value="Post Comment">
+                                                <th:block th:if="${forum.forumTitle=='qna'}">
+                                                    <p class="m-0 text-gray-600"> 사실이 아닌 추측 답변은 피해주세요. </p>
+                                                </th:block>
+                                                <th:block th:if="${forum.forumTitle!='qna'}">
+                                                    <p class="m-0 text-gray-600"> 도움이 되었다면 댓글을 작성해주세요. </p>
+                                                </th:block>
+                                                <input type="submit" value="작성하기">
                                             </div>
                                         </div>
                                     </div>
@@ -633,7 +645,7 @@
    
                         <div uk-sticky="offset:100; top:1 ; bottom: true">
   
-                            <h2 class="text-lg font-semibold mb-3"> Recently Courses </h2>
+                            <h2 class="text-lg font-semibold mb-3"> 최근 올라온 포럼 </h2>
                             <ul> 
                                 <li th:each="r_forum : ${recentlyForum}">
                                     <a href="#" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
