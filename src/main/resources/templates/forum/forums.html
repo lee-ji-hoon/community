@@ -191,9 +191,8 @@
                                     <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5" th:text="${forumList.forumTitle}"></div>
                                 </a>
                                 <div class="flex-1 space-y-2">
-
                                     <a th:href="@{/forum/detail/{fid}(fid=${forumList.fid})}" class="md:text-xl font-semibold line-clamp-2" th:text="${forumList.postTitle}"></a>
-                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:text="${forumList.postContent}"></p>
+                                    <p class="leading-6 pr-4 line-clamp-2 md:block hidden" th:utext="${forumList.postContent}"></p>
                                     <a href="#" class="font-semibold block text-sm" th:text="${forumList.getPostWriter().nickname}"></a>
 
                                     <div class="flex items-center justify-between">
