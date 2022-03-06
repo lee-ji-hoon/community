@@ -49,8 +49,12 @@
                                 <div class="card-body">
                                     <a th:href="@{'/study/' + ${study.path}}" class="font-semibold text-lg truncate" th:text="${study.title}"> Graphic Design </a>
                                     <div class="flex items-center flex-wrap space-x-1 mt-1 text-sm text-gray-500 capitalize">
-                                        <a href="#"> <span th:text="${study.memberCount}"> 232k members </span> </a>
-<!--                                        <a href="#"> <span th:text="${#temporals.format(study.publishedDateTime, 'yyyy-MM-dd')}"> 1.7k post a day </span> </a>-->
+                                        <span th:each="tag: ${study.tags}"
+                                              class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                            <span class="text-decoration-none text-white">
+                                                <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                                            </span>
+                                        </span>
                                     </div>
                                     <div class="flex mt-3.5 space-x-2">
 

@@ -211,7 +211,7 @@ public class StudyController {
 
         model.addAttribute("tags", studyUpdate.getTags().stream().map(Tag::getTitle).collect(Collectors.toList()));
         List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
+        model.addAttribute("tagList", objectMapper.writeValueAsString(allTags));
 
         return "study/settings/tags";
     }
