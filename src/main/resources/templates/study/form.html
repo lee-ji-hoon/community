@@ -77,12 +77,12 @@
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('managerEmail')}" th:errors="*{managerEmail}">managerEmail Error</small>
                             </div>
                             <div class="col-span-2">
-                                <label for="shortDescription"> 소개</label>
+                                <label for="shortDescription">한 문장 소개</label>
                                 <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}"
                                           class="shadow-none with-border pt-2 pl-4 form-control"
                                           placeholder="스터디를 짧게 소개해 주세요." aria-describedby="shortDescriptionHelp" required maxlength="100"></textarea>
                                 <small id="shortDescriptionHelp" class="form-text text-muted">
-                                    스터디를 간단하게 소개해 주세요.
+                                    스터디를 한 문장으로 간단하게 소개해주세요
                                 </small>
                                 <small class="invalid-feedback">짧은 소개를 확인해주세요.</small>
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">shortDescription Error</small>
