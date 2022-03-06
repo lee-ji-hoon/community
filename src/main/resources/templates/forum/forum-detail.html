@@ -93,7 +93,7 @@
                                 <div class="space-y-5">
                                     <div>
                                         <h3 class="font-semibold mb-2 text-xl"> Description </h3>
-                                        <p style="white-space:pre;" th:text="${forum.postContent}"></p>
+                                        <div th:utext="${forum.postContent}"></div>
                                     </div>
                                     <th:block th:if="${forum.forumTitle != 'qna'}">
                                         <div>

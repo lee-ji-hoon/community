@@ -164,7 +164,7 @@ public class BoardController {
     // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
     @RequestMapping(value = "/board/detail/update")
-    public void boardUpdate(BoardForm boardForm, @CurrentUser Account account,
+    public String boardUpdate(BoardForm boardForm, @CurrentUser Account account,
                               @RequestParam(value = "bid") String bid,
                               @RequestParam(value = "boardTitle") String boardTitle,
                               @RequestParam(value = "writer") String writer,
@@ -172,6 +172,7 @@ public class BoardController {
                               @RequestParam(value = "content") String content) {
         Long boardId = Long.valueOf(bid);
         Board board = boardRepository.findByBid(boardId);
+        String message = null;
         if (account.getId().equals(board.getWriterId())) {
             log.info("bid : " + bid);
             log.info("boardTitle : " + boardTitle);
@@ -183,16 +184,27 @@ public class BoardController {
             boardForm.setTitle(title);
             boardForm.setContent(content);
             boardService.updateBoard(boardId, boardForm);
+            message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">게시물이 수정되었습니다.</p>\n" +
+                    "</div>";
+            return message;
         }
         log.info("잘못된 게시물 수정 요청 : bid = " + boardId + " accountId = " + account.getId());
+        message = "잘못된 요청입니다.";
+        return message;
     }
 
     // 게시물 삭제
     @GetMapping("/board/detail/{boardId}/delete")
-    public String boardDelete(@PathVariable long boardId, @CurrentUser Account account) {
+    public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriterId())) {
             boardRepository.delete(currentBoard);
+            redirectAttributes.addFlashAttribute("message", "해당 게시글 삭제되었습니다.");
             return "redirect:/board";
         }
         return "error-page";
