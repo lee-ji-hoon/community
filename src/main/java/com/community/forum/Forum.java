@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of = "bid")
+@EqualsAndHashCode(of = "fid")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,14 +39,5 @@ public class Forum {
     private String postContent;
 
     private Boolean isReported;
-
-    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "answerer_id")
-    private Account postAnswerer;
-
-    private LocalDateTime answerUploadTime;
-
-    @Column(columnDefinition = "TEXT")
-    private String answerContent;
 
 }

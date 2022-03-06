@@ -30,13 +30,19 @@ public class ForumController {
         model.addAttribute(account);
         model.addAttribute(forumService);
         model.addAttribute("top5Posts", recentlyPosts);
-        model.addAttribute(new ForumForm());
         return "forum/forums";
     }
 
     @GetMapping("/forum/detail")
     public String forumDetail() {
         return "forum/forum-detail";
+    }
+
+    @GetMapping("/forum/write")
+    public String forumWrite(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new ForumForm());
+        return "forum/forum-write";
     }
 
     @PostMapping("/forum/write")
