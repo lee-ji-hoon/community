@@ -2,6 +2,7 @@ package com.community.study;
 
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.study.form.StudyCalendarForm;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
 import com.community.tag.TagRepository;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +58,11 @@ public class StudyController {
 
     @InitBinder("studyForm")
     public void studyFormInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(studyFormValidator);
+    }
+
+    @InitBinder("studyCalendarForm")
+    public void studyDescriptionFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(studyFormValidator);
     }
 
@@ -146,7 +151,7 @@ public class StudyController {
 
     // 스터디 설명 수정 시작
     @GetMapping(STUDY_SETTINGS + "description")
-    public String viewStudyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
+    public String studyDescriptionForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
         model.addAttribute(account);
@@ -156,7 +161,7 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "description")
-    public String updateStudyForm(@CurrentUser Account account, @PathVariable String path, String image,
+    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,
                                   @Valid StudyDescriptionForm studyDescriptionForm,
                                   Errors errors, Model model, RedirectAttributes redirectAttributes) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -173,6 +178,35 @@ public class StudyController {
         return "redirect:/study/" + fixPath(path) + "/settings/description";
     }
     // 스터디 설명 수정 끝
+
+    @GetMapping(STUDY_SETTINGS + "calendar")
+    public String studyCalendarForm(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+        model.addAttribute(modelMapper.map(studyUpdate, StudyCalendarForm.class));
+
+        return "study/settings/calendar";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "calendar")
+    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,
+                                             @Valid StudyCalendarForm studyCalendarForm,
+                                             Errors errors, Model model, RedirectAttributes redirectAttributes) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(studyUpdate);
+            return "study/settings/calendar";
+        }
+
+        studyService.updateStudyCalendar(studyUpdate, studyCalendarForm);
+        redirectAttributes.addFlashAttribute("message", "게시글의 일정이 수정됐습니다.");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/calendar";
+    }
 
     @PostMapping(STUDY_SETTINGS + "banner")
     public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
@@ -248,35 +282,35 @@ public class StudyController {
 
     /* 스터디 전체적인 설정 시작 */
     // 스터디 설정 시작
-    @GetMapping(STUDY_SETTINGS + "study")
+    @GetMapping(STUDY_SETTINGS + "config")
     public String studyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
 
-        return "study/settings/study";
+        return "study/settings/config";
     }
 
     // 스터디 이름 변경
-    @PostMapping(STUDY_SETTINGS + "study/title")
+    @PostMapping(STUDY_SETTINGS + "config/title")
     public String studyTitleUpdate(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes, Model model, String newTitle) {
         Study studyToUpdateStatus = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidTitle(newTitle)) {
             model.addAttribute(account);
             model.addAttribute(studyToUpdateStatus);
             model.addAttribute("studyTitleError", "스터디 이름들 다시 입력해주세요");
-            return "study/settings/study";
+            return "study/settings/config";
         }
 
         studyService.updateStudyTitle(studyToUpdateStatus, newTitle);
         redirectAttributes.addFlashAttribute("message", "스터디 이름을 수정했습니다.");
 
-        return "redirect:/study/" + fixPath(path) + "/settings/study";
+        return "redirect:/study/" + fixPath(path) + "/settings/config";
     }
 
     // 스터디 삭제
-    @PostMapping(STUDY_SETTINGS + "study/remove")
+    @PostMapping(STUDY_SETTINGS + "config/remove")
     public String removeStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.remove(study);
@@ -284,7 +318,7 @@ public class StudyController {
     }
 
     // 스터디 경로 수정
-    @PostMapping(STUDY_SETTINGS + "study/path")
+    @PostMapping(STUDY_SETTINGS + "config/path")
     public String updatePath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes redirectAttributes) {
         Study studyToUpdateStatus = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidPath(newPath)) {
@@ -295,7 +329,7 @@ public class StudyController {
         }
         studyService.updateStudyPath(studyToUpdateStatus, newPath);
         redirectAttributes.addFlashAttribute("message", "스터디 경로가 수정됐습니다.");
-        return "redirect:/study/" + fixPath(newPath) + "/settings/study";
+        return "redirect:/study/" + fixPath(newPath) + "/settings/config";
 
     }
     /* 스터디 전체적인 설정 끝 */

@@ -284,8 +284,8 @@
                     </span>
                 <div id="logo">
                     <a href="/">
-                        <img src="assets/images/logo.png" alt="">
-                        <img src="assets/images/logo-mobile.png" class="logo_mobile" alt="">
+                        <img src="/assets/images/logo.png" alt="">
+                        <img src="/assets/images/logo-mobile.png" class="logo_mobile" alt="">
                     </a>
                 </div>
             </div>
@@ -651,9 +651,10 @@
          uk-sticky="top:30 ; offset:80 ; media:@m ;bottom:true; animation: uk-animation-slide-top">
         <h4 class="mb-0 p-3 uk-visible@m hidden"> Setting Navigation </h4>
         <ul>
-            <li class="" th:classappend="${currentMenu == 'description'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}" class="hover:bg-gray-100"> <i class="uil-user"></i>소개</a></li>
-            <li class="" th:classappend="${currentMenu == 'tag'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="hover:bg-gray-100"> <i class="uil-scenery"></i>스터디 주제</a></li>
-            <li class="" th:classappend="${currentMenu == 'stduy'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/study'}" class="hover:bg-gray-100"> <i class="icon-material-outline-local-offer"></i> 설정</a></li>
+            <li class="" th:classappend="${currentMenu == 'description'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}" class="hover:bg-gray-100"> <i class="icon-material-outline-assignment"></i>소개</a></li>
+            <li class="" th:classappend="${currentMenu == 'calendar'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/calendar'}" class="hover:bg-gray-100"> <i class="icon-feather-calendar"></i>일정</a></li>
+            <li class="" th:classappend="${currentMenu == 'tag'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="hover:bg-gray-100"> <i class="icon-feather-tag"></i>스터디 주제</a></li>
+            <li class="" th:classappend="${currentMenu == 'config'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/config'}" class="hover:bg-gray-100"> <i class="icon-material-outline-https"></i> 설정</a></li>
         </ul>
     </nav>
 </div>

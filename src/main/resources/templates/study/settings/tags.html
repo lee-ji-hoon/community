@@ -11,15 +11,16 @@
     .tagify__input {
         outline: none;
         font-size: 15px;
-        color: #808080;
-        width: 30%;
+        width: 70%;
+        height: 30px;
         background-color: #fff;
         font-weight: 400;
         opacity: 1;
-        border-radius: 3px;
+        border-radius: 5px;
         border: 1px solid #e0e0e0;
-        padding: 5px;
     }
+
+
 </style>
 <body>
 
@@ -40,7 +41,6 @@
                         <h3 class="font-bold mb-2 text-xl">스터디 주제</h3>
                         <p class=""> 스터디에서 주로 다루는 주제를 태그로 등록하세요. <p>태그를 입력하고 콤마(,) 또는 엔터를 입력하세요. </p>
                         <div class="" id="tagList" th:text="${tagList}" hidden></div>
-
                         <div class="keywords-container max-w-lg flow-root">
                             <div class="keyword-input-container">
                                 <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
