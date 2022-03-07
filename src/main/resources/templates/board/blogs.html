@@ -36,7 +36,7 @@
                                 </nav>
                             </div>
                             <a href="#create-post-modal" uk-toggle  class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute right-0"
-                            data-tippy-placement="left" title="Create New Article">
+                            data-tippy-placement="left" title="새 게시글 작성하기">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                             </a>
                             <!-- Craete video post modal -->
@@ -106,8 +106,8 @@
 
                                             <div class="flex items-center space-x-2">
 
-                                                <ion-icon name="checkmark-circle" class="text-green-600 text-xl"></ion-icon>
-                                                <div> You are successfuly uploaded</div>
+                                                <!--<ion-icon name="checkmark-circle" class="text-green-600 text-xl"></ion-icon>
+                                                <div> You are successfuly uploaded</div>-->
 
                                             </div>
 
@@ -308,7 +308,7 @@
 
                         <div uk-sticky="offset:100" class="uk-sticky">
   
-                          <h2 class="text-lg font-semibold mb-3"> Recently Posted </h2>
+                          <h2 class="text-lg font-semibold mb-3"> 최근 올라온 글 </h2>
                           <ul> 
                               <li th:each="recent : ${recentlyBoards}">
                                   <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">

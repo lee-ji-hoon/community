@@ -7,7 +7,8 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface ForumRepository extends JpaRepository<Forum, Long> {
-    List<Forum> findAllTop5ByIsReportedOrderByPostUploadTime(Boolean isTrue);
+
+    List<Forum> findTop5ByIsReportedOrderByPostUploadTimeDesc(Boolean isReported);
 
     List<Forum> findAllByIsReportedAndForumTitleOrderByPostUploadTimeDesc(Boolean isTrue, String forumTitle);
     Forum findByFid(long fid);
