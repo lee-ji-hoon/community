@@ -50,6 +50,23 @@
                         <!-- form body -->
                         <div class="p-10 space-y-7">
                             <div>
+                                <label for="selectBox"> 유형 선택 </label>
+                                <select id="selectBox" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitle}">
+                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
+                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
+                                </select>
+                            </div>
+                            <div  id="forumTitlesub">
+                                <label for="selectBoxSub"> 전공 선택 </label>
+                                <select id="selectBoxSub" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
+                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
+                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                </select>
+                            </div>
+                            <div>
                                 <div class="line">
                                     <input class="line__input form-group" id="postTitle" th:field="*{postTitle}"
                                            type="text" onkeyup="this.setAttribute('value', this.value);"
@@ -72,23 +89,6 @@
                                 </small>
                             </div>
                             <div>
-                                <label for="selectBox"> 유형 선택 </label>
-                                <select id="selectBox" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitle}">
-                                    <option data-icon="icon-material-outline-help-outline" value="qna" selected>질문</option>
-                                    <option data-icon="icon-material-outline-assignment" value="forum">정보 공유</option>
-                                </select>
-                            </div>
-                            <div  id="forumTitlesub">
-                                <label for="selectBoxSub"> 전공 선택 </label>
-                                <select id="selectBoxSub" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{forumTitleSub}" aria-describedby="forumTitleHelp">
-                                    <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
-                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
-                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
-                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
-                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
-                                </select>
-                            </div>
-                            <div>
                                 <div class="form-group">
                                 <textarea class="form-control"  id="postContent" th:field="*{postContent}"
                                           type="text" aria-describedby="postContentHelp" required></textarea>
@@ -99,9 +99,9 @@
 
                         <!-- form footer -->
                         <div class="border-t flex justify-between lg:space-x-10 p-7 bg-gray-50 rounded-b-md">
-                            <p class="text-sm leading-6"> You can add images, contact info and other details after you create the Page. </p>
+                            <p class="text-sm leading-6"> 이미지와 파일 업로드는 현재 구현 중입니다. </p>
                             <button type="submit" class="button lg:w-1/2">
-                                Create Now
+                                작성하기
                             </button>
                         </div>
                     </form>

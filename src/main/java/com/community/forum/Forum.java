@@ -31,8 +31,6 @@ public class Forum {
 
     private String postSubtitle;
 
-    private String keywordList;
-
     private LocalDateTime postUploadTime;
 
     @Column(columnDefinition = "TEXT")

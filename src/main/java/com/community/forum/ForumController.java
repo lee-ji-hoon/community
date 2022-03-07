@@ -25,17 +25,12 @@ public class ForumController {
 
     @GetMapping("/forum")
     public String forumMainPage(@CurrentUser Account account, Model model) {
-        List<Forum> recentlyPosts = forumRepository.findAllTop5ByIsReportedOrderByPostUploadTime(false);
+        List<Forum> recentlyPosts = forumRepository.findTop5ByIsReportedOrderByPostUploadTimeDesc(false);
 
         model.addAttribute(account);
         model.addAttribute(forumService);
         model.addAttribute("top5Posts", recentlyPosts);
         return "forum/forums";
-    }
-
-    @GetMapping("/forum/detail")
-    public String forumDetail() {
-        return "forum/forum-detail";
     }
 
     @GetMapping("/forum/write")
@@ -55,8 +50,10 @@ public class ForumController {
 
     @GetMapping("/forum/detail/{fid}")
     public String detailForum(@PathVariable Long fid, @CurrentUser Account account, Model model) {
+        List<Forum> recentlyForum = forumRepository.findTop5ByIsReportedOrderByPostUploadTimeDesc(false);
         model.addAttribute(boardService);
         model.addAttribute(account);
+        model.addAttribute("recentlyForum", recentlyForum);
         model.addAttribute("forum", forumRepository.findByFid(fid));
         return "forum/forum-detail";
     }

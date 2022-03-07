@@ -293,14 +293,13 @@
             <!-- search icon for mobile -->
             <div class="header-search-icon" uk-toggle="target: #wrapper ; cls: show-searchbox"> </div>
             <div class="header_search"><i class="uil-search-alt"></i>
-                <input value="" type="text" class="form-control" placeholder="Search for Friends , Videos and more.." autocomplete="off">
+                <input value="" type="text" class="form-control" placeholder="검색어를 입력해주세요." autocomplete="off">
                 <div uk-drop="mode: click" class="header_search_dropdown">
-                    <h4 class="search_title"> Recently </h4>
+                    <h4 class="search_title"> 최근 검색어 </h4>
                     <ul>
                         <li>
                             <a href="#">
-                                <img src="" alt="" class="list-avatar">
-                                <div class="list-name">  Erica Jones </div>
+                                <div class="list-name">  잘생겨지는 방법 </div>
                             </a>
                         </li>
                     </ul>
@@ -310,19 +309,19 @@
             <div class="right_side">
                 <div class="header_widgets">
 
-                    <a href="#" class="is_icon" uk-tooltip="title: Notifications">
+                    <a href="#" class="is_icon" uk-tooltip="title: 알림">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-                        <span>3</span>
+                        <span class="pt-1">3</span>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown">
                         <div class="dropdown_scrollbar" data-simplebar>
                             <div class="drop_headline">
-                                <h4>Notifications </h4>
+                                <h4> 알림 </h4>
                                 <div class="btn_action">
-                                    <a href="#" data-tippy-placement="left" title="Notifications">
+                                    <a href="#" data-tippy-placement="left" title="알림">
                                         <ion-icon name="settings-outline"></ion-icon>
                                     </a>
-                                    <a href="#" data-tippy-placement="left" title="Mark as read all">
+                                    <a href="#" data-tippy-placement="left" title="전부 확인하기">
                                         <ion-icon name="checkbox-outline"></ion-icon>
                                     </a>
                                 </div>
@@ -331,17 +330,22 @@
                                 <li>
                                     <a href="#">
                                         <div class="drop_avatar">
-                                            <img src="" alt="">
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                         </div>
                                         <span class="drop_icon bg-gradient-primary">
                                             <i class="icon-feather-thumbs-up"></i>
                                         </span>
                                         <div class="drop_text">
                                             <p>
-                                                <strong>Adrian Mohani</strong> Like Your Comment On Video
-                                                <span class="text-link">Learn Prototype Faster </span>
+                                                <strong> ezhoon </strong>님이 회원님의 글을 좋아합니다.<br>
+                                                <span class="text-link">게시물 제목 </span>
                                             </p>
-                                            <time> 2 hours ago </time>
+                                            <time> 2시간 전 </time>
                                         </div>
                                     </a>
                                 </li>
@@ -350,14 +354,14 @@
                     </div>
 
                     <!-- Message -->
-                    <a href="#" class="is_icon" uk-tooltip="title: Message">
+                    <a href="#" class="is_icon" uk-tooltip="title: 쪽지">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
-                        <span>4</span>
+                        <span class="pt-1">4</span>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown is_message">
                         <div  class="dropdown_scrollbar" data-simplebar>
                             <div class="drop_headline">
-                                <h4>Messages </h4>
+                                <h4> 쪽지 </h4>
                                 <div class="btn_action">
                                     <a href="#" data-tippy-placement="left" title="Notifications">
                                         <ion-icon name="settings-outline" uk-tooltip="title: Message settings ; pos: left"></ion-icon>
@@ -367,15 +371,21 @@
                                     </a>
                                 </div>
                             </div>
-                            <input type="text" class="uk-input" placeholder="Search in Messages">
+                            <input type="text" class="uk-input" placeholder="쪽지를 검색해보세요.">
                             <ul>
                                 <li class="un-read">
                                     <a href="#">
-                                        <div class="drop_avatar"> <img src="" alt="">
+                                        <div class="drop_avatar">
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                         </div>
                                         <div class="drop_text">
-                                            <strong> Stella Johnson </strong> <time>12:43 PM</time>
-                                            <p>  Alex will explain you how ...  </p>
+                                            <strong> ezhoon </strong> <time>5분 전</time><br>
+                                            <p>  쪽지 내용 길이 체크 ...  </p>
                                         </div>
                                     </a>
                                 </li>
@@ -492,7 +502,19 @@
                 </svg>
                 <span> 학생회</span> </a>
             </li>
-            <li id="more-veiw" hidden ><a href="games.html">
+            <li id="more-veiw" hidden><a href="events.html">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500">
+                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                </svg><span> 행사 </span></a>
+            </li>
+            <li id="more-veiw" hidden><a href="products.html">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500">
+                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                </svg>
+                <span> 장터 </span></a>
+            </li>
+
+            <!--<li id="more-veiw" hidden ><a href="games.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-green-500">
                     <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
                 </svg>  <span>  Games </span></a>
@@ -509,23 +531,11 @@
                 </svg>
                 <span> Video</span></a>
             </li>
-
-            <li id="more-veiw" hidden><a href="events.html">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500">
-                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                </svg><span>  Events </span></a>
-            </li>
-            <li id="more-veiw" hidden><a href="products.html">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500">
-                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
-                </svg>
-                <span> Products</span></a>
-            </li>
             <li id="more-veiw" hidden><a href="albums.html">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-purple-500">
                     <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                 </svg>  <span>  Photos </span></a>
-            </li>
+            </li>-->
 
 
         </ul>
