@@ -1,6 +1,7 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.study.form.StudyCalendarForm;
 import com.community.study.form.StudyDescriptionForm;
 import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,7 @@ public class StudyService {
         return byPath;
     }
 
-    public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
-        modelMapper.map(studyDescriptionForm, study);
-    }
+
 
     public void getStudyImage(Study study, String image) {
         study.setImage(image);
@@ -128,5 +127,13 @@ public class StudyService {
 
     public void remove(Study study) {
         studyRepository.delete(study);
+    }
+
+    public void updateStudyCalendar(Study study, StudyCalendarForm studyCalendarForm) {
+        modelMapper.map(studyCalendarForm, study);
+    }
+
+    public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
+        modelMapper.map(studyDescriptionForm, study);
     }
 }

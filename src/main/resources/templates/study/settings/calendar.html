@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="theme-fragments.html :: head"></head>
+
+<body>
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'settings')"></div>
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='calendar')"></div>
+                <div class="lg:w-2/3">
+                    <div th:if="${message}" class="m-5">
+                        <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
+                    </div>
+                    <form class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
+                          th:action="@{'/study/' + ${study.getPath()} + '/settings/calendar'}"
+                          th:object="${studyCalendarForm}"
+                          method="post" novalidate>
+                        <h3 class="text-xl mb-2 font-semibold"> 기간 및 인원</h3>
+                        <p> 스터디 인원 및 기간을 수정할 수 있습니다..</p>
+                        <hr/>
+                        <div>
+                            <label for="limitMember" class="font-bold">인원</label>
+                            <input id="limitMember" type="number" th:field="*{limitMember}" class="shadow-none with-border p-3 form-control" placeholder="2" aria-describedby="limitMembersHelp" min="2" max="30">
+                            <small id="limitMemberHelp" class="form-text text-muted">
+                                스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
+                            </small>
+                            <small class="invalid-feedback"> 스터디 모집 인원을 확인해주세요.</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</small>
+                        </div>
+                        <div>
+                            <label for="limitMemberDate" class="font-bold">인원 모집 기간</label>
+                            <div class="form-group">
+                                <input id="limitMemberDate" type="date" th:field="*{limitMemberDate}" class="shadow-none with-border p-3 form-control"
+                                       aria-describedby="limitPersonDateHelp" required>
+                            </div>
+                            <small id="limitPersonDateHelp" class="form-text text-muted">
+                                스터디 인원 모집 마감일을 설정해주세요<br>
+                                인원 모집 시작은 설정에서 가능합니다.
+                            </small>
+                            <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
+                        </div>
+                        <hr/>
+                        <div class="grid grid-cols-2 gap-3">
+
+                            <div>
+                                <label for="startStudyDate" class="font-bold">스터디 시작일</label>
+                                <div class="form-group">
+                                    <input id="startStudyDate" type="date" th:field="*{startStudyDate}" class="shadow-none with-border p-3 form-control"
+                                           aria-describedby="startStudyDateHelp" required>
+                                </div>
+                                <small id="startStudyDateHelp" class="form-text text-muted">
+                                    스터디 시작 날짜를 설정해주세요
+                                </small>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('startStudyDate')}" th:errors="*{startStudyDate}">startStudyDate Error</small>
+                                <small class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</small>
+                            </div>
+                            <div>
+                                <label for="limitStudyDate" class="font-bold">스터디 종료일</label>
+                                <div class="form-group">
+                                    <input id="limitStudyDate" type="date" th:field="*{limitStudyDate}" class="shadow-none with-border p-3 form-control"
+                                           aria-describedby="limitStudyDateHelp" required>
+                                </div>
+                                <small id="limitStudyDateHelp" class="form-text text-muted">
+                                    스터디 종료 날짜를 설정해주세요<br>
+                                </small>
+                                <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 변경 </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: editor-script"></script>
+<script th:replace="theme-fragments.html :: studyBanner"></script>>
+</body>
+
+</html>
