@@ -1,5 +1,6 @@
 package com.community.board.entity;
 
+import com.community.account.entity.Account;
 import com.community.like.Likes;
 import lombok.*;
 
@@ -23,8 +24,13 @@ public class Board {
 
     private String boardTitle;
 
+    private String subBoardTitle;
+
     @NotBlank
     private String title;
+
+    @NotBlank
+    private String subTitle;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>();
@@ -40,10 +46,9 @@ public class Board {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @NotBlank
-    private String writer;
-
-    private Long writerId;
+    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private Account writer;
 
     private Integer pageView;
 

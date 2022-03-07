@@ -1,6 +1,7 @@
 package com.community.board.entity;
 
 import com.community.account.entity.Account;
+import com.community.forum.Forum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class Reply {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Account account;
+
+    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "forum_fid")
+    private Forum forum;
 
     @Column(columnDefinition = "TEXT")
     private String content;

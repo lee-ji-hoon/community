@@ -13,11 +13,12 @@ public class BoardForm {
     @Length(min = 5, max = 30)
     private String title;
 
+    private String subTitle;
+
     @NotBlank
     private String content;
 
-    @NotBlank
-    private String writer;
-
     private String boardTitle;
+
+    private String subBoardTitle;
 }

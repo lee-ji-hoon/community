@@ -2,6 +2,14 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
+<style>
+    #subBoardSort, #postTitleSub, #keywordListForm{
+        display: none;
+    }
+    .modal{
+        display: none;
+    }
+</style>
 <body>
 
     <div id="wrapper">
@@ -22,16 +30,16 @@
                     <div class="lg:w-3/4">
                         <div class="flex justify-between items-center relative md:mb-4 mb-3">
                             <div class="flex-1">
-                                <h2 class="text-2xl font-semibold"> 게시판 </h2>
+                                <h2 class="text-2xl font-semibold"> 커뮤니티 </h2>
                                 <th:block th:if="${message}">
                                     <div th:replace="theme-fragments.html :: red-notice(message=${message})"></div>
                                 </th:block>
                                 <nav class="responsive-nav md:m-0 -mx-4 style-2">
                                     <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                         <li><a href="#" class="lg:px-2"> 🔥 Top5 🔥 </a></li>
-                                        <li><a href="#" class="lg:px-2"> 자유게시판 </a></li>
-                                        <li><a href="#" class="lg:px-2"> 신입생게시판 </a></li>
-                                        <li><a href="#" class="lg:px-2"> 졸업생게시판 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 자유 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 정보 </a></li>
+                                        <li><a href="#" class="lg:px-2"> 질문 </a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -44,7 +52,7 @@
                                 <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
 
                                     <div class="py-4 border-b flex  justify-between px-6">
-                                        <h3 class="text-lg font-semibold"> 게시글 작성하기 </h3>
+                                        <h3 class="text-lg font-semibold" id="forum_head"> 게시글 작성하기 </h3>
                                         <div>
                                             <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
                                                     type="button" uk-close>
@@ -58,42 +66,75 @@
                                             <div class="space-y-4 g:w-8/12">
 
                                                 <div class="px-2 space-y-2">
-                                                    <div class="font-semibold text-base"> 게시판 선택 </div>
-                                                    <select class="selectpicker" th:field="*{boardTitle}">
-                                                        <option data-icon="icon-material-outline-assignment" value="자유게시판" selected>자유게시판</option>
-                                                        <option data-icon="icon-material-outline-access-alarm" value="신입생게시판">신입생게시판</option>
-                                                        <option data-icon="icon-material-outline-account-circle" value="졸업생게시판">졸업생게시판</option>
+                                                    <div>
+                                                        <label for="selectBox"> 유형 선택 </label>
+                                                        <select id="selectBox" name="selectBox"  class="shadow-none selectpicker with-border" th:field="*{boardTitle}">
+                                                            <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
+                                                            <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
+                                                            <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div id="subBoardSort">
+                                                    <label for="selectBoxSub"> 종류 선택 </label>
+                                                    <select id="selectBoxSub" name="selectBoxSub"  class="shadow-none selectpicker with-border">
+                                                        <option data-icon="icon-material-outline-help-outline" value="" selected>선택</option>
+                                                        <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                                        <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                                        <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                                        <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                                        <option data-icon="icon-material-outline-movie" value="etc"> 기타 </option>
                                                     </select>
                                                 </div>
                                                 <div class="font-semibold text-lg"> Details </div>
-                                                <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group d-none">
-                                                    <label for="writer" class="mb-0 ml-2 text-gray-600 text-sm">작성자</label>
-                                                    <input type="hidden" placeholder="제목을 입력해주세요." id="writer"
-                                                           th:value="${account.nickname}" name="writer" readonly
-                                                           aria-describedby="writerHelp"
-                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
-                                                    <small id="writerHelp" class="form-text text-muted">
-                                                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
-                                                    </small>
-                                                    <small class="invalid-feedback">제목을 입력해주세요.</small>
-                                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}">writer Error</small>
-                                                </div>
-                                                <div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
-                                                    <label for="title" class="mb-0 ml-2 text-gray-600 text-sm">Title</label>
-                                                    <input type="text" placeholder="제목을 입력해주세요." id="title"
-                                                           th:field="*{title}" aria-describedby="titleHelp" required
-                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                <!-- 제목 -->
+                                                <div class="form-group">
+                                                    <div class="line">
+                                                        <input class="line__input form-control" id="title" th:field="*{title}"
+                                                               type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                               aria-describedby="titleHelp" required autocomplete="off">
+                                                        <span for="username" class="line__placeholder"> 제목 </span>
+                                                    </div>
                                                     <small id="titleHelp" class="form-text text-muted">
                                                         제목은 5글자부터 최대 30글자까지 입력 가능합니다.
                                                     </small>
                                                     <small class="invalid-feedback">제목을 입력해주세요.</small>
                                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
                                                 </div>
-                                                <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
+                                                <!-- 소제목 -->
+                                                <div id="postTitleSub form-group">
+                                                    <div class="line">
+                                                        <input class="line__input form-group" id="subTitle" th:field="*{subTitle}"
+                                                               type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                               aria-describedby="subTitleHelp" required autocomplete="off">
+                                                        <span for="username" class="line__placeholder"> 소제목 </span>
+                                                    </div>
+                                                    <small id="subTitleHelp" class="form-text text-muted">
+                                                        예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
+                                                    </small>
+                                                </div>
+                                                <!--<div class="border focus-within:border-blue-300 p-3 pb-0 rounded-md form-group">
+                                                    <label for="title" class="mb-0 ml-2 text-gray-600 text-sm">Title</label>
+                                                    <input type="text" placeholder="제목을 입력해주세요." id="title"
+                                                            aria-describedby="titleHelp" required
+                                                           class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                    <small id="titleHelp" class="form-text text-muted">
+                                                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                                    </small>
+                                                </div>-->
+                                                <!--<div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
                                                     <label for="content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
                                                     <textarea type="text" rows="5" placeholder="내용을 입력해주세요." id="content"
                                                               th:field="*{content}" aria-describedby="contentHelp" required
                                                               class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
+                                                    <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                                                </div>-->
+                                                <!-- 본문 -->
+                                                <div class="form-group">
+                                                    <div>
+                                                        <textarea class="form-control"  id="content" th:field="*{content}" 
+                                                                  type="text" aria-describedby="contentHelp" required></textarea>
+                                                    </div>
                                                     <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
                                                     <small class="invalid-feedback">글을 입력해주세요.</small>
                                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
@@ -130,23 +171,24 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- 게시판 분류 -->
                         <div class="card divide-y divide-gray-100 px-4">
                             <div class="uk-switcher" id="timeline-tab">
+                                <!-- TOP 5 -->
                                 <div>
                                     <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${board}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                                <th:block th:if="${board.boardTitle=='자유게시판'}">
+                                                <th:block th:if="${board.boardTitle=='자유'}">
                                                     <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
                                                     </div>
                                                 </th:block>
-                                                <th:block th:if="${board.boardTitle=='신입생게시판'}">
+                                                <th:block th:if="${board.boardTitle=='정보'}">
                                                     <div class="absolute bg-yellow-100 font-semibold px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
                                                     </div>
                                                 </th:block>
-                                                <th:block th:if="${board.boardTitle=='졸업생게시판'}">
+                                                <th:block th:if="${board.boardTitle=='질문'}">
                                                     <div class="absolute bg-purple-100 font-semibold px-2.5 py-1 rounded-full text-purple-500 text-xs top-2.5 left-2.5" th:text="${board.boardTitle}">
                                                     </div>
                                                 </th:block>
@@ -155,7 +197,7 @@
                                         <div class="flex-1 lg:pt-0 pt-4">
 
                                             <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                            <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
+                                            <div class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${service.boardDateTime(board.uploadTime)}"></div>
 
                                             <div class="flex items-center pt-3">
                                                 <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
@@ -181,8 +223,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 게시판 1 -->
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('자유게시판')}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('자유')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
@@ -194,8 +237,7 @@
                                         <div class="flex-1 lg:pt-0 pt-4">
 
                                             <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                            <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
-
+                                            <div class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${service.boardDateTime(board.uploadTime)}"></div>
                                             <div class="flex items-center pt-3">
                                                 <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
                                                 <div class="flex items-center mx-4">
@@ -220,8 +262,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 게시판 2 -->
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('신입생게시판')}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('정보')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
@@ -233,8 +276,7 @@
                                         <div class="flex-1 lg:pt-0 pt-4">
 
                                             <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                            <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
-
+                                            <div class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${service.boardDateTime(board.uploadTime)}"></div>
                                             <div class="flex items-center pt-3">
                                                 <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
                                                 <div class="flex items-center mx-4">
@@ -259,8 +301,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- 게시판 3 -->
                                 <div>
-                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('졸업생게시판')}">
+                                    <div class="lg:flex lg:space-x-6 py-5" th:each="board : ${service.boardTitleList('질문')}">
                                         <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}">
                                             <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
                                                 <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
@@ -272,8 +315,7 @@
                                         <div class="flex-1 lg:pt-0 pt-4">
 
                                             <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-2" th:text="${board.title}"></a>
-                                            <div style="white-space:pre;" class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${board.content}"></div>
-
+                                            <div class="line-clamp-3 pt-3 truncate md:text-clip" th:text="${service.boardDateTime(board.uploadTime)}"></div>
                                             <div class="flex items-center pt-3">
                                                 <div class="flex items-center">  <ion-icon name="thumbs-up-outline" class="text-xl mr-2"></ion-icon><a th:text="${likeService.boardLikeSize(board)}"></a></div>
                                                 <div class="flex items-center mx-4">
@@ -332,11 +374,69 @@
         
     </div>
 
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script th:replace="theme-fragments.html :: form-validation"></script>
     <script type="application/javascript">
-        $(document).ready(function (){
+        $( document ).ready( function() {
+            $('#content').summernote({
+                placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+                tabsize: 2,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                ],
+                maxHeight: null,
+                minHeight: null,
+                lang : 'ko-KR',
+                height: 500,
+            });
+            $('#postTitle').val('');
+            jQuery('#selectBox').change(function() {
+                var state = jQuery('#selectBox option:selected').val();
+                if (state == '자유') {
+                    $('#postTitle').val('');
+                    $('#subTitle').val('');
+                    $('#content').val('');
+                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                    $('#postTitleHelp').text("자유의 대제목을 입력해주세요.");
+                    $('#contentHelp').text("자유에 대한 내용을 자세히 설명해주세요.");
+                    $("label[for='postTitle']").text('Forum Title');
+                    $("label[for='content']").text('Forum Description');
+                    $("#forum_head").text('글 작성하기');
+                    jQuery('#subBoardSort').hide();
+                    jQuery('#postTitleSub').hide();
+                }
+                if (state == '질문') {
+                    $('#postTitle').val('');
+                    $('#subTitle').val('');
+                    $('#content').val('');
+                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                    $("#selectBoxSub option[value*='java']").prop('disabled',true);
+                    $('#postTitleHelp').text("궁금한 내용의 주제를 작성해주세요.");
+                    $('#content').attr("placeholder", "궁금한 내용을 자세하게 설명해주세요.");
+                    $("label[for='postTitle']").text('Q&A Title');
+                    $("label[for='content']").text('Q&A Description');
+                    $("#forum_head").text('Q&A 작성하기');
+                    jQuery('#subBoardSort').show();
+                    jQuery('#postTitleSub').hide();
+                    $('#selectBoxSub').load(window.location.href+' #selectBoxSub');
 
-        })
+                }
+                if (state == '정보') {
+                    $('#postTitle').val('');
+                    $('#subTitle').val('');
+                    $('#content').val('');
+                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                    $('#postTitleHelp').text("공유할 정보의 대제목을 입력해주세요.");
+                    $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
+                    $("label[for='postTitle']").text('Forum Title');
+                    $("label[for='content']").text('Forum Description');
+                    $("#forum_head").text('정보 작성하기');
+                    jQuery('#subBoardSort').show();
+                    jQuery('#postTitleSub').show();
+                }
+            });
+        });
     </script>
 
 </body>
