@@ -108,7 +108,7 @@
                                                                             <label for="content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
                                                                             <textarea type="text" rows="5" placeholder="내용을 입력해주세요." id="content" name="content"
                                                                                       aria-describedby="contentHelp" required
-                                                                                      th:text="${board.content}"
+                                                                                      th:utext="${board.content}"
                                                                                       class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
                                                                         </div>
 
@@ -146,7 +146,7 @@
                                         </div>
                                     </div>
                                     <div id="utextDiv">
-                                        <div class="space-y-3" th:utext="${board.content}"></div>
+                                        <div class="space-y-3 content" th:utext="${board.content}"></div>
                                     </div>
                                 </div>
                             </div>
@@ -265,9 +265,21 @@
         </div>
         
     </div>
-
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="application/javascript" th:inline="javascript">
         $(document).ready(function (){
+            $('#content').summernote({
+                placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+                tabsize: 2,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                ],
+                maxHeight: null,
+                minHeight: null,
+                lang : 'ko-KR',
+                height: 500,
+            });
 
             // input에 있는 값을 가져옴
             var input = document.getElementById("r_content");

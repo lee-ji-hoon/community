@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class BoardForm {
     @NotBlank
-    @Length(min = 5, max = 30)
+    @Length(min = 3, max = 30)
     private String title;
 
     private String subTitle;
