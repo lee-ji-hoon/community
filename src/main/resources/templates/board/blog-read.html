@@ -48,7 +48,7 @@
                                             <th:block th:if="${boardOwner.id==account.id}">
                                                 <div>
                                                     <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
-                                                       data-tippy-placement="right" title="Update Article">
+                                                       data-tippy-placement="right" title="게시물 수정하기">
                                                         <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
                                                     </a>
                                                     <!-- Craete video post modal -->
@@ -66,7 +66,7 @@
                                                             </div>
 
                                                             <form class="space-y-4 g:w-8/12" id="board_form" onsubmit="return false">
-                                                                <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
+                                                                <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1 max-h-screen" data-simplebar>
                                                                     <div class="space-y-4 g:w-8/12">
                                                                         <div class="px-2 space-y-2 d-none">
                                                                             <div class="font-semibold text-base"> 게시판 bid </div>
@@ -123,15 +123,15 @@
                                                                     <div class="flex space-x-2">
                                                                         <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}"
                                                                            class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                                                                            Delete </a>
+                                                                            삭제하기 </a>
                                                                         <button
                                                                                 class="uk-modal-close bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send">
-                                                                            Update </button>
+                                                                            수정하기 </button>
                                                                     </div>
 
                                                                     <button hidden
                                                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold board_form_send">
-                                                                        Update1 </button>
+                                                                        수정하기 </button>
                                                                 </div>
                                                             </form>
 
@@ -182,14 +182,14 @@
                         <!-- related articles -->
                         <div class="card p-6 relative">
 
-                            <h3 class="mb-8 mt-2 font-semibold text-xl"> Add your comment </h3>
+                            <h3 class="mb-8 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
                             <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
                                 <form id="reply_form" onsubmit="return false">
                                     <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
                                            value="1" th:value="${board.bid}" readonly>
                                     <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
                                            value="1" th:value="${account.id}" readonly>
-                                    <input type="text" id="r_content" placeholder="댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
+                                    <input type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
                                     <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
                                         <a class="write_reply">
                                             <ion-icon name="return-down-back-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
