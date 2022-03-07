@@ -29,7 +29,6 @@ public class Board {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String subTitle;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

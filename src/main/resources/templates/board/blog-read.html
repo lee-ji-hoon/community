@@ -35,7 +35,47 @@
                             </div>
                             <div class="form_refresh">
                                 <div class="p-7">
-                                    <h1 class="lg:text-3xl text-2xl font-semibold mb-6" th:text="${board.title}">제목</h1>
+                                    <th:block th:if="${board.boardTitle=='자유'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 자유게시글 </h5>
+                                    </th:block>
+                                    <th:block th:if="${board.boardTitle=='질문'}">
+                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'major'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 전공 질문 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'college'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 학교 생활 질문 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'qnaEtc'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 기타 질문 </h5>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:if="${board.boardTitle=='정보'}">
+                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'web'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> WEB DEVELOPMENT </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'java'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> JAVA Programing </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'media'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> Image Processing</h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'vrar'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> Virtual Reality</h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'infoEtc'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> Etc </h5>
+                                        </th:block>
+                                    </th:block>
+                                    <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${board.title}">제목</h1>
+                                    <th:block th:if="${board.boardTitle=='정보'}">
+                                        <p th:text="${board.subTitle}"></p>
+                                    </th:block>
                                     <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
                                         <svg th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
                                              th:data-jdenticon-value="${boardOwner.nickname}"
@@ -153,20 +193,21 @@
                         </div>
                         <div class="card p-6 relative">
                             <div class="flex space-x-4 lg:font-bold">
+                                <a id="like_result"></a>
                                 <a href="#" class="flex items-center space-x-2">
                                     <div class="p-2 rounded-full text-black lg:bg-gray-10 like_div">
                                         <th:block th:if="${likes.isEmpty()}">
-                                            <form id="like_add" class="float-left">
+                                            <form id="like_add">
                                                 <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
                                                 <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
-                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</a>
+                                                <a class="like_heart_click"><i class="fa fa-thumbs-up"></i> 좋아요</a>
                                             </form>
                                         </th:block>
                                         <th:block th:if="${likes.isPresent()}">
-                                            <form id="like_cancel" class="float-left">
+                                            <form id="like_cancel">
                                                 <input type="hidden" name="like_boardId" th:value="${board.bid}"/>
                                                 <input type="hidden" name="like_accountId" th:value="${account.id}"/>
-                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
+                                                <a class="like_heart_click"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
                                             </form>
                                         </th:block>
                                         <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
