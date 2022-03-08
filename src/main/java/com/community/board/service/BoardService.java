@@ -44,14 +44,15 @@ public class BoardService {
 
         Board board = Board.builder()
                 .title(boardForm.getTitle())
+                .subTitle(boardForm.getSubTitle())
                 .content(boardForm.getContent())
                 .boardTitle(boardForm.getBoardTitle())
+                .subBoardTitle(boardForm.getSubBoardTitle())
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)
                 .reportCount(0)
-                .writer(boardForm.getWriter())
-                .writerId(account.getId())
+                .writer(account)
                 .build();
         return boardRepository.save(board);
     }
@@ -61,10 +62,11 @@ public class BoardService {
         if (board.getIsReported()) {
             return boardRepository.save(board);
         }
+        Account boardOwner = board.getWriter();
         board.setTitle(boardForm.getTitle());
         board.setBoardTitle(boardForm.getBoardTitle());
         board.setContent(boardForm.getContent());
-        board.setWriter(boardForm.getWriter());
+        board.setWriter(boardOwner);
         board.setUpdateTime(LocalDateTime.now());
         return boardRepository.save(board);
 

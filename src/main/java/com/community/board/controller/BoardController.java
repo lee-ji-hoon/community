@@ -129,7 +129,7 @@ public class BoardController {
 
         // 게시물 작성자 account 불러오는 로직
         Board currentBoard = boardRepository.findByBid(boardId);
-        Account boardOwner = accountRepository.findByNickname(currentBoard.getWriter());
+        Account boardOwner = currentBoard.getWriter();
 
         model.addAttribute("board", detail);
         model.addAttribute("boardOwner", boardOwner);
@@ -175,14 +175,8 @@ public class BoardController {
         Long boardId = Long.valueOf(bid);
         Board board = boardRepository.findByBid(boardId);
         String message = null;
-        if (account.getId().equals(board.getWriterId())) {
-            log.info("bid : " + bid);
-            log.info("boardTitle : " + boardTitle);
-            log.info("writer : " + writer);
-            log.info("title : " + title);
-            log.info("content : " + content);
+        if (account.getId().equals(board.getWriter().getId())) {
             boardForm.setBoardTitle(boardTitle);
-            boardForm.setWriter(writer);
             boardForm.setTitle(title);
             boardForm.setContent(content);
             boardService.updateBoard(boardId, boardForm);
@@ -204,7 +198,7 @@ public class BoardController {
     @GetMapping("/board/detail/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         Board currentBoard = boardRepository.findByBid(boardId);
-        if (account.getId().equals(currentBoard.getWriterId())) {
+        if (account.getId().equals(currentBoard.getWriter().getId())) {
             boardRepository.delete(currentBoard);
             redirectAttributes.addFlashAttribute("message", "해당 게시글 삭제되었습니다.");
             return "redirect:/board";
