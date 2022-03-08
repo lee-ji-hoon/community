@@ -35,6 +35,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.modelmapper:modelmapper:3.0.0'
+	/*implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23' // 추가
+	runtimeOnly 'org.postgresql:postgresql' // 추가*/
 }
 
 tasks.named('test') {
