@@ -33,6 +33,8 @@ public class Forum {
 
     private LocalDateTime postUploadTime;
 
+    private Integer postView;
+
     @Column(columnDefinition = "TEXT")
     private String postContent;
 

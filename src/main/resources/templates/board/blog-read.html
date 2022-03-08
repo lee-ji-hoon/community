@@ -2,7 +2,11 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
-
+<style>
+    #utextDiv{
+        overflow:hidden; word-wrap:break-word;
+    }
+</style>
 <body>
     
 
@@ -31,7 +35,47 @@
                             </div>
                             <div class="form_refresh">
                                 <div class="p-7">
-                                    <h1 class="lg:text-3xl text-2xl font-semibold mb-6" th:text="${board.title}">제목</h1>
+                                    <th:block th:if="${board.boardTitle=='자유'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 자유게시글 </h5>
+                                    </th:block>
+                                    <th:block th:if="${board.boardTitle=='질문'}">
+                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'major'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 전공 질문 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'college'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 학교 생활 질문 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'qnaEtc'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 기타 질문 </h5>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:if="${board.boardTitle=='정보'}">
+                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'web'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>WEB</b> DEVELOPMENT </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'java'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>JAVA</b> Programing </h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'media'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Image</b> Processing</h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'vrar'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Virtual</b> Reality</h5>
+                                        </th:block>
+                                        <th:block th:if="${board.subBoardTitle == 'infoEtc'}">
+                                            <h5 class="uppercase text-sm font-medium text-gray-400"> Etc </h5>
+                                        </th:block>
+                                    </th:block>
+                                    <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${board.title}">제목</h1>
+                                    <th:block th:if="${board.boardTitle=='정보'}">
+                                        <p th:text="${board.subTitle}"></p>
+                                    </th:block>
                                     <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
                                         <svg th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
                                              th:data-jdenticon-value="${boardOwner.nickname}"
@@ -41,7 +85,7 @@
                                              alt="" class="w-10 rounded-full is_avatar"/>
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.writer})}" th:text="${board.writer}"></a></div>
+                                                <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
                                                 <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
                                             </div>
                                             <!-- Board 작성자면 뜨는 수정폼 -->
@@ -104,7 +148,7 @@
                                                                             <label for="content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
                                                                             <textarea type="text" rows="5" placeholder="내용을 입력해주세요." id="content" name="content"
                                                                                       aria-describedby="contentHelp" required
-                                                                                      th:text="${board.content}"
+                                                                                      th:utext="${board.content}"
                                                                                       class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
                                                                         </div>
 
@@ -141,47 +185,76 @@
                                             </th:block>
                                         </div>
                                     </div>
-                                    <div style="white-space:pre;" class="space-y-3" th:text="${board.content}"></div>
+                                    <div id="utextDiv">
+                                        <div class="space-y-3 content" th:utext="${board.content}"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card p-6 relative">
-                            <div class="flex space-x-4 lg:font-bold">
-                                <a href="#" class="flex items-center space-x-2">
-                                    <div class="p-2 rounded-full text-black lg:bg-gray-10 like_div">
-                                        <th:block th:if="${likes.isEmpty()}">
-                                            <form id="like_add" class="float-left">
-                                                <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
-                                                <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
-                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-up"></i> 좋아요</a>
+                        <div class="like_div">
+                            <div class="card p-6 relative">
+                                <div class="md:flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <a th:if="${likes.isEmpty()}">
+                                            <form id="like_add">
+                                                <svg viewBox="-2 0 105 92" width="22" height="22" fill="currentColor" >
+                                                    <path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71z"></path>
+                                                </svg>
+                                                <div class="">
+                                                    <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                                                    <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                                                    <a class="like_heart_click"><b class="likeAddBtn">좋아요</b></a>
+                                                </div>
                                             </form>
-                                        </th:block>
-                                        <th:block th:if="${likes.isPresent()}">
-                                            <form id="like_cancel" class="float-left">
-                                                <input type="hidden" name="like_boardId" th:value="${board.bid}"/>
-                                                <input type="hidden" name="like_accountId" th:value="${account.id}"/>
-                                                <a class="like_heart_click btn btn-link"><i class="fa fa-thumbs-down"></i> 좋아요 취소</a>
+                                        </a>
+                                        <a th:if="${likes.isPresent()}">
+                                            <form id="like_cancel">
+                                                <svg viewBox="-2 0 105 92" class="w-10 rounded-full" fill="currentColor">
+                                                    <path d="M85.24 2.67C72.29-3.08 55.75 2.67 50 14.9 44.25 2 27-3.8 14.76 2.67 1.1 9.14-5.37 25 5.42 44.38 13.33 58 27 68.11 50 86.81 73.73 68.11 87.39 58 94.58 44.38c10.79-18.7 4.32-35.24-9.34-41.71z"></path>
+                                                </svg>
+                                                <div class="">
+                                                    <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                                                    <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                                                    <a class="like_heart_click"><b class="likeDelBtn">좋아요 취소</b></a>
+                                                </div>
                                             </form>
-                                        </th:block>
-                                        <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
-                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                        </svg>-->
+                                        </a>
                                     </div>
-                                    <!--<div> Like</div>-->
-                                </a>
-                                <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
-                                    <div class="p-2 rounded-full text-black lg:bg-gray-10">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
-                                            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                                        </svg>
+                                    <div class="flex items-center space-x-3 md:pt-0 pt-2">
+                                        <div class="like-btn" uk-tooltip="Unlike it">
+                                            <i class="uil-thumbs-down"></i>
+                                            <span class="likes">16</span>
+                                        </div>
+                                        <div class="flex h-2 w-36 bg-gray-200 rounded-lg overflow-hidden">
+                                            <div class="w-2/3 bg-gradient-to-br from-purple-400 to-blue-400 h-4"></div>
+                                        </div>
+                                        <div class="like-btn" uk-tooltip="I like it">
+                                            <i class="uil-thumbs-up"></i>
+                                            <span class="likes">21</span>
+                                        </div>
                                     </div>
-                                    <div> Share</div>
-                                </a>
+                                </div>
+
+                                <!--<div class="flex space-x-4 lg:font-bold">
+                                    <a class="flex items-center space-x-2 flex-1 justify-start">
+                                        <div class="p-2 rounded-full text-black lg:bg-gray-10">
+                                        </div>
+                                    </a>
+                                    &lt;!&ndash;<a id="like_result"></a>&ndash;&gt;
+                                    <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
+                                        <div class="p-2 rounded-full text-black lg:bg-gray-10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="22" height="22" class="dark:text-gray-100">
+                                                <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                            </svg>
+                                        </div>
+                                        <div> Share</div>
+                                    </a>
+                                </div>-->
                             </div>
                         </div>
-                        <!-- related articles -->
-                        <div class="card p-6 relative">
 
+                        <!-- 댓글 작성 폼 -->
+                        <div class="card p-6 relative">
                             <h3 class="mb-8 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
                             <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
                                 <form id="reply_form" onsubmit="return false">
@@ -259,9 +332,21 @@
         </div>
         
     </div>
-
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="application/javascript" th:inline="javascript">
         $(document).ready(function (){
+            $('#content').summernote({
+                placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+                tabsize: 2,
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                ],
+                maxHeight: null,
+                minHeight: null,
+                lang : 'ko-KR',
+                height: 500,
+            });
 
             // input에 있는 값을 가져옴
             var input = document.getElementById("r_content");
@@ -290,7 +375,7 @@
             $(document).on('click', '.like_heart_click', function() {
                 // .like_heart_click은 <a></a>태그의 class 이름
                 // 해당 태그를 클릭하면 진행되는 메소드
-                if($(this).children('i').attr('class') == "fa fa-thumbs-up"){
+                if($(this).children('b').attr('class') == "likeAddBtn"){
                     // this는 클릭한 태그 전역
                     // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
                     console.log("좋아요 실행");
@@ -304,13 +389,13 @@
                             console.log("Like Hit Success");
                             $("#like_result").html(like_size);
                             $('.like_div').load(location.href+' .like_div');
-                            $(".like_heart_click").html("<i class=\"fa fa-thumbs-down\"></i> 좋아요 취소");
+                            $(".like_heart_click").html("좋아요 취소");
                         },
                         error : function (request, status, error){
                             console.log("Like Hit Fail" + error);
                         }
                     });
-                }else if($(this).children('i').attr('class') == "fa fa-thumbs-down"){
+                }else if($(this).children('b').attr('class') == "likeDelBtn"){
                     console.log("좋아요 취소 실행");
                     $.ajax({
                         url:'/board/detail/like-cancel',
@@ -322,7 +407,7 @@
                             console.log("Like Hit Success");
                             $("#like_result").html(like_size);
                             $('.like_div').load(location.href+' .like_div');
-                            $(".like_heart_click").html("<i class=\"fa fa-thumbs-up\"></i> 좋아요");
+                            $(".like_heart_click").html("좋아요");
                         },
                         error : function (request, status, error){
                             console.log("Like Hit Fail");
