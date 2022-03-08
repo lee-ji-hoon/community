@@ -331,7 +331,7 @@
                                     <a href="#">
                                         <div class="drop_avatar">
                                             <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 th:data-jdenticon-value="${account.studentId}"
                                                  alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
@@ -377,7 +377,7 @@
                                     <a href="#">
                                         <div class="drop_avatar">
                                             <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 th:data-jdenticon-value="${account.studentId}"
                                                  alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
@@ -397,7 +397,7 @@
 
                     <a href="#" sec:authorize="isAuthenticated()">
 
-                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${account.studentId}"
                              width="24" height="24" class="is_avatar"></svg>
                         <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
                              width="24" height="24" class="is_avatar"/>
@@ -407,13 +407,13 @@
                         <a href="#" th:href="@{'/profile/' + ${#authentication.name}}" class="user">
                             <div class="user_avatar">
                                 <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
-                                     th:data-jdenticon-value="${#authentication.name}"></svg>
+                                     th:data-jdenticon-value="${account.studentId}"></svg>
                                 <img th:if="${!#strings.isEmpty(account?.profileImage)}" class="user_avatar"
                                      th:src="${account.profileImage}"/>
                             </div>
                             <div class="user_name">
                                 <div class="user_name">
-                                    <div th:text="${account.username}">유저이름</div>
+                                    <div th:text="${account.nickname}">유저이름</div>
                                     <span th:text="${account.studentId}">유저 학번</span>
                                 </div>
                             </div>
@@ -461,7 +461,7 @@
 </header>
 
 <!-- sidebar -->
-<div th:fragment="side_bar" class="sidebar">
+<div th:fragment="side_bar" class="sidebar" style="width: 250px">
 
     <div class="sidebar_inner" >
         <ul>
@@ -1144,24 +1144,27 @@
                 <div th:text="${study.shortDescription}"> Free</div>
             </div>
         </div>
-        <div class="items-center space-x-2 text-center grid grid-cols-4 tooltip"
+        <div class="items-center space-x-2 text-center grid grid-cols-5 tooltip"
              th:attrappend="uk-countdown = ${study.limitMemberDate}"
-             uk-countdown="date: ">
-            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-days text-lg font-bold"></span>
-                <span class="">일 </span>
+             uk-countdown="date: "><!--<b>모집 남은 시간 : </b>-->
+            <div class="bg-gray-100 rounded-md p-2 ml-2 border shadow-inner">
+                <span class="text-sm font-bold">모집 남은 기간 :  </span>
+            </div>
+            <div class="bg-gray-100 rounded-md p-2 ml-2 border shadow-inner">
+                <span class="uk-countdown-days text-base font-bold"></span>
+                <span class="font-bold">일 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-hours text-lg font-bold"></span>
-                <span class="">시 </span>
+                <span class="uk-countdown-hours text-base font-bold"></span>
+                <span class="font-bold">시 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-minutes text-lg font-bold"></span>
-                <span class="">분 </span>
+                <span class="uk-countdown-minutes text-base font-bold"></span>
+                <span class="font-bold">분 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class=" uk-countdown-seconds text-lg font-bold"></span>
-                <span class="">초 </span>
+                <span class=" uk-countdown-seconds text-base font-bold"></span>
+                <span class="font-bold">초 </span>
             </div>
             <span class="tooltiptext tooltip-left">모집 남은 시간</span>
         </div>
