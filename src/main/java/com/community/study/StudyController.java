@@ -1,10 +1,11 @@
 package com.community.study;
 
-import com.community.account.AccountService;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.profile.form.ProfileForm;
 import com.community.study.form.StudyCalendarForm;
+import com.community.study.validator.StudyCalendarFormValidator;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
 import com.community.tag.TagRepository;
@@ -30,8 +31,6 @@ import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -42,9 +41,9 @@ public class StudyController {
     private final StudyService studyService;
     private final ModelMapper modelMapper;
     private final StudyFormValidator studyFormValidator;
+    private final StudyCalendarFormValidator studyCalendarFormValidator;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
-    private final AccountService accountService;
 
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
@@ -69,7 +68,7 @@ public class StudyController {
 
     @InitBinder("studyCalendarForm")
     public void studyDescriptionFormInitBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(studyFormValidator);
+        webDataBinder.addValidators(studyCalendarFormValidator);
     }
 
     @GetMapping("/study")
@@ -79,14 +78,30 @@ public class StudyController {
         model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("studyTagListTitle",tagRepository.findAll());
 
-        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
+//        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
 //        model.addAttribute("suggestStudyList", studyRepository.findStudyByTags((accountWithTagsById.getTags())));
 
-        List<Tag> tagList = tagRepository.findAll();
-        model.addAttribute(tagList);
+        model.addAttribute("accountWithTagsById", accountRepository.findAccountWithTagsById(account.getId()));
 
         return "study/study-list";
+    }
+
+    @GetMapping("/{tagTitle}")
+    public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
+
+        Tag byTag = tagService.getTag(tagTitle);
+
+        System.out.println("byTag = " + byTag);
+
+        model.addAttribute(account);
+        model.addAttribute("tag", byTag);
+        model.addAttribute("accountWithTagsById", accountRepository.findAccountWithTagsById(account.getId()));
+        model.addAttribute("studyListWithTag", studyRepository.findByTagsContainingOrderByPublishedDateTimeDesc(byTag));
+        model.addAttribute("studyTagListTitle",tagRepository.findAll());
+
+        return "study/study-with-tag";
     }
 
     // 스터디 추가 뷰
@@ -95,16 +110,17 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(new StudyForm());
         return STUDY_FORM_VIEW;
+
     }
 
     // 스터디 추가
+
     @PostMapping(STUDY_FORM_URL)
     public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model, HttpServletRequest httpServletRequest) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
         }
-
 
         String parameter = httpServletRequest.getParameter("startStudyDate");
         String parameter1 = httpServletRequest.getParameter("limitStudyDate");
@@ -119,11 +135,13 @@ public class StudyController {
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
-
     // 스터디 뷰 이동
+
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
+
         Study bypath = studyService.getPath(path);
+
         model.addAttribute(account);
         model.addAttribute(bypath);
 
@@ -131,6 +149,7 @@ public class StudyController {
     }
 
     // 스터디 참여
+
     @GetMapping(STUDY_PATH_VIEW + "/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
