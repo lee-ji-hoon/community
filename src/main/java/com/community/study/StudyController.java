@@ -3,6 +3,7 @@ package com.community.study;
 import com.community.account.AccountService;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.account.repository.AccountRepository;
 import com.community.study.form.StudyCalendarForm;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,12 +44,14 @@ public class StudyController {
     private final StudyFormValidator studyFormValidator;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
+    private final AccountService accountService;
 
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
+    private final AccountRepository accountRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
-    private static final String STUDY_FORM_VIEW = "study/form";
+    private static final String STUDY_FORM_VIEW = "study/study-form";
 
     private static final String STUDY_PATH_URL = "/study/{path}";
     private static final String STUDY_PATH_VIEW = "study/{path}";
@@ -74,6 +79,9 @@ public class StudyController {
         model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
+
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
+//        model.addAttribute("suggestStudyList", studyRepository.findStudyByTags((accountWithTagsById.getTags())));
 
         List<Tag> tagList = tagRepository.findAll();
         model.addAttribute(tagList);
@@ -119,18 +127,7 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(bypath);
 
-        return "study/view";
-    }
-
-    // 멤버 확인
-    @GetMapping(STUDY_PATH_URL + "/members")
-    public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
-        Study bypath = studyService.getPath(path);
-
-        model.addAttribute(account);
-        model.addAttribute(bypath);
-
-        return "study/members";
+        return "study/study-view";
     }
 
     // 스터디 참여

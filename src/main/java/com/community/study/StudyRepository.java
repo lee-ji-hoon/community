@@ -29,6 +29,8 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
 
+//    List<Study> findStudyByTags(Set<Tag> tags);
+
     @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByManagersContainingOrderByPublishedDateTimeDesc(Account account);
 
@@ -37,6 +39,5 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByMemberCount();
-
 
 }

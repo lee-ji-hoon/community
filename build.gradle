@@ -29,14 +29,14 @@ dependencies {
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	compileOnly 'com.h2database:h2'
+//	compileOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.modelmapper:modelmapper:3.0.0'
-	/*implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23' // 추가
-	runtimeOnly 'org.postgresql:postgresql' // 추가*/
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23' // 추가
+	runtimeOnly 'org.postgresql:postgresql' // 추가
 }
 
 tasks.named('test') {
