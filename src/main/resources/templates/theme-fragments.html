@@ -1146,6 +1146,7 @@
             </div>
         </div>
         <div class="items-center space-x-2 text-center grid grid-cols-5 tooltip"
+             th:if="${study.recruiting()}"
              th:attrappend="uk-countdown = ${study.limitMemberDate}"
              uk-countdown="date: "><!--<b>모집 남은 시간 : </b>-->
             <div class="bg-gray-100 rounded-md p-2 ml-2 border shadow-inner">
@@ -1169,6 +1170,11 @@
             </div>
             <span class="tooltiptext tooltip-left">모집 남은 시간</span>
         </div>
+        <div th:if="${!study.recruiting()}"
+             class="items-center md:pt-3 text-base -mt-2 md:justify-start justify-center">
+            <span class="text-lg font-bold text-danger"> 모집이 종료된 스터디입니다.</span>
+
+        </div>
     </div>
     <div class="flex items-center space-x-4 lg:absolute bottom-0 right-0 p-3 z-10 justify-center">
         <div th:if="${study.isJoinable(#authentication.principal)
@@ -1189,10 +1195,15 @@
     </div>
     <nav class="responsive-nav border-t -mb-0.5 lg:pl-2">
         <ul>
-            <li th:classappend="${currentStudyMenu == 'view'}? active"><a th:href="@{'/study/' + ${study.path}}"> 소개</a></li>
-            <li th:classappend="${currentStudyMenu == 'meeting'}? active"><a href="#">모임</a></li>
+            <li th:classappend="${currentStudyMenu == 'view'}? active">
+                <a th:href="@{'/study/' + ${study.path}}"> 소개</a></li>
+            <!--<li th:if="${study.isMember(#authentication.principal) || study.isManager(#authentication.principal)}"
+                th:classappend="${currentStudyMenu == 'meeting'}? active">
+                <a th:href="@{'/study/' + ${study.path} + '/meetings'}">모임</a>
+            </li>-->
             <li th:if="${study.isManager(#authentication.principal)}"
-                th:classappend="${currentStudyMenu == 'settings'}? active"> <a th:href="@{'/study/' + ${study.path} + '/settings/description'}">설정</a>
+                th:classappend="${currentStudyMenu == 'settings'}? active">
+                <a th:href="@{'/study/' + ${study.path} + '/settings/description'}">설정</a>
             </li>
         </ul>
     </nav>
@@ -1226,7 +1237,7 @@
     <div class="uk-slider-container px-1 py-3">
         <div>
             <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                <li th:each="study: ${studyType}">
+                <li th:each="study: ${studyType}" >
                     <div class="card">
                         <div class="card-media h-28">
                             <div class="card-media-overly"></div>
@@ -1234,17 +1245,18 @@
                         </div>
                         <div class="card-body">
                             <a th:href="@{'/study/' + ${study.path}}" class="font-semibold text-lg truncate" th:text="${study.title}"> Graphic Design </a>
-                            <div class="flex items-center flex-wrap space-x-1 mt-1 text-sm text-gray-500 capitalize">
-                                <span th:each="tag: ${study.tags}"
-                                      class="font-weight-light text-monospace badge badge-pill badge-info">
-                                    <span class="text-decoration-none text-green-500">
-                                        <i class="fa fa-tag"></i> <span class="text-gray-500" th:text="${tag.title}">Tag</span>
-                                    </span>
+                            <div class="flex items-center flex-wrap space-x-1 mt-3 text-xs text-gray-500 capitalize">
+                                <div th:each="tag: ${study.tags}">
+                                <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
+                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                                    <a  class="text-decoration-none text-white">
+                                        <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
+                                    </a>
                                 </span>
+                                </div>
                             </div>
                             <div class="flex mt-3.5 space-x-2">
-
-                                <div th:each="manager : ${study.managers}">
+                                <div th:each="manager : ${study.managers}" style="font-size: 14px">
                                     <strong th:text="${manager.nickname}">Johnson</strong>와
                                     <span th:text="${study.memberCount - 1} + '명이 참여'">5 freind are members</span>
                                 </div>
@@ -1254,7 +1266,7 @@
                                         <div th:if="${managerStat.count} < 2">
                                             <svg th:if="${#strings.isEmpty(manager?.profileImage)}"
                                                  th:data-jdenticon-value="${manager.nickname}"
-                                                 class="border-2 border-grey rounded-full w-7 is_avatar"></svg>
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar" style="height: 28px"></svg>
                                             <img th:if="${!#strings.isEmpty(manager?.profileImage)}"
                                                  th:src="${manager?.profileImage}"
                                                  class="border-2 border-grey rounded-full w-7 is_avatar"/>
@@ -1264,7 +1276,7 @@
                                         <div th:if="${memberStat.count} < 3">
                                             <svg th:if="${#strings.isEmpty(member?.profileImage)}"
                                                  th:data-jdenticon-value="${member.nickname}"
-                                                 class="border-2 border-grey rounded-full w-7 is_avatar"></svg>
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar "style="height: 28px"></svg>
                                             <img th:if="${!#strings.isEmpty(member?.profileImage)}"
                                                  th:src="${member?.profileImage}"
                                                  class="border-2 border-grey rounded-full w-7 is_avatar"/>
@@ -1278,7 +1290,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex mt-3.5 space-x-2 text-sm font-medium">
+                            <div class="flex mt-3.5 space-x-2 text-sm font-medium" th:if="${study.recruiting}">
                                 <a th:if="${study.isJoinable(#authentication.principal)}"
                                    th:href="@{'/study/' + ${study.path} + '/join'}" class="bg-blue-500 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                     참가 신청
@@ -1286,6 +1298,14 @@
                                 <span th:if="${!study.isJoinable(#authentication.principal)}"
                                       class="bg-green-500 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                         참여중
+                                </span>
+                                <a th:href="@{'/study/' + ${study.path}}" class="bg-gray-200 flex flex-1 h-8 items-center justify-center rounded-md capitalize">
+                                    자세히 보기
+                                </a>
+                            </div>
+                            <div class="flex mt-3.5 space-x-2 text-sm font-medium" th:if="${!study.recruiting || study.isLimitMember()}">
+                                <span class="bg-red-500 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
+                                    인원 모집 마감
                                 </span>
                                 <a th:href="@{'/study/' + ${study.path}}" class="bg-gray-200 flex flex-1 h-8 items-center justify-center rounded-md capitalize">
                                     자세히 보기
@@ -1299,6 +1319,30 @@
             <a class="absolute bg-white bottom-1/2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
             <a class="absolute bg-white bottom-1/2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
         </div>
+    </div>
+</div>
+
+<div th:fragment="study-acount-tag-list (tagList)">
+    <div>
+        <h2 class="text-xl font-semibold"> 나의 관심 태그 </h2>
+        <p class="font-medium text-gray-500 leading-6 mt-2 mb-2"> 원하시는 태그를 클릭하시면 <br>해당하는 스터디가 조회됩니다. </p>
+    </div>
+    <div class="relative -mt-3 mb-2">
+        <button th:each="tag: ${tagList.tags}"
+              class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-1" >
+            <span>#</span>
+            <a th:href="@{/{tagTitle}(tagTitle=${tag.title})}" th:text="${tag.title}">Tag</a>
+        </button>
+    </div>
+</div>
+
+<div class="relative -mt-3" th:fragment="study-tag-list (tagList)">
+    <div class=" px-1 py-3">
+        <button th:each="tag: ${tagList}"
+                class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-2" >
+            <span>#</span>
+            <a th:href="@{/{tagTitle}(tagTitle=${tag.title})}" th:text="${tag.title}">Tag</a>
+        </button>
     </div>
 </div>
 
