@@ -63,9 +63,6 @@ public class ProfileController {
     private static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
     private static final String SETTINGS_TAGS_URL = "/settings/tags";
 
-    private static final String SETTINGS_ZONES_VIEW_NAME = "settings/zones";
-    private static final String SETTINGS_ZONES_URL = "/settings/zones";
-
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
 
