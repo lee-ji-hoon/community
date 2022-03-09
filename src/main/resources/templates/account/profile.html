@@ -96,11 +96,11 @@
                 <div class="study_content">
                     <div class="profile_avatar">
                         <div class="profile_avatar_holder" th:if="${isOwner}">
-                            <svg th:if="${#strings.isEmpty(byAccount.profileImage)}"
-                                 th:data-jdenticon-value="${#authentication.name}"
+                            <svg th:if="${#strings.isEmpty(account.profileImage)}"
+                                 th:data-jdenticon-value="${account.studentId}"
                                 style="width: 160px; height: 160px"></svg>
-                            <img th:if="${!#strings.isEmpty(byAccount.profileImage)}"
-                                 th:src="${byAccount.profileImage}" />
+                            <img th:if="${!#strings.isEmpty(account.profileImage)}"
+                                 th:src="${account.profileImage}" />
                         </div>
                         <div class="profile_avatar_holder" th:if="${!isOwner}">
                             <svg th:if="${#strings.isEmpty(byAccount.profileImage)}"

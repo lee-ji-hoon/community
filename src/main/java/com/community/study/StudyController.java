@@ -1,7 +1,9 @@
 package com.community.study;
 
+import com.community.account.AccountService;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.account.repository.AccountRepository;
 import com.community.study.form.StudyCalendarForm;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
@@ -28,6 +30,8 @@ import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -40,12 +44,14 @@ public class StudyController {
     private final StudyFormValidator studyFormValidator;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
+    private final AccountService accountService;
 
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
+    private final AccountRepository accountRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
-    private static final String STUDY_FORM_VIEW = "study/form";
+    private static final String STUDY_FORM_VIEW = "study/study-form";
 
     private static final String STUDY_PATH_URL = "/study/{path}";
     private static final String STUDY_PATH_VIEW = "study/{path}";
@@ -67,9 +73,19 @@ public class StudyController {
     }
 
     @GetMapping("/study")
-    public String study(@CurrentUser Account account, Model model) {
+    public String study(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByPublishedDateTimeDesc());
+        model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
+        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
+
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
+//        model.addAttribute("suggestStudyList", studyRepository.findStudyByTags((accountWithTagsById.getTags())));
+
+        List<Tag> tagList = tagRepository.findAll();
+        model.addAttribute(tagList);
+
         return "study/study-list";
     }
 
@@ -89,10 +105,6 @@ public class StudyController {
             return STUDY_FORM_VIEW;
         }
 
-        System.out.println("========================");
-        System.out.println(studyForm.getStudyPlaces());
-        System.out.println(studyForm.getPath());
-        System.out.println("========================");
 
         String parameter = httpServletRequest.getParameter("startStudyDate");
         String parameter1 = httpServletRequest.getParameter("limitStudyDate");
@@ -112,22 +124,10 @@ public class StudyController {
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study bypath = studyService.getPath(path);
-
         model.addAttribute(account);
         model.addAttribute(bypath);
 
-        return "study/view";
-    }
-
-    // 멤버 확인
-    @GetMapping(STUDY_PATH_URL + "/members")
-    public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
-        Study bypath = studyService.getPath(path);
-
-        model.addAttribute(account);
-        model.addAttribute(bypath);
-
-        return "study/members";
+        return "study/study-view";
     }
 
     // 스터디 참여
@@ -216,25 +216,8 @@ public class StudyController {
 
         redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
 
-        return "redirect:/study/" + fixPath(path) + "/settings/description";
+        return "redirect:/study/" + fixPath(path) ;
     }
-
-    @PostMapping(STUDY_SETTINGS + "banner/enable")
-    public String studyBannerEnable(@CurrentUser Account account, @PathVariable String path) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.studyBannerEnable(studyUpdate);
-
-        return "redirect:/study/" + fixPath(path) + "/settings/description";
-    }
-
-    @PostMapping(STUDY_SETTINGS + "banner/disable")
-    public String studyBannerDisable(@CurrentUser Account account, @PathVariable String path) {
-        Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.studyBannerDisable(studyUpdate);
-
-        return "redirect:/study/" + fixPath(path) + "/settings/description";
-    }
-    // 배너 수정 끝
 
     // 태그 수정 시작
     @GetMapping(STUDY_SETTINGS + "tags")

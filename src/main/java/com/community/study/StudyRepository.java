@@ -26,16 +26,18 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withMembers", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithMembersByPath(String path);
 
-    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
 
-    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByOrderByIdDesc();
+//    List<Study> findStudyByTags(Set<Tag> tags);
 
-    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst5ByManagersContainingOrderByPublishedDateTimeDesc(Account account);
+    @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findByManagersContainingOrderByPublishedDateTimeDesc(Account account);
 
-    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst5ByMembersContainingOrderByPublishedDateTimeDesc(Account account);
+    @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findByMembersContainingOrderByPublishedDateTimeDesc(Account account);
+
+    @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findFirst9ByOrderByMemberCount();
 
 }
