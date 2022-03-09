@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='study')"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="lg:flex lg:space-x-10">
+                <div class="lg:w-3/4">
+                    <div class="flex justify-between relative md:mb-4 mb-3">
+                        <div class="flex-1">
+                            <span class="text-2xl font-semibold">스터디 목록</span>
+                            <nav class="responsive-nav border-b md:m-0 -mx-4">
+                                <span href="#" class="lg" th:text="${tag.title} + '에 해당하는 스터디 조회 결과입니다.'">  </span>
+                            </nav>
+                        </div>
+
+                        <a th:href="@{/study-form}" class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="md:block hidden"> 스터디 추가 </span>
+                        </a>
+                    </div>
+                    <div th:replace="theme-fragments.html :: study-tag-list (tagList = ${studyTagListTitle})"></div>
+
+                    <!--전체-->
+                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${studyListWithTag})"></div>
+                </div>
+                <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
+                    <div th:replace="theme-fragments.html :: study-acount-tag-list(tagList = ${accountWithTagsById})"></div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+
+

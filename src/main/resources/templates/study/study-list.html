@@ -15,67 +15,66 @@
     <!-- Main Contents -->
     <div class="main_content">
         <div class="mcontainer">
-            <div class="flex justify-between relative md:mb-4 mb-3">
-                <div class="flex-1">
-                    <i class="icon-material-outline-group text-2xl font-semibold"> 스터디</i>
-                    <nav class="responsive-nav border-b md:m-0 -mx-4">
-                        <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                            <li><a href="#" class="lg:px-2"> 신규 </a></li>
-                            <li><a href="#" class="lg:px-2"> 인기 </a></li>
-                            <li><a href="#" class="lg:px-2"> 참여 </a></li>
-                            <li><a href="#" class="lg:px-2"> 관리 </a></li>
-
-                        </ul>
-                    </nav>
-                </div>
-                <a th:href="@{/study-form}" class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                              clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="md:block hidden"> 스터디 추가 </span>
-                </a>
-            </div>
-
-            <div class="uk-switcher" id="timeline-tab">
-                <!--전체-->
-                <div th:replace="theme-fragments.html :: study-list-type(studyType=${studyListId})"></div>
-                <!--인기 스터디-->
-                <div th:replace="theme-fragments.html :: study-list-type(studyType=${popularityStudyLIst})"></div>
-                <!--참여 중인 스터디-->
-                <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
-                <!--관리중인 스터디-->
-                <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
-
-            </div>
-
-            <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
-                <div>
-                    <h2 class="text-xl font-semibold"> 태그 </h2>
-                    <p class="font-medium text-gray-500 leading-6"> 원하시는 태그를 클릭하시면 해당하는 스터디가 조회됩니다. </p>
-                </div>
-            </div>
-
-            <div class="relative -mt-3">
-
-                <div class=" px-1 py-3">
-                    <span th:each="tag: ${tagList}"
-                          class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                        <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-blue-500">
-                            <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+            <div class="lg:flex lg:space-x-10">
+                <div class="lg:w-3/4">
+                    <div class="flex justify-between relative md:mb-4 mb-3">
+                        <div class="flex-1">
+                            <i class="icon-material-outline-group text-2xl font-semibold"> 스터디</i>
+                            <nav class="responsive-nav border-b md:m-0 -mx-4">
+                                <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
+                                    <li><a href="#" class="lg:px-2"> 신규 </a></li>
+                                    <li><a href="#" class="lg:px-2"> 인기 </a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <a th:href="@{/study-form}" class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="md:block hidden"> 스터디 추가 </span>
                         </a>
-                    </span>
+                    </div>
+
+                    <div th:replace="theme-fragments.html :: study-tag-list (tagList = ${studyTagListTitle})"></div>
+
+                    <div class="uk-switcher" id="timeline-tab">
+                        <!--전체-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${studyListId})"></div>
+                        <!--인기 스터디-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${popularityStudyLIst})"></div>
+
+                    </div>
+
+                    <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
+                        <div>
+                            <h2 class="text-xl font-semibold"> 멤버 스터디 </h2>
+                            <p class="font-medium text-gray-500 leading-6"> 현재 참여중인 스터디 목록입니다. </p>
+                        </div>
+                    </div>
+                    <!--참여 중인 스터디-->
+                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
+
+                    <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
+                        <div>
+                            <h2 class="text-xl font-semibold"> 매니저 스터디 </h2>
+                            <p class="font-medium text-gray-500 leading-6"> 현재 관리중인 스터디 목록입니다. </p>
+                        </div>
+                    </div>
+                    <!--관리 중인 스터디-->
+                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
+                </div>
+                <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
+                    <div th:replace="theme-fragments.html :: study-acount-tag-list(tagList = ${accountWithTagsById})"></div>
+                    <hr>
                 </div>
             </div>
-
-            <div th:replace="theme-fragments.html :: study-list-type(studyType=${suggestStudyList})"></div>
 
             <br>
 
         </div>
     </div>
 </div>
-
 
 
 </body>
