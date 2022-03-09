@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,11 @@ public class ReplyController {
     private final ReplyRepository replyRepository;
 
     private final ReplyService replyService;
+
+    private String updatePath(String path) {
+        return URLEncoder.encode(path, StandardCharsets.UTF_8);
+    }
+
 
     // 댓글 관련 내용
     @ResponseBody
@@ -75,18 +82,21 @@ public class ReplyController {
         return reply_size;
     }
 
-    @PostMapping("/board/detail/reply/delete/{rid}")
+    @GetMapping("/board/detail/reply/delete/{rid}")
     public String boardReplyDelete(@PathVariable Long rid,
                                    RedirectAttributes redirectAttributes) {
         String r_del_error_message = null;
         Reply findReply = replyRepository.findByRid(rid);
+        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
+        String path = String.valueOf(board.getBid());
+
         if (findReply.getIsReported() || findReply.getReportCount() > 0) {
             r_del_error_message = "신고된 댓글은 삭제할 수 없습니다.";
             return r_del_error_message;
         }
         redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
         replyRepository.delete(findReply);
-        return "redirect:/board/detail/{boardId}";
+        return "redirect:/board/detail/" + updatePath(path);
     }
 
 }
