@@ -37,6 +37,7 @@ public class ReportService {
                 .board(board)
                 .account(account)
                 .reportTime(LocalDateTime.now())
+                .report_title(reportForm.getReport_title())
                 .report_content(reportForm.getReport_content())
                 .build();
         boardReportRepository.save(Boardreport);
@@ -52,6 +53,7 @@ public class ReportService {
                 .account(account)
                 .reply(reply)
                 .reportTime(LocalDateTime.now())
+                .report_title(replyReportForm.getReport_title())
                 .report_content(replyReportForm.getReport_content())
                 .build();
         replyReportRepository.save(Replyreport);
