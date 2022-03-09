@@ -299,13 +299,13 @@
                                                                             <label for="writer" class="mb-0 ml-2 text-gray-600 text-sm">rid</label>
                                                                             <input type="hidden" placeholder="닉네임 입력해주세요."
                                                                                    name="reply_update_rid" readonly th:value="${reply.rid}"
-                                                                                   aria-describedby="writerHelp" id="reply_update_rid"
+                                                                                   id="reply_update_rid"
                                                                                    class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
                                                                         </div>
                                                                         <div class="border focus-within:border-blue-300 p-3 rounded-md form-group">
                                                                             <label for="reply_update_content" class="mb-0 ml-2 text-gray-600 text-sm"> Description</label>
                                                                             <textarea type="text" rows="5" placeholder="내용을 입력해주세요." name="reply_update_content" id="reply_update_content"
-                                                                                      aria-describedby="contentHelp" required th:text="${reply.content}"
+                                                                                      required th:text="${reply.content}"
                                                                                       class="bg-transparent focus:bg-white focus:ring-gray-300 focus:shadow-none outline-none p-2 resize-none shadow-none text-base w-full form-control"></textarea>
                                                                         </div>
 
@@ -527,7 +527,6 @@
                         success : function (){
                             console.log("Reply Update Success");
                             $('.reply_div').load(location.href+' .reply_div');
-                            $('.reply_update_modal').load(location.href+' .reply_update_modal');
                             $('#reply_update_form').load(location.href+' #reply_update_form');
                         },
                         error : function (request, status, error){
