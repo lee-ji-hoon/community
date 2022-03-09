@@ -24,6 +24,10 @@ import java.util.*;
         sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
         initialValue = 1,
         allocationSize = 1)
+
+@NamedEntityGraph(name = "Account.withTags", attributeNodes = {
+        @NamedAttributeNode("tags")
+})
 public class Account {
 
     @Id

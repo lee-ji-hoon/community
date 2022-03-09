@@ -331,7 +331,7 @@
                                     <a href="#">
                                         <div class="drop_avatar">
                                             <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 th:data-jdenticon-value="${account.studentId}"
                                                  alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
@@ -377,7 +377,7 @@
                                     <a href="#">
                                         <div class="drop_avatar">
                                             <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.nickname}"
+                                                 th:data-jdenticon-value="${account.studentId}"
                                                  alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
@@ -397,7 +397,7 @@
 
                     <a href="#" sec:authorize="isAuthenticated()">
 
-                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${account.studentId}"
                              width="24" height="24" class="is_avatar"></svg>
                         <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
                              width="24" height="24" class="is_avatar"/>
@@ -407,13 +407,13 @@
                         <a href="#" th:href="@{'/profile/' + ${#authentication.name}}" class="user">
                             <div class="user_avatar">
                                 <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
-                                     th:data-jdenticon-value="${#authentication.name}"></svg>
+                                     th:data-jdenticon-value="${account.studentId}"></svg>
                                 <img th:if="${!#strings.isEmpty(account?.profileImage)}" class="user_avatar"
                                      th:src="${account.profileImage}"/>
                             </div>
                             <div class="user_name">
                                 <div class="user_name">
-                                    <div th:text="${account.username}">유저이름</div>
+                                    <div th:text="${account.nickname}">유저이름</div>
                                     <span th:text="${account.studentId}">유저 학번</span>
                                 </div>
                             </div>
@@ -461,7 +461,7 @@
 </header>
 
 <!-- sidebar -->
-<div th:fragment="side_bar" class="sidebar">
+<div th:fragment="side_bar" class="sidebar" style="width: 250px">
 
     <div class="sidebar_inner" >
         <ul>
@@ -1053,6 +1053,7 @@
             $resultImage.show();
             $confirmBtn.show();
 
+
             $confirmBtn.click(function () {
                 $newStudyImage.html(newImage);
                 $cutBtn.hide();
@@ -1144,24 +1145,27 @@
                 <div th:text="${study.shortDescription}"> Free</div>
             </div>
         </div>
-        <div class="items-center space-x-2 text-center grid grid-cols-4 tooltip"
+        <div class="items-center space-x-2 text-center grid grid-cols-5 tooltip"
              th:attrappend="uk-countdown = ${study.limitMemberDate}"
-             uk-countdown="date: ">
-            <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-days text-lg font-bold"></span>
-                <span class="">일 </span>
+             uk-countdown="date: "><!--<b>모집 남은 시간 : </b>-->
+            <div class="bg-gray-100 rounded-md p-2 ml-2 border shadow-inner">
+                <span class="text-sm font-bold">모집 남은 기간 :  </span>
+            </div>
+            <div class="bg-gray-100 rounded-md p-2 ml-2 border shadow-inner">
+                <span class="uk-countdown-days text-base font-bold"></span>
+                <span class="font-bold">일 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-hours text-lg font-bold"></span>
-                <span class="">시 </span>
+                <span class="uk-countdown-hours text-base font-bold"></span>
+                <span class="font-bold">시 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class="uk-countdown-minutes text-lg font-bold"></span>
-                <span class="">분 </span>
+                <span class="uk-countdown-minutes text-base font-bold"></span>
+                <span class="font-bold">분 </span>
             </div>
             <div class="bg-gray-100 rounded-md p-2 border shadow-inner">
-                <span class=" uk-countdown-seconds text-lg font-bold"></span>
-                <span class="">초 </span>
+                <span class=" uk-countdown-seconds text-base font-bold"></span>
+                <span class="font-bold">초 </span>
             </div>
             <span class="tooltiptext tooltip-left">모집 남은 시간</span>
         </div>
@@ -1192,8 +1196,6 @@
             </li>
         </ul>
     </nav>
-
-
 </div>
 
 <div th:fragment="blue-notice (message)" class="bg-blue-500 border p-4 relative rounded-md" uk-alert>
@@ -1219,6 +1221,87 @@
     <h3 class="text-lg font-semibold text-white">정보</h3>
     <p class="text-white text-opacity-75" th:text="${message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 </div>
+
+<div class="relative" uk-slider="finite: true" th:fragment="study-list-type (studyType)">
+    <div class="uk-slider-container px-1 py-3">
+        <div>
+            <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
+                <li th:each="study: ${studyType}">
+                    <div class="card">
+                        <div class="card-media h-28">
+                            <div class="card-media-overly"></div>
+                            <img th:src="${study.image}" th:alt="${study.title}" class="">
+                        </div>
+                        <div class="card-body">
+                            <a th:href="@{'/study/' + ${study.path}}" class="font-semibold text-lg truncate" th:text="${study.title}"> Graphic Design </a>
+                            <div class="flex items-center flex-wrap space-x-1 mt-1 text-sm text-gray-500 capitalize">
+                                <span th:each="tag: ${study.tags}"
+                                      class="font-weight-light text-monospace badge badge-pill badge-info">
+                                    <span class="text-decoration-none text-green-500">
+                                        <i class="fa fa-tag"></i> <span class="text-gray-500" th:text="${tag.title}">Tag</span>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="flex mt-3.5 space-x-2">
+
+                                <div th:each="manager : ${study.managers}">
+                                    <strong th:text="${manager.nickname}">Johnson</strong>와
+                                    <span th:text="${study.memberCount - 1} + '명이 참여'">5 freind are members</span>
+                                </div>
+
+                                <div class="flex -space-x-3 flex items-center" style="margin-top: -5px">
+                                    <div th:each="manager : ${study.managers}">
+                                        <div th:if="${managerStat.count} < 2">
+                                            <svg th:if="${#strings.isEmpty(manager?.profileImage)}"
+                                                 th:data-jdenticon-value="${manager.nickname}"
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar"></svg>
+                                            <img th:if="${!#strings.isEmpty(manager?.profileImage)}"
+                                                 th:src="${manager?.profileImage}"
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                                        </div>
+                                    </div>
+                                    <div th:each="member : ${study.members}">
+                                        <div th:if="${memberStat.count} < 3">
+                                            <svg th:if="${#strings.isEmpty(member?.profileImage)}"
+                                                 th:data-jdenticon-value="${member.nickname}"
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar"></svg>
+                                            <img th:if="${!#strings.isEmpty(member?.profileImage)}"
+                                                 th:src="${member?.profileImage}"
+                                                 class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                                        </div>
+                                        <div th:if="${memberStat.count} == 3">
+                                            <div class="w-7 rounded-full flex justify-center items-center bg-blue-100 text-blue-500 font-semibold"
+                                                 th:text="${study.memberCount-3} + '+'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex mt-3.5 space-x-2 text-sm font-medium">
+                                <a th:if="${study.isJoinable(#authentication.principal)}"
+                                   th:href="@{'/study/' + ${study.path} + '/join'}" class="bg-blue-500 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
+                                    참가 신청
+                                </a>
+                                <span th:if="${!study.isJoinable(#authentication.principal)}"
+                                      class="bg-green-500 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
+                                        참여중
+                                </span>
+                                <a th:href="@{'/study/' + ${study.path}}" class="bg-gray-200 flex flex-1 h-8 items-center justify-center rounded-md capitalize">
+                                    자세히 보기
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <a class="absolute bg-white bottom-1/2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
+            <a class="absolute bg-white bottom-1/2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+        </div>
+    </div>
+</div>
+
 
 
 

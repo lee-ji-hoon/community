@@ -42,8 +42,6 @@ public class StudyService {
         return byPath;
     }
 
-
-
     public void getStudyImage(Study study, String image) {
         study.setImage(image);
     }
@@ -57,11 +55,11 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateStatus(Account account, String path) {
-        Study accountWithZonesByPath = studyRepository.findAccountWithManagersByPath(path);
-        checkExistStudy(path, accountWithZonesByPath);
-        checkManager(account, accountWithZonesByPath);
+        Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
+        checkExistStudy(path, accountWithManagersByPath);
+        checkManager(account, accountWithManagersByPath);
 
-        return accountWithZonesByPath;
+        return accountWithManagersByPath;
     }
 
     public Study getStudyUpdateTag(Account account, String path) {
@@ -80,9 +78,6 @@ public class StudyService {
         studyUpdateTag.getTags().remove(byTitle);
     }
 
-    // study start
-
-    // study end
 
     private void checkManager(Account account, Study accountWithTagsByPath) {
         if (!account.isManager(accountWithTagsByPath)) throw new AccessDeniedException("해당 기능을 사용할 권한이 없습니다.");
@@ -135,5 +130,11 @@ public class StudyService {
 
     public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         modelMapper.map(studyDescriptionForm, study);
+    }
+
+    public Study getStudyManager(String path) {
+        Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
+
+        return accountWithManagersByPath;
     }
 }
