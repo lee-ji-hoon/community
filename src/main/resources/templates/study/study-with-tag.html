@@ -38,8 +38,12 @@
                     <div th:replace="theme-fragments.html :: study-list-type(studyType=${studyListWithTag})"></div>
                 </div>
                 <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
-                    <div th:replace="theme-fragments.html :: study-acount-tag-list(tagList = ${accountWithTagsById})"></div>
-                    <hr>
+                    <div th:if="${accountWithTagsById.tags.isEmpty()}">
+                        <div th:replace="theme-fragments.html :: study-account-tag-list-empty"></div>
+                    </div>
+                    <div th:if="${!accountWithTagsById.tags.isEmpty()}">
+                        <div th:replace="theme-fragments.html :: study-acount-tag-list(tagList = ${accountWithTagsById})"></div>
+                    </div>
                 </div>
             </div>
         </div>
