@@ -1,6 +1,7 @@
 package com.community.market;
 
 import com.community.account.entity.Account;
+import com.community.study.Study;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Market {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Account.class)
     @JoinColumn(name = "seller_id")
     private Account account;
 

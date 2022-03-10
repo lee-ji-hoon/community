@@ -2,7 +2,6 @@ package com.community.study;
 
 import com.community.account.UserAccount;
 import com.community.account.entity.Account;
-import com.community.board.entity.Reply;
 import com.community.meetings.Meetings;
 import com.community.tag.Tag;
 import lombok.*;
@@ -51,6 +50,7 @@ public class Study {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name="study_id")
     private Long id;
 
     @ManyToMany
@@ -83,7 +83,7 @@ public class Study {
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "meetings", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Meetings> meetingsList = new ArrayList<>();
 
     private LocalDate limitStudyDate;

@@ -20,7 +20,7 @@ public class Meetings {
 
     @Id
     @GeneratedValue
-    @Column(name = "m_id")
+    @Column(name = "meetings_id")
     private Long id;
 
     private String meetingTitle;
@@ -28,6 +28,7 @@ public class Meetings {
     private String meetingDescription;
 
     @ManyToOne(targetEntity = Study.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id")
     private Study study;
 
     private LocalDateTime localDateTime;

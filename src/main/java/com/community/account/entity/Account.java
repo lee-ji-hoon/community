@@ -35,6 +35,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
                     generator = "MEMBER_SEQ_GENERATOR")
+    @Column(name = "account_id")
     private Long id;
 
     @Column(unique = true)
