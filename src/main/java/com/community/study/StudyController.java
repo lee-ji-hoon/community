@@ -3,8 +3,11 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
+import com.community.study.form.MeetingsForm;
 import com.community.study.form.StudyCalendarForm;
+import com.community.study.repository.StudyRepository;
 import com.community.study.validator.StudyCalendarFormValidator;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
@@ -116,26 +119,44 @@ public class StudyController {
     // 스터디 추가
 
     @PostMapping(STUDY_FORM_URL)
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model, HttpServletRequest httpServletRequest) {
+    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model,
+                                 HttpServletRequest httpServletRequest) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
         }
 
-        String parameter = httpServletRequest.getParameter("startStudyDate");
-        String parameter1 = httpServletRequest.getParameter("limitStudyDate");
-        String parameter2 = httpServletRequest.getParameter("limitMemberDate");
-        String studyPlaces = httpServletRequest.getParameter("studyPlaces");
-
-        log.info("스티더 위치 = " + studyPlaces);
-        log.info("스티더 시작일 = " + parameter);
-        log.info("스티더 종료일 = " + parameter1);
-        log.info("인원모집 종료일 = " + parameter2);
-
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
     // 스터디 뷰 이동
+
+    // 모임 페이지
+    @GetMapping(STUDY_PATH_URL + "/meetings")
+    public String meetingListView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+        model.addAttribute(new MeetingsForm());
+        return "study/meetings/view";
+    }
+
+    @PostMapping(STUDY_PATH_URL + "/meetings")
+    public String meetingView(@CurrentUser Account account, @PathVariable String path,
+                              Model model, @Valid MeetingsForm meetingsForm) {
+        log.info("스터디 실행");
+        System.out.println("스터디 실행");
+        Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
+/*        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(studyUpdate);
+            return "study/meetings/view";
+        }*/
+        Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings/" + newMeeting.getId();
+    }
 
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
@@ -146,16 +167,6 @@ public class StudyController {
         model.addAttribute(bypath);
 
         return "study/study-view";
-    }
-
-    // 모임 페이지
-    @GetMapping(STUDY_PATH_URL + "/meetings")
-    public String meetingListView(@CurrentUser Account account, @PathVariable String path, Model model) {
-        Study bypath = studyService.getPath(path);
-
-        model.addAttribute(account);
-        model.addAttribute(bypath);
-        return "study/meetings/view";
     }
 
     // 스터디 참여
