@@ -90,15 +90,15 @@ public class Account {
 
     private boolean studyCreatedByWeb = true;
 
+    private boolean studyUpdatedByEmail;
+
+    private boolean studyUpdatedByWeb = true;
     // TODO
     // 이메일 등 장터로 바꿔야
     private boolean studyEnrollmentResultByEmail;
 
     private boolean studyEnrollmentResultByWeb = true;
 
-    private boolean studyUpdatedByEmail;
-
-    private boolean studyUpdatedByWeb = true;
     // 알림 설정 끝
 
     // 태그

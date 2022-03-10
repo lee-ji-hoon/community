@@ -1,6 +1,6 @@
 package com.community.study.validator;
 
-import com.community.study.StudyRepository;
+import com.community.study.repository.StudyRepository;
 import com.community.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,6 @@
 package com.community.study.entity;
 
+import com.community.account.entity.Account;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,18 @@ public class Meetings {
 
     private String meetingDescription;
 
-    @ManyToOne(targetEntity = Study.class, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "study_id")
     private Study study;
 
-    private LocalDateTime localDateTime;
+    @ManyToOne
+    @JoinColumn(name = "writer_id")
+    private Account writer;
+
+    private String meetingMethod;
+
+    private String meetingPlaces;
+
+    private LocalDateTime uploadTime;
 
 }

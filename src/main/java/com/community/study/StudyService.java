@@ -1,9 +1,12 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
 import com.community.study.form.StudyCalendarForm;
 import com.community.study.form.StudyDescriptionForm;
+import com.community.study.repository.MeetingsRepository;
+import com.community.study.repository.StudyRepository;
 import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -19,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    private final MeetingsRepository meetingsRepository;
     private final ModelMapper modelMapper;
 
     public Study createNewStudy(Study study, Account account) {
@@ -142,11 +148,12 @@ public class StudyService {
         return accountWithManagersByPath;
     }
 
-    public Study getStudy(String path) {
-        System.out.println("path = " + path);
-        System.out.println("==============================");
-        Study study = this.studyRepository.findByPath(path);
-        checkExistStudy(path, study);
-        return study;
+    public Meetings createNewMeeting(Meetings meetings, Study study, Account account) {
+        meetings.setWriter(account);
+        meetings.setUploadTime(LocalDateTime.now());
+        meetings.setStudy(study);
+
+        return meetingsRepository.save(meetings);
+
     }
 }
