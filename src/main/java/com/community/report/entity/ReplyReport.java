@@ -30,6 +30,9 @@ public class ReplyReport {
     @JoinColumn(name = "reply_rid")
     private Reply reply;
 
+    @Column(columnDefinition = "TEXT")
+    private String report_title;
+
     // 신고 내용
     @Column(columnDefinition = "TEXT")
     private String report_content;

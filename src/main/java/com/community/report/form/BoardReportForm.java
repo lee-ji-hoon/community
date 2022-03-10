@@ -12,4 +12,6 @@ public class BoardReportForm {
     @Length(min = 2, max = 300)
     private String report_content;
 
+    private String report_title;
+
 }

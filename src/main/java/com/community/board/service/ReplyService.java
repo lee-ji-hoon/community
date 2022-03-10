@@ -36,9 +36,9 @@ public class ReplyService {
         replyRepository.save(reply);
     }
 
-    public void updateReply(Long rid, ReplyForm replyForm) {
+    public void updateReply(Long rid, String reply_content) {
         Reply reply = replyRepository.findByRid(rid);
-        reply.setContent(replyForm.getContent());
+        reply.setContent(reply_content);
         reply.setUploadTime(LocalDateTime.now());
         replyRepository.save(reply);
     }
