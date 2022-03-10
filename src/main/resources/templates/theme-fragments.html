@@ -585,15 +585,15 @@
             </li>
         </ul>-->
 
-      <!--  <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Blog </a>
-            <a href="#">Careers</a>
-            <a href="#">Support</a>
-            <a href="#">Contact Us </a>
-            <a href="#">Developer</a>
-            <a href="#">Terms of service</a>
-        </div>-->
+        <!--  <div class="footer-links">
+              <a href="#">About</a>
+              <a href="#">Blog </a>
+              <a href="#">Careers</a>
+              <a href="#">Support</a>
+              <a href="#">Contact Us </a>
+              <a href="#">Developer</a>
+              <a href="#">Terms of service</a>
+          </div>-->
 
     </div>
 
@@ -1121,6 +1121,7 @@
                 배너 이미지 수정
             </label>
 
+
             <input type="file" id="study-image-file" name="uploadfile" accept="*">
         </div>
         <span id="cut-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
@@ -1135,30 +1136,8 @@
         <span id="reset-button" class="flex items-center justify-center h-8 px-3 bg-red-600 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
             취소
         </span>
-        <a th:if="${currentStudyMenu == 'meeting'}"
-           href="#create-post-modal" uk-toggle data-tippy-placement="bottom" title="새 모임 작성"
-           class="flex items-center justify-center h-8 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5  right-0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                      clip-rule="evenodd"></path>
-            </svg>
-            <span class="md:block hidden"> 모임 추가 </span>
-        </a>
-        <div th:if="${study.isJoinable(#authentication.principal)
-                                && !study.isLimitMember()
-                                || study.isMember(#authentication.principal)} ">
-            <a th:if="${study.isJoinable(#authentication.principal)}"
-               th:href="@{'/study/' + ${study.path} + '/join'}"
-               href="#" class="flex items-center justify-center h-8 px-5 rounded-md bg-blue-600 text-white font-semibold space-x-1.5">
-                <span> 참여 </span>
-            </a>
 
-            <a th:if="${study.recruiting() && study.isMember(#authentication.principal)}"
-               th:href="@{'/study/' + ${study.path} + '/remove'}"
-               href="#" class="flex items-center justify-center h-8 px-5 rounded-md bg-red-600 text-white font-semibold space-x-1.5">
-                <span> 탈퇴 </span>
-            </a>
-        </div>
+
         <!--<div id="create-post-modal" class="create-post" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
 
@@ -1271,7 +1250,33 @@
 
             </div>
         </div>-->
+        <a th:if="${currentStudyMenu == 'meeting'}" href="#create-post-modal" uk-toggle data-tippy-placement="left" title="새 모임 작성"
+           class="flex items-center justify-center h-8 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5  right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                      clip-rule="evenodd"></path>
+            </svg>
+            <span class="md:block hidden"> 모임 추가 </span>
+        </a>
+        <div th:if="${study.isJoinable(#authentication.principal)
+                                && !study.isLimitMember()
+                                || study.isMember(#authentication.principal)} ">
+            <a th:if="${study.isJoinable(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/join'}"
+               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-blue-600 text-white font-semibold space-x-1.5">
+                <span> 참여 </span>
+            </a>
+
+            <a th:if="${study.recruiting() && study.isMember(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/remove'}"
+               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-red-600 text-white font-semibold space-x-1.5">
+                <span> 탈퇴 </span>
+            </a>
+        </div>
+
     </div>
+
+
 
 
     <div class="study_content">
@@ -1306,11 +1311,15 @@
             </div>
             <span class="tooltiptext tooltip-left">모집 남은 시간</span>
         </div>
+
         <div th:if="${!study.recruiting()}"
              class="items-center md:pt-3 text-base -mt-2 md:justify-start justify-center">
             <span class="text-lg font-bold text-danger"> 모집이 종료된 스터디입니다.</span>
-
         </div>
+
+    </div>
+    <div class="flex items-center space-x-4 lg:absolute bottom-0 right-0 p-3 z-10 justify-center">
+
     </div>
     <nav class="responsive-nav border-t -mb-0.5 lg:pl-2">
         <ul>
@@ -1384,7 +1393,7 @@
                                     <div th:each="manager : ${study.managers}">
                                         <div th:if="${managerStat.count} < 2">
                                             <svg th:if="${#strings.isEmpty(manager?.profileImage)}"
-                                                 th:data-jdenticon-value="${manager.nickname}"
+                                                 th:data-jdenticon-value="${manager.studentId}"
                                                  class="border-2 border-grey rounded-full w-7 is_avatar" style="height: 28px"></svg>
                                             <img th:if="${!#strings.isEmpty(manager?.profileImage)}"
                                                  th:src="${manager?.profileImage}"
@@ -1394,7 +1403,7 @@
                                     <div th:each="member : ${study.members}">
                                         <div th:if="${memberStat.count} < 3">
                                             <svg th:if="${#strings.isEmpty(member?.profileImage)}"
-                                                 th:data-jdenticon-value="${member.nickname}"
+                                                 th:data-jdenticon-value="${member.studentId}"
                                                  class="border-2 border-grey rounded-full w-7 is_avatar "style="height: 28px"></svg>
                                             <img th:if="${!#strings.isEmpty(member?.profileImage)}"
                                                  th:src="${member?.profileImage}"
@@ -1448,7 +1457,7 @@
     </div>
     <div class="relative -mt-3 mb-2">
         <button th:each="tag: ${tagList.tags}"
-              class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-1" >
+                class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-1" >
             <span>#</span>
             <a th:href="@{/{tagTitle}(tagTitle=${tag.title})}" th:text="${tag.title}">Tag</a>
         </button>

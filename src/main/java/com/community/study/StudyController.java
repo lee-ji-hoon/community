@@ -139,14 +139,13 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
-        return "study/meetings/list";
+        return "study/meetings/view";
     }
 
     @PostMapping(STUDY_PATH_URL + "/meetings")
     public String meetingView(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
         log.info("스터디 실행");
-        System.out.println("스터디 실행");
         Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
 /*        if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -154,7 +153,9 @@ public class StudyController {
             return "study/meetings/view";
         }*/
         Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        model.addAttribute(account);
 
+        log.info("스터디 종료");
         return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings/" + newMeeting.getId();
     }
 
