@@ -139,7 +139,7 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
-        return "study/meetings/view";
+        return "study/meetings/list";
     }
 
     @PostMapping(STUDY_PATH_URL + "/meetings")

@@ -34,8 +34,6 @@ public class StudyService {
     }
 
     public Study getPath(String path) {
-        System.out.println("=========================");
-        System.out.println(path);
 
         Study byPath = this.studyRepository.findByPath(path);
         if (byPath == null) {
@@ -46,7 +44,7 @@ public class StudyService {
 
     public Study getStudyUpdate(Account account, String path) {
         Study byPath = this.getPath(path);
-        if (!account.isManager(byPath)) {
+        if (!account.isManager(byPath) && !account.isMemeber(byPath)) {
             throw new IllegalArgumentException("해당하는 스터디가 없습니다.");
         }
         return byPath;

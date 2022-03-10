@@ -1113,15 +1113,13 @@
             <input id="studyImage" type="hidden" name="image" class="form-control" />
         </div>
     </form>
-    <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex"
-         th:if="${study.isManager(#authentication.principal)}">
-        <div class="custom-file">
+    <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex">
+        <div class="custom-file" th:if="${study.isManager(#authentication.principal)}">
             <label for="study-image-file" id="update-banner"
                    class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
                 <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
                 배너 이미지 수정
             </label>
-
 
             <input type="file" id="study-image-file" name="uploadfile" accept="*">
         </div>
@@ -1137,7 +1135,8 @@
         <span id="reset-button" class="flex items-center justify-center h-8 px-3 bg-red-600 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
             취소
         </span>
-        <a href="#create-post-modal" uk-toggle data-tippy-placement="left" title="새 모임 작성"
+        <a th:if="${currentStudyMenu == 'meeting'}"
+           href="#create-post-modal" uk-toggle data-tippy-placement="bottom" title="새 모임 작성"
            class="flex items-center justify-center h-8 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5  right-0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
@@ -1145,6 +1144,21 @@
             </svg>
             <span class="md:block hidden"> 모임 추가 </span>
         </a>
+        <div th:if="${study.isJoinable(#authentication.principal)
+                                && !study.isLimitMember()
+                                || study.isMember(#authentication.principal)} ">
+            <a th:if="${study.isJoinable(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/join'}"
+               href="#" class="flex items-center justify-center h-8 px-5 rounded-md bg-blue-600 text-white font-semibold space-x-1.5">
+                <span> 참여 </span>
+            </a>
+
+            <a th:if="${study.recruiting() && study.isMember(#authentication.principal)}"
+               th:href="@{'/study/' + ${study.path} + '/remove'}"
+               href="#" class="flex items-center justify-center h-8 px-5 rounded-md bg-red-600 text-white font-semibold space-x-1.5">
+                <span> 탈퇴 </span>
+            </a>
+        </div>
         <!--<div id="create-post-modal" class="create-post" uk-modal>
             <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
 
@@ -1296,23 +1310,6 @@
              class="items-center md:pt-3 text-base -mt-2 md:justify-start justify-center">
             <span class="text-lg font-bold text-danger"> 모집이 종료된 스터디입니다.</span>
 
-        </div>
-    </div>
-    <div class="flex items-center space-x-4 lg:absolute bottom-0 right-0 p-3 z-10 justify-center">
-        <div th:if="${study.isJoinable(#authentication.principal)
-                                && !study.isLimitMember()
-                                || study.isMember(#authentication.principal)} ">
-            <a th:if="${study.isJoinable(#authentication.principal)}"
-               th:href="@{'/study/' + ${study.path} + '/join'}"
-               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-blue-600 text-white font-semibold space-x-1.5">
-                <span> 참여 </span>
-            </a>
-
-            <a th:if="${study.recruiting() && study.isMember(#authentication.principal)}"
-               th:href="@{'/study/' + ${study.path} + '/remove'}"
-               href="#" class="flex items-center justify-center h-9 px-5 rounded-md bg-red-600 text-white font-semibold space-x-1.5">
-                <span> 탈퇴 </span>
-            </a>
         </div>
     </div>
     <nav class="responsive-nav border-t -mb-0.5 lg:pl-2">

@@ -134,4 +134,8 @@ public class Account {
     public boolean isManager(Study byPath) {
         return byPath.getManagers().contains(this);
     }
+
+    public boolean isMemeber(Study byPath) {
+        return byPath.getMembers().contains(this);
+    }
 }
