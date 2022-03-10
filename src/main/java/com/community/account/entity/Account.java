@@ -89,6 +89,8 @@ public class Account {
 
     private boolean studyCreatedByWeb = true;
 
+    // TODO
+    // 이메일 등 장터로 바꿔야
     private boolean studyEnrollmentResultByEmail;
 
     private boolean studyEnrollmentResultByWeb = true;

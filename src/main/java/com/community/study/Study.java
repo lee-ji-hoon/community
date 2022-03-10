@@ -2,15 +2,15 @@ package com.community.study;
 
 import com.community.account.UserAccount;
 import com.community.account.entity.Account;
+import com.community.board.entity.Reply;
+import com.community.meetings.Meetings;
 import com.community.tag.Tag;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @NamedEntityGraph(name = "Study.withAll", attributeNodes = {
         @NamedAttributeNode("tags"),
@@ -82,6 +82,9 @@ public class Study {
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
+
+    @OneToMany(mappedBy = "meetings", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Meetings> meetingsList = new ArrayList<>();
 
     private LocalDate limitStudyDate;
 

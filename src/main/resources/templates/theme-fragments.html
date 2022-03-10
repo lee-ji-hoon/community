@@ -1197,10 +1197,10 @@
         <ul>
             <li th:classappend="${currentStudyMenu == 'view'}? active">
                 <a th:href="@{'/study/' + ${study.path}}"> 소개</a></li>
-            <!--<li th:if="${study.isMember(#authentication.principal) || study.isManager(#authentication.principal)}"
+            <li th:if="${study.isMember(#authentication.principal) || study.isManager(#authentication.principal)}"
                 th:classappend="${currentStudyMenu == 'meeting'}? active">
                 <a th:href="@{'/study/' + ${study.path} + '/meetings'}">모임</a>
-            </li>-->
+            </li>
             <li th:if="${study.isManager(#authentication.principal)}"
                 th:classappend="${currentStudyMenu == 'settings'}? active">
                 <a th:href="@{'/study/' + ${study.path} + '/settings/description'}">설정</a>
