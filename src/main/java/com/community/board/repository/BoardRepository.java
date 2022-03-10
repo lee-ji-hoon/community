@@ -33,6 +33,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop5ByIsReportedOrderByPageViewDesc(Boolean isReported);
 
+
     Boolean findByBidAndIsReported(long bid, Boolean isReported);
 
     Board findByBid(long id);
