@@ -27,6 +27,9 @@ public class StudyService {
     }
 
     public Study getPath(String path) {
+        System.out.println("=========================");
+        System.out.println(path);
+
         Study byPath = this.studyRepository.findByPath(path);
         if (byPath == null) {
             throw new AccessDeniedException("유효하지 않는 페이지입니다.");
@@ -136,5 +139,13 @@ public class StudyService {
         Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
 
         return accountWithManagersByPath;
+    }
+
+    public Study getStudy(String path) {
+        System.out.println("path = " + path);
+        System.out.println("==============================");
+        Study study = this.studyRepository.findByPath(path);
+        checkExistStudy(path, study);
+        return study;
     }
 }

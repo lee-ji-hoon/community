@@ -148,8 +148,17 @@ public class StudyController {
         return "study/study-view";
     }
 
-    // 스터디 참여
+    // 모임 페이지
+    @GetMapping(STUDY_PATH_URL + "/meetings")
+    public String meetingListView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study bypath = studyService.getPath(path);
 
+        model.addAttribute(account);
+        model.addAttribute(bypath);
+        return "study/meetings/view";
+    }
+
+    // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
@@ -178,6 +187,7 @@ public class StudyController {
         model.addAttribute(modelMapper.map(studyUpdate, StudyDescriptionForm.class));
         return "study/settings/description";
     }
+
 
     @PostMapping(STUDY_SETTINGS + "description")
     public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,

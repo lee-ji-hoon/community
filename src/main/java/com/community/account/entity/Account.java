@@ -82,6 +82,7 @@ public class Account {
     private List<Market> markets = new ArrayList<>();
 
     @Lob
+    @Type(type = "text")
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 

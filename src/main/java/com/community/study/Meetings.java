@@ -1,4 +1,4 @@
-package com.community.meetings;
+package com.community.study;
 
 import com.community.account.entity.Account;
 import com.community.study.Study;
