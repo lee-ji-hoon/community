@@ -3,7 +3,7 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
-import com.community.profile.form.ProfileForm;
+import com.community.study.entity.Study;
 import com.community.study.form.StudyCalendarForm;
 import com.community.study.validator.StudyCalendarFormValidator;
 import com.community.tag.Tag;

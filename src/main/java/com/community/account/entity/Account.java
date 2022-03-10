@@ -3,11 +3,10 @@ package com.community.account.entity;
 import com.community.like.Likes;
 import com.community.market.Market;
 import com.community.tag.Tag;
-import com.community.study.Study;
+import com.community.study.entity.Study;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.yaml.snakeyaml.error.Mark;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

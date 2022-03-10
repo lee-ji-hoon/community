@@ -1,14 +1,11 @@
-package com.community.study;
+package com.community.study.entity;
 
-import com.community.account.entity.Account;
-import com.community.study.Study;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity

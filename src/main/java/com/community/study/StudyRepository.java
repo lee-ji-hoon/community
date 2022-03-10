@@ -1,13 +1,13 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.study.entity.Study;
 import com.community.tag.Tag;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Transactional(readOnly = true)
 public interface StudyRepository extends JpaRepository<Study, Long> {

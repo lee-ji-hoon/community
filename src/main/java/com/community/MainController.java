@@ -6,7 +6,7 @@ import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
-import com.community.study.Study;
+import com.community.study.entity.Study;
 import com.community.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

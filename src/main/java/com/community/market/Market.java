@@ -1,7 +1,6 @@
 package com.community.market;
 
 import com.community.account.entity.Account;
-import com.community.study.Study;
 import lombok.*;
 
 import javax.persistence.*;

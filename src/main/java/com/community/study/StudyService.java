@@ -1,6 +1,7 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.study.entity.Study;
 import com.community.study.form.StudyCalendarForm;
 import com.community.study.form.StudyDescriptionForm;
 import com.community.tag.Tag;
