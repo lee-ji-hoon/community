@@ -16,7 +16,6 @@ public class MeetingsForm {
     @Length(max = 20)
     public String meetingTitle;
 
-    @Length(max = 100)
     private String meetingDescription;
 
     @Length(max = 20)
