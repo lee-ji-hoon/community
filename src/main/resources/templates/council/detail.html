@@ -29,10 +29,8 @@
                         <h1 class="block text-lg font-bold"> Details  </h1>
 
                         <div class="space-y-4 mt-3">
-                            <div class="line-clamp-3" id="more-text">
-                                Just as there are breeds of chickens for egg and breeds of chickens for meat, there are ducks breeds specifically for egg production. While duck eggs are more popular in Asia, for those with allergies to chicken eggs, duck eggs are a good alternative. Ron Kean from the University of Wisconsin in Madison will be discussing how to raise ducks for egg production. Just as there are breeds of chickens for egg and breeds of chickens for meat, there are ducks breeds specifically for egg production. While duck eggs are more popular in Asia, for those with allergies to chicken eggs, duck eggs are a good alternative. Ron Kean from the University of Wisconsin in Madison will be discussing how to raise ducks for egg production.
-                            </div>
-                            <a href="#" id="more-text1" uk-toggle="target: #more-text ; cls: line-clamp-3"> See more </a>
+                            <div class="line-clamp-3" id="more-text" th:utext="${council.postContent}">내용</div>
+                            <a href="#" id="more-text1" uk-toggle="target: #more-text ; cls: line-clamp-3" class="text-blue-500"> 더 보기 </a>
                             <div class="flex items-center space-x-3">
                                 <ion-icon name="alert-circle" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
                                 <div class="flex-1">
@@ -141,32 +139,33 @@
                 </div>
 
                 <!-- Sidebar -->
-                <div class="w-full flex-shirink-0">
-
-                    <div class="card p-4">
-                        <div class="">
-                            <div class="py-2 flex items-center space-x-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                                <div>
-                                    <div class="text-lg font-semibold"> Start Date</div>
-                                    <div> 02-02-21 - 11:31</div>
+                <th:block th:if="${council.postSort=='행사'}">
+                    <div class="w-full flex-shirink-0">
+                        <div class="card p-4">
+                            <div class="">
+                                <div class="py-2 flex items-center space-x-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <div>
+                                        <div class="text-lg font-semibold"> Start Date</div>
+                                        <div><a th:text="${council.eventStartDate}"></a></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="py-2 flex items-center space-x-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                                <div>
-                                    <div class="text-lg font-semibold"> End Date</div>
-                                    <div> 03-02-21 - 11:31</div>
+                                <div class="py-2 flex items-center space-x-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <div>
+                                        <div class="text-lg font-semibold"> End Date</div>
+                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </th:block>
 
-                </div>
             </div>
 
         </div>
