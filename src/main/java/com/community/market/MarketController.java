@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MarketController {
 
-    /*@GetMapping("/market")
+    @GetMapping("/market")
     public String marketListView(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
 
@@ -21,5 +21,5 @@ public class MarketController {
         model.addAttribute(account);
 
         return "market/market-form";
-    }*/
+    }
 }

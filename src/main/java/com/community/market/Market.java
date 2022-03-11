@@ -26,11 +26,9 @@ public class Market {
 
     private int price;
 
+    private String type;
+
     private String itemDetail;
 
     private MarketItemStatus marketItemStatus;
-
-
-
-
 }
