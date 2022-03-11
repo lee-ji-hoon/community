@@ -1,8 +1,9 @@
 package com.community.account.entity;
 
 import com.community.like.Likes;
+import com.community.market.Market;
 import com.community.tag.Tag;
-import com.community.study.Study;
+import com.community.study.entity.Study;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +34,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
                     generator = "MEMBER_SEQ_GENERATOR")
+    @Column(name = "account_id")
     private Long id;
 
     @Column(unique = true)
@@ -75,7 +77,11 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<Market> markets = new ArrayList<>();
+
     @Lob
+    @Type(type = "text")
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
@@ -84,13 +90,15 @@ public class Account {
 
     private boolean studyCreatedByWeb = true;
 
+    private boolean studyUpdatedByEmail;
+
+    private boolean studyUpdatedByWeb = true;
+    // TODO
+    // 이메일 등 장터로 바꿔야
     private boolean studyEnrollmentResultByEmail;
 
     private boolean studyEnrollmentResultByWeb = true;
 
-    private boolean studyUpdatedByEmail;
-
-    private boolean studyUpdatedByWeb = true;
     // 알림 설정 끝
 
     // 태그
@@ -125,5 +133,9 @@ public class Account {
 
     public boolean isManager(Study byPath) {
         return byPath.getManagers().contains(this);
+    }
+
+    public boolean isMemeber(Study byPath) {
+        return byPath.getMembers().contains(this);
     }
 }

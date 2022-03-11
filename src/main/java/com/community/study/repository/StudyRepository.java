@@ -1,13 +1,13 @@
-package com.community.study;
+package com.community.study.repository;
 
 import com.community.account.entity.Account;
+import com.community.study.entity.Study;
 import com.community.tag.Tag;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Transactional(readOnly = true)
 public interface StudyRepository extends JpaRepository<Study, Long> {
@@ -29,7 +29,8 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
 
-//    List<Study> findStudyByTags(Set<Tag> tags);
+//    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD)
+//    List<Study> findStudiesByTags(Set<Tag> tags);
 
     @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByManagersContainingOrderByPublishedDateTimeDesc(Account account);
@@ -38,6 +39,8 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     List<Study> findByMembersContainingOrderByPublishedDateTimeDesc(Account account);
 
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByOrderByMemberCount();
+    List<Study> findByTagsContainingOrderByPublishedDateTimeDesc(Tag tag);
 
+    @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
+    List<Study> findFirst9ByOrderByMemberCount();
 }

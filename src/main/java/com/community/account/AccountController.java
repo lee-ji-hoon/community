@@ -4,30 +4,21 @@ import com.community.account.entity.Account;
 import com.community.account.form.SignUpForm;
 import com.community.account.repository.AccountRepository;
 import com.community.account.validator.SignUpFormValidator;
-import com.community.board.entity.Board;
 import com.community.board.repository.BoardRepository;
 import com.community.board.service.BoardService;
 import com.community.like.LikeService;
 import com.community.profile.form.ProfileForm;
-import com.community.study.StudyRepository;
+import com.community.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Paths;
-import java.util.List;
 
 @Slf4j
 @Controller

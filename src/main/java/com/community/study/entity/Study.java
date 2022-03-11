@@ -1,4 +1,4 @@
-package com.community.study;
+package com.community.study.entity;
 
 import com.community.account.UserAccount;
 import com.community.account.entity.Account;
@@ -8,9 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @NamedEntityGraph(name = "Study.withAll", attributeNodes = {
         @NamedAttributeNode("tags"),
@@ -51,6 +49,7 @@ public class Study {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "study_id")
     private Long id;
 
     @ManyToMany
@@ -82,6 +81,9 @@ public class Study {
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Meetings> meetingsList = new ArrayList<>();
 
     private LocalDate limitStudyDate;
 
@@ -121,7 +123,7 @@ public class Study {
         return image != null ? image : "/images/study-banner.jpeg";
     }
 
-    public boolean openStudy(){
+    public boolean openStudy() {
 
         return isNotOpenAndClosed();
     }
@@ -157,7 +159,7 @@ public class Study {
     public void recruitClose() {
         if (this.recruiting()) {
             this.limitMemberDate = LocalDate.now();
-        }else {
+        } else {
             throw new RuntimeException("스터디원 모집을 종료 할 수 없습니다. 이미 종료됐거나 시작하지 않은 스터디입니다. 다시 확인해주세요.");
         }
     }

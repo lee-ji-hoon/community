@@ -30,7 +30,10 @@
                         <hr/>
                         <div>
                             <label for="limitMember" class="font-bold">인원</label>
-                            <input id="limitMember" type="number" th:field="*{limitMember}" class="shadow-none with-border p-3 form-control" placeholder="2" aria-describedby="limitMembersHelp" min="2" max="30">
+                            <input id="limitMember" type="number"
+                                   th:field="*{limitMember}"
+                                   th:value="${study.limitMember}"
+                                   class="shadow-none with-border p-3 form-control" placeholder="2" aria-describedby="limitMembersHelp" min="2" max="30">
                             <small id="limitMemberHelp" class="form-text text-muted">
                                 스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
                             </small>
