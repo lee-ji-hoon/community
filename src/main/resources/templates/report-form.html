@@ -53,7 +53,7 @@
                                 <div class="line">
                                     <label for="board_title"> 게시글 제목 </label>
                                     <p id="board_title">
-                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/report(boardId = ${board.bid})}" th:text="${board.title}"></a>
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${board.bid})}" th:text="${board.title}"></a>
                                     </p>
                                 </div>
                                 <div>
@@ -121,7 +121,7 @@
                             <div class="line">
                                 <label for="board_title"> 게시글 제목 </label>
                                 <p id="reply_content">
-                                    <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/report(boardId = ${r_board.bid})}" th:text="${reply.content}"></a>
+                                    <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${r_board.bid})}" th:text="${reply.content}"></a>
                                 </p>
                             </div>
                             <div>
