@@ -41,6 +41,8 @@ public class CouncilController {
 
     @GetMapping("/council/detail/{cid}")
     public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model) {
+        Council council = councilRepository.findByCid(cid);
+        model.addAttribute(council);
         model.addAttribute(account);
         return "council/detail";
     }

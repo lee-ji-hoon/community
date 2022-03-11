@@ -153,7 +153,7 @@
                             <li th:each="notice : ${councilService.postSort('공지')}">
                                 <div class="card">
                                     <div class="card-body">
-                                        <a href="timeline-event.html" class="box-title mb-1" th:text="${notice.postTitle}"> 공지 제목 </a>
+                                        <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="box-title mb-1" th:text="${notice.postTitle}"> 공지 제목 </a>
 
                                         <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
                                             <div> 15 intersted</div>
@@ -195,7 +195,7 @@
                                             <div class="text-xs uppercase text-red-500 font-semibold"> 행사 종료 </div>
                                         </th:block>
 
-                                        <a href="timeline-event.html" class="box-title mb-1" th:text="${event.postTitle}"> 행사 제목 </a>
+                                        <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}" class="box-title mb-1" th:text="${event.postTitle}"> 행사 제목 </a>
                                         <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
                                             <div>종료일 : <a th:text="${event.eventEndDate}"></a></div>
                                         </div>
