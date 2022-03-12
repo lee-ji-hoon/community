@@ -6,6 +6,7 @@ import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
+import com.community.council.Council;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,20 @@ public class ReplyService {
                 .content(replyForm.getContent())
                 .account(account)
                 .board(board)
+                .council(null)
+                .uploadTime(LocalDateTime.now())
+                .isReported(false)
+                .reportCount(0)
+                .build();
+        replyRepository.save(reply);
+    }
+
+    public void saveCouncilReply(@Valid ReplyForm replyForm, Account account, Council council) {
+        Reply reply = Reply.builder()
+                .content(replyForm.getContent())
+                .account(account)
+                .board(null)
+                .council(council)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)
                 .reportCount(0)

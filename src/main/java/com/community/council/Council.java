@@ -30,6 +30,13 @@ public class Council {
     private String postTitle;
 
     @NotBlank
+    private String postTarget;
+
+    private String postLink;
+
+    private String contactNum;
+
+    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String postContent;
 
@@ -42,4 +49,10 @@ public class Council {
     private LocalDate eventStartDate;
 
     private LocalDate eventEndDate;
+
+    private LocalDate applyPeriodStartDate;
+
+    private LocalDate applyPeriodEndDate;
+
+    private LocalDateTime uploadTime;
 }
