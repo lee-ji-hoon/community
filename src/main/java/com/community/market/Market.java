@@ -4,6 +4,7 @@ import com.community.account.entity.Account;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,6 +23,8 @@ public class Market {
     @JoinColumn(name = "seller_id")
     private Account account;
 
+    private String byeAndSell;
+
     private String itemName;
 
     private int price;
@@ -31,4 +34,8 @@ public class Market {
     private String itemDetail;
 
     private MarketItemStatus marketItemStatus;
+
+    private String itemImg;
+
+    private LocalDateTime itemUploadTime;
 }

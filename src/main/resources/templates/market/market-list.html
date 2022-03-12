@@ -134,75 +134,66 @@
         <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
             <h4> 물건 등록   </h4>
         </div>
-
-        <div class="p-6 space-y-3 flex-1">
-            <div>
-                <label> 품명  </label>
-                <input type="text" class="with-border" placeholder="">
-            </div>
-            <div>
-                <label> 설명   </label>
-                <textarea name="description" rows="3" class="with-border w-full p-4"
-                          id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
-            </div>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="col-span-2">
-                    <label> 카테고리    </label>
-                    <select name="category" id="category" class=" with-border">
-                        <option value="2">전공서적</option>
-                        <option value="3">의류</option>
-                        <option value="4"></option>
-                        <option value="5">Computers &amp; Peripherals</option>
-                        <option value="6">Consumer Electronics</option>
-                        <option value="7">Dating Services</option>
-                        <option value="8">Financial Services</option>
-                        <option value="9">Gifts &amp; Occasions</option>
-                        <option value="10">Home &amp; Garden</option>
-                        <option value="1">Other</option>
+        <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
+              th:object="${marketForm}"
+              th:action="@{/market/new}"
+              method="post" novalidate>
+            <div class="p-6 space-y-3 flex-1">
+                <div>
+                    <label> 카테고리 </label>
+                    <select name="" class="selectpicker with-border" th:field="*{byeAndSell}">
+                        <option value="2" selected th:value="팝니다"> 팝니다 </option>
+                        <option value="3" th:value="삽니다"> 삽니다 </option>
+                        <option value="3" th:value="나눔"> 나눔 </option>
                     </select>
+
                 </div>
                 <div>
-                    <label> 가격 </label>
-                    <input placeholder="0" type="number" class="with-border w-full">
-                </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="col-span-2">
-                    <label> 배송비 </label>
-                    <select id="" name="" class="selectpicker with-border">
-                        <option value="2"> 포함 </option>
-                        <option value="3"> 미포함 </option>
-                    </select>
+                    <label> 품명  </label>
+                    <input type="text" th:field="*{itemName}" class="with-border" placeholder="">
                 </div>
                 <div>
-                    <label> 상품 상태 </label>
-                    <select id="" name="" class="selectpicker with-border">
-                        <option value="2"> 새 것 </option>
-                        <option value="3"> 사용감 있음 </option>
-                        <option value="3"> 사용감 있음 </option>
-                    </select>
+                    <label> 설명   </label>
+                    <textarea name="description" th:field="*{itemDetail}" rows="2" class="with-border w-full p-4"
+                              id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label> 가격 </label>
+                        <input placeholder="0" th:field="*{price}" type="number" class="with-border w-full">
+                    </div>
+                    <div>
+                        <label> 상품 상태 </label>
+                        <select name="" class="selectpicker with-border" th:field="*{type}">
+                            <option value="2" selected th:value="새것"> 새 것 </option>
+                            <option value="3" th:value="사용감있음"> 사용감 있음 </option>
+                            <option value="3" th:value="사용감없음"> 사용감 없음 </option>
+                        </select>
+                    </div>
+                </div>
+                <div uk-form-custom class="w-full py-3">
+                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                        </svg>
+                    </div>
+<!--                    <input type="file" th:field="*{itemImg}">-->
                 </div>
             </div>
-            <div uk-form-custom class="w-full py-3">
-                <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                        <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                        <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                    </svg>
-                </div>
-                <input type="file">
+            <div class="p-5">
+                <button type="submit"
+                        id = "board_form_send"
+                        class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                    추가
+                </button>
             </div>
-        </div>
-        <div class="p-5">
-            <button type="button"  class="button w-full">
-                Create Now
-            </button>
-        </div>
-
-
+        </form>
     </div>
 </div>
 
-
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: ajax-csrf"></script>
 </body>
 </html>
