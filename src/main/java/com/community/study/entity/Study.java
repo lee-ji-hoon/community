@@ -4,6 +4,7 @@ import com.community.account.UserAccount;
 import com.community.account.entity.Account;
 import com.community.tag.Tag;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -54,18 +54,17 @@ public class StudyService {
         study.setImage(image);
     }
 
-    public void studyBannerEnable(Study study) {
-        study.setUseBanner(true);
-    }
-
-    public void studyBannerDisable(Study study) {
-        study.setUseBanner(false);
-    }
-
     public Study getStudyToUpdateStatus(Account account, String path) {
         Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
         checkExistStudy(path, accountWithManagersByPath);
         checkManager(account, accountWithManagersByPath);
+
+        return accountWithManagersByPath;
+    }
+
+    public Study getStudyToUpdateStatusByMember(String path) {
+        Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
+        checkExistStudy(path, accountWithManagersByPath);
 
         return accountWithManagersByPath;
     }
@@ -154,4 +153,8 @@ public class StudyService {
         return meetingsRepository.save(meetings);
 
     }
+
+    /*public void getMeetingsId(String meetingId) {
+        meetingsRepository.findById();
+    }*/
 }

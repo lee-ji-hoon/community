@@ -2,11 +2,6 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
-<style>
-    #subBoardSort, #postTitleSub{
-        display: none;
-    }
-</style>
 <body>
 
 <div id="wrapper">
@@ -22,76 +17,269 @@
         <div class="mcontainer">
 
 
-            <div class="lg:flex  lg:space-x-12">
-
+            <div class="lg:flex lg:space-x-12">
                 <div class="lg:w-3/4">
+
                     <div class="flex justify-between items-center relative md:mb-4 mb-3">
                         <div class="flex-1">
                             <h2 class="text-2xl font-semibold"> 장터 </h2>
-
-                            <nav class="responsive-nav md:m-0 -mx-4 style-2">
+                            <nav class="responsive-nav border-b md:m-0 -mx-4">
                                 <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                                    <li><a href="#" class="lg:px-2"> 전체 </a></li>
-                                    <li><a href="#" class="lg:px-2"> 팝니다 </a></li>
+                                    <li><a href="#" class="lg:px-2">팝니다 </a></li>
                                     <li><a href="#" class="lg:px-2"> 삽니다 </a></li>
+                                    <li><a href="#" class="lg:px-2"> 나눔 </a></li>
+                                    <li><a href="#" class="lg:px-2"> 내 상품 </a></li>
                                 </ul>
                             </nav>
                         </div>
+                        <a href="#offcanvas-create" uk-toggle class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">
+                                <path fill-rule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="md:block hidden"> 장터 등록 </span>
+                        </a>
                     </div>
-                    <!-- 게시판 분류 -->
-                    <div class="card divide-y divide-gray-100 px-4">
+
+                    <div class="card divide-y divide-gray-100 sm:m-0 -mx-4">
                         <div class="uk-switcher" id="timeline-tab">
-                            <!-- TOP 5 -->
+                        <!-- job 1 -->
                             <div>
-                                <div class="lg:flex lg:space-x-6 py-5">
-                                    <a>
-                                        <div class="lg:w-60 w-full h-40 overflow-hidden rounded-lg relative shadow-sm">
-                                            <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                                            <div class="absolute bg-blue-100 font-semibold
-                                            px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5">전체
-                                            </div>
-                                            <div class="absolute bg-purple-100 font-semibold
-                                            px-2.5 py-1 rounded-full text-purple-500 text-xs top-2.5 left-2.5">삽니다
-                                            </div>
-                                            <div class="absolute bg-yellow-100 font-semibold
-                                             px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5">팝니다
-                                            </div>
-                                        </div>
+                                <div th:each="sell : ${sellingProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
+                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
+                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
                                     </a>
-                                    <div class="flex-1 lg:pt-0 pt-4">
-
-
+                                    <div class="flex-1 sm:order-2">
+                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
+                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}">
+                                            <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
+                                        </a>
+                                        <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
+                                        </div>
+                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}"> 자세히 보기 </a>
+                                        <div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- 게시판 1 -->
-                            <!-- 게시판 2 -->
-                            <!-- 게시판 3 -->
+
+                            <div>
+                                <div th:each="sell : ${buyProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
+                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
+                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
+                                    </a>
+                                    <div class="flex-1 sm:order-2 line-clamp-3">
+                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
+                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
+                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
+                                        </a>
+                                        <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
+                                        </div>
+                                        <a href="#" id="more-text" uk-toggle="target: #more-text; cls: line-clamp-3"> 자세히 보기 </a>
+                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div th:each="sell : ${shareProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
+                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
+                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
+                                    </a>
+                                    <div class="flex-1 sm:order-2">
+                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
+                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
+                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
+                                        </a>
+                                        <p th:utext="${sell.itemDetail}">
+                                            상품 설명
+                                        </p>
+                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div th:each="sell : ${myProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
+                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
+                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
+                                    </a>
+                                    <div class="flex-1 sm:order-2">
+                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
+                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
+                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
+                                        </a>
+                                        <p th:utext="${sell.itemDetail}">
+                                            상품 설명
+                                        </p>
+                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
+                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-
                     </div>
-
                 </div>
+
                 <div class="lg:w-1/4 w-full flex-shrink-0">
 
-                    <div uk-sticky="offset:100" class="uk-sticky">
+                    <div uk-sticky="media @m ; offset:80 ; bottom : true" class="lg:mt-0 mt-6">
 
-                        <h2 class="text-lg font-semibold mb-3"> 최근 올라온 글 </h2>
-                        <ul>
-                            <li></li>
+                        <h2 class="text-xl font-semibold mb-2"> 최근 본 목록 </h2>
+                        <ul class="-space-y-2">
+                            <li>
+                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
+                                    <h3 class="font-medium line-clamp-2">제목</h3>
+                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
+                                        <div class="">작성자</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
+                                    <h3 class="font-medium line-clamp-2">제목</h3>
+                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
+                                        <div class="">작성자</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
+                                    <h3 class="font-medium line-clamp-2">제목</h3>
+                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
+                                        <div class="">작성자</div>
+                                    </div>
+                                </a>
+                            </li>
                         </ul>
                         <br>
 
-                    </div>
+                        <h4 class="text-lg font-semibold mb-3"> Tags </h4>
+
+                        <div class="flex flex-wrap gap-2">
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Computers</a>
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Business</a>
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> News</a>
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Architecher</a>
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Technolgy</a>
+                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Music</a>
+                        </div>
+
+                    </div><div class="uk-sticky-placeholder" style="height: 556px; margin: 0px;"></div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
 </div>
 
+<div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
+    <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
 
+        <button class="uk-offcanvas-close absolute" type="button" uk-close></button>
+
+        <!-- notivication header -->
+        <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
+            <h4> 물건 등록   </h4>
+        </div>
+        <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
+              th:object="${marketForm}"
+              th:action="@{/market/new}"
+              method="post" novalidate>
+            <div class="p-6 space-y-3 flex-1">
+                <div>
+                    <label> 카테고리 </label>
+                    <select name="" class="selectpicker with-border" th:field="*{marketType}">
+                        <option value="2" selected th:value="판매"> 판매 </option>
+                        <option value="3" th:value="구매"> 구매 </option>
+                        <option value="3" th:value="나눔"> 나눔 </option>
+                    </select>
+
+                </div>
+                <div>
+                    <label> 품명  </label>
+                    <input type="text" th:field="*{itemName}" class="with-border" placeholder="">
+                </div>
+                <div>
+                    <label> 설명  </label>
+                    <textarea name="description" th:field="*{itemDetail}" rows="2" class="with-border w-full p-4"
+                              id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label> 가격 </label>
+                        <input placeholder="0" th:field="*{price}" type="number" class="with-border w-full">
+                    </div>
+                    <div>
+                        <label> 상품 상태 </label>
+                        <select name="" class="selectpicker with-border" th:field="*{itemStatus}">
+                            <option value="2" selected th:value="새것"> 새 것 </option>
+                            <option value="3" th:value="사용감있음"> 사용감 있음 </option>
+                            <option value="3" th:value="사용감없음"> 사용감 없음 </option>
+                        </select>
+                    </div>
+                </div>
+                <div uk-form-custom class="w-full py-3">
+                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                        </svg>
+                    </div>
+<!--                    <input type="file" th:field="*{itemImg}">-->
+                </div>
+            </div>
+            <div class="p-5">
+                <button type="submit"
+                        id = "board_form_send"
+                        class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
+                    추가
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: ajax-csrf"></script>
+
+
+<script type="application/javascript">
+    $(document).ready(function() {
+        //여기 아래 부분
+
+        $('#description').summernote({
+            height: 300,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+            lang: "ko-KR",					// 한글 설정
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear', 'codeblock']],
+                ['mybutton', ['hello']],
+                ['insert',['picture','link']],
+            ],
+            placeholder: '더 자세한 내용을 적어주세요. <br> 꼼꼼히 작성하면 물건을 더 빠르게 판매 할 수 있을거에요.  <br/> [판매/구매 내용 예시] <br/> 거래지역 : <br/> 물건 상태 : ' //placeholder 설정
+
+        });
+    });
+</script>
 </body>
 </html>

@@ -7,7 +7,9 @@ import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
 import com.community.study.form.MeetingsForm;
 import com.community.study.form.StudyCalendarForm;
+import com.community.study.repository.MeetingsRepository;
 import com.community.study.repository.StudyRepository;
+import com.community.study.validator.MeetingFormValidator;
 import com.community.study.validator.StudyCalendarFormValidator;
 import com.community.tag.Tag;
 import com.community.tag.TagForm;
@@ -45,12 +47,14 @@ public class StudyController {
     private final ModelMapper modelMapper;
     private final StudyFormValidator studyFormValidator;
     private final StudyCalendarFormValidator studyCalendarFormValidator;
+    private final MeetingFormValidator meetingFormValidator;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
 
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
+    private final MeetingsRepository meetingsRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
     private static final String STUDY_FORM_VIEW = "study/study-form";
@@ -72,6 +76,12 @@ public class StudyController {
     @InitBinder("studyCalendarForm")
     public void studyDescriptionFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(studyCalendarFormValidator);
+    }
+
+    @InitBinder("meetingsForm")
+    public void meetingFormInitBinder(WebDataBinder webDataBinder) {
+        log.info("webDataBinder={}, target={}", webDataBinder, webDataBinder.getTarget());
+        webDataBinder.addValidators(meetingFormValidator);
     }
 
     @GetMapping("/study")
@@ -117,7 +127,6 @@ public class StudyController {
     }
 
     // 스터디 추가
-
     @PostMapping(STUDY_FORM_URL)
     public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model,
                                  HttpServletRequest httpServletRequest) {
@@ -133,17 +142,19 @@ public class StudyController {
 
     // 모임 페이지
     @GetMapping(STUDY_PATH_URL + "/meetings")
-    public String meetingListView(@CurrentUser Account account, @PathVariable String path, Model model) {
+    public String meetingListView(@CurrentUser Account account,
+                                  @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        model.addAttribute("meetingsList", meetingsRepository.findFirst9ByOrderByUploadTimeDesc());
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
-        return "study/meetings/view";
+        return "study/study-meetings";
     }
 
     @PostMapping(STUDY_PATH_URL + "/meetings")
-    public String meetingView(@CurrentUser Account account, @PathVariable String path,
+    public String meetingList(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
         log.info("스터디 실행");
         Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
@@ -152,12 +163,26 @@ public class StudyController {
             model.addAttribute(studyUpdate);
             return "study/meetings/view";
         }*/
-        Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
         model.addAttribute(account);
 
         log.info("스터디 종료");
-        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings/" + newMeeting.getId();
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
     }
+
+    /*@GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
+    public String meetingView(@CurrentUser Account account, @PathVariable String path,
+                              Model model, @PathVariable String meetingId) {
+        log.info("스터디 모임 상세 페이지 실행");
+        Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
+//        studyService.getMeetingsId(meetingId);
+
+        model.addAttribute(studyUpdate);
+//        model.addAttribute(meetings);
+        model.addAttribute(account);
+
+        return "study/meetings/view";
+    }*/
 
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
@@ -177,7 +202,7 @@ public class StudyController {
 
         studyService.addMember(studyWithMembersByPath, account);
 
-        return "redirect:/study/" + fixPath(path);
+        return "redirect:/study/" + fixPath(path) + "/meetings";
     }
 
     // 스터디 탈퇴
@@ -186,7 +211,7 @@ public class StudyController {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
         studyService.removeMember(studyWithMembersByPath, account);
 
-        return "redirect:/study/" + fixPath(path);
+        return "redirect:/study/" + fixPath(path) + "/meetings";
     }
 
     // 스터디 설명 수정 시작

@@ -1,5 +1,5 @@
 package com.community.market;
 
 public enum MarketItemStatus {
-    SELLING, SOLDOUT
+    판매중, 판매완료
 }

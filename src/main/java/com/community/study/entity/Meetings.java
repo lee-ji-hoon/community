@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,8 +22,12 @@ public class Meetings {
     @Column(name = "meetings_id")
     private Long id;
 
+    private String meetingDivision;
+
     private String meetingTitle;
 
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String meetingDescription;
 
     @ManyToOne
