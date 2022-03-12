@@ -22,19 +22,20 @@ public class CouncilService {
     private final CouncilRepository councilRepository;
 
     public Council saveNewPosts(CouncilForm councilForm, Account account) {
-        log.info("eventStartDate : " + councilForm.getEventStartDate());
-        log.info("eventEndDate : " + councilForm.getEventEndDate());
         Council council = Council.builder()
                 .postTitle(councilForm.getPostTitle())
-                .postSort(councilForm.getPostSort())
+                .postLink(councilForm.getPostLink())
                 .postContent(councilForm.getPostContent())
+                .postTarget(councilForm.getPostTarget())
+                .postSort(councilForm.getPostSort())
+                .contactNum(councilForm.getContactNum())
                 .postWriter(account)
                 .pageView(0)
                 .eventStartDate(councilForm.getEventStartDate())
                 .eventEndDate(councilForm.getEventEndDate())
+                .applyPeriodStartDate(councilForm.getApplyPeriodStartDate())
+                .applyPeriodEndDate(councilForm.getApplyPeriodEndDate())
                 .build();
-        log.info("eventStartDate : " + council.getEventStartDate());
-        log.info("eventEndDate : " + council.getEventEndDate());
         return councilRepository.save(council);
     }
 

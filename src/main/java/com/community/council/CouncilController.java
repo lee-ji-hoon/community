@@ -2,6 +2,7 @@ package com.community.council;
 
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ public class CouncilController {
 
     private final CouncilRepository councilRepository;
     private final CouncilService councilService;
+    private final BoardService boardService;
 
     @GetMapping("/council")
     public String council(@CurrentUser Account account, Model model) {
@@ -44,6 +46,8 @@ public class CouncilController {
         Council council = councilRepository.findByCid(cid);
         model.addAttribute(council);
         model.addAttribute(account);
+        model.addAttribute(boardService);
+        model.addAttribute(councilService);
         return "council/detail";
     }
 }

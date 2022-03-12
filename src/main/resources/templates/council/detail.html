@@ -22,96 +22,25 @@
 
             <div class="md:flex  md:space-x-8 lg:mx-14">
                 <div class="space-y-5 flex-shrink-0 md:w-7/12">
-
-
-                    <div class="card p-5">
-
-                        <h1 class="block text-lg font-bold"> Details  </h1>
-
-                        <div class="space-y-4 mt-3">
-                            <div class="line-clamp-3" id="more-text" th:utext="${council.postContent}">내용</div>
-                            <a href="#" id="more-text1" uk-toggle="target: #more-text ; cls: line-clamp-3" class="text-blue-500"> 더 보기 </a>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="alert-circle" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div>  We Plan ,We Desing, We Estimate for Approval to Build.. </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div class="font-semibold"> 3.3K people responded </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="globe" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div> Online: <a href="#" class="text-blue-500"> https://mydomain.com </a> </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="globe" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div> Tuesday, 2 February 2021 at 13:00 MST </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="mail-open" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div> Public  · Anyone on or off Socialite </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <ion-icon name="albums" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div>  <a href="#" class="text-blue-500">Product/service</a> </div>
-                                </div>
+                    <div class="card p-6">
+                        <div class="space-y-4">
+                            <h3 class="font-semibold text-xl text-center" th:text="${council.postTitle}"> 제목 </h3>
+                            <hr>
+                            <div th:utext="${council.postContent}">내용</div>
+                        </div>
+                        <hr class="my-4">
+                        <div>
+                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 mb-2">
+                                <input type="hidden" id="r_council_id" name="r_board_id" class="form-control"
+                                       value="1" th:value="${council.cid}" readonly>
+                                <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
+                                       value="1" th:value="${account.id}" readonly>
+                                <form id="reply_form" onsubmit="return false">
+                                    <input placeholder="댓글을 입력해주세요." class="bg-transparent max-h-10 shadow-none px-5">
+                                </form>
                             </div>
 
-                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
-                                <input placeholder="Add your Comment.." class="bg-transparent max-h-10 shadow-none px-5">
-                                <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
-                                    <a href="#">
-                                        <ion-icon name="happy-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                                    </a>
-                                    <a href="#">
-                                        <ion-icon name="image-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                                    </a>
-                                    <a href="#">
-                                        <ion-icon name="link-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center space-x-3 pt-2">
-                                <div class="flex items-center">
-                                    <img src="assets/images/avatars/avatar-1.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900">
-                                    <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 rounded-full border-2 border-white dark:border-gray-900 -ml-2">
-                                </div>
-                                <div class="dark:text-gray-100">
-                                    Liked <strong> Johnson</strong> and <strong> 209 Others </strong>
-                                </div>
-                            </div>
-
-                            <div class="border-t py-4 space-y-4 dark:border-gray-600">
-                                <div class="flex">
-                                    <div class="w-10 h-10 rounded-full relative flex-shrink-0">
-                                        <img src="assets/images/avatars/avatar-1.jpg" alt="" class="absolute h-full rounded-full w-full">
-                                    </div>
-                                    <div>
-                                        <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12 dark:bg-gray-800 dark:text-gray-100">
-                                            <p class="leading-6">In ut odio libero vulputate <urna class="i uil-heart"></urna> <i
-                                                    class="uil-grin-tongue-wink"> </i> </p>
-                                            <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 dark:bg-gray-800"></div>
-                                        </div>
-                                        <div class="text-sm flex items-center space-x-3 mt-2 ml-5">
-                                            <a href="#" class="text-red-600"> <i class="uil-heart"></i> Love </a>
-                                            <a href="#"> Replay </a>
-                                            <span> 3d </span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="py-4 space-y-4 dark:border-gray-600">
                                 <div class="flex">
                                     <div class="w-10 h-10 rounded-full relative flex-shrink-0">
                                         <img src="assets/images/avatars/avatar-1.jpg" alt="" class="absolute h-full rounded-full w-full">
@@ -130,42 +59,129 @@
                                 </div>
 
                             </div>
-
                         </div>
-
-
                     </div>
+
 
                 </div>
 
                 <!-- Sidebar -->
-                <th:block th:if="${council.postSort=='행사'}">
                     <div class="w-full flex-shirink-0">
-                        <div class="card p-4">
-                            <div class="">
-                                <div class="py-2 flex items-center space-x-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <div>
-                                        <div class="text-lg font-semibold"> Start Date</div>
-                                        <div><a th:text="${council.eventStartDate}"></a></div>
-                                    </div>
+                        <div uk-sticky="offset:100" class="uk-sticky">
+                            <div class="card p-4">
+                                <div class="">
+                                    <th:block th:if="${council.postSort=='행사'}">
+                                        <div class="py-2 flex items-center space-x-4">
+                                            <!-- 신청 시작 전 -->
+                                            <th:block th:if="${council.applyPeriodStartDate > councilService.nowDate() && council.applyPeriodEndDate > councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 신청 진행전 </div>
+                                                    <div><a th:text="${council.applyPeriodStartDate}"></a>일 부터 신청 시작</div>
+                                                </div>
+                                            </th:block>
+                                            <!-- 신청 진행 중 -->
+                                            <th:block th:if="${council.applyPeriodStartDate <= councilService.nowDate() && council.applyPeriodEndDate >= councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-green-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 신청 진행중 </div>
+                                                    <div>~ <a th:text="${council.applyPeriodEndDate}"></a>까지</div>
+                                                </div>
+                                            </th:block>
+                                            <!-- 신청 마감 -->
+                                            <th:block th:if="${council.applyPeriodStartDate < councilService.nowDate() && council.applyPeriodEndDate < councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 신청 마감 </div>
+                                                    <div>마감일 : <a th:text="${council.applyPeriodEndDate}"></a></div>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                        <div class="py-2 flex items-center space-x-4">
+                                            <!-- 행사 시작 전 -->
+                                            <th:block th:if="${council.eventStartDate > councilService.nowDate() && council.eventEndDate > councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-yellow-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 행사 진행전 </div>
+                                                    <th:block th:if="${council.eventStartDate == council.eventEndDate}">
+                                                        <div><a th:text="${council.eventEndDate}"></a>일 행사</div>
+                                                    </th:block>
+                                                    <th:block th:if="${council.eventStartDate != council.eventEndDate}">
+                                                        <div><a th:text="${council.eventStartDate}"></a>일 부터 행사 시작</div>
+                                                    </th:block>
+                                                </div>
+                                            </th:block>
+                                            <!-- 행사 진행 중 -->
+                                            <th:block th:if="${council.eventStartDate <= councilService.nowDate() && council.eventEndDate >= councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-green-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 행사 진행중 </div>
+                                                    <th:block th:if="${council.eventStartDate == council.eventEndDate}">
+                                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                                    </th:block>
+                                                    <th:block th:if="${council.eventStartDate != council.eventEndDate}">
+                                                        <div><a th:text="${council.eventStartDate}"></a> ~ <a th:text="${council.eventEndDate}"></a></div>
+                                                    </th:block>
+                                                </div>
+                                            </th:block>
+                                            <!-- 행사 종료 -->
+                                            <th:block th:if="${council.eventStartDate < councilService.nowDate() && council.eventEndDate < councilService.nowDate()}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                                </svg>
+                                                <div>
+                                                    <div class="text-lg font-semibold"> 행사 종료 </div>
+                                                    <th:block th:if="${council.eventStartDate == council.eventEndDate}">
+                                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                                    </th:block>
+                                                    <th:block th:if="${council.eventStartDate != council.eventEndDate}">
+                                                        <div>마감일 : <a th:text="${council.eventEndDate}"></a></div>
+                                                    </th:block>
+                                                </div>
+                                            </th:block>
+
+                                        </div>
+                                        <hr class="my-4">
+                                    </th:block>
                                 </div>
-                                <div class="py-2 flex items-center space-x-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-red-500 w-9">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <div>
-                                        <div class="text-lg font-semibold"> End Date</div>
-                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                <div>
+                                    <div class="flex items-center space-x-3 my-1">
+                                        <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                        <div class="flex-1">
+                                            <div><a th:text="${council.postTarget}"></a> 대상</div>
+                                        </div>
                                     </div>
+
+                                    <th:block th:if="${not #strings.isEmpty(council.postLink)}">
+                                        <div class="flex items-center space-x-3 my-1">
+                                            <ion-icon name="globe" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                            <div class="flex-1">
+                                                <div class="text-blue-500"><a th:href="${council.postLink}" target='_blank'>링크 바로가기</a></div>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${not #strings.isEmpty(council.contactNum)}">
+                                        <div class="flex items-center space-x-3 my-1">
+                                            <ion-icon name="mail-open" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
+                                            <div class="flex-1">
+                                                <div th:text="${council.contactNum}"> 연락망 </div>
+                                            </div>
+                                        </div>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </th:block>
-
             </div>
 
         </div>

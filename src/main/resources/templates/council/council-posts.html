@@ -30,7 +30,6 @@
                     <nav class="responsive-nav border-b md:m-0 -mx-4">
                         <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                             <li><a href="#" class="lg:px-2">공지사항</a></li>
-                            <li><a href="#" class="lg:px-2"> 학과 행사 </a></li>
                         </ul>
                     </nav>
                 </div>
@@ -40,13 +39,13 @@
                               d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
                               clip-rule="evenodd"></path>
                     </svg>
-                    <span class="md:block hidden"> Create </span>
+                    <span class="md:block hidden"> 글 작성하기 </span>
                 </a>
                 <div id="create-post-modal" class="create-post" uk-modal>
                     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
 
                         <div class="py-4 border-b flex  justify-between px-6">
-                            <h3 class="text-lg font-semibold" id="forum_head"> 게시글 작성하기 </h3>
+                            <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
                             <div>
                                 <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
                                         type="button" uk-close>
@@ -58,19 +57,44 @@
                         <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/board/detail" th:action="@{/council/detail}" th:object="${councilForm}" method="post" novalidate>
                             <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
                                 <div class="space-y-4 g:w-8/12">
-                                    <div class="form-group">
-                                        <label for="selectBox"> 유형 선택 </label>
-                                        <select id="selectBox" name="selectBox"  class="shadow-none with-border px-2 selectpicker" th:field="*{postSort}">
-                                            <option data-icon="icon-material-outline-assignment" value="공지" selected>공지</option>
-                                            <option data-icon="icon-material-outline-help-outline" value="행사">행사</option>
-                                        </select>
+                                    <div class="font-semibold text-lg"> 유형 선택 </div>
+                                    <hr>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label for="selectBox"> 글 종류 선택 </label>
+                                            <div class="form-group">
+                                                <select id="selectBox" name="selectBox"  class="shadow-none with-border px-2 selectpicker mb-2" aria-describedby="postSortHelp" th:field="*{postSort}">
+                                                    <option data-icon="icon-material-outline-assignment" value="공지" selected>공지</option>
+                                                    <option data-icon="icon-material-outline-help-outline" value="행사">행사</option>
+                                                </select>
+                                                <small id="postSortHelp" class="form-text text-muted">
+                                                    타학과 행사는 공지로 올려주세요.
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="form-group mb-3">
+                                                <label for="postTarget"> 참여 및 공지 대상 </label>
+                                                <select id="postTarget" name="postTarget" aria-describedby="postTargetHelp" class="shadow-none with-border px-2 selectpicker mb-2" th:field="*{postTarget}" multiple>
+                                                    <option data-icon="icon-material-outline-assignment" value="전체 학년" selected>전체 학년</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="1학년">1학년</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="2학년">2학년</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="3학년">3학년</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="4학년">4학년</option>
+                                                </select>
+                                                <small id="postTargetHelp" class="form-text text-muted">
+                                                    전체 학년일 경우 <b class="text-blue-500">전체 학년</b>만 선택해주세요.
+                                                </small>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="font-semibold text-lg"> Details </div>
+                                    <hr>
+                                    <div class="font-semibold text-lg"> 상세 정보 입력 </div>
                                     <!-- 제목 -->
                                     <div class="form-group">
                                         <div class="line">
                                             <input class="line__input form-control" id="title" th:field="*{postTitle}"
-                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                   type="text" onkeyup="this.setAttribute(  'value', this.value);"
                                                    aria-describedby="titleHelp" required autocomplete="off">
                                             <span for="username" class="line__placeholder"> 제목 </span>
                                         </div>
@@ -79,31 +103,66 @@
                                         </small>
                                         <small class="invalid-feedback">제목을 입력해주세요.</small>
                                     </div>
-                                    <!-- 소제목 -->
+                                    <div class="form-group">
+                                        <div class="line">
+                                            <input class="line__input form-control" id="postLink" th:field="*{postLink}"
+                                                   type="text" onkeyup="this.setAttribute(  'value', this.value);"
+                                                   aria-describedby="postLinkHelp" autocomplete="off">
+                                            <span for="postLink" class="line__placeholder"> 참여 및 참고 링크 </span>
+                                        </div>
+                                        <small id="postLinkHelp" class="form-text text-muted">
+                                            링크가 없을 경우 아무것도 입력하지 않아도 됩니다.
+                                        </small>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="line">
+                                            <input class="line__input form-control" id="contactNum" th:field="*{contactNum}"
+                                                   type="text" onkeyup="this.setAttribute(  'value', this.value);"
+                                                   aria-describedby="contactNumHelp" autocomplete="off">
+                                            <span for="contactNum" class="line__placeholder"> 연락처 </span>
+                                        </div>
+                                        <small id="contactNumHelp" class="form-text text-muted">
+                                            학우들이 편하게 연락할 수 있는 번호 혹은 카카오톡 아이디를 입력해주세요.
+                                            <br>작성할 내용이 없다면 아무것도 입력하지 않아도 됩니다.
+                                        </small>
+                                    </div>
                                     <div id="eventDatePick">
-                                        <div>
-                                            <label for="eventStartDate">행사 시작 일자</label>
-                                            <div class="form-group">
-                                                <input id="eventStartDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                       th:field="*{eventStartDate}" aria-describedby="eventStartDateHelp">
+                                        <hr class="my-3">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label for="applyPeriodStartDate">신청 시작일</label>
+                                                <div class="form-group">
+                                                    <input id="applyPeriodStartDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                           th:field="*{applyPeriodStartDate}" aria-describedby="applyPeriodStartDateHelp">
+                                                </div>
+                                                <small class="invalid-feedback">날짜를 확인해주세요.</small>
                                             </div>
-                                            <small id="eventStartDateHelp" class="form-text text-muted">
-                                                행사가 시작되는 일자를 입력해주세요.
-                                            </small>
-                                            <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                        </div>
-                                        <br>
-                                        <div>
-                                            <label for="eventEndDate">행사 종료 일자</label>
-                                            <div class="form-group">
-                                                <input id="eventEndDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                       th:field="*{eventEndDate}" aria-describedby="eventEndDateHelp">
+                                            <div>
+                                                <label for="applyPeriodStartDate">신청 마감일</label>
+                                                <div class="form-group">
+                                                    <input id="applyPeriodEndDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                           th:field="*{applyPeriodEndDate}" aria-describedby="applyPeriodEndDateHelp">
+                                                </div>
+                                                <small class="invalid-feedback">날짜를 확인해주세요.</small>
                                             </div>
-                                            <small id="eventEndDateHelp" class="form-text text-muted">
-                                                행사가 종료되는 일자를 입력해주세요.
-                                            </small>
-                                            <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                                            <div>
+                                                <label for="eventStartDate">행사 시작일</label>
+                                                <div class="form-group">
+                                                    <input id="eventStartDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                           th:field="*{eventStartDate}" aria-describedby="eventStartDateHelp">
+                                                </div>
+                                                <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                                            </div>
+                                            <div>
+                                                <label for="eventEndDate">행사 종료일</label>
+                                                <div class="form-group">
+                                                    <input id="eventEndDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                           th:field="*{eventEndDate}" aria-describedby="eventEndDateHelp">
+                                                </div>
+                                                <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                                            </div>
                                         </div>
+                                        <hr class="my-3">
                                     </div>
                                     <!-- 본문 -->
                                     <div class="form-group">
@@ -115,8 +174,8 @@
                                         <small class="invalid-feedback">글을 입력해주세요.</small>
                                     </div>
                                 </div>
-
                             </div>
+
 
                             <div class="flex items-center w-full justify-between p-3 border-t">
 
@@ -130,16 +189,16 @@
                                 <div class="flex space-x-2">
                                     <a href="#"
                                        class="uk-modal-close bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                                        Cancel </a>
+                                        돌아가기 </a>
                                     <button type="submit"
                                             id = "board_form_send"
                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                                        Post </button>
+                                        등록하기 </button>
                                 </div>
 
                                 <button type="submit" hidden
                                         class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold">
-                                    Post </button>
+                                    등록하기 </button>
                             </div>
                         </form>
 
@@ -156,54 +215,15 @@
                                         <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="box-title mb-1" th:text="${notice.postTitle}"> 공지 제목 </a>
 
                                         <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div> 15 intersted</div>
+                                            <div th:text="${notice.postTarget}"></div>
                                             <div>·</div>
-                                            <div> 2 going </div>
+                                            <div>조회수 <a th:text="${notice.pageView}"></a></div>
                                         </div>
                                     </div>
                                 </div>
                             </li>
                         </ul>
 
-                        <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                        <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
-
-                    </div>
-                </div>
-                <div class="relative" uk-slider="finite: true">
-                    <div class="uk-slider-container px-1 py-3">
-                        <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                            <li th:each="event : ${councilService.postSort('행사')}">
-                                <div class="card">
-                                    <div class="card-media h-60">
-                                        <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-2.jpg" alt="" class="">
-                                        <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
-                                            <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">
-                                                진행중 </div>
-                                        </th:block>
-                                        <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
-                                            <div class="absolute bg-red-100 font-semibold px-2.5 py-1 rounded-full text-red-500 text-xs top-2.5 left-2.5">
-                                                종료 </div>
-                                        </th:block>
-                                    </div>
-                                    <div class="card-body">
-                                        <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
-                                            <div class="text-xs uppercase text-green-500 font-semibold"> 행사 진행 중 </div>
-                                        </th:block>
-                                        <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
-                                            <div class="text-xs uppercase text-red-500 font-semibold"> 행사 종료 </div>
-                                        </th:block>
-
-                                        <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}" class="box-title mb-1" th:text="${event.postTitle}"> 행사 제목 </a>
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div>종료일 : <a th:text="${event.eventEndDate}"></a></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
                         <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
                         <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
 
@@ -215,7 +235,7 @@
 
             <div class="my-4 flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-semibold"> 내가 좋아하는 목록 </h2>
+                    <h2 class="text-xl font-semibold"> 학과 행사 </h2>
                 </div>
                 <a href="#" class="text-blue-500"> See all </a>
             </div>
@@ -224,73 +244,62 @@
 
                 <div class="uk-slider-container px-1 py-3">
 
+                    <!--<div class="relative" uk-slider="finite: true">
+                        <div class="uk-slider-container px-1 py-3">
+                            <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
+                                <li >
+                                    <div class="card">
+                                        <div class="card-media h-60">
+                                            <div class="card-media-overly"></div>
+                                            <img src="assets/images/events/img-2.jpg" alt="" class="">
+
+                                        </div>
+                                        <div class="card-body">
+                                            <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                                <div class="text-xs uppercase text-green-500 font-semibold"> 행사 진행 중 </div>
+                                            </th:block>
+                                            <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                                <div class="text-xs uppercase text-red-500 font-semibold"> 행사 종료 </div>
+                                            </th:block>
+
+                                            <a class="box-title mb-1" > 행사 제목 </a>
+                                            <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
+                                                <div>종료일 : <a th:text="${event.eventEndDate}"></a></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
+                            <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+
+                        </div>
+                    </div>-->
+
+
                     <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
 
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
+                        <li th:each="event : ${councilService.postSort('행사')}">
+                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
+                                <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
+                                    <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
+                                    </div>
+                                    <img src="assets/images/events/listing-1.jpg" class="absolute w-full h-full object-cover" alt="">
+                                    <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                        <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">
+                                            진행중 </div>
+                                    </th:block>
+                                    <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                        <div class="absolute bg-red-100 font-semibold px-2.5 py-1 rounded-full text-red-500 text-xs top-2.5 left-2.5">
+                                            종료 </div>
+                                    </th:block>
+                                    <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
+                                        <div class="text-xl" th:text="${event.postTitle}"> 제목 </div>
+                                        <div class="text-sm"><a th:text="${event.eventEndDate}"></a> 까지</div>
+                                    </div>
                                 </div>
-                                <img src="assets/images/events/listing-1.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> Miami </div>
-                                    <div class="text-xl"> Hotels </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                </div>
-                                <img src="assets/images/events/listing-2.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> Florida</div>
-                                    <div class="text-xl"> Hotels </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                </div>
-                                <img src="assets/images/events/listing-3.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> London</div>
-                                    <div class="text-lg"> Cold Drink </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                </div>
-                                <img src="assets/images/events/listing-4.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> Dubai </div>
-                                    <div class="text-lg"> Hotels </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                </div>
-                                <img src="assets/images/events/listing-5.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> Florida</div>
-                                    <div class="text-lg"> Tom Restaurant </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                <div class="absolute w-full h-3/4 -bottom-12 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                </div>
-                                <img src="assets/images/events/listing-1.jpg" class="absolute w-full h-full object-cover" alt="">
-                                <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                    <div class="text-sm"> Miami </div>
-                                    <div class="text-lg"> Hotels </div>
-                                </div>
-                            </div>
+                            </a>
                         </li>
                     </ul>
                     <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
@@ -299,237 +308,6 @@
                        href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
                 </div>
             </div>
-
-            <br>
-
-            <div class="my-4 flex items-center justify-between">
-                <div>
-                    <h2 class="text-xl font-semibold">Upcomming Events </h2>
-                </div>
-                <a href="#" class="text-blue-500"> See all </a>
-            </div>
-
-            <div class="relative" uk-slider="finite: true">
-
-                <div class="uk-slider-container px-1 py-3">
-                    <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                        <li>
-                            <div class="card">
-                                <div class="card-media h-32">
-                                    <div class="card-media-overly"></div>
-                                    <img src="assets/images/events/img-2.jpg" alt="" class="">
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-xs uppercase text-red-500 font-semibold"> Happening now </div>
-                                    <a href="timeline-event.html" class="box-title mb-1"> The global creative </a>
-                                    <div class="text-sm font-medium mt-1">Ankara</div>
-
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                        <div> 15 intersted</div>
-                                        <div>·</div>
-                                        <div> 2 going </div>
-                                    </div>
-
-                                    <div class="flex mt-2 space-x-2 text-sm">
-                                        <a href="#"
-                                           class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                 class="w-5 mr-1.5">
-                                                <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg> intersted
-                                        </a>
-                                        <a href="#" class="bg-gray-200 flex h-8 items-center px-3 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor" class="w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="card">
-                                <div class="card-media h-32">
-                                    <div class="card-media-overly"></div>
-                                    <img src="assets/images/events/img-4.jpg" alt="" class="">
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-xs uppercase text-blue-500 font-semibold">Uk brands</div>
-                                    <a href="timeline-event.html" class="box-title  mb-1"> Safety and Flight </a>
-                                    <div class="text-sm font-medium mt-1">London</div>
-
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                        <div> 15 intersted</div>
-                                        <div>·</div>
-                                        <div> 2 going </div>
-                                    </div>
-
-                                    <div class="flex mt-2 space-x-2 text-sm">
-                                        <a href="#"
-                                           class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                 class="w-5 mr-1.5">
-                                                <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg>
-                                            intersted
-                                        </a>
-                                        <a href="#" class="bg-gray-200 flex h-8 items-center px-3 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor" class="w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="card">
-                                <div class="card-media h-32">
-                                    <div class="card-media-overly"></div>
-                                    <img src="assets/images/events/img-2.jpg" alt="" class="">
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-xs uppercase text-green-500 font-semibold">Conference </div>
-                                    <a href="timeline-event.html" class="box-title mb-1"> Accept Who I Am</a>
-                                    <div class="text-sm font-medium mt-1">Dubai</div>
-
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                        <div> 15 intersted</div>
-                                        <div>·</div>
-                                        <div> 2 going </div>
-                                    </div>
-
-                                    <div class="flex mt-2 space-x-2 text-sm">
-                                        <a href="#"
-                                           class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                 class="w-5 mr-1.5">
-                                                <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg>
-                                            intersted
-                                        </a>
-                                        <a href="#" class="bg-gray-200 flex h-8 items-center px-3 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor" class="w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="card">
-                                <div class="card-media h-32">
-                                    <div class="card-media-overly"></div>
-                                    <img src="assets/images/events/img-4.jpg" alt="" class="">
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-xs uppercase text-yellow-500 font-semibold">Upcomming </div>
-                                    <a href="timeline-event.html" class="box-title mb-1"> Perspective is everything </a>
-                                    <div class="text-sm font-medium mt-1">Dubai</div>
-
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                        <div> 15 intersted</div>
-                                        <div>·</div>
-                                        <div> 2 going </div>
-                                    </div>
-
-                                    <div class="flex mt-2 space-x-2 text-sm">
-                                        <a href="#"
-                                           class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                 class="w-5 mr-1.5">
-                                                <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg>
-                                            intersted
-                                        </a>
-                                        <a href="#" class="bg-gray-200 flex h-8 items-center px-3 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor" class="w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="card">
-                                <div class="card-media h-32">
-                                    <div class="card-media-overly"></div>
-                                    <img src="assets/images/events/img-2.jpg" alt="" class="">
-                                    <div
-                                            class="absolute bg-red-100 font-semibold px-2.5 py-1 rounded-full text-red-500 text-xs top-2.5 left-2.5">
-                                        Happening
-                                        now </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-xs uppercase text-red-500 font-semibold"> Happening now </div>
-                                    <a href="timeline-event.html" class="box-title mb-1"> The global creative </a>
-                                    <div class="text-sm font-medium mt-1">Ankara</div>
-
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                        <div> 15 intersted</div>
-                                        <div>·</div>
-                                        <div> 2 going </div>
-                                    </div>
-
-                                    <div class="flex mt-2 space-x-2 text-sm">
-                                        <a href="#"
-                                           class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                 class="w-5 mr-1.5">
-                                                <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                </path>
-                                            </svg> intersted
-                                        </a>
-                                        <a href="#" class="bg-gray-200 flex h-8 items-center px-3 rounded-md">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                 stroke="currentColor" class="w-5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
-                                                </path>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                    <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
-
-                </div>
-            </div>
-
-
-
         </div>
     </div>
 
