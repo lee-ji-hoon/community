@@ -1,6 +1,7 @@
 package com.community.board.entity;
 
 import com.community.account.entity.Account;
+import com.community.council.Council;
 import com.community.forum.Forum;
 import lombok.*;
 
@@ -26,6 +27,10 @@ public class Reply {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Account account;
+
+    @ManyToOne(targetEntity = Council.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "council_id")
+    private Council council;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "forum_fid")

@@ -13,6 +13,12 @@ public class CouncilForm {
     @Length(max = 50)
     private String postTitle;
 
+    private String postTarget;
+
+    private String postLink;
+
+    private String contactNum;
+
     private String postSort;
 
     @NotBlank
@@ -23,4 +29,10 @@ public class CouncilForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate eventEndDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate applyPeriodStartDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate applyPeriodEndDate;
 }

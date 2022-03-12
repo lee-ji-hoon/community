@@ -2,6 +2,10 @@ package com.community.council;
 
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.board.entity.Reply;
+import com.community.board.repository.ReplyRepository;
+import com.community.board.service.BoardService;
+import com.community.board.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +23,17 @@ import java.util.List;
 public class CouncilController {
 
     private final CouncilRepository councilRepository;
+    private final ReplyRepository replyRepository;
     private final CouncilService councilService;
+    private final BoardService boardService;
+    private final ReplyService replyService;
 
     @GetMapping("/council")
     public String council(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new CouncilForm());
         model.addAttribute(councilService);
+        model.addAttribute(boardService);
         return "council/council-posts";
     }
 
@@ -42,8 +50,15 @@ public class CouncilController {
     @GetMapping("/council/detail/{cid}")
     public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model) {
         Council council = councilRepository.findByCid(cid);
+
+        List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
+
         model.addAttribute(council);
         model.addAttribute(account);
+        model.addAttribute(boardService);
+        model.addAttribute(councilService);
+        model.addAttribute("reply", replies);
+        model.addAttribute("replyService", replyService);
         return "council/detail";
     }
 }
