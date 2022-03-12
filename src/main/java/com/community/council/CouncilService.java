@@ -35,6 +35,7 @@ public class CouncilService {
                 .eventEndDate(councilForm.getEventEndDate())
                 .applyPeriodStartDate(councilForm.getApplyPeriodStartDate())
                 .applyPeriodEndDate(councilForm.getApplyPeriodEndDate())
+                .uploadTime(LocalDateTime.now())
                 .build();
         return councilRepository.save(council);
     }

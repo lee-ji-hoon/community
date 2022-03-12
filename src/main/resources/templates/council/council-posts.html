@@ -24,14 +24,10 @@
     <div class="main_content">
         <div class="mcontainer">
 
+
             <div class="flex justify-between relative md:mb-4 mb-3">
                 <div class="flex-1">
                     <h2 class="text-2xl font-semibold"> 제 27대 학생회 CROCE </h2>
-                    <nav class="responsive-nav border-b md:m-0 -mx-4">
-                        <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                            <li><a href="#" class="lg:px-2">공지사항</a></li>
-                        </ul>
-                    </nav>
                 </div>
                 <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
@@ -170,7 +166,6 @@
                                             <textarea class="form-control" id="content" th:field="*{postContent}"
                                                       type="text" aria-describedby="contentHelp" required></textarea>
                                         </div>
-                                        <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
                                         <small class="invalid-feedback">글을 입력해주세요.</small>
                                     </div>
                                 </div>
@@ -205,78 +200,16 @@
                     </div>
                 </div>
             </div>
-            <div class="uk-switcher" id="timeline-tab">
-                <div class="relative" uk-slider="finite: true">
-                    <div class="uk-slider-container px-1 py-3">
-                        <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                            <li th:each="notice : ${councilService.postSort('공지')}">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="box-title mb-1" th:text="${notice.postTitle}"> 공지 제목 </a>
-
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div th:text="${notice.postTarget}"></div>
-                                            <div>·</div>
-                                            <div>조회수 <a th:text="${notice.pageView}"></a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-
-                        <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                        <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
-
-                    </div>
-                </div>
-            </div>
-
             <br>
-
             <div class="my-4 flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-semibold"> 학과 행사 </h2>
                 </div>
                 <a href="#" class="text-blue-500"> See all </a>
             </div>
-
             <div class="relative" uk-slider="finite: true">
 
                 <div class="uk-slider-container px-1 py-3">
-
-                    <!--<div class="relative" uk-slider="finite: true">
-                        <div class="uk-slider-container px-1 py-3">
-                            <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                                <li >
-                                    <div class="card">
-                                        <div class="card-media h-60">
-                                            <div class="card-media-overly"></div>
-                                            <img src="assets/images/events/img-2.jpg" alt="" class="">
-
-                                        </div>
-                                        <div class="card-body">
-                                            <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
-                                                <div class="text-xs uppercase text-green-500 font-semibold"> 행사 진행 중 </div>
-                                            </th:block>
-                                            <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
-                                                <div class="text-xs uppercase text-red-500 font-semibold"> 행사 종료 </div>
-                                            </th:block>
-
-                                            <a class="box-title mb-1" > 행사 제목 </a>
-                                            <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                                <div>종료일 : <a th:text="${event.eventEndDate}"></a></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <a class="absolute bg-white top-16 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                            <a class="absolute bg-white top-16 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white" href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
-
-                        </div>
-                    </div>-->
-
 
                     <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
 
@@ -308,6 +241,29 @@
                        href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
                 </div>
             </div>
+            <br>
+            <div class="my-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold"> 학과 공지 </h2>
+                </div>
+                <a href="#" class="text-blue-500"> See all </a>
+            </div>
+            <br>
+            <div class="mt-2">
+                <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${councilService.postSort('공지')}">
+                    <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
+                        <div class="flex-1 relative md:mt-0 mt-4">
+                            <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="text-xl font-semibold leading-6" th:text="${notice.postTitle}">가장 인기있는 게시물</a>
+                            <div class="flex space-x-2 items-center text-sm mt-2">
+                                <div th:text="${boardService.boardDateTime(notice.uploadTime)}">공지등록일</div>
+                                <div>·</div>
+                                <div th:text="${notice.pageView}">조회수</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

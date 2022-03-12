@@ -33,6 +33,7 @@ public class CouncilController {
         model.addAttribute(account);
         model.addAttribute(new CouncilForm());
         model.addAttribute(councilService);
+        model.addAttribute(boardService);
         return "council/council-posts";
     }
 

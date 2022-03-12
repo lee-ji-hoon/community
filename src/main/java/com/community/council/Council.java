@@ -53,4 +53,6 @@ public class Council {
     private LocalDate applyPeriodStartDate;
 
     private LocalDate applyPeriodEndDate;
+
+    private LocalDateTime uploadTime;
 }

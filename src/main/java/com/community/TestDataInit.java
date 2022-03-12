@@ -88,7 +88,7 @@ public class TestDataInit {
                     true, "asdf123", LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1), null,
                     "안녕하세요 27대 학생회 CROCE 입니다.", "", "대학생", "충청북도, 성환", null, null, null, true, true,
                     true, true, true, true, null));
-            councilRepository.save(new Council(null, "행사", "💛친해지길 바라💛", "전체 학년", "http://naver.me/G3K7QAeA", "010-1234-1234", COUNCIL_CONTENT_VALUE, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14)));
+            councilRepository.save(new Council(null, "행사", "💛친해지길 바라💛", "전체 학년", "http://naver.me/G3K7QAeA", "010-1234-1234", COUNCIL_CONTENT_VALUE, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));
         }
     }
 }
