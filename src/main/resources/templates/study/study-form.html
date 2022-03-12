@@ -38,12 +38,12 @@
                     </div>
                 </div>
                 <hr>
-                <div class="grid lg:grid-cols-4 mt-12 gap-8">
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 스터디 소개</h3>
                         <p>스터디에 사용될 주소, 이름, 연락처, 진행방식을 적어주세요.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-3 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div class="col-span-2">
                                 <label for="path"> 스터디 주소</label>
@@ -116,13 +116,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <hr class="col-span-4">
+                </div>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 상세 설명</h3>
                         <p> 위의 내용을 포함해서 더 자세한 내용을 적어주세요.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-3 lg:p-6 p-4 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div class="col-span-2">
                                 <label for="fullDescription">상세 소개</label>
@@ -135,13 +135,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <hr class="col-span-4">
+                </div>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 기간 및 인원</h3>
                         <p> 스터디 인원 및 기간 설정을 할 수 있습니다.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-3 lg:p-6 p-4 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
 
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div>
@@ -167,7 +167,6 @@
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
                             </div>
 
-                            <hr class="col-span-2"/>
 
                             <div>
                                 <label for="startStudyDate">스터디 시작일</label>

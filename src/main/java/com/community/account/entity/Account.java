@@ -2,6 +2,7 @@ package com.community.account.entity;
 
 import com.community.like.Likes;
 import com.community.market.Market;
+import com.community.study.entity.Meetings;
 import com.community.tag.Tag;
 import com.community.study.entity.Study;
 import lombok.*;
@@ -77,8 +78,8 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Market> markets = new ArrayList<>();
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private List<Market> marketsList = new ArrayList<>();
 
     @Lob
     @Type(type = "text")
