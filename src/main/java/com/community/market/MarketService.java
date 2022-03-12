@@ -17,10 +17,10 @@ public class MarketService {
 
     private final MarketRepository marketRepository;
 
-    public void createNewItem(Market market, Account account) {
+    public Market createNewItem(Market market, Account account) {
         market.setItemUploadTime(LocalDateTime.now());
-        market.setAccount(account);
-        market.setMarketItemStatus(MarketItemStatus.SELLING);
-        marketRepository.save(market);
+        market.setMarketItemStatus(MarketItemStatus.판매중);
+        market.setSeller(account);
+        return marketRepository.save(market);
     }
 }

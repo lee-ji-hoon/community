@@ -5,13 +5,13 @@ import lombok.Data;
 @Data
 public class MarketForm {
 
-    private String byeAndSell;
+    private String marketType;
 
     private String itemName;
 
     private int price;
 
-    private String type;
+    private String itemStatus;
 
     private String itemDetail;
 
