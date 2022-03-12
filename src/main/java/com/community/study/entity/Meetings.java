@@ -1,6 +1,7 @@
 package com.community.study.entity;
 
 import com.community.account.entity.Account;
+import com.community.board.entity.Reply;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +23,7 @@ public class Meetings {
     @Id
     @GeneratedValue
     @Column(name = "meetings_id")
-    private Long id;
+    private Long meetingsId;
 
     private String meetingDivision;
 
@@ -37,6 +40,9 @@ public class Meetings {
     @ManyToOne
     @JoinColumn(name = "writer_id")
     private Account writer;
+
+    @OneToMany(mappedBy = "meetings")
+    private List<Reply> replyList = new ArrayList<>();
 
     private String meetingMethod;
 

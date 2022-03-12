@@ -1,11 +1,15 @@
 package com.community.market;
 
 import com.community.account.entity.Account;
+import com.community.board.entity.Reply;
+import com.community.study.entity.Meetings;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +36,9 @@ public class Market {
     private int price;
 
     private String marketType;
+
+    @OneToMany(mappedBy = "market")
+    private List<Reply> replyList = new ArrayList<>();
 
     @Lob
     @Type(type = "text")

@@ -7,6 +7,8 @@ import com.community.board.form.ReplyForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.council.Council;
+import com.community.market.Market;
+import com.community.study.entity.Meetings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,32 @@ public class ReplyService {
                 .content(replyForm.getContent())
                 .account(account)
                 .board(board)
+                .council(null)
+                .uploadTime(LocalDateTime.now())
+                .isReported(false)
+                .reportCount(0)
+                .build();
+        replyRepository.save(reply);
+    }
+
+    public void saveMeetingsReply(@Valid ReplyForm replyForm, Account account, Meetings meetings) {
+        Reply reply = Reply.builder()
+                .content(replyForm.getContent())
+                .account(account)
+                .meetings(meetings)
+                .council(null)
+                .uploadTime(LocalDateTime.now())
+                .isReported(false)
+                .reportCount(0)
+                .build();
+        replyRepository.save(reply);
+    }
+
+    public void saveMarketReply(@Valid ReplyForm replyForm, Account account, Market market) {
+        Reply reply = Reply.builder()
+                .content(replyForm.getContent())
+                .account(account)
+                .market(market)
                 .council(null)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)

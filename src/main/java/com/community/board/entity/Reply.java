@@ -3,6 +3,8 @@ package com.community.board.entity;
 import com.community.account.entity.Account;
 import com.community.council.Council;
 import com.community.forum.Forum;
+import com.community.market.Market;
+import com.community.study.entity.Meetings;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,6 +37,14 @@ public class Reply {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "forum_fid")
     private Forum forum;
+
+    @ManyToOne
+    @JoinColumn(name = "meetings_id")
+    private Meetings meetings;
+
+    @ManyToOne
+    @JoinColumn(name = "market_id")
+    private Market market;
 
     @Column(columnDefinition = "TEXT")
     private String content;
