@@ -31,16 +31,7 @@ public class MarketController {
     @PostMapping("/market/new")
     public String marketProductForm(@CurrentUser Account account, Model model, MarketForm marketForm) {
 
-        System.out.println("marketForm.getItemDetail() = " + marketForm.getItemDetail());
-        System.out.println("marketForm.getByeAndSell() = " + marketForm.getByeAndSell());
-        System.out.println("marketForm.getItemName() = " + marketForm.getItemName());
-        System.out.println("marketForm.getType() = " + marketForm.getType());
-        System.out.println("marketForm.getPrice() = " + marketForm.getPrice());
-
-
-//        Market newItem = marketService.createNewItem(marketForm, account);
-
-        marketService.createNewItem(modelMapper.map(marketForm, Market.class));
+        marketService.createNewItem(modelMapper.map(marketForm, Market.class), account);
 
         model.addAttribute(account);
 

@@ -15,8 +15,6 @@ public class MarketForm {
 
     private String itemDetail;
 
-//    private MarketItemStatus marketItemStatus;
-
 //    private String itemImg;
 
 }

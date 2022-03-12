@@ -19,7 +19,7 @@ public class Market {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(targetEntity = Account.class)
+    @ManyToOne
     @JoinColumn(name = "seller_id")
     private Account account;
 
