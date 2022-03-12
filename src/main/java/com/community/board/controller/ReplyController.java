@@ -9,6 +9,8 @@ import com.community.board.form.ReplyForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.ReplyService;
+import com.community.council.Council;
+import com.community.council.CouncilRepository;
 import com.community.like.Likes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class ReplyController {
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
+    private final CouncilRepository councilRepository;
 
     private final ReplyService replyService;
 
@@ -42,7 +45,7 @@ public class ReplyController {
     // 댓글 관련 내용
     @ResponseBody
     @RequestMapping(value = "/board/detail/reply")
-    public int addLikeLink(@RequestParam(value = "r_board_id") Long r_board_id,
+    public int addBoardReplyLink(@RequestParam(value = "r_board_id") Long r_board_id,
                            @RequestParam(value = "r_account_id") Long r_account_id,
                            @RequestParam(value = "r_content") String r_content,
                            ReplyForm replyForm) throws IOException {
@@ -58,6 +61,32 @@ public class ReplyController {
             String accountEmail = currentAccount.get().getEmail();
             Account account = accountRepository.findByEmail(accountEmail);
             replyService.saveReply(replyForm, account, currentBoard);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/council/detail/reply")
+    public int addCouncilReplyLink(@RequestParam(value = "r_council_id") Long r_council_id,
+                           @RequestParam(value = "r_account_id") Long r_account_id,
+                           @RequestParam(value = "r_content") String r_content,
+                           ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_council_id + "r_council_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+        replyForm.setContent(r_content);
+        Council currentPost = councilRepository.findByCid(r_council_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveCouncilReply(replyForm, account, currentPost);
             List<Reply> replies = replyRepository.findAll();
             int reply_size = replies.size();
             return reply_size;
