@@ -50,7 +50,7 @@
                                         <div class="w-10 h-10 rounded-full relative flex-shrink-0">
                                             <a th:href="@{/profile/{nickname}(nickname = ${reply.getAccount().nickname})}">
                                                 <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                                     th:data-jdenticon-value="${reply.getAccount().nickname}"
+                                                     th:data-jdenticon-value="${reply.getAccount().studentId}"
                                                      alt="" class="absolute h-full rounded-full w-full"></svg>
                                                 <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                                      th:src="${reply.getAccount()?.profileImage}"
