@@ -325,21 +325,46 @@
                     <div class="lg:w-1/4 w-full flex-shrink-0">
 
                         <div uk-sticky="offset:100" class="uk-sticky">
-  
-                          <h2 class="text-lg font-semibold mb-3"> 최근 올라온 글 </h2>
-                          <ul> 
-                              <li th:each="recent : ${recentlyBoards}">
-                                  <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                      <h3 class="font-medium line-clamp-2" th:text="${recent.title}"></h3>
-                                      <div class="flex items-center my-auto text-xs space-x-1.5">
-                                        <div th:text="${service.boardDateTime(recent.uploadTime)}"></div> <div class="pb-1"> . </div>
-                                        <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div th:text="${replyService.boardReplySize(recent)}"></div>
-                                     </div> 
-                                  </a>
-                              </li>
-                          </ul>
-                          <br>
-
+                            <!--<div class="card divide-y divide-gray-100 px-4 mb-4">
+                                <h2 class="text-lg font-semibold my-3">🔥 Top5 🔥</h2>
+                                <ul>
+                                    <li th:each="board : ${board}">
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                            <th:block th:if="${board.boardTitle=='자유'}">
+                                                <div class="bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
+                                            </th:block>
+                                            <th:block th:if="${board.boardTitle=='정보'}">
+                                                <div class="bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
+                                            </th:block>
+                                            <th:block th:if="${board.boardTitle=='질문'}">
+                                                <div class="bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
+                                            </th:block>
+                                            <h3 class="font-medium line-clamp-2" th:text="${board.title}"></h3>
+                                            <div class="flex items-center my-auto text-xs space-x-1.5">
+                                                <ion-icon name="time-outline"></ion-icon>
+                                                <div th:text="${service.boardDateTime(board.uploadTime)}"></div>
+                                                <div class="pb-1"> . </div>
+                                                <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                                                <div th:text="${replyService.boardReplySize(board)}"></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>-->
+                            <div class="card divide-y divide-gray-100 px-4 mb-4">
+                                <h2 class="text-lg font-semibold my-3"> 최근 올라온 글 </h2>
+                                <ul>
+                                    <li th:each="recent : ${recentlyBoards}">
+                                        <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                            <h3 class="font-medium line-clamp-2" th:text="${recent.title}"></h3>
+                                            <div class="flex items-center my-auto text-xs space-x-1.5">
+                                                <div th:text="${service.boardDateTime(recent.uploadTime)}"></div> <div class="pb-1"> . </div>
+                                                <ion-icon name="chatbox-ellipses-outline"></ion-icon> <div th:text="${replyService.boardReplySize(recent)}"></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
