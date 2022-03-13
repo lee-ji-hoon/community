@@ -1,6 +1,8 @@
 package com.community.board.repository;
 
 import com.community.board.entity.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +10,11 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long> {
+    // 페이징 기능 관련
+
+    Page<Board> findAll(Pageable pageable);
+
+    Page<Board> findAllByBoardTitleOrderByUploadTimeDesc(String title, Pageable pageable);
 
     /* 검색 관련 쿼리 */
     List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);

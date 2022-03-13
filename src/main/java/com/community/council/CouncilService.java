@@ -49,7 +49,7 @@ public class CouncilService {
     }
 
     public List<Council> noticeSort(String sort) {
-        return councilRepository.findTop5ByPostSortOrderByUploadTimeDesc(sort);
+        return councilRepository.findTop4ByPostSortOrderByUploadTimeDesc(sort);
     }
 
     public LocalDate nowDate() {
@@ -101,6 +101,23 @@ public class CouncilService {
         Integer page = council.getPageView();
         council.setPageView(++page);
         councilRepository.save(council);
+    }
+
+    // 업데이트
+    public Council updateCouncil(Long cid, CouncilForm councilForm) {
+        Council council = councilRepository.findByCid(cid);
+        council.setPostSort(councilForm.getPostSort());
+        council.setPostTitle(councilForm.getPostTitle());
+        council.setPostTarget(councilForm.getPostTarget());
+        council.setPostLink(councilForm.getPostLink());
+        council.setContactNum(councilForm.getContactNum());
+        council.setPostContent(councilForm.getPostContent());
+        council.setEventStartDate(councilForm.getEventStartDate());
+        council.setEventEndDate(councilForm.getEventEndDate());
+        council.setApplyPeriodStartDate(councilForm.getApplyPeriodStartDate());
+        council.setApplyPeriodEndDate(councilForm.getApplyPeriodEndDate());
+        return councilRepository.save(council);
+
     }
 
 }
