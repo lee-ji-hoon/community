@@ -189,11 +189,10 @@ public class StudyController {
         Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
 
-        String replyTime = studyService.meetingDateTime(meetings.getUploadTime());
         List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
 
         model.addAttribute("meeting", meetings);
-        model.addAttribute("replyTime", replyTime);
+        model.addAttribute("service", studyService);
         model.addAttribute("reply", replies);
         model.addAttribute(studyUpdate);
         model.addAttribute(account);
