@@ -24,7 +24,7 @@
 
                 <div class="lg:flex  lg:space-x-12">
 
-                    <div class="lg:w-3/4">
+                    <div class="lg:w-3/4 mb-3">
                         <div class="flex justify-between items-center relative md:mb-4 mb-3">
                             <div class="flex-1">
                                 <h2 class="text-2xl font-semibold"> 커뮤니티 </h2>
@@ -164,7 +164,7 @@
                                 <div>
                                     <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${board}">
                                         <div class="lg:flex lg:space-x-6 py-5">
-                                            <div class="flex-1 lg:pt-0 pt-4">
+                                            <div class="flex-1 lg:pt-0 pt-0">
                                                 <th:block th:if="${board.boardTitle=='자유'}">
                                                     <div class="bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
                                                 </th:block>
