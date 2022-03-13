@@ -6,6 +6,7 @@ import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
+import com.community.council.Council;
 import com.community.report.form.BoardReportForm;
 import com.community.report.form.ReplyReportForm;
 import com.community.report.repository.BoardReportRepository;
@@ -55,6 +56,7 @@ public class ReportController {
             return "redirect:/board/detail/{boardId}";
         }
         model.addAttribute("board", currentBoard);
+        model.addAttribute("boardOptional", board);
         model.addAttribute(account);
         model.addAttribute(new BoardReportForm());
         return "report-form";
@@ -67,16 +69,22 @@ public class ReportController {
             return "error-page";
         }
         Reply currentReply = replyRepository.findByRid(reply.get().getRid());
-        Board currentBoard = currentReply.getBoard();
-        Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
-
-        if (isReported) {
-            redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고 되었습니다.");
-            String path = String.valueOf(currentReply.getBoard().getBid());
-            return "redirect:/board/detail/" + updatePath(path);
+        Optional<Board> currentBoard = Optional.ofNullable(currentReply.getBoard());
+        Optional<Council> currentCouncil = Optional.ofNullable(currentReply.getCouncil());
+        if (currentBoard.isPresent() || currentCouncil.isPresent()) {
+            Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
+            if (isReported) {
+                redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고 되었습니다.");
+                String path = String.valueOf(currentReply.getBoard().getBid());
+                return "redirect:/board/detail/" + updatePath(path);
+            }
         }
+
+
+
         model.addAttribute("reply", currentReply);
         model.addAttribute("r_board", currentBoard);
+        model.addAttribute("r_council", currentCouncil);
         model.addAttribute(account);
         model.addAttribute(new ReplyReportForm());
         return "report-form";
