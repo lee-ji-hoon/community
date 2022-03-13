@@ -3,6 +3,11 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
+<style>
+    .updateSubmit{
+        display: none;
+    }
+</style>
 <body>
 
 
@@ -58,22 +63,29 @@
                                             </a>
                                         </div>
                                         <div>
-                                            <form>
+                                            <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">
                                                 <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12 dark:bg-gray-800 dark:text-gray-100">
-                                                    <p class="leading-6" th:text="${reply.content}"></p>
-                                                    <input type="text" th:value="${reply.content}">
+                                                    <input type="hidden" th:value="${reply.rid}" name="reply_update_rid">
+                                                    <p class="leading-6" th:text="${reply.content}" th:id="|orginalReply${reply.rid}|"></p>
+                                                    <input type="hidden" th:value="${reply.content}" name="reply_update_content" th:id="|replyUpdateInput${reply.rid}|">
                                                     <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 dark:bg-gray-800"></div>
                                                 </div>
-                                                <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
-                                                    <span th:text="${boardService.boardDateTime(reply.uploadTime)}"></span>
-                                                    <th:block th:if="${reply.getAccount().id == account.id}">
-                                                        <a href="#" class="text-blue-500"> 수정 </a>
-                                                    </th:block>
-                                                    <th:block th:if="${reply.getAccount().id != account.id}">
-                                                        <a th:href="@{/reply/report/{rid}(rid = ${reply.rid})}" class="text-red-600"> <i class="fa fa-bullhorn"></i> 신고 </a>
-                                                    </th:block>
-                                                </div>
                                             </form>
+
+                                            <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
+                                                <span th:text="${boardService.boardDateTime(reply.uploadTime)}"></span>
+                                                <th:block th:if="${reply.getAccount().id == account.id}">
+                                                    <span class="text-blue-500" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|"> 수정 </span>
+                                                    <span class="text-blue-500 updateSubmit" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|"> 등록 </span>
+                                                    <span class="text-red-500" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|"> 삭제 </span>
+                                                    <form onsubmit="return false" th:id="|replyDeleteForm${reply.rid}|" class="d-none">
+                                                        <input type="hidden" th:value="${reply.rid}" name="reply_delete_rid">
+                                                    </form>
+                                                </th:block>
+                                                <th:block th:if="${reply.getAccount().id != account.id}">
+                                                    <a th:href="@{/reply/report/{rid}(rid = ${reply.rid})}" class="text-red-600"> <i class="fa fa-bullhorn"></i> 신고 </a>
+                                                </th:block>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +221,83 @@
 
 </div>
 <script type="application/javascript" th:inline="javascript">
+    let updateBtn = {
+        replyUpdate: function (replyId) {
+            console.log(`${replyId}`);
+            jQuery(`#orginalReply${replyId}`).hide();
+            jQuery(`#replyUpdateBtn${replyId}`).hide();
+            jQuery(`#replyUpdateSubmit${replyId}`).show();
+            $(`#replyUpdateInput${replyId}`).prop("type", "text");
+        }
+    }
+    let updateComplete = {
+        replyUpdateAjax: function (replyId) {
+            console.log(`${replyId}`);
+            // 댓글 수정 ajax
+            console.log("댓글 수정");
+            $.ajax({
+                url:'/reply/update',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#replyUpdateForm${replyId}`).serialize(),
+                dataType : "json",
+                success : function (){
+                    console.log("Reply Update Success");
+                    $('.reply_div').load(location.href+' .reply_div');
+                    jQuery(`#orginalReply${replyId}`).show();
+                    jQuery(`#replyUpdateBtn${replyId}`).show();
+                    jQuery(`#replyUpdateSubmit${replyId}`).hide();
+                    $(`#replyUpdateInput${replyId}`).prop("type", "hidden");
+                },
+                error : function (request, status, error){
+                    console.log("Reply Update Fail" + error);
+                }
+            });
+        }
+    }
+    // 댓글 삭제
+    let deleteReplyBtn = {
+        deleteReply: function (replyId) {
+            swal({
+                title: "댓글을 삭제하시겠습니까?",
+                text: "삭제된 댓글은 복구할 수 없습니다.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        console.log("댓글 삭제");
+                        $.ajax({
+                            url:'/reply/delete',
+                            type:'get',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $(`#replyDeleteForm${replyId}`).serialize(),
+                            dataType : "json",
+                            success : function (){
+                                console.log("Reply Delete Success");
+                                $('.reply_div').load(location.href+' .reply_div');
+                            },
+                            error : function (request, status, error){
+                                console.log("Reply Delete Fail" + error);
+                            }
+                        });
+                        swal("댓글이 삭제되었습니다.", {
+                            icon: "success",
+                        });
+                    } else {
+                        swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
+                    }
+                });
+        }
+    }
+
+
+
     $(document).ready(function (){
+        //jQuery('#postTitleSub').show();
+
+
         // input에 있는 값을 가져옴
         // 댓글 작성 ajax
         var input = document.getElementById("r_content");
@@ -259,33 +347,6 @@
                 });
             }
         });
-
-        // 댓글 수정 ajax
-        var reply_input = document.getElementById("reply_update_content");
-        $(document).on('click', '#update_reply', function() {
-            if (reply_input.value == '') {
-                alert("댓글을 입력해주세요.");
-            }
-            if (reply_input.value != '') {
-                console.log("댓글 수정");
-                $.ajax({
-                    url:'/reply/update',
-                    type:'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#reply_update_form').serialize(),
-                    dataType : "json",
-                    success : function (){
-                        console.log("Reply Update Success");
-                        $('.reply_div').load(location.href+' .reply_div');
-                        $('#reply_update_form').load(location.href+' #reply_update_form');
-                    },
-                    error : function (request, status, error){
-                        console.log("Reply Update Fail" + error);
-                    }
-                });
-            }
-        });
-
     })
 </script>
 

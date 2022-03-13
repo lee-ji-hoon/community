@@ -62,11 +62,11 @@ public class BoardService {
         if (board.getIsReported()) {
             return boardRepository.save(board);
         }
-        Account boardOwner = board.getWriter();
         board.setTitle(boardForm.getTitle());
+        board.setSubBoardTitle(boardForm.getSubBoardTitle());
         board.setBoardTitle(boardForm.getBoardTitle());
+        board.setSubTitle(boardForm.getSubTitle());
         board.setContent(boardForm.getContent());
-        board.setWriter(boardOwner);
         board.setUpdateTime(LocalDateTime.now());
         return boardRepository.save(board);
 
