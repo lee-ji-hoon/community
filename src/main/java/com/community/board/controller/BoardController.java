@@ -156,15 +156,18 @@ public class BoardController {
     public String boardUpdate(BoardForm boardForm, @CurrentUser Account account,
                               @RequestParam(value = "bid") String bid,
                               @RequestParam(value = "boardTitle") String boardTitle,
-                              @RequestParam(value = "writer") String writer,
+                              @RequestParam(value = "subBoardTitle") String subBoardTitle,
                               @RequestParam(value = "title") String title,
+                              @RequestParam(value = "subTitle") String subTitle,
                               @RequestParam(value = "content") String content) {
         Long boardId = Long.valueOf(bid);
         Board board = boardRepository.findByBid(boardId);
         String message = null;
         if (account.getId().equals(board.getWriter().getId())) {
             boardForm.setBoardTitle(boardTitle);
+            boardForm.setSubBoardTitle(subBoardTitle);
             boardForm.setTitle(title);
+            boardForm.setSubTitle(subTitle);
             boardForm.setContent(content);
             boardService.updateBoard(boardId, boardForm);
             message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +

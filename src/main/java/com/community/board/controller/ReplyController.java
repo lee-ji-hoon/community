@@ -118,6 +118,16 @@ public class ReplyController {
         int reply_size = 0;
         return reply_size;
     }
+    @ResponseBody
+    @RequestMapping(value = "/reply/delete")
+    public int replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
+        log.info("rid : " + reply_delete_rid);
+        Reply reply = replyRepository.findByRid(reply_delete_rid);
+        replyRepository.delete(reply);
+
+        int reply_size = 0;
+        return reply_size;
+    }
 
     @GetMapping("/board/detail/reply/delete/{rid}")
     public String boardReplyDelete(@PathVariable Long rid,
