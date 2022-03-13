@@ -1132,13 +1132,13 @@
             취소
         </span>
 
-        <a th:if="${currentStudyMenu == 'meeting' && study.isManager(#authentication.principal)}" href="#create-post-modal" uk-toggle data-tippy-placement="bottom" title="새 모임 작성"
+        <a th:if="${currentStudyMenu == 'meeting' && study.isManager(#authentication.principal)}" href="#create-post-modal" uk-toggle data-tippy-placement="bottom" title="새 일정 작성"
            class="flex items-center justify-center h-8 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5  right-0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
                       clip-rule="evenodd"></path>
             </svg>
-            <span class="md:block hidden"> 모임 추가 </span>
+            <span class="md:block hidden"> 일정 추가 </span>
         </a>
         <div th:if="${study.isJoinable(#authentication.principal)
                                 && !study.isLimitMember()
@@ -1205,7 +1205,7 @@
                 <a th:href="@{'/study/' + ${study.path}}"> 소개</a></li>
             <li th:if="${study.isMember(#authentication.principal) || study.isManager(#authentication.principal)}"
                 th:classappend="${currentStudyMenu == 'meeting' || currentStudyMenu == 'meetingView'}? active">
-                <a th:href="@{'/study/' + ${study.path} + '/meetings'}">모임</a>
+                <a th:href="@{'/study/' + ${study.path} + '/meetings'}">일정</a>
             </li>
             <li th:if="${study.isManager(#authentication.principal)}"
                 th:classappend="${currentStudyMenu == 'settings'}? active">
@@ -1358,88 +1358,86 @@
         <a href="#" class="text-blue-500" th:href="@{/settings/tags}">태그 등록하기</a>
 </div>
 
-<div th:fragment="study-meeting-form" id="create-post-modal" class="create-post" uk-modal>
-    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
+<div th:fragment="study-meeting-form" id="create-post-modal"  uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                type="button" uk-close>
+            <i class="icon-feather-close"></i>
+        </button>
 
-        <div class="py-4 border-b flex  justify-between px-6">
-            <h3 class="text-lg font-semibold" id="forum_head"> 모임 작성하기 </h3>
-            <div>
-                <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
-                        type="button" uk-close>
-                    <i class="icon-feather-close"></i>
-                </button>
-            </div>
+        <div class="uk-modal-header">
+            <h3 class="text-lg font-semibold" id="forum_head"> 일정 작성하기 </h3>
         </div>
-        <!--모임 폼-->
+        <!--일정 폼-->
         <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
               th:object="${meetingsForm}"
               th:action="@{'/study/' + ${study.getPath()} + '/meetings'}"
               method="post" novalidate>
-            <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
+            <div class="uk-modal-body" uk-overflow-auto>
                 <div class="space-y-4 g:w-8/12">
 
-                    <div class="font-semibold text-lg"> 자세한 내용 </div>
-                    <!-- 제목 -->
-                    <div class="form-group">
-                        <div class="line form-group">
-                            <input class="line__input form-control" id="title" th:field="*{meetingTitle}"
-                                   type="text" onkeyup="this.setAttribute('value', this.value);"
-                                   aria-describedby="titleHelp" required autocomplete="off">
-                            <span for="username" class="line__placeholder"> 제목 </span>
-                        </div>
-                        <small id="titleHelp" class="form-text text-muted">
-                            제목은 5글자부터 최대 30글자까지 입력 가능합니다.
-                        </small>
-                        <small class="invalid-feedback">제목을 입력해주세요.</small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingTitle')}" th:errors="*{meetingTitle}">meetingTitle Error</small>
+                <div class="font-semibold text-lg"> 자세한 내용 </div>
+                <!-- 제목 -->
+                <div class="form-group">
+                    <div class="line form-group">
+                        <input class="line__input form-control" id="title" th:field="*{meetingTitle}"
+                               type="text" onkeyup="this.setAttribute('value', this.value);"
+                               aria-describedby="titleHelp" required autocomplete="off">
+                        <span for="username" class="line__placeholder"> 제목 </span>
                     </div>
-
-                    <!-- 위치 -->
-                    <div id="meetingPlaces" class="form-group">
-                        <div class="line form-group">
-                            <input class="line__input form-group" id="places" th:field="*{meetingPlaces}"
-                                   type="text" onkeyup="this.setAttribute('value', this.value);"
-                                   aria-describedby="subTitleHelp" required autocomplete="off">
-                            <span for="username" class="line__placeholder"> 위치 </span>
-                        </div>
-                        <small class="invalid-feedback">스터디를 진행할 곳을 적어주세요..</small>
-                        <small id="meetingPlacesHep" class="form-text text-muted">
-                            스터디를 진행할 곳을 적어주세요.
-                        </small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingPlaces')}" th:errors="*{meetingPlaces}">meetingPlaces Error</small>
-                    </div>
-
-                    <!-- 주제 -->
-                    <div id="meetingMethod" class="form-group">
-                        <div class="line form-group -mb-3">
-                            <label for="meetingMethod">모임 주제 선택</label>
-                        </div>
-                        <select class="selectpicker" th:field="*{meetingMethod}" multiple>
-                            <option th:each="tags : ${study.tags}" th:value="${tags.title}" th:text="${tags.title}">Option 1</option>
-                        </select>
-                        <small id="meetingMethodHelp" class="form-text text-muted mt-3">
-                            스터디에 등록된 태그중의 주제를 선택할 수 있습니다.
-                        </small>
-                        <small class="invalid-feedback">다시 선택해주세요.</small>
-                        <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingMethod')}" th:errors="*{meetingMethod}">meetingMethod Error</small>
-                    </div>
-
-                    <!-- 본문 -->
-                    <div class="form-group">
-                        <div class="line form-group">
-                            <label for="meetingDescription">상세 소개</label>
-                            <textarea id="meetingDescription" type="text" name="meetingDescription"
-                                      th:field="*{meetingDescription}" class="shadow-none with-border p-3 form-control"
-                                      placeholder="스터디를 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp" required></textarea>
-                            <small id="meetingDescriptionHelp" class="form-text text-muted">
-                                목표, 일정, 진행방식, 위치, 모집인원 등 최대한 자세히 적어주세요
-                            </small>
-                            <small class="invalid-feedback">자세한 일정을 공유해주세요.</small>
-                            <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingDescription')}" th:errors="*{meetingDescription}">meetingDescription Error</small>
-                        </div>
-                    </div>
-
+                    <small id="titleHelp" class="form-text text-muted">
+                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                    </small>
+                    <small class="invalid-feedback">제목을 입력해주세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingTitle')}" th:errors="*{meetingTitle}">meetingTitle Error</small>
                 </div>
+
+                <!-- 위치 -->
+                <div id="meetingPlaces" class="form-group">
+                    <div class="line form-group">
+                        <input class="line__input form-group" id="places" th:field="*{meetingPlaces}"
+                               type="text" onkeyup="this.setAttribute('value', this.value);"
+                               aria-describedby="subTitleHelp" required autocomplete="off">
+                        <span for="username" class="line__placeholder"> 위치 </span>
+                    </div>
+                    <small class="invalid-feedback">스터디를 진행할 곳을 적어주세요..</small>
+                    <small id="meetingPlacesHep" class="form-text text-muted">
+                        스터디를 진행할 곳을 적어주세요.
+                    </small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingPlaces')}" th:errors="*{meetingPlaces}">meetingPlaces Error</small>
+                </div>
+
+                <!-- 주제 -->
+                <div id="meetingMethod" class="form-group">
+                    <div class="line form-group -mb-3">
+                        <label for="meetingMethod">일정 주제 선택</label>
+                    </div>
+                    <select class="selectpicker" th:field="*{meetingMethod}" multiple>
+                        <option th:each="tags : ${study.tags}" th:value="${tags.title}" th:text="${tags.title}">Option 1</option>
+                    </select>
+                    <small id="meetingMethodHelp" class="form-text text-muted mt-3">
+                        스터디에 등록된 태그중의 주제를 선택할 수 있습니다.
+                    </small>
+                    <small class="invalid-feedback">다시 선택해주세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingMethod')}" th:errors="*{meetingMethod}">meetingMethod Error</small>
+                </div>
+
+                <!-- 본문 -->
+                <div class="form-group">
+                    <div class="line form-group">
+                        <label for="meetingDescription">상세 소개</label>
+                        <textarea id="meetingDescription" type="text" name="meetingDescription"
+                                  th:field="*{meetingDescription}" class="shadow-none with-border p-3 form-control"
+                                  placeholder="스터디를 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp" required></textarea>
+                        <small id="meetingDescriptionHelp" class="form-text text-muted">
+                            목표, 일정, 진행방식, 위치, 모집인원 등 최대한 자세히 적어주세요
+                        </small>
+                        <small class="invalid-feedback">자세한 일정을 공유해주세요.</small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingDescription')}" th:errors="*{meetingDescription}">meetingDescription Error</small>
+                    </div>
+                </div>
+
+            </div>
             </div>
 
             <div class="flex items-center w-full justify-between p-3 border-t">
@@ -1448,12 +1446,9 @@
                     <div> You are successfuly uploaded</div>-->
                 </div>
 
-                <div class="flex space-x-2">
-                    <button type="submit"
-                            id = "board_form_send"
-                            class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                        추가
-                    </button>
+                <div class="uk-modal-footer uk-text-right">
+                    <button class="bg-red-100 font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm uk-modal-close" type="button">취소</button>
+                    <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium" id="board_form_send" type="submit">저장</button>
                 </div>
             </div>
         </form>
