@@ -12,6 +12,10 @@ import com.community.board.service.ReplyService;
 import com.community.council.Council;
 import com.community.council.CouncilRepository;
 import com.community.like.Likes;
+import com.community.market.Market;
+import com.community.market.MarketRepository;
+import com.community.study.entity.Meetings;
+import com.community.study.repository.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,8 @@ public class ReplyController {
     private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
     private final CouncilRepository councilRepository;
+    private final MeetingsRepository meetingsRepository;
+    private final MarketRepository marketRepository;
 
     private final ReplyService replyService;
 
@@ -41,6 +47,93 @@ public class ReplyController {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 
+    // 모임 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply")
+    public int addMeetingReplyLink(@RequestParam(value = "r_board_id") Long r_board_id,
+                                   @RequestParam(value = "r_account_id") Long r_account_id,
+                                   @RequestParam(value = "r_content") String r_content,
+                                   ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_board_id + "r_board_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_board_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply/update")
+    public int addMeetingReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
+                                     @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
+        log.info("rid : " + reply_update_rid);
+        log.info("content : " + reply_update_content);
+        replyService.updateReply(reply_update_rid, reply_update_content);
+
+        Reply reply = replyRepository.findByRid(reply_update_rid);
+        Meetings byMeetingsId = meetingsRepository.findByMeetingsId(reply.getMeetings().getMeetingsId());
+        List<Reply> replies = replyRepository.findAllByMeetings(byMeetingsId);
+        int reply_size = replies.size();
+        return reply_size;
+    }
+    // 모임 댓글 추가 끝
+
+    // 중고거래 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/market/reply")
+    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
+                              @RequestParam(value = "r_account_id") Long r_account_id,
+                              @RequestParam(value = "r_content") String r_content,
+                              ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_board_id + "r_board_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Market byMarketId = marketRepository.findByMarketId(r_board_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMarketReply(replyForm, account, byMarketId);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/market/reply/update")
+    public int addMarketReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
+                                    @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
+        log.info("rid : " + reply_update_rid);
+        log.info("content : " + reply_update_content);
+        replyService.updateReply(reply_update_rid, reply_update_content);
+
+        Reply reply = replyRepository.findByRid(reply_update_rid);
+        Market byMarketId = marketRepository.findByMarketId(reply.getMeetings().getMeetingsId());
+        List<Reply> replies = replyRepository.findAllByMarket(byMarketId);
+        int reply_size = replies.size();
+        return reply_size;
+    }
+    // 중고거래 댓글 추가 끝
 
     // 댓글 관련 내용
     @ResponseBody
@@ -69,6 +162,8 @@ public class ReplyController {
         int reply_size = replies.size();
         return reply_size;
     }
+
+
 
     @ResponseBody
     @RequestMapping(value = "/council/detail/reply")
