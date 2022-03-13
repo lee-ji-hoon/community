@@ -264,7 +264,8 @@
                                                     </div>
 
                                                     <div class="uk-modal-footer uk-text-right">
-                                                        <button class="bg-red-100 font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm uk-modal-close" type="button">취소</button>
+                                                        <button th:onclick="|location.href='@{/council/detail/delete/{councilId}(councilId=${council.cid})}'|"
+                                                                class="bg-red-100 font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm uk-modal-close" type="button">삭제하기</button>
                                                         <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">저장</button>
                                                     </div>
                                                 </form>
