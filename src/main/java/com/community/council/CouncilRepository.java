@@ -8,6 +8,9 @@ public interface CouncilRepository extends JpaRepository<Council, Long> {
 
     List<Council> findAllByPostSortOrderByEventEndDateDesc(String postSort);
 
+    List<Council> findTop5ByPostSortOrderByUploadTimeDesc(String postSort);
+
+
     Council findByCid(long cid);
 
 }
