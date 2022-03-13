@@ -108,17 +108,14 @@ public class ReplyController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/board/detail/reply/update")
-    public int boardReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
+    @RequestMapping(value = "/reply/update")
+    public int replyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
                                 @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
         log.info("rid : " + reply_update_rid);
         log.info("content : " + reply_update_content);
         replyService.updateReply(reply_update_rid, reply_update_content);
 
-        Reply reply = replyRepository.findByRid(reply_update_rid);
-        Board board = boardRepository.findByBid(reply.getBoard().getBid());
-        List<Reply> replies = replyRepository.findAllByBoard(board);
-        int reply_size = replies.size();
+        int reply_size = 0;
         return reply_size;
     }
 

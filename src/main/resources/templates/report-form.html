@@ -17,12 +17,11 @@
     <!-- Header -->
     <header th:replace="theme-fragments.html :: header"></header>
 
-    <!-- sidebar -->
-    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
-
-    <!-- Main Contents -->
-    <div class="main_content">
-        <th:block th:if="${board}">
+    <th:block th:if="${board}">
+        <!-- sidebar -->
+        <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
+        <!-- Main Contents -->
+        <div class="main_content">
             <div class="mcontainer">
 
                 <!--  breadcrumb -->
@@ -50,30 +49,30 @@
                     <form th:action="@{/board/detail/{boardId}/report(boardId = ${board.bid})}" th:object="${boardReportForm}" method="post">
                         <!-- form body -->
                         <div class="p-10 space-y-7">
-                                <div class="line">
-                                    <label for="board_title"> 게시글 제목 </label>
-                                    <p id="board_title">
-                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${board.bid})}" th:text="${board.title}"></a>
-                                    </p>
-                                </div>
-                                <div>
-                                    <label for="report_title"> 신고 주제 </label>
-                                    <select id="report_title" name="report_title"  class="shadow-none selectpicker with-border" th:field="*{report_title}">
-                                        <option value="욕설 / 비하">욕설 / 비하</option>
-                                        <option value="음란물 / 불건전한 만남 및 대화">음란물 / 불건전한 만남 및 대화</option>
-                                        <option value="상업적 광고 및 판매">상업적 광고 및 판매</option>
-                                        <option value="명예훼손 / 사생활 침해 및 저작권 침해 등">명예훼손 / 사생활 침해 및 저작권 침해 등 </option>
-                                        <option value="유출 / 사칭 / 사기">유출 / 사칭 / 사기</option>
-                                        <option value="낚시 / 놀람 / 도배">낚시 / 놀람 / 도배</option>
-                                        <option value="정당 / 정치인 비하 및 선거운동">정당 / 정치인 비하 및 선거운동</option>
-                                        <option value="기타">기타</option>
-                                    </select>
-                                </div>
-                                <label for="report_content"> 신고 사유 </label>
-                                <div class="line h-32">
-                                    <textarea class="line__input h-32"  id="report_content" name="report_content" type="text" th:field="*{report_content}" onkeyup="this.setAttribute('value', this.value);" value="" autocomplete="off" style="resize: none"></textarea>
-                                    <span for="report_content" class="line__placeholder"> 신고 사유를 입력해주세요. </span>
-                                </div>
+                            <div class="line">
+                                <label for="board_title"> 게시글 제목 </label>
+                                <p id="board_title">
+                                    <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${board.bid})}" th:text="${board.title}"></a>
+                                </p>
+                            </div>
+                            <div>
+                                <label for="report_title"> 신고 주제 </label>
+                                <select id="report_title" name="report_title"  class="shadow-none selectpicker with-border" th:field="*{report_title}">
+                                    <option value="욕설 / 비하">욕설 / 비하</option>
+                                    <option value="음란물 / 불건전한 만남 및 대화">음란물 / 불건전한 만남 및 대화</option>
+                                    <option value="상업적 광고 및 판매">상업적 광고 및 판매</option>
+                                    <option value="명예훼손 / 사생활 침해 및 저작권 침해 등">명예훼손 / 사생활 침해 및 저작권 침해 등 </option>
+                                    <option value="유출 / 사칭 / 사기">유출 / 사칭 / 사기</option>
+                                    <option value="낚시 / 놀람 / 도배">낚시 / 놀람 / 도배</option>
+                                    <option value="정당 / 정치인 비하 및 선거운동">정당 / 정치인 비하 및 선거운동</option>
+                                    <option value="기타">기타</option>
+                                </select>
+                            </div>
+                            <label for="report_content"> 신고 사유 </label>
+                            <div class="line h-32">
+                                <textarea class="line__input h-32"  id="report_content" name="report_content" type="text" th:field="*{report_content}" onkeyup="this.setAttribute('value', this.value);" value="" autocomplete="off" style="resize: none"></textarea>
+                                <span for="report_content" class="line__placeholder"> 신고 사유를 입력해주세요. </span>
+                            </div>
                         </div>
                         <!-- form footer -->
                         <div class="border-t flex justify-between lg:space-x-10 p-7 bg-gray-50 rounded-b-md">
@@ -88,18 +87,35 @@
 
 
             </div>
+        </div>
+    </th:block>
+
+    <th:block th:if="${reply}">
+        <!-- sidebar -->
+        <th:block th:if="${r_board.isPresent()}">
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
         </th:block>
-        <th:block th:if="${reply}">
+        <th:block th:if="${r_council.isPresent()}">
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='council')"></div>
+        </th:block>
+        <!-- Main Contents -->
+        <div class="main_content">
             <div class="mcontainer">
 
                 <!--  breadcrumb -->
                 <div class="breadcrumb-area py-0">
                     <div class="breadcrumb">
                         <ul class="m-0">
-                            <li>
-                                <a th:href="@{/board/detail/{boardId}(boardId = ${r_board.bid})}"> 게시글 </a>
-                                <a>게시글</a>
-                            </li>
+                            <th:block th:if="${r_board.isPresent()}">
+                                <li>
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${r_board.get().bid})}"> 커뮤니티 </a>
+                                </li>
+                            </th:block>
+                            <th:block th:if="${r_council.isPresent()}">
+                                <li>
+                                    <a th:href="@{/council/detail/{cid}(cid = ${r_council.get().cid})}"> 학생회 게시판 </a>
+                                </li>
+                            </th:block>
                             <li class="active">
                                 <a> 신고하기 </a>
                             </li>
@@ -119,9 +135,14 @@
                         <!-- form body -->
                         <div class="p-10 space-y-7">
                             <div class="line">
-                                <label for="board_title"> 게시글 제목 </label>
+                                <label for="board_title"> 댓글 내용 </label>
                                 <p id="reply_content">
-                                    <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${r_board.bid})}" th:text="${reply.content}"></a>
+                                    <th:block th:if="${r_board.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${r_board.get().bid})}" th:text="${reply.content}"></a>
+                                    </th:block>
+                                    <th:block th:if="${r_council.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/council/detail/{cid}/(boardId = ${r_council.get().cid})}" th:text="${reply.content}"></a>
+                                    </th:block>
                                 </p>
                             </div>
                             <div>
@@ -156,8 +177,8 @@
 
 
             </div>
-        </th:block>
-    </div>
+        </div>
+    </th:block>
 
 </div>
 
