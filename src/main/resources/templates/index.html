@@ -28,17 +28,17 @@
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 divide divide-gray-200 gap-x-4 mt-4">
-
-                        <div class="flex items-center space-x-4 py-3 hover:bg-gray-100 rounded-md -mx-2 px-2" th:each="c_notice : ${notice}">
-                            <div class="flex-1">
-                                <a href="timeline-group.html"  class="text-lg font-semibold capitalize line-clamp-1" th:text="${c_notice.postTitle}"> Graphic Design </a>
-                                <div class="text-sm text-gray-500 mt-0.5"><a th:text="${c_notice.pageView}"></a> 조회</div>
+                        <div class="card px-3" th:each="c_notice : ${notice}">
+                            <div class="flex items-center space-x-4 py-3 hover:bg-gray-100 rounded-md -mx-2 px-2" >
+                                <div class="flex-1">
+                                    <a th:href="@{/council/detail/{cid}(cid = ${c_notice.cid})}" class="text-base font-semibold capitalize line-clamp-1" th:text="${c_notice.postTitle}"> 제목 </a>
+                                    <div class="text-sm text-gray-500 mt-0.5"><a th:text="${c_notice.pageView}"></a> 조회</div>
+                                </div>
+                                <a th:href="@{/council/detail/{cid}(cid = ${c_notice.cid})}" class="flex items-center justify-center h-9 px-4 rounded-md bg-gray-200 font-semibold">
+                                    확인하기
+                                </a>
                             </div>
-                            <a th:href="@{/council/detail/{cid}(cid = ${c_notice.cid})}" class="flex items-center justify-center h-9 px-4 rounded-md bg-gray-200 font-semibold">
-                                확인하기
-                            </a>
                         </div>
-
                     </div>
                     <br>
 

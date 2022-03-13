@@ -20,6 +20,8 @@ import com.community.report.repository.BoardReportRepository;
 import com.community.report.repository.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -52,12 +54,16 @@ public class BoardController {
 
     //전체 게시물 조회
     @GetMapping("/board")
-    public String boardList(Model model, @CurrentUser Account account) {
+    public String boardList(Model model, @CurrentUser Account account, Pageable pageable) {
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // Top5 게시물
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+
+        int page = 0;
+        Page<Board> listPage = boardService.boardPageSystem("자유", page);
+        model.addAttribute("paging", listPage.getContent());
 
         model.addAttribute("board", top5Board);
         model.addAttribute("recentlyBoards", recentlyBoards);

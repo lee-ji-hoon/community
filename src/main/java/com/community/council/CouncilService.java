@@ -49,7 +49,7 @@ public class CouncilService {
     }
 
     public List<Council> noticeSort(String sort) {
-        return councilRepository.findTop5ByPostSortOrderByUploadTimeDesc(sort);
+        return councilRepository.findTop4ByPostSortOrderByUploadTimeDesc(sort);
     }
 
     public LocalDate nowDate() {
