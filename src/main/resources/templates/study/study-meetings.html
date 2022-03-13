@@ -16,6 +16,7 @@
     <div class="main_content">
         <div class="mcontainer">
             <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'meeting')"></div>
+
             <div id="create-post-modal" class="create-post" uk-modal>
                 <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
 
@@ -251,8 +252,12 @@
 </div>
 
 <!-- 스터디 참여 인원 -->
+<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+<script src="/node_modules/cropper/dist/cropper.min.js"></script>
+<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 <script th:replace="theme-fragments.html :: studyBanner"></script>
-<script th:replace="theme-fragments.html :: form-validation"></script>
+
+<!--<script th:replace="theme-fragments.html :: form-validation"></script>-->
 
 </body>
 </html>
