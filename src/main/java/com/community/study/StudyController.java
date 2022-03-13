@@ -3,6 +3,9 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.board.controller.ReplyController;
+import com.community.board.entity.Reply;
+import com.community.board.repository.ReplyRepository;
 import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
 import com.community.study.form.MeetingsForm;
@@ -55,6 +58,7 @@ public class StudyController {
     private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
     private final MeetingsRepository meetingsRepository;
+    private final ReplyRepository replyRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
     private static final String STUDY_FORM_VIEW = "study/study-form";
@@ -145,6 +149,9 @@ public class StudyController {
     public String meetingListView(@CurrentUser Account account,
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        /*Meetings meetings = meetingsRepository.findByMeetingsId()
+        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc();*/
 
         model.addAttribute("meetingsList", meetingsRepository.findFirst9ByOrderByUploadTimeDesc());
         model.addAttribute(account);
