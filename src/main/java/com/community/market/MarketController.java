@@ -3,11 +3,14 @@ package com.community.market;
 import com.community.account.AccountService;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
+import com.community.account.repository.AccountRepository;
 import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
+import com.community.board.form.ReplyForm;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
+import com.community.board.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,9 +31,12 @@ public class MarketController {
 
     private final MarketService marketService;
     private final ModelMapper modelMapper;
+    private final BoardService boardService;
+    private final ReplyService replyService;
+
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
-    private final BoardService boardService;
+    private final AccountRepository accountRepository;
 
     @GetMapping("/market")
     public String marketListView(@CurrentUser Account account, Model model) {
@@ -113,4 +121,60 @@ public class MarketController {
         }
         return "error-page";
     }
+
+    // 중고거래 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/market/reply")
+    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
+                              @RequestParam(value = "r_account_id") Long r_account_id,
+                              @RequestParam(value = "r_content") String r_content,
+                              ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_board_id + "r_board_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Market byMarketId = marketRepository.findByMarketId(r_board_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMarketReply(replyForm, account, byMarketId);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/market/reply/update")
+    public int addMarketReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
+                                    @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
+        log.info("rid : " + reply_update_rid);
+        log.info("content : " + reply_update_content);
+        replyService.updateReply(reply_update_rid, reply_update_content);
+
+        Reply reply = replyRepository.findByRid(reply_update_rid);
+        Market byMarketId = marketRepository.findByMarketId(reply.getMarket().getMarketId());
+        List<Reply> replies = replyRepository.findAllByMarket(byMarketId);
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @GetMapping("/market/reply/delete/{rid}")
+    public String marketReplyDelete(@PathVariable Long rid,
+                                    RedirectAttributes redirectAttributes) {
+        Reply findReply = replyRepository.findByRid(rid);
+        Market byMarketId = marketRepository.findByMarketId(findReply.getMarket().getMarketId());
+
+        redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
+        replyRepository.delete(findReply);
+        return "redirect:/market/" + byMarketId.getMarketId();
+    }
+
+    // 중고거래 댓글 추가 끝
 }
