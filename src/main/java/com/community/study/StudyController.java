@@ -199,6 +199,7 @@ public class StudyController {
         model.addAttribute("service", studyService);
         model.addAttribute("reply", replies);
         model.addAttribute("meetingTagsList", meetingTagsList);
+        model.addAttribute(new MeetingsForm());
         model.addAttribute(studyUpdate);
         model.addAttribute(account);
 

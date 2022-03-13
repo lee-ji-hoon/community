@@ -16,6 +16,7 @@
     <div class="main_content">
         <div class="mcontainer">
             <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'meeting')"></div>
+            <div th:replace="theme-fragments.html :: study-meeting-form"></div>
 
             <div class="lg:mt-8 mt-4">
                 <div class="breadcrumb-area py-0">
@@ -78,9 +79,6 @@
                             </div>
 
                             <div class="card p-5">
-                                <div class="" th:text="'지역 : ' + ${meeting.meetingPlaces}"></div>
-                                <div class="" th:text="'주제 : ' + ${meeting.meetingMethod}"></div>
-
                                 <div class="line-clamp-3" id="more-text" th:utext="${meeting.meetingDescription}">
                                 </div>
                                 <!--                                <a href="#" id="more-text" uk-toggle="target: #more-text; cls: line-clamp-3"> 자세히 보기 </a>-->
@@ -159,11 +157,8 @@
                                                                 </div>
 
                                                                 <div class="flex items-center w-full justify-between p-3 border-t">
-
                                                                     <div class="flex items-center space-x-2">
-
                                                                         <div></div>
-
                                                                     </div>
 
                                                                     <div class="flex space-x-2">
@@ -234,7 +229,7 @@
                                 <div class="flex items-center space-x-3 mt-2">
                                     <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
                                     <div class="flex-1">
-                                        <div th:text="${meeting.meetingPlaces}" class="font-semibold"> 모집 인원 </div>
+                                        <div th:text="'지역 : '+${meeting.meetingPlaces}" class="font-semibold"> 위치 인원 </div>
                                     </div>
                                 </div>
                             </div>
