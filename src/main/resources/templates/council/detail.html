@@ -58,13 +58,22 @@
                                             </a>
                                         </div>
                                         <div>
-                                            <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12 dark:bg-gray-800 dark:text-gray-100">
-                                                <p class="leading-6" th:text="${reply.content}"></p>
-                                                <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 dark:bg-gray-800"></div>
-                                            </div>
-                                            <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
-                                                <span th:text="${boardService.boardDateTime(reply.uploadTime)}"></span>
-                                            </div>
+                                            <form>
+                                                <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 relative lg:ml-5 ml-2 lg:mr-12 dark:bg-gray-800 dark:text-gray-100">
+                                                    <p class="leading-6" th:text="${reply.content}"></p>
+                                                    <input type="text" th:value="${reply.content}">
+                                                    <div class="absolute w-3 h-3 top-3 -left-1 bg-gray-100 transform rotate-45 dark:bg-gray-800"></div>
+                                                </div>
+                                                <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
+                                                    <span th:text="${boardService.boardDateTime(reply.uploadTime)}"></span>
+                                                    <th:block th:if="${reply.getAccount().id == account.id}">
+                                                        <a href="#" class="text-blue-500"> 수정 </a>
+                                                    </th:block>
+                                                    <th:block th:if="${reply.getAccount().id != account.id}">
+                                                        <a th:href="@{/reply/report/{rid}(rid = ${reply.rid})}" class="text-red-600"> <i class="fa fa-bullhorn"></i> 신고 </a>
+                                                    </th:block>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -202,6 +211,7 @@
 <script type="application/javascript" th:inline="javascript">
     $(document).ready(function (){
         // input에 있는 값을 가져옴
+        // 댓글 작성 ajax
         var input = document.getElementById("r_content");
         input.addEventListener('keypress', function(key){
             if (input.value == '' && key.key == 'Enter') {
@@ -225,6 +235,7 @@
                 });
             }
         });
+        // 댓글 작성 ajax
         $(document).on('click', '.write_reply', function() {
             if (input.value == '') {
                 alert("댓글을 입력해주세요.");
@@ -249,6 +260,31 @@
             }
         });
 
+        // 댓글 수정 ajax
+        var reply_input = document.getElementById("reply_update_content");
+        $(document).on('click', '#update_reply', function() {
+            if (reply_input.value == '') {
+                alert("댓글을 입력해주세요.");
+            }
+            if (reply_input.value != '') {
+                console.log("댓글 수정");
+                $.ajax({
+                    url:'/reply/update',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $('#reply_update_form').serialize(),
+                    dataType : "json",
+                    success : function (){
+                        console.log("Reply Update Success");
+                        $('.reply_div').load(location.href+' .reply_div');
+                        $('#reply_update_form').load(location.href+' #reply_update_form');
+                    },
+                    error : function (request, status, error){
+                        console.log("Reply Update Fail" + error);
+                    }
+                });
+            }
+        });
 
     })
 </script>
