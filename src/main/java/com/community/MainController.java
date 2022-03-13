@@ -61,7 +61,7 @@ public class MainController {
             }
         }
 
-        List<Council> noticeLists = councilRepository.findTop5ByPostSortOrderByUploadTimeDesc("공지");
+        List<Council> noticeLists = councilRepository.findTop4ByPostSortOrderByUploadTimeDesc("공지");
 
         model.addAttribute("notice", noticeLists);
 
