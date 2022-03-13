@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -101,23 +102,13 @@ public class BoardService {
         return msg;
     }
 
-    public Page<Board> sortBoard() {
-        Sort sort = Sort.by("uploadTime").descending();
-        Pageable pageable = PageRequest.of(0, 10, sort);
-        Page<Board> result = boardRepository.findAll(pageable);
-        return result;
+    public Page<Board> boardPageSystem(String title, int page) {
+        return boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(title, PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "idx")));
     }
 
     public List<Board> mainBoardList(String boardTitle) {
         return boardRepository.findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
     }
-
-    /*public List<Board> popularPosts() {
-        List<Board> boards = boardRepository.findAll();
-        List<Likes> likesPosts = likeRepository.findTop4ByBoardOrderByBoard(boards);
-        List<Board> top4Boards = boardRepository.findAllByBidOrderByUploadTime(likesPosts);
-        return null;
-    }*/
 
     public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
         //TODO boardTitle 검색 구현하기
