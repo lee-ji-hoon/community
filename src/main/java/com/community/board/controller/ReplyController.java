@@ -128,11 +128,23 @@ public class ReplyController {
         replyService.updateReply(reply_update_rid, reply_update_content);
 
         Reply reply = replyRepository.findByRid(reply_update_rid);
-        Market byMarketId = marketRepository.findByMarketId(reply.getMeetings().getMeetingsId());
+        Market byMarketId = marketRepository.findByMarketId(reply.getMarket().getMarketId());
         List<Reply> replies = replyRepository.findAllByMarket(byMarketId);
         int reply_size = replies.size();
         return reply_size;
     }
+
+    @GetMapping("/market/reply/delete/{rid}")
+    public String marketReplyDelete(@PathVariable Long rid,
+                                   RedirectAttributes redirectAttributes) {
+        Reply findReply = replyRepository.findByRid(rid);
+        Market byMarketId = marketRepository.findByMarketId(findReply.getMarket().getMarketId());
+
+        redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
+        replyRepository.delete(findReply);
+        return "redirect:/market/" + byMarketId.getMarketId();
+    }
+
     // 중고거래 댓글 추가 끝
 
     // 댓글 관련 내용
