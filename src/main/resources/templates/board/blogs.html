@@ -45,21 +45,18 @@
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                             </a>
                             <!-- Craete video post modal -->
-                            <div id="create-post-modal" class="create-post" uk-modal>
-                                <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical shadow-2xl uk-animation-slide-bottom-small">
+                            <div id="create-post-modal" uk-modal>
+                                <div class="uk-modal-dialog">
+                                    <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                            type="button" uk-close>
+                                        <i class="icon-feather-close"></i>
+                                    </button>
 
-                                    <div class="py-4 border-b flex  justify-between px-6">
-                                        <h3 class="text-lg font-semibold" id="forum_head"> 게시글 작성하기 </h3>
-                                        <div>
-                                            <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
-                                                    type="button" uk-close>
-                                                <i class="icon-feather-close"></i>
-                                            </button>
-                                        </div>
+                                    <div class="uk-modal-header">
+                                        <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
                                     </div>
-
-                                    <form class="needs-validation space-y-4 g:w-8/12" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
-                                        <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
+                                    <form class="needs-validation" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
+                                        <div class="uk-modal-body" uk-overflow-auto>
                                             <div class="space-y-4 g:w-8/12">
                                                 <div class="form-group">
                                                     <label for="selectBox"> 유형 선택 </label>
@@ -109,7 +106,7 @@
                                                     <div class="line">
                                                         <input class="line__input form-group" id="subTitle" th:field="*{subTitle}"
                                                                type="text" onkeyup="this.setAttribute('value', this.value);"
-                                                               aria-describedby="subTitleHelp" required autocomplete="off">
+                                                               aria-describedby="subTitleHelp" autocomplete="off">
                                                         <span for="username" class="line__placeholder"> 소제목 </span>
                                                     </div>
                                                     <small id="subTitleHelp" class="form-text text-muted">
@@ -119,7 +116,7 @@
                                                 <!-- 본문 -->
                                                 <div class="form-group">
                                                     <div>
-                                                        <textarea class="form-control"  id="content" th:field="*{content}" 
+                                                        <textarea class="form-control"  id="content" th:field="*{content}"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>
                                                     </div>
                                                     <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
@@ -127,36 +124,18 @@
                                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
                                                 </div>
                                             </div>
-
                                         </div>
 
-                                        <div class="flex items-center w-full justify-between p-3 border-t">
-
-                                            <div class="flex items-center space-x-2">
-
-                                                <!--<ion-icon name="checkmark-circle" class="text-green-600 text-xl"></ion-icon>
-                                                <div> You are successfuly uploaded</div>-->
-
-                                            </div>
-
-                                            <div class="flex space-x-2">
-                                                <a href="#"
-                                                   class="uk-modal-close bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                                                    Cancel </a>
-                                                <button type="submit"
-                                                   id = "board_form_send"
-                                                   class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                                                    Post </button>
-                                            </div>
-
-                                            <button type="submit" hidden
-                                               class="bg-blue-600 flex h-9 items-center justify-center rounded-lg text-white px-12 font-semibold">
-                                                Post </button>
+                                        <div class="uk-modal-footer uk-text-right">
+                                            <button class="bg-red-100 font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm uk-modal-close" type="button">취소</button>
+                                            <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium" id="board_form_send" type="submit">저장</button>
                                         </div>
                                     </form>
 
+
                                 </div>
                             </div>
+
                         </div>
                         <!-- 게시판 분류 -->
                             <div class="uk-switcher" id="timeline-tab">
