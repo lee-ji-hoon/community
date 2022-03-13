@@ -25,8 +25,6 @@ public class Meetings {
     @Column(name = "meetings_id")
     private Long meetingsId;
 
-    private String meetingDivision;
-
     private String meetingTitle;
 
     @Lob
@@ -49,5 +47,4 @@ public class Meetings {
     private String meetingPlaces;
 
     private LocalDateTime uploadTime;
-
 }

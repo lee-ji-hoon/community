@@ -18,6 +18,18 @@
             <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'meeting')"></div>
 
             <div class="lg:mt-8 mt-4">
+                <div class="breadcrumb-area py-0">
+                    <div class="breadcrumb">
+                        <ul class="m-0">
+                            <li>
+                                <a th:href="@{'/study/' + ${study.path} + '/meetings'}">모임 전체</a>
+                            </li>
+                            <li>
+                                <a th:text="${meeting.meetingTitle}" style="font-weight: bold" href="#">모임 상세 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
                 <!-- Timeline -->
                 <div class="md:flex md:space-x-6">
@@ -38,8 +50,8 @@
                                     </a>
                                     <div class="flex-1 font-semibold capitalize">
                                         <a th:text="${meeting.writer.nickname}" href="#" class="text-black dark:text-gray-100"> Johnson smith </a>
-                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>
-                                        <span th:text="${#temporals.format(meeting.uploadTime,  'yyyy-MM-dd')}"></span>
+<!--                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>-->
+                                        <div class="text-sm" th:text="${service.meetingDateTime(meeting.uploadTime)}"></div>
                                     </div>
                                 </div>
 
@@ -201,15 +213,15 @@
                     <div class="w-full space-y-6">
                         <div uk-sticky="media @m ; offset:80 ; bottom : true">
                             <div class="widget card p-5">
-                                <h4 class="text-lg font-semibold"> 스터디 주요 관심사 </h4>
+                                <h4 class="text-lg font-semibold"> 이번 모임 주제 </h4>
                                 <h5 class="text-lg font-semibold" th:if="${study.tags.size() == 0}">
-                                    스터디 주제가 아직 등록되지 않았습니다.
+                                    모임 주제가 아직 등록되지 않았습니다.
                                 </h5>
 
-                                <ul class="text-gray-600 space-y-3 mt-3" th:if="${study.tags.size() != 0}">
-                                    <li class="flex items-center space-x-2" th:each="tag : ${study.tags}">
+                                <ul class="text-gray-600 space-y-3 mt-3" th:if="${meetingTagsList.size() != 0}">
+                                    <li class="flex items-center space-x-2" th:each="tag : ${meetingTagsList}">
                                         <a class="text-decoration-none text-white">
-                                            #<span th:text="${tag.title}">Tag</span>
+                                            #<span th:text="${tag}">Tag</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -222,17 +234,9 @@
                                 <div class="flex items-center space-x-3 mt-2">
                                     <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
                                     <div class="flex-1">
-                                        <div th:text="${meeting.meetingMethod}" class="font-semibold"> 모집 인원 </div>
+                                        <div th:text="${meeting.meetingPlaces}" class="font-semibold"> 모집 인원 </div>
                                     </div>
                                 </div>
-
-                                <div class="flex items-center space-x-3 mt-2">
-                                <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
-                                <div class="flex-1">
-                                    <div th:text="${meeting.meetingPlaces}" class="font-semibold"> 모집 인원 </div>
-                                </div>
-                            </div>
-
                             </div>
 
 

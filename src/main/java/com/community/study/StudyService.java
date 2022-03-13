@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -184,6 +187,17 @@ public class StudyService {
             msg = (diffTime) + "년 전";
         }
         return msg;
+    }
+
+    /*모임 주제 쉼표 구분*/
+    public List<String> getMeetingTagsList(Meetings meetings) {
+
+        String[] meetingTagsArray = meetings.getMeetingMethod().split(",");
+
+        List<String> meetingTagsList = new ArrayList<>();
+        Collections.addAll(meetingTagsList, meetingTagsArray);
+
+        return meetingTagsList;
     }
 
     /*public void getMeetingsId(String meetingId) {

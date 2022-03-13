@@ -41,6 +41,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -160,6 +161,7 @@ public class StudyController {
 
         model.addAttribute("meetingsList", meetingsRepository.findFirst9ByOrderByUploadTimeDesc());
         model.addAttribute(account);
+        model.addAttribute("service", studyService);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
         return "study/study-meetings";
@@ -188,12 +190,15 @@ public class StudyController {
         log.info("스터디 모임 상세 페이지 실행");
         Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
+        List<String> meetingTagsList = studyService.getMeetingTagsList(meetings);
+
 
         List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
 
         model.addAttribute("meeting", meetings);
         model.addAttribute("service", studyService);
         model.addAttribute("reply", replies);
+        model.addAttribute("meetingTagsList", meetingTagsList);
         model.addAttribute(studyUpdate);
         model.addAttribute(account);
 

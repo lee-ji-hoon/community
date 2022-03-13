@@ -36,14 +36,6 @@
                           method="post" novalidate>
                         <div class="create-post-modal-body space-x-6 p-5 overflow-x-hidden mr-1" data-simplebar>
                             <div class="space-y-4 g:w-8/12">
-                                <div class="form-group">
-                                    <label for="selectBox"> 유형 선택 </label>
-                                    <select id="selectBox" name="selectBox"  class="shadow-none with-border px-2" th:field="*{meetingDivision}">
-                                        <option data-icon="icon-material-outline-assignment" th:value="자유" value="자유" selected>공지</option>
-                                        <option data-icon="icon-material-outline-help-outline" th:value="질문">질문</option>
-                                        <option data-icon="icon-material-outline-assignment" th:value="정보">정보</option>
-                                    </select>
-                                </div>
 
                                 <div class="font-semibold text-lg"> 자세한 내용 </div>
                                 <!-- 제목 -->
@@ -59,22 +51,8 @@
                                     </small>
                                     <small class="invalid-feedback">제목을 입력해주세요.</small>
                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingTitle')}" th:errors="*{meetingTitle}">meetingTitle Error</small>
+                                </div>
 
-                                </div>
-                                <!-- 주제 -->
-                                <div id="meetingMethod" class="form-group">
-                                    <div class="line form-group">
-                                        <input class="line__input form-group" id="method" th:field="*{meetingMethod}"
-                                               type="text" onkeyup="this.setAttribute('value', this.value);"
-                                               aria-describedby="subTitleHelp" required autocomplete="off">
-                                        <span for="username" class="line__placeholder"> 주제 </span>
-                                    </div>
-                                    <small class="invalid-feedback">주제를 입력해주세요..</small>
-                                    <small id="meetingMethodHelp" class="form-text text-muted">
-                                        질문에 관련한 주제를 입력해주세요.
-                                    </small>
-                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingMethod')}" th:errors="*{meetingMethod}">meetingMethod Error</small>
-                                </div>
                                 <!-- 위치 -->
                                 <div id="meetingPlaces" class="form-group">
                                     <div class="line form-group">
@@ -89,6 +67,22 @@
                                     </small>
                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingPlaces')}" th:errors="*{meetingPlaces}">meetingPlaces Error</small>
                                 </div>
+
+                                <!-- 주제 -->
+                                <div id="meetingMethod" class="form-group">
+                                    <div class="line form-group -mb-3">
+                                        <label for="meetingDescription">모임 주제 선택</label>
+                                    </div>
+                                    <select class="selectpicker" th:field="*{meetingMethod}" multiple>
+                                        <option th:each="tags : ${study.tags}" th:value="${tags.title}" th:text="${tags.title}">Option 1</option>
+                                    </select>
+                                    <small id="meetingMethodHelp" class="form-text text-muted mt-3">
+                                        스터디에 등록된 태그중의 주제를 선택할 수 있습니다.
+                                    </small>
+                                    <small class="invalid-feedback">다시 선택해주세요.</small>
+                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingMethod')}" th:errors="*{meetingMethod}">meetingMethod Error</small>
+                                </div>
+
                                 <!-- 본문 -->
                                 <div class="form-group">
                                     <div class="line form-group">
@@ -103,8 +97,8 @@
                                         <small class="form-text text-danger" th:if="${#fields.hasErrors('meetingDescription')}" th:errors="*{meetingDescription}">meetingDescription Error</small>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
 
                         <div class="flex items-center w-full justify-between p-3 border-t">
@@ -129,9 +123,37 @@
                 <div class="md:flex md:space-x-6">
                     <div class="space-y-5 flex-shrink-0 md:w-7/12">
                         <!-- 모임 view  -->
+                        <!--<div class="card divide-y divide-gray-100 sm:m-0 -mx-4" th:each="meeting : ${meetingsList}">
+                            <div class="flex items-start flex-wrap p-7 sm:space-x-6">
+                                <a th:href="@{'/study/' + ${study.path} + '/meetings/' + ${meeting.meetingsId}}" class="w-14 h-14 relative mt-1 order-1">
+                                    <svg th:if="${#strings.isEmpty(meeting.writer.profileImage)}"
+                                         th:data-jdenticon-value="${meeting.writer.studentId}"
+                                         class="border border-white rounded-full w-10 h-10">
+                                    </svg>
+                                    <img th:if="${!#strings.isEmpty(meeting.writer.profileImage)}"
+                                         th:src="${meeting.writer.profileImage}" alt=""
+                                         class=" border border-white rounded-full w-10 h-10">
+                                </a>
+                                <div class="flex-1 sm:order-2">
+                                    <a th:text="${meeting.writer.nickname}" href="#" class="text-black dark:text-gray-100"> Johnson smith </a>
+                                    <h4 th:text="${meeting.meetingDivision}" class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
+                                    <a th:href="@{'/study/' + ${study.path} + '/meetings/' + ${meeting.meetingsId}}">
+                                        <h3 th:text="${meeting.meetingTitle}" class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
+                                    </a>
+                                    &lt;!&ndash;<p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+                                        sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+                                        wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper ..
+                                    </p>&ndash;&gt;
+                                    <div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                        <a th:each="tags : ${service.getMeetingTagsList(meeting)}" th:text="${tags}" href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
                         <div th:each="meeting : ${meetingsList}" class="card lg:mx-0 uk-animation-slide-bottom-small">
                             <!-- 헤더 -->
-                            <div class="flex justify-between items-center lg:p-4 p-2.5">
+                            <div th:href="@{'/study/' + ${study.path} + '/meetings/' + ${meeting.meetingsId}}" class="flex justify-between items-center lg:p-4 p-2.5">
                                 <div class="flex flex-1 items-center space-x-4">
                                     <a href="#">
                                         <svg th:if="${#strings.isEmpty(meeting.writer.profileImage)}"
@@ -144,8 +166,9 @@
                                     </a>
                                     <div class="flex-1 font-semibold capitalize">
                                         <a th:text="${meeting.writer.nickname}" href="#" class="text-black dark:text-gray-100"> Johnson smith </a>
-                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>
-                                        <span th:text="${#temporals.format(meeting.uploadTime,  'yyyy-MM-dd')}"></span>
+<!--                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>-->
+                                        <div class="text-sm" th:text="${service.meetingDateTime(meeting.uploadTime)}"></div>
+<!--                                        <span th:text="${#temporals.format(meeting.uploadTime,  'yyyy-MM-dd')}"></span>-->
                                     </div>
                                 </div>
 
@@ -172,14 +195,17 @@
                             </div>
 
                             <div class="card p-5">
-                                <div class="" th:text="'지역 : ' + ${meeting.meetingPlaces}"></div>
-                                <div class="" th:text="'주제 : ' + ${meeting.meetingMethod}"></div>
-
                                 <a href="#"
+                                   class="text-xl"
+                                   th:text="${meeting.meetingTitle}"
                                    th:href="@{'/study/' + ${study.path} + '/meetings/' + ${meeting.meetingsId}}">
                                     자세히 보기
                                 </a>
+                                <div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
+                                    <a th:each="tags : ${service.getMeetingTagsList(meeting)}" th:text="${tags}" href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
+                                </div>
                             </div>
+
                         </div>
 
                         <div class="flex justify-center mt-6">
