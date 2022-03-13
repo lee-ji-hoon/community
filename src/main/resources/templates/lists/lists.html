@@ -17,7 +17,7 @@
         <div class="mcontainer">
 
 
-            <!--<div class="lg:flex  lg:space-x-12">
+            <div class="lg:flex  lg:space-x-12">
 
                 <div class="lg:w-3/4 mb-3">
                     <div class="flex justify-between items-center relative md:mb-4 mb-3">
@@ -34,35 +34,26 @@
                             </nav>
                         </div>
                     </div>
-                    &lt;!&ndash; 게시판 분류 &ndash;&gt;
+                    <!-- 게시판 분류 -->
                     <div class="uk-switcher" id="timeline-tab">
-                        &lt;!&ndash; TOP 5 &ndash;&gt;
+                        <!-- TOP 5 -->
                         <div>
-                            <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${board}">
+                            <div class="card divide-y divide-gray-100 px-4 mb-4">
                                 <div class="lg:flex lg:space-x-6 py-5">
-                                    <div class="flex-1 lg:pt-0 pt-0">
-                                        <th:block th:if="${board.boardTitle=='자유'}">
-                                            <div class="bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <th:block th:if="${board.boardTitle=='정보'}">
-                                            <div class="bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <th:block th:if="${board.boardTitle=='질문'}">
-                                            <div class="bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl mt-2 font-semibold line-clamp-1" th:text="${board.title}"></a>
-                                        <div class="flex items-center pt-3 align-middle">
+                                    <div class="flex-1 lg:pt-0 pt-4">
+                                        <a class="text-xl font-semibold line-clamp-1">제목</a>
+                                        <div class="flex items-center pt-3">
                                             <div class="flex items-center">
                                                 <ion-icon name="time-outline" class="text-xl mr-2"></ion-icon>
-                                                <a th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                                                <a> 5분전</a>
                                             </div>
                                             <div class="flex items-center mx-4 align-middle">
                                                 <ion-icon name="thumbs-up-outline" class="text-lg mr-2"></ion-icon>
-                                                <a th:text="${likeService.boardLikeSize(board)}"></a>
+                                                <a>1</a>
                                             </div>
-                                            <div class="flex items-center align-middle">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-lg mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
-                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                            <div class="flex items-center mx-4">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a>5</a>
+                                                <!--<th:block th:if="${replyService.boardReplyPresent(board)}">
                                                     <div class="-space-x-2 flex items-center ml-1">
                                                         <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                             <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
@@ -73,7 +64,7 @@
                                                                  alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
                                                         </div>
                                                     </div>
-                                                </th:block>
+                                                </th:block>-->
 
                                             </div>
                                         </div>
@@ -81,24 +72,24 @@
                                 </div>
                             </div>
                         </div>
-                        &lt;!&ndash; 게시판 1 &ndash;&gt;
+                        <!-- 게시판 1 -->
                         <div>
-                            <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${service.boardTitleList('자유')}">
+                            <div class="card divide-y divide-gray-100 px-4 mb-4">
                                 <div class="lg:flex lg:space-x-6 py-5">
                                     <div class="flex-1 lg:pt-0 pt-4">
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-xl font-semibold line-clamp-1" th:text="${board.title}"></a>
+                                        <a class="text-xl font-semibold line-clamp-1">제목</a>
                                         <div class="flex items-center pt-3">
                                             <div class="flex items-center">
                                                 <ion-icon name="time-outline" class="text-xl mr-2"></ion-icon>
-                                                <a th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                                                <a> 5분전</a>
                                             </div>
                                             <div class="flex items-center mx-4 align-middle">
                                                 <ion-icon name="thumbs-up-outline" class="text-lg mr-2"></ion-icon>
-                                                <a th:text="${likeService.boardLikeSize(board)}"></a>
+                                                <a>1</a>
                                             </div>
                                             <div class="flex items-center mx-4">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a th:text="${replyService.boardReplySize(board)}"></a>
-                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="text-xl mr-2"></ion-icon><a>5</a>
+                                                <!--<th:block th:if="${replyService.boardReplyPresent(board)}">
                                                     <div class="-space-x-2 flex items-center ml-1">
                                                         <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                             <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
@@ -109,10 +100,9 @@
                                                                  alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
                                                         </div>
                                                     </div>
-                                                </th:block>
+                                                </th:block>-->
 
                                             </div>
-                                            &lt;!&ndash;<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>&ndash;&gt;
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +114,7 @@
                 <div class="lg:w-1/4 w-full flex-shrink-0">
 
                     <div uk-sticky="offset:100" class="uk-sticky">
-                        &lt;!&ndash;<div class="card divide-y divide-gray-100 px-4 mb-4">
+                        <!--<div class="card divide-y divide-gray-100 px-4 mb-4">
                             <h2 class="text-lg font-semibold my-3">🔥 Top5 🔥</h2>
                             <ul>
                                 <li th:each="board : ${board}">
@@ -149,19 +139,19 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>&ndash;&gt;
+                        </div>-->
                         <div class="card divide-y divide-gray-100 px-4 mb-4">
                             <h2 class="text-lg font-semibold my-3"> 최근 올라온 글 </h2>
                             <ul>
-                                <li th:each="recent : ${recentlyBoards}">
-                                    <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                        <h3 class="font-medium line-clamp-1" th:text="${recent.title}"></h3>
+                                <li>
+                                    <a class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                        <h3 class="font-medium line-clamp-1">제목</h3>
                                         <div class="flex items-center my-auto text-xs space-x-1.5">
                                             <ion-icon name="time-outline"></ion-icon>
-                                            <div th:text="${service.boardDateTime(recent.uploadTime)}"></div>
+                                            <div>5분전</div>
                                             <div class="pb-1"> . </div>
                                             <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                                            <div th:text="${replyService.boardReplySize(recent)}"></div>
+                                            <div>10</div>
                                         </div>
                                     </a>
                                 </li>
@@ -169,7 +159,7 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
 
 
         </div>

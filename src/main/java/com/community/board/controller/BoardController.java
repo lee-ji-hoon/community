@@ -54,16 +54,12 @@ public class BoardController {
 
     //전체 게시물 조회
     @GetMapping("/board")
-    public String boardList(Model model, @CurrentUser Account account, Pageable pageable) {
+    public String boardList(Model model, @CurrentUser Account account) {
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // Top5 게시물
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
-
-        int page = 0;
-        Page<Board> listPage = boardService.boardPageSystem("자유", page);
-        model.addAttribute("paging", listPage.getContent());
 
         model.addAttribute("board", top5Board);
         model.addAttribute("recentlyBoards", recentlyBoards);

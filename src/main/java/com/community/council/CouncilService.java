@@ -103,4 +103,21 @@ public class CouncilService {
         councilRepository.save(council);
     }
 
+    // 업데이트
+    public Council updateCouncil(Long cid, CouncilForm councilForm) {
+        Council council = councilRepository.findByCid(cid);
+        council.setPostSort(councilForm.getPostSort());
+        council.setPostTitle(councilForm.getPostTitle());
+        council.setPostTarget(councilForm.getPostTarget());
+        council.setPostLink(councilForm.getPostLink());
+        council.setContactNum(councilForm.getContactNum());
+        council.setPostContent(councilForm.getPostContent());
+        council.setEventStartDate(councilForm.getEventStartDate());
+        council.setEventEndDate(councilForm.getEventEndDate());
+        council.setApplyPeriodStartDate(councilForm.getApplyPeriodStartDate());
+        council.setApplyPeriodEndDate(councilForm.getApplyPeriodEndDate());
+        return councilRepository.save(council);
+
+    }
+
 }
