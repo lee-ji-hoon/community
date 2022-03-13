@@ -52,7 +52,6 @@ public class CouncilController {
         Council council = councilRepository.findByCid(cid);
 
         List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
-
         model.addAttribute(council);
         model.addAttribute(account);
         model.addAttribute(boardService);
