@@ -6,6 +6,9 @@ import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
+import com.community.council.Council;
+import com.community.council.CouncilRepository;
+import com.community.council.CouncilService;
 import com.community.study.entity.Study;
 import com.community.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +26,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MainController {
     private final BoardRepository boardRepository;
+    private final CouncilRepository councilRepository;
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
+
+    private final CouncilService councilService;
 
 
     @GetMapping("/")
@@ -54,6 +60,10 @@ public class MainController {
                 todayStudyList.add(s_list);
             }
         }
+
+        List<Council> noticeLists = councilRepository.findTop5ByPostSortOrderByUploadTimeDesc("공지");
+
+        model.addAttribute("notice", noticeLists);
 
         model.addAttribute("b_size",boardList.size());
         model.addAttribute("b_today",todayBoardList.size());

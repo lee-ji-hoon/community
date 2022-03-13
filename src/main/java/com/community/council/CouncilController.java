@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -48,11 +50,13 @@ public class CouncilController {
     }
 
     @GetMapping("/council/detail/{cid}")
-    public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model) {
+    public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model,
+                                HttpServletRequest request, HttpServletResponse response) {
         Council council = councilRepository.findByCid(cid);
 
-        List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
+        councilService.viewUpdate(cid, request, response);
 
+        List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
         model.addAttribute(council);
         model.addAttribute(account);
         model.addAttribute(boardService);
