@@ -5,6 +5,7 @@ import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
+import com.community.board.form.BoardForm;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -53,6 +53,39 @@ public class MarketController {
         return "redirect:/market/" + marketId;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/market/update")
+    public String marketUpdate(MarketForm marketForm, @CurrentUser Account account,
+                               @RequestParam(value = "bid") String bid,
+                               @RequestParam(value = "marketType") String marketType,
+                               @RequestParam(value = "itemName") String itemName,
+                               @RequestParam(value = "price") int price,
+                               @RequestParam(value = "itemDetail") String itemDetail){
+        log.info("market update 실행");
+        Long marketNum = Long.valueOf(bid);
+        Market byMarketId = marketRepository.findByMarketId(marketNum);
+        String message = null;
+        if (account.getId().equals(byMarketId.getSeller().getId())) {
+            marketService.updateMarket(byMarketId, marketForm);
+            /*marketForm.setMarketType(marketType);
+            marketForm.setItemName(itemName);
+            marketForm.setPrice(price);
+            marketForm.setItemDetail(itemDetail);*/
+//            marketService.updateMarket(boardId, marketForm);
+            message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">게시물이 수정되었습니다.</p>\n" +
+                    "</div>";
+            return message;
+        }
+        log.info("잘못된 게시물 수정 요청 : bid = " + byMarketId + " accountId = " + account.getId());
+        message = "잘못된 요청입니다.";
+        return message;
+    }
+
     @GetMapping("/market/{marketId}")
     public String marketDetail(@CurrentUser Account account, Model model,
                                @PathVariable long marketId) {
@@ -64,7 +97,20 @@ public class MarketController {
         model.addAttribute("product", detail);
         model.addAttribute("reply", replies);
         model.addAttribute("service", boardService);
+        model.addAttribute(new MarketForm());
 
         return "market/market-detail";
+    }
+
+    @GetMapping("/market/{marketId}/delete")
+    public String marketDelete(@CurrentUser Account account, Model model,
+                               @PathVariable long marketId, RedirectAttributes redirectAttributes) {
+        Market byMarketId = marketRepository.findByMarketId(marketId);
+        if (account.getId().equals(byMarketId.getSeller().getId())) {
+            marketRepository.delete(byMarketId);
+            redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
+            return "redirect:/market";
+        }
+        return "error-page";
     }
 }
