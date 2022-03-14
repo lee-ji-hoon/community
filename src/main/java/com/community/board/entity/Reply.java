@@ -38,7 +38,7 @@ public class Reply {
     @JoinColumn(name = "forum_fid")
     private Forum forum;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Meetings.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "meetings_id")
     private Meetings meetings;
 

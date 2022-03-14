@@ -5,7 +5,9 @@ import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
 import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
+import com.community.board.form.ReplyForm;
 import com.community.board.repository.ReplyRepository;
+import com.community.board.service.ReplyService;
 import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
 import com.community.study.form.MeetingsForm;
@@ -36,9 +38,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -53,6 +58,7 @@ public class StudyController {
     private final MeetingFormValidator meetingFormValidator;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
+    private final ReplyService replyService;
 
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
@@ -155,6 +161,7 @@ public class StudyController {
 
         model.addAttribute("meetingsList", meetingsRepository.findFirst9ByOrderByUploadTimeDesc());
         model.addAttribute(account);
+        model.addAttribute("service", studyService);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
         return "study/study-meetings";
@@ -170,26 +177,88 @@ public class StudyController {
             model.addAttribute(studyUpdate);
             return "study/meetings/view";
         }*/
-        studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
         model.addAttribute(account);
 
         log.info("스터디 종료");
-        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings/" + newMeeting.getMeetingsId();
     }
 
-    /*@GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
+    @GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
     public String meetingView(@CurrentUser Account account, @PathVariable String path,
-                              Model model, @PathVariable String meetingId) {
+                              Model model, @PathVariable long meetingId) {
         log.info("스터디 모임 상세 페이지 실행");
         Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
-//        studyService.getMeetingsId(meetingId);
+        Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
+        List<String> meetingTagsList = studyService.getMeetingTagsList(meetings);
 
+
+        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
+
+        model.addAttribute("meeting", meetings);
+        model.addAttribute("service", studyService);
+        model.addAttribute("reply", replies);
+        model.addAttribute("meetingTagsList", meetingTagsList);
+        model.addAttribute(new MeetingsForm());
         model.addAttribute(studyUpdate);
-//        model.addAttribute(meetings);
         model.addAttribute(account);
 
-        return "study/meetings/view";
-    }*/
+        return "study/study-meetings-detail";
+    }
+
+    // 모임 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply")
+    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
+                                   @RequestParam(value = "r_account_id") Long r_account_id,
+                                   @RequestParam(value = "r_content") String r_content,
+                                   ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_meetings_id + "r_meetings_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply/update")
+    public int addMeetingReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
+                                     @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
+        log.info("rid : " + reply_update_rid);
+        log.info("content : " + reply_update_content);
+
+        replyService.updateReply(reply_update_rid, reply_update_content);
+
+        int reply_size = 0;
+        return reply_size;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply/delete")
+    public int replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
+        log.info("rid : " + reply_delete_rid);
+        Reply byRid = replyRepository.findByRid(reply_delete_rid);
+        log.info("delete_reply" + byRid);
+        replyRepository.delete(byRid);
+
+        int reply_size = 0;
+        return reply_size;
+    }
+    // 모임 댓글 추가 끝
 
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
