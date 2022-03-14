@@ -479,9 +479,17 @@
         }
     }
 
-
-
     $(document).ready(function (){
+        // Delay 함수
+        var delay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        // summernote
         $('#content').summernote({
             placeholder: '정확한 내용을 입력해주세요.',
             tabsize: 2,
@@ -493,6 +501,7 @@
             lang : 'ko-KR',
             height: 500,
         });
+
         // 게시글 업데이트
         $(document).on('click', '.board_form_send', function() {
             console.log("Board Update 실행");
@@ -516,30 +525,40 @@
             });
         });
 
-        // input에 있는 값을 가져옴
         // 댓글 작성 ajax
+        var keydown = true;
         var input = document.getElementById("r_content");
         input.addEventListener('keypress', function(key){
             if (input.value == '' && key.key == 'Enter') {
                 alert("댓글을 입력해주세요.");
             }
             if(input.value != '' && key.key == 'Enter'){
-                $.ajax({
-                    url:'/council/detail/reply',
-                    type:'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#reply_form').serialize(),
-                    dataType : "json",
-                    success : function (){
-                        console.log("Write Reply Success");
-                        $('.reply_div').load(location.href+' .reply_div');
-                        input.value ='';
-                    },
-                    error : function (request, status, error){
-                        console.log("Write Reply Fail" + error);
-                    }
-                });
+                if (keydown) {
+                    $.ajax({
+                        url:'/council/detail/reply',
+                        type:'get',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data : $('#reply_form').serialize(),
+                        dataType : "json",
+                        success : function (){
+                            console.log("Write Reply Success");
+                            $('.reply_div').load(location.href+' .reply_div');
+                            input.value ='';
+                            keydown = false;
+                            $(input).attr("readonly",true);
+                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
+                        },
+                        error : function (request, status, error){
+                            console.log("Write Reply Fail" + error);
+                        }
+                    });
+                }
             }
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
         });
         // 댓글 작성 ajax
         $(document).on('click', '.write_reply', function() {
@@ -558,12 +577,20 @@
                         console.log("Write Reply Success");
                         $('.reply_div').load(location.href+' .reply_div');
                         input.value ='';
+                        keydown = false;
+                        $(input).attr("readonly",true);
+                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                     },
                     error : function (request, status, error){
                         console.log("Write Reply Fail" + error);
                     }
                 });
             }
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
         });
         jQuery('#selectBox').change(function() {
             var state = jQuery('#selectBox option:selected').val();

@@ -450,6 +450,15 @@
 
 <script type="application/javascript" th:inline="javascript">
     $(document).ready(function () {
+        // Delay 함수
+        var delay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
         $('#description').summernote({
             placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
             tabsize: 2,
@@ -462,6 +471,7 @@
             height: 500,
         });
         // input에 있는 값을 가져옴
+        var keydown = true;
         var input = document.getElementById("r_content");
         input.addEventListener('keypress', function (key) {
             if (input.value == '' && key.key == 'Enter') {
@@ -478,12 +488,20 @@
                         console.log("Write Reply Success");
                         $('.reply_div').load(location.href + ' .reply_div');
                         input.value = '';
+                        keydown = false;
+                        $(input).attr("readonly",true);
+                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                     },
                     error: function (request, status, error) {
                         console.log("Write Reply Fail" + error);
                     }
                 });
             }
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
         });
         $(document).on('click', '.write_reply', function () {
             if (input.value == '') {
@@ -501,12 +519,20 @@
                         console.log("Write Reply Success");
                         $('.reply_div').load(location.href + ' .reply_div');
                         input.value = '';
+                        keydown = false;
+                        $(input).attr("readonly",true);
+                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                     },
                     error: function (request, status, error) {
                         console.log("Write Reply Fail" + error);
                     }
                 });
             }
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
         });
         var reply_input = document.getElementById("reply_update_content");
         $(document).on('click', '#update_reply', function () {
