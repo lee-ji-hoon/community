@@ -106,6 +106,12 @@
                 <div class="w-full flex-shirink-0">
                     <div uk-sticky="offset:100" class="uk-sticky">
                         <div class="council_sidebar">
+                            <div th:if="${isReportedReplyMessage}" class="my-4">
+                                <div th:replace="theme-fragments.html :: red-notice(message=${isReportedReplyMessage})"></div>
+                            </div>
+                            <div th:if="${reportCompleteMessage}" class="my-4">
+                                <div th:replace="theme-fragments.html :: blue-notice(message=${reportCompleteMessage})"></div>
+                            </div>
                             <div class="card p-4">
                                 <div class="">
                                     <th:block th:if="${account.studentId=='11-111111'}">
