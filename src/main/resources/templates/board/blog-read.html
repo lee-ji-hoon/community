@@ -256,8 +256,8 @@
                         </div>
                         <!-- 댓글 작성 폼 -->
                         <div class="card p-6 relative">
-                            <h3 class="mb-8 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
-                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
+                            <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
+                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
                                 <form id="reply_form" onsubmit="return false">
                                     <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
                                            value="1" th:value="${board.bid}" readonly>
@@ -287,26 +287,24 @@
 
                                     <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
                                         <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                             th:data-jdenticon-value="${reply.getAccount().studentId}"
+                                             th:data-jdenticon-value="${reply.getAccount().studentId}" style="width: 40px; height: 40px;"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                         <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                              th:src="${reply.getAccount()?.profileImage}"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                         <th:block th:if="${reply.getAccount().id == account.id}">
-                                            <div class="absolute right-5 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
+                                            <div class="absolute right-16 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
                                                 <a>
-                                                    <ion-icon name="construct-outline"></ion-icon>
                                                     <span>수정</span>
                                                 </a>
                                             </div>
-                                            <div class="absolute right-5 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
+                                            <div class="absolute right-16 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
                                                 <a>
                                                     <span>등록</span>
                                                 </a>
                                             </div>
-                                            <div class="absolute right-5 top-7 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
+                                            <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
                                                 <a>
-                                                    <ion-icon name="trash-outline"></ion-icon>
                                                     <span class="likes">삭제</span>
                                                     <form onsubmit="return false" th:id="|replyDeleteForm${reply.rid}|" class="d-none">
                                                         <input type="hidden" th:value="${reply.rid}" name="reply_delete_rid">
