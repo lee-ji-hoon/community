@@ -7,6 +7,7 @@ import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.council.Council;
+import com.community.council.CouncilRepository;
 import com.community.report.form.BoardReportForm;
 import com.community.report.form.ReplyReportForm;
 import com.community.report.repository.BoardReportRepository;
@@ -35,6 +36,7 @@ public class ReportController {
 
     private final BoardReportRepository boardReportRepository;
     private final ReplyReportRepository replyReportRepository;
+    private final CouncilRepository councilRepository;
 
     private final ReportService reportService;
 
@@ -52,7 +54,7 @@ public class ReportController {
         Board currentBoard = boardRepository.findByBid(board.get().getBid());
         Boolean isReported = boardReportRepository.existsByAccountAndBoard(account, currentBoard);
         if (isReported) {
-            redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고 되었습니다.");
+            redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고한 게시물입니다.");
             return "redirect:/board/detail/{boardId}";
         }
         model.addAttribute("board", currentBoard);
@@ -71,12 +73,20 @@ public class ReportController {
         Reply currentReply = replyRepository.findByRid(reply.get().getRid());
         Optional<Board> currentBoard = Optional.ofNullable(currentReply.getBoard());
         Optional<Council> currentCouncil = Optional.ofNullable(currentReply.getCouncil());
-        if (currentBoard.isPresent() || currentCouncil.isPresent()) {
+        if (currentBoard.isPresent()) {
             Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
             if (isReported) {
-                redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고 되었습니다.");
+                redirectAttributes.addFlashAttribute("isReportedReplyMessage","이미 신고한 댓글입니다.");
                 String path = String.valueOf(currentReply.getBoard().getBid());
                 return "redirect:/board/detail/" + updatePath(path);
+            }
+        }
+        if (currentCouncil.isPresent()) {
+            Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
+            if (isReported) {
+                redirectAttributes.addFlashAttribute("isReportedReplyMessage","이미 신고한 댓글입니다.");
+                String path = String.valueOf(currentReply.getCouncil().getCid());
+                return "redirect:/council/detail/" + updatePath(path);
             }
         }
 
@@ -99,10 +109,17 @@ public class ReportController {
     @PostMapping("/reply/detail/{rid}/report")
     public String replyReport(@PathVariable Long rid, ReplyReportForm replyReportForm, @CurrentUser Account account) {
         Reply currentReply = replyRepository.findByRid(rid);
-        log.info(currentReply.toString());
-        reportService.saveReplyReport(currentReply, account, replyReportForm);
-        String path = String.valueOf(currentReply.getBoard().getBid());
-        return "redirect:/board/detail/" + updatePath(path);
+        if (currentReply.getBoard()!=null) {
+            reportService.saveReplyReport(currentReply, account, replyReportForm);
+            String path = String.valueOf(currentReply.getBoard().getBid());
+            return "redirect:/board/detail/" + updatePath(path);
+        }
+        if (currentReply.getCouncil()!=null) {
+            reportService.saveReplyReport(currentReply, account, replyReportForm);
+            String path = String.valueOf(currentReply.getCouncil().getCid());
+            return "redirect:/council/detail/" + updatePath(path);
+        }
+        return "redirect:/error";
     }
 
 }
