@@ -1,6 +1,7 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.board.service.BoardService;
 import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
 import com.community.study.form.StudyCalendarForm;
@@ -15,7 +16,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -140,9 +147,8 @@ public class StudyService {
     }
 
     public Study getStudyManager(String path) {
-        Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
 
-        return accountWithManagersByPath;
+        return studyRepository.findAccountWithManagersByPath(path);
     }
 
     public Meetings createNewMeeting(Meetings meetings, Study study, Account account) {
@@ -152,6 +158,46 @@ public class StudyService {
 
         return meetingsRepository.save(meetings);
 
+    }
+
+    public String meetingDateTime(LocalDateTime localDateTime){
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+
+        long curTime = System.currentTimeMillis();
+        long regTime = date.getTime();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = null;
+        if (diffTime < BoardService.SEC) {
+            // sec
+            msg = diffTime + "초 전";
+        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
+            // min
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
+            // hour
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
+            // day
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
+            // day
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
+    }
+
+    /*모임 주제 쉼표 구분*/
+    public List<String> getMeetingTagsList(Meetings meetings) {
+
+        String[] meetingTagsArray = meetings.getMeetingMethod().split(",");
+
+        List<String> meetingTagsList = new ArrayList<>();
+        Collections.addAll(meetingTagsList, meetingTagsArray);
+
+        return meetingTagsList;
     }
 
     /*public void getMeetingsId(String meetingId) {
