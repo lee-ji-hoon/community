@@ -98,6 +98,12 @@
         <th:block th:if="${r_council.isPresent()}">
             <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='council')"></div>
         </th:block>
+        <th:block th:if="${r_market.isPresent()}">
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='market')"></div>
+        </th:block>
+        <th:block th:if="${r_meetings.isPresent()}">
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='study')"></div>
+        </th:block>
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
@@ -116,6 +122,16 @@
                                     <a th:href="@{/council/detail/{cid}(cid = ${r_council.get().cid})}"> 학생회 게시판 </a>
                                 </li>
                             </th:block>
+                            <th:block th:if="${r_market.isPresent()}">
+                                <li>
+                                    <a th:href="@{/market/{marketId}(marketId = ${r_market.get().marketId})}"> 장터 </a>
+                                </li>
+                            </th:block>
+                            <!--<th:block th:if="${r_meetings.isPresent()}">
+                                <li>
+                                    <a th:href="@{/study/{s_path}/meetings/{meetingsId}(s_path=${r_meetings.get().getStudy().path}, meetingsId=${r_meetings.get().meetingsId})}"> 모임 </a>
+                                </li>
+                            </th:block>-->
                             <li class="active">
                                 <a> 신고하기 </a>
                             </li>
@@ -141,8 +157,14 @@
                                         <a class="pl-4 font-semibold decoration-black" th:href="@{/board/detail/{boardId}/(boardId = ${r_board.get().bid})}" th:text="${reply.content}"></a>
                                     </th:block>
                                     <th:block th:if="${r_council.isPresent()}">
-                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/council/detail/{cid}/(boardId = ${r_council.get().cid})}" th:text="${reply.content}"></a>
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/council/detail/{cid}/(cid = ${r_council.get().cid})}" th:text="${reply.content}"></a>
                                     </th:block>
+                                    <th:block th:if="${r_market.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/market/{marketId}/(marketId = ${r_market.get().marketId})}" th:text="${reply.content}"></a>
+                                    </th:block>
+                                    <!--<th:block th:if="${r_meetings.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/study/{s_path}/meetings/{meetingsId}(s_path=${r_meetings.get().getStudy().path}, meetingsId=${r_meetings.get().meetingsId})}" th:text="${reply.content}"></a>
+                                    </th:block>-->
                                 </p>
                             </div>
                             <div>
