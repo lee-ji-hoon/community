@@ -426,6 +426,11 @@
                     dangerMode: true,
                 })
                     .then((willDelete) => {
+                        window.addEventListener('keydown', function (e){
+                            if (e.keyCode == 13) {
+                                swal("엔터키는 사용할 수 없습니다.");
+                            }
+                        })
                         if (willDelete) {
                             console.log("댓글 삭제");
                             $.ajax({
