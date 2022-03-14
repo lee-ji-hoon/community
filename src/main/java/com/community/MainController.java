@@ -6,9 +6,12 @@ import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
+import com.community.board.service.BoardService;
+import com.community.board.service.ReplyService;
 import com.community.council.Council;
 import com.community.council.CouncilRepository;
 import com.community.council.CouncilService;
+import com.community.like.LikeService;
 import com.community.study.entity.Study;
 import com.community.study.repository.StudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,9 @@ public class MainController {
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
 
+    private final ReplyService replyService;
+    private final BoardService boardService;
+    private final LikeService likeService;
     private final CouncilService councilService;
 
 
@@ -63,7 +69,14 @@ public class MainController {
 
         List<Council> noticeLists = councilRepository.findTop4ByPostSortOrderByUploadTimeDesc("공지");
 
+        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        model.addAttribute("board", top5Board);
+
+
         model.addAttribute("notice", noticeLists);
+        model.addAttribute("service", boardService);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute("likeService", likeService);
 
         model.addAttribute("b_size",boardList.size());
         model.addAttribute("b_today",todayBoardList.size());
