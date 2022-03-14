@@ -14,6 +14,7 @@ import com.community.report.form.ReplyReportForm;
 import com.community.report.repository.BoardReportRepository;
 import com.community.report.repository.ReplyReportRepository;
 import com.community.report.service.ReportService;
+import com.community.study.entity.Meetings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -75,6 +76,7 @@ public class ReportController {
         Optional<Board> currentBoard = Optional.ofNullable(currentReply.getBoard());
         Optional<Council> currentCouncil = Optional.ofNullable(currentReply.getCouncil());
         Optional<Market> currentMarket = Optional.ofNullable(currentReply.getMarket());
+        Optional<Meetings> currentMeetings = Optional.ofNullable(currentReply.getMeetings());
         if (currentBoard.isPresent()) {
             Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
             if (isReported) {
@@ -99,6 +101,15 @@ public class ReportController {
                 return "redirect:/market/" + updatePath(path);
             }
         }
+        if (currentMeetings.isPresent()) {
+            Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
+            if (isReported) {
+                redirectAttributes.addFlashAttribute("isReportedReplyMessage","이미 신고한 댓글입니다.");
+                String path = String.valueOf(currentReply.getMeetings().getMeetingsId());
+                String studyPath = currentReply.getMeetings().getStudy().getPath();
+                return "redirect:/study/" + studyPath + "/meetings/" + updatePath(path);
+            }
+        }
 
 
 
@@ -107,6 +118,7 @@ public class ReportController {
         model.addAttribute("r_board", currentBoard);
         model.addAttribute("r_council", currentCouncil);
         model.addAttribute("r_market", currentMarket);
+        model.addAttribute("r_meetings", currentMeetings);
         model.addAttribute(account);
         model.addAttribute(new ReplyReportForm());
         return "report-form";
@@ -138,6 +150,13 @@ public class ReportController {
             String path = String.valueOf(currentReply.getMarket().getMarketId());
             redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
             return "redirect:/market/" + updatePath(path);
+        }
+        if (currentReply.getMeetings() != null) {
+            reportService.saveReplyReport(currentReply, account, replyReportForm);
+            String path = String.valueOf(currentReply.getMeetings().getMeetingsId());
+            String studyPath = currentReply.getMeetings().getStudy().getPath();
+            redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
+            return "redirect:/study/" + studyPath + "/meetings/" + updatePath(path);
         }
         return "redirect:/error";
     }

@@ -101,6 +101,9 @@
         <th:block th:if="${r_market.isPresent()}">
             <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='market')"></div>
         </th:block>
+        <th:block th:if="${r_meetings.isPresent()}">
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='study')"></div>
+        </th:block>
         <!-- Main Contents -->
         <div class="main_content">
             <div class="mcontainer">
@@ -122,6 +125,11 @@
                             <th:block th:if="${r_market.isPresent()}">
                                 <li>
                                     <a th:href="@{/market/{marketId}(marketId = ${r_market.get().marketId})}"> 장터 </a>
+                                </li>
+                            </th:block>
+                            <th:block th:if="${r_meetings.isPresent()}">
+                                <li>
+                                    <a th:href="@{/study/{s_path}/meetings/{meetindsId}(meetindsId = ${r_meetings.get().meetingsId}, s_path = ${r_meetings.get().getStudy().getPath()})}"> 모임 </a>
                                 </li>
                             </th:block>
                             <li class="active">
@@ -153,6 +161,9 @@
                                     </th:block>
                                     <th:block th:if="${r_market.isPresent()}">
                                         <a class="pl-4 font-semibold decoration-black" th:href="@{/market/{marketId}/(marketId = ${r_market.get().marketId})}" th:text="${reply.content}"></a>
+                                    </th:block>
+                                    <th:block th:if="${r_meetings.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/study/{s_path}/meetings/{meetindsId}(meetindsId = ${r_meetings.get().meetingsId}, s_path = ${r_meetings.get().getStudy().getPath()})}" th:text="${reply.content}"></a>
                                     </th:block>
                                 </p>
                             </div>
