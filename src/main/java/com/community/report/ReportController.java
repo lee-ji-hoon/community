@@ -8,6 +8,7 @@ import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.council.Council;
 import com.community.council.CouncilRepository;
+import com.community.market.Market;
 import com.community.report.form.BoardReportForm;
 import com.community.report.form.ReplyReportForm;
 import com.community.report.repository.BoardReportRepository;
@@ -73,6 +74,7 @@ public class ReportController {
         Reply currentReply = replyRepository.findByRid(reply.get().getRid());
         Optional<Board> currentBoard = Optional.ofNullable(currentReply.getBoard());
         Optional<Council> currentCouncil = Optional.ofNullable(currentReply.getCouncil());
+        Optional<Market> currentMarket = Optional.ofNullable(currentReply.getMarket());
         if (currentBoard.isPresent()) {
             Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
             if (isReported) {
@@ -89,12 +91,22 @@ public class ReportController {
                 return "redirect:/council/detail/" + updatePath(path);
             }
         }
+        if (currentMarket.isPresent()) {
+            Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
+            if (isReported) {
+                redirectAttributes.addFlashAttribute("isReportedReplyMessage","이미 신고한 댓글입니다.");
+                String path = String.valueOf(currentReply.getMarket().getMarketId());
+                return "redirect:/market/" + updatePath(path);
+            }
+        }
+
 
 
 
         model.addAttribute("reply", currentReply);
         model.addAttribute("r_board", currentBoard);
         model.addAttribute("r_council", currentCouncil);
+        model.addAttribute("r_market", currentMarket);
         model.addAttribute(account);
         model.addAttribute(new ReplyReportForm());
         return "report-form";
@@ -107,17 +119,25 @@ public class ReportController {
         return "redirect:/board/detail/{boardId}";
     }
     @PostMapping("/reply/detail/{rid}/report")
-    public String replyReport(@PathVariable Long rid, ReplyReportForm replyReportForm, @CurrentUser Account account) {
+    public String replyReport(@PathVariable Long rid, ReplyReportForm replyReportForm, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         Reply currentReply = replyRepository.findByRid(rid);
         if (currentReply.getBoard()!=null) {
             reportService.saveReplyReport(currentReply, account, replyReportForm);
             String path = String.valueOf(currentReply.getBoard().getBid());
+            redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
             return "redirect:/board/detail/" + updatePath(path);
         }
         if (currentReply.getCouncil()!=null) {
             reportService.saveReplyReport(currentReply, account, replyReportForm);
             String path = String.valueOf(currentReply.getCouncil().getCid());
+            redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
             return "redirect:/council/detail/" + updatePath(path);
+        }
+        if (currentReply.getMarket() != null) {
+            reportService.saveReplyReport(currentReply, account, replyReportForm);
+            String path = String.valueOf(currentReply.getMarket().getMarketId());
+            redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
+            return "redirect:/market/" + updatePath(path);
         }
         return "redirect:/error";
     }
