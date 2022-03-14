@@ -127,11 +127,11 @@
                                     <a th:href="@{/market/{marketId}(marketId = ${r_market.get().marketId})}"> 장터 </a>
                                 </li>
                             </th:block>
-                            <th:block th:if="${r_meetings.isPresent()}">
+                            <!--<th:block th:if="${r_meetings.isPresent()}">
                                 <li>
-                                    <a th:href="@{/study/{s_path}/meetings/{meetindsId}(meetindsId = ${r_meetings.get().meetingsId}, s_path = ${r_meetings.get().getStudy().getPath()})}"> 모임 </a>
+                                    <a th:href="@{/study/{s_path}/meetings/{meetingsId}(s_path=${r_meetings.get().getStudy().path}, meetingsId=${r_meetings.get().meetingsId})}"> 모임 </a>
                                 </li>
-                            </th:block>
+                            </th:block>-->
                             <li class="active">
                                 <a> 신고하기 </a>
                             </li>
@@ -162,9 +162,9 @@
                                     <th:block th:if="${r_market.isPresent()}">
                                         <a class="pl-4 font-semibold decoration-black" th:href="@{/market/{marketId}/(marketId = ${r_market.get().marketId})}" th:text="${reply.content}"></a>
                                     </th:block>
-                                    <th:block th:if="${r_meetings.isPresent()}">
-                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/study/{s_path}/meetings/{meetindsId}(meetindsId = ${r_meetings.get().meetingsId}, s_path = ${r_meetings.get().getStudy().getPath()})}" th:text="${reply.content}"></a>
-                                    </th:block>
+                                    <!--<th:block th:if="${r_meetings.isPresent()}">
+                                        <a class="pl-4 font-semibold decoration-black" th:href="@{/study/{s_path}/meetings/{meetingsId}(s_path=${r_meetings.get().getStudy().path}, meetingsId=${r_meetings.get().meetingsId})}" th:text="${reply.content}"></a>
+                                    </th:block>-->
                                 </p>
                             </div>
                             <div>
