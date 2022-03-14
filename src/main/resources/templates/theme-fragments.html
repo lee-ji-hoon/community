@@ -471,9 +471,9 @@
 </header>
 
 <!-- sidebar -->
-<div th:fragment="side_bar" class="sidebar" style="width: 250px">
+<div th:fragment="side_bar" class="sidebar">
 
-    <div class="sidebar_inner" >
+    <div class="sidebar_inner" data-simplebar>
         <ul>
             <li th:classappend="${currentSideMenu == 'study'}? active"><a th:href="@{/study}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-500">
