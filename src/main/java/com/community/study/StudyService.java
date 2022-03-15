@@ -1,9 +1,12 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.board.entity.Reply;
+import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
+import com.community.study.form.MeetingsForm;
 import com.community.study.form.StudyCalendarForm;
 import com.community.study.form.StudyDescriptionForm;
 import com.community.study.repository.MeetingsRepository;
@@ -32,6 +35,8 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final MeetingsRepository meetingsRepository;
+    private final ReplyRepository replyRepository;
+
     private final ModelMapper modelMapper;
 
     public Study createNewStudy(Study study, Account account) {
@@ -189,6 +194,11 @@ public class StudyService {
         return msg;
     }
 
+    public List<Reply> replyList(Meetings meetings) {
+
+        return replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
+    }
+
     /*모임 주제 쉼표 구분*/
     public List<String> getMeetingTagsList(Meetings meetings) {
 
@@ -198,6 +208,20 @@ public class StudyService {
         Collections.addAll(meetingTagsList, meetingTagsArray);
 
         return meetingTagsList;
+    }
+
+    public void updateMeeting(long meetingId, MeetingsForm meetingsForm) {
+        Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
+
+        meetings.setMeetingTitle(meetingsForm.getMeetingTitle());
+        meetings.setMeetingPlaces(meetingsForm.getMeetingPlaces());
+        meetings.setMeetingDescription(meetingsForm.getMeetingDescription());
+
+        if(meetingsForm.getMeetingMethod() != null) {
+            meetings.setMeetingMethod(meetingsForm.getMeetingMethod());
+        }
+
+        meetingsRepository.save(meetings);
     }
 
     /*public void getMeetingsId(String meetingId) {
