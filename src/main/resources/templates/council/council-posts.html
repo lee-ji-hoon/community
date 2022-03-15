@@ -237,7 +237,7 @@
                             <div class="flex space-x-2 items-center text-sm mt-2">
                                 <div th:text="${boardService.boardDateTime(notice.uploadTime)}">공지등록일</div>
                                 <div>·</div>
-                                <div th:text="${notice.pageView}">조회수</div>
+                                <div><a th:text="${notice.pageView}"></a>명 조회</div>
                             </div>
                         </div>
                     </div>
