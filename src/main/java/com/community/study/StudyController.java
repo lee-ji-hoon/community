@@ -325,7 +325,7 @@ public class StudyController {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
         studyService.removeMember(studyWithMembersByPath, account);
 
-        return "redirect:/study/" + fixPath(path) + "/meetings";
+        return "redirect:/study/" + fixPath(path);
     }
 
     // 스터디 설명 수정 시작

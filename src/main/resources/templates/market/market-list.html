@@ -44,95 +44,18 @@
 
                     <div class="card divide-y divide-gray-100 sm:m-0 -mx-4">
                         <div class="uk-switcher" id="timeline-tab">
-                        <!-- job 1 -->
-                            <div>
-                                <div th:each="sell : ${sellingProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
-                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
-                                    </a>
-                                    <div class="flex-1 sm:order-2">
-                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
-                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}">
-                                            <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
-                                        </a>
-                                        <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
-                                        </div>
-                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}"> 자세히 보기 </a>
-                                        <div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- 판매  -->
+                            <div th:replace="theme-fragments.html :: market-list(type = ${sellingProduct})">
                             </div>
-
-                            <div>
-                                <div th:each="sell : ${buyProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
-                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
-                                    </a>
-                                    <div class="flex-1 sm:order-2 line-clamp-3">
-                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
-                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
-                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
-                                        </a>
-                                        <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
-                                        </div>
-                                        <a href="#" id="more-text" uk-toggle="target: #more-text; cls: line-clamp-3"> 자세히 보기 </a>
-                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-                                        </div>-->
-                                    </div>
-                                </div>
+                            <!-- 구매  -->
+                            <div th:replace="theme-fragments.html :: market-list(type = ${buyProduct})">
                             </div>
-
-                            <div>
-                                <div th:each="sell : ${shareProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
-                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
-                                    </a>
-                                    <div class="flex-1 sm:order-2">
-                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
-                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
-                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
-                                        </a>
-                                        <p th:utext="${sell.itemDetail}">
-                                            상품 설명
-                                        </p>
-                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-                                        </div>-->
-                                    </div>
-                                </div>
+                            <!-- 나눔  -->
+                            <div th:replace="theme-fragments.html :: market-list(type = ${shareProduct})">
                             </div>
-
-                            <div>
-                                <div th:each="sell : ${myProduct}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                    <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
-                                        <img src="assets/images/product/3.jpg" alt="" class="rounded-md">
-                                    </a>
-                                    <div class="flex-1 sm:order-2">
-                                        <h4 class="text-base text-gray-500 font-medium mb-2">Phaseout </h4>
-                                        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" th:text="${sell.itemName}">
-                                            <h3 class="text-xl font-medium mb-4"> Technical Event Support Specialist </h3>
-                                        </a>
-                                        <p th:utext="${sell.itemDetail}">
-                                            상품 설명
-                                        </p>
-                                        <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                                            <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-                                        </div>-->
-                                    </div>
-                                </div>
+                            <!-- 내거  -->
+                            <div th:replace="theme-fragments.html :: market-list(type = ${myProduct})">
                             </div>
-
                         </div>
                     </div>
                 </div>
