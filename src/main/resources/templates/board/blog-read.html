@@ -256,8 +256,8 @@
                         </div>
                         <!-- 댓글 작성 폼 -->
                         <div class="card p-6 relative">
-                            <h3 class="mb-8 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
-                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-t">
+                            <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
+                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
                                 <form id="reply_form" onsubmit="return false">
                                     <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
                                            value="1" th:value="${board.bid}" readonly>
@@ -287,26 +287,24 @@
 
                                     <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
                                         <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                             th:data-jdenticon-value="${reply.getAccount().studentId}"
+                                             th:data-jdenticon-value="${reply.getAccount().studentId}" style="width: 40px; height: 40px;"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                         <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                              th:src="${reply.getAccount()?.profileImage}"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                         <th:block th:if="${reply.getAccount().id == account.id}">
-                                            <div class="absolute right-5 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
+                                            <div class="absolute right-16 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
                                                 <a>
-                                                    <ion-icon name="construct-outline"></ion-icon>
                                                     <span>수정</span>
                                                 </a>
                                             </div>
-                                            <div class="absolute right-5 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
+                                            <div class="absolute right-16 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
                                                 <a>
                                                     <span>등록</span>
                                                 </a>
                                             </div>
-                                            <div class="absolute right-5 top-7 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
+                                            <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
                                                 <a>
-                                                    <ion-icon name="trash-outline"></ion-icon>
                                                     <span class="likes">삭제</span>
                                                     <form onsubmit="return false" th:id="|replyDeleteForm${reply.rid}|" class="d-none">
                                                         <input type="hidden" th:value="${reply.rid}" name="reply_delete_rid">
@@ -426,6 +424,11 @@
                     dangerMode: true,
                 })
                     .then((willDelete) => {
+                        window.addEventListener('keydown', function (e){
+                            if (e.keyCode == 13) {
+                                swal("엔터키는 사용할 수 없습니다.");
+                            }
+                        })
                         if (willDelete) {
                             console.log("댓글 삭제");
                             $.ajax({
@@ -453,6 +456,16 @@
         }
 
         $(document).ready(function (){
+            // Delay 함수
+            var delay = (function (){
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+
+            // summernote
             $('#content').summernote({
                 placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
                 tabsize: 2,
@@ -466,6 +479,7 @@
             });
 
             // input에 있는 값을 가져옴
+            var keydown = true;
             var input = document.getElementById("r_content");
             input.addEventListener('keypress', function(key){
                 if (input.value == '' && key.key == 'Enter') {
@@ -482,12 +496,20 @@
                             console.log("Write Reply Success");
                             $('.reply_div').load(location.href+' .reply_div');
                             input.value ='';
+                            keydown = false;
+                            $(input).attr("readonly",true);
+                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                         },
                         error : function (request, status, error){
                             console.log("Write Reply Fail" + error);
                         }
                     });
                 }
+                delay(function (){
+                    $(input).removeAttr("readonly");
+                    $(input).attr("placeholder","댓글을 입력해주세요.");
+                    keydown=true;
+                }, 5000);
             });
             $(document).on('click', '.like_heart_click', function() {
                 // .like_heart_click은 <a></a>태그의 class 이름
@@ -548,12 +570,20 @@
                             console.log("Write Reply Success");
                             $('.reply_div').load(location.href+' .reply_div');
                             input.value ='';
+                            keydown = false;
+                            $(input).attr("readonly",true);
+                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                         },
                         error : function (request, status, error){
                             console.log("Write Reply Fail" + error);
                         }
                     });
                 }
+                delay(function (){
+                    $(input).removeAttr("readonly");
+                    $(input).attr("placeholder","댓글을 입력해주세요.");
+                    keydown=true;
+                }, 5000);
             });
 
             // 게시글 업데이트
