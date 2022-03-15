@@ -39,9 +39,6 @@
                             <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
                         </div>
                         <div class="card">
-                            <div class="h-44 mb-4 md:h-72 overflow-hidden relative rounded-t-lg w-full">
-                                <img src="/assets/images/blog/img-4.jpg" alt="" class="w-full h-full absolute inset-0 object-cover">
-                            </div>
                             <div class="form_refresh">
                                 <div class="p-7">
                                     <th:block th:if="${board.boardTitle=='자유'}">
@@ -87,7 +84,7 @@
                                     </th:block>
                                     <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
                                         <svg th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
-                                             th:data-jdenticon-value="${boardOwner.studentId}"
+                                             th:data-jdenticon-value="${boardOwner.studentId}" style="width: 40px; height: 40px"
                                              alt="" class="w-10 rounded-full is_avatar"></svg>
                                         <img th:if="${!#strings.isEmpty(boardOwner?.profileImage)}"
                                              th:src="${boardOwner?.profileImage}"
