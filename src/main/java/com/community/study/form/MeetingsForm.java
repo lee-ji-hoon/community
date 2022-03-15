@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Data
 public class MeetingsForm {
 
-    public String meetingDivision;
-
     @Length(max = 20)
     public String meetingTitle;
 

@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "meetingsId")
 public class Meetings {
 
     @Id
