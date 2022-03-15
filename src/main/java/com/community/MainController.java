@@ -2,6 +2,7 @@ package com.community;
 
 import com.community.account.entity.Account;
 import com.community.account.CurrentUser;
+import com.community.account.repository.AccountRepository;
 import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.repository.BoardRepository;
@@ -32,6 +33,7 @@ public class MainController {
     private final CouncilRepository councilRepository;
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
+    private final AccountRepository accountRepository;
 
     private final ReplyService replyService;
     private final BoardService boardService;
@@ -70,8 +72,16 @@ public class MainController {
         List<Council> noticeLists = councilRepository.findTop4ByPostSortOrderByUploadTimeDesc("공지");
 
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+
+        List<Study> enrollStudy = studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account);
+
+        List<Study> myStudy = studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account);
+
         model.addAttribute("board", top5Board);
 
+        model.addAttribute("enrollStudy", enrollStudy);
+        model.addAttribute("myStudy", myStudy);
+        model.addAttribute("now", LocalDate.now());
 
         model.addAttribute("notice", noticeLists);
         model.addAttribute("service", boardService);

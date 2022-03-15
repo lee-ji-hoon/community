@@ -155,11 +155,13 @@ public class StudyController {
     public String meetingListView(@CurrentUser Account account,
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
+        List<Meetings> meetingsList = meetingsRepository.findAllByStudy(studyUpdate);
 
-        /*Meetings meetings = meetingsRepository.findByMeetingsId()
-        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc();*/
 
-        model.addAttribute("meetingsList", meetingsRepository.findFirst9ByOrderByUploadTimeDesc());
+        /*Meetings meetings = meetingsRepository.findByMeetingsId(meetingsList)
+        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);*/
+
+        model.addAttribute("meetingsList", meetingsList);
         model.addAttribute(account);
         model.addAttribute("service", studyService);
         model.addAttribute(studyUpdate);
@@ -177,14 +179,50 @@ public class StudyController {
             model.addAttribute(studyUpdate);
             return "study/meetings/view";
         }*/
-        Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
         model.addAttribute(account);
 
         log.info("스터디 종료");
-        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings/" + newMeeting.getMeetingsId();
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
     }
 
-    @GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/update", method = RequestMethod.GET)
+    public String meetingUpdate(MeetingsForm meetingsForm, @CurrentUser Account account,
+                                @RequestParam(required = false, value = "meetingId") String meetingId,
+                                @RequestParam(required = false, value = "updateTitle") String updateTitle,
+                                @RequestParam(required = false, value = "updateMethod") String updateMethod,
+                                @RequestParam(required = false, value = "updateMeetingDescription") String updateMeetingDescription,
+                                @RequestParam(required = false, value = "updatePlaces") String updatePlaces){
+        System.out.println("updateTitle = " + updateTitle);
+        System.out.println("updateMethod = " + updateMethod);
+        System.out.println("updatePlaces = " + updatePlaces);
+        System.out.println("updateMeetingDescription = " + updateMeetingDescription);
+        Long meetingsId = Long.valueOf(meetingId);
+        Meetings meetings = meetingsRepository.findByMeetingsId(meetingsId);
+        String message = null;
+
+        if (account.getId().equals(meetings.getWriter().getId())) {
+            meetingsForm.setMeetingTitle(updateTitle);
+            meetingsForm.setMeetingMethod(updateMethod);
+            meetingsForm.setMeetingDescription(updateMeetingDescription);
+            meetingsForm.setMeetingPlaces(updatePlaces);
+            studyService.updateMeeting(meetingsId, meetingsForm);
+            message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">게시물이 수정되었습니다.</p>\n" +
+                    "</div>";
+            return message;
+        }
+        log.info("잘못된 게시물 수정 요청 : bid = " + meetingId + " accountId = " + account.getId());
+        message = "잘못된 요청입니다.";
+        return message;
+    }
+
+    /*@GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
     public String meetingView(@CurrentUser Account account, @PathVariable String path,
                               Model model, @PathVariable long meetingId) {
         log.info("스터디 모임 상세 페이지 실행");
@@ -204,7 +242,7 @@ public class StudyController {
         model.addAttribute(account);
 
         return "study/study-meetings-detail";
-    }
+    }*/
 
     // 모임 댓글 추가 시작
     @ResponseBody
