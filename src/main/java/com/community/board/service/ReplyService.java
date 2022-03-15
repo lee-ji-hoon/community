@@ -82,7 +82,6 @@ public class ReplyService {
     public void updateReply(Long rid, String reply_content) {
         Reply reply = replyRepository.findByRid(rid);
         reply.setContent(reply_content);
-        reply.setUploadTime(LocalDateTime.now());
         replyRepository.save(reply);
     }
 
