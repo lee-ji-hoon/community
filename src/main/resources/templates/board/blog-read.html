@@ -38,6 +38,9 @@
                         <div th:if="${isReportedMessage}">
                             <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
                         </div>
+                        <div th:if="${errorMessage}">
+                            <div th:replace="theme-fragments.html :: red-notice(message=${errorMessage})"></div>
+                        </div>
                         <div class="card">
                             <div class="form_refresh">
                                 <div class="p-7">
@@ -110,7 +113,7 @@
                                                             </button>
 
                                                             <div class="uk-modal-header">
-                                                                <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
+                                                                <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
                                                             </div>
                                                             <form class="needs-validation" id="board_form" onsubmit="return false">
                                                                 <div class="uk-modal-body" uk-overflow-auto>
@@ -190,7 +193,7 @@
                                                                 </div>
 
                                                                 <div class="uk-modal-footer uk-text-right">
-                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close py-2.5">삭제하기</a>
+                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
                                                                     <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">수정하기</button>
                                                                 </div>
                                                             </form>
