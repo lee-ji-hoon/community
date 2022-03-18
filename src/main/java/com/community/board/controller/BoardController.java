@@ -192,10 +192,11 @@ public class BoardController {
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriter().getId())) {
             boardRepository.delete(currentBoard);
-            redirectAttributes.addFlashAttribute("message", "해당 게시글 삭제되었습니다.");
+            redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
             return "redirect:/board";
         }
-        return "error-page";
+        redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
+        return "redirect:/board/detail/{boardId}";
     }
 
     // TODO Summernote 사진 업로드 구현해야함.

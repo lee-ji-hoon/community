@@ -28,8 +28,8 @@
                         <div class="flex justify-between items-center relative md:mb-4 mb-3">
                             <div class="flex-1">
                                 <h2 class="text-2xl font-semibold"> 커뮤니티 </h2>
-                                <th:block th:if="${message}">
-                                    <div th:replace="theme-fragments.html :: red-notice(message=${message})"></div>
+                                <th:block th:if="${deleteMessage}">
+                                    <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})"></div>
                                 </th:block>
                                 <nav class="responsive-nav md:m-0 -mx-4 style-2">
                                     <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
