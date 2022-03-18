@@ -194,10 +194,6 @@ public class StudyController {
                                 @RequestParam(required = false, value = "updateMethod") String updateMethod,
                                 @RequestParam(required = false, value = "updateMeetingDescription") String updateMeetingDescription,
                                 @RequestParam(required = false, value = "updatePlaces") String updatePlaces){
-        System.out.println("updateTitle = " + updateTitle);
-        System.out.println("updateMethod = " + updateMethod);
-        System.out.println("updatePlaces = " + updatePlaces);
-        System.out.println("updateMeetingDescription = " + updateMeetingDescription);
         Long meetingsId = Long.valueOf(meetingId);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingsId);
         String message = null;
