@@ -67,35 +67,16 @@ public class BoardController {
         model.addAttribute("bt", "전체게시판");
         model.addAttribute(new SearchForm());
         model.addAttribute(new BoardForm());
-        return "board/blogs";
-    }
-
-    @GetMapping("/board/main")
-    public String boardMain(Model model) {
-        List<Board> boards = boardRepository.findAllByIsReportedOrderByUploadTimeDesc(true);
-        model.addAttribute("board", boards);
-        model.addAttribute("service", boardService);
-        model.addAttribute("accountRepo", accountRepository);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute(new SearchForm());
-        return "board/board-main";
+        return "board/boards";
     }
 
     /* 게시물 작성 관련 */
-    // 게시물 작성
-    @GetMapping("/board/write")
-    public String boardForm(@CurrentUser Account account, Model model) {
-        model.addAttribute("account", account);
-        model.addAttribute(new BoardForm());
-        return "board/board-write";
-    }
 
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
     public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         if (errors.hasErrors()) {
-            return "board/blogs";
+            return "board/boards";
         }
 
         Board savedBoard = boardService.saveNewBoard(boardForm, account);
@@ -145,7 +126,7 @@ public class BoardController {
         model.addAttribute(new BoardReportForm());
         model.addAttribute(new BoardForm());
 
-        return "board/blog-read";
+        return "board/board-detail";
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트

@@ -427,7 +427,6 @@
 <script type="application/javascript" th:inline="javascript">
     let updateBtn = {
         replyUpdate: function (replyId) {
-            console.log(`${replyId}`);
             jQuery(`#orginalReply${replyId}`).hide();
             jQuery(`#replyUpdateBtn${replyId}`).hide();
             jQuery(`#replyUpdateSubmit${replyId}`).show();
@@ -436,9 +435,7 @@
     }
     let updateComplete = {
         replyUpdateAjax: function (replyId) {
-            console.log(`${replyId}`);
             // 댓글 수정 ajax
-            console.log("댓글 수정");
             $.ajax({
                 url:'/reply/update',
                 type:'get',
@@ -446,16 +443,12 @@
                 data : $(`#replyUpdateForm${replyId}`).serialize(),
                 dataType : "json",
                 success : function (){
-                    console.log("Reply Update Success");
                     $('.reply_div').load(location.href+' .reply_div');
                     jQuery(`#orginalReply${replyId}`).show();
                     jQuery(`#replyUpdateBtn${replyId}`).show();
                     jQuery(`#replyUpdateSubmit${replyId}`).hide();
                     $(`#replyUpdateInput${replyId}`).prop("type", "hidden");
                 },
-                error : function (request, status, error){
-                    console.log("Reply Update Fail" + error);
-                }
             });
         }
     }
@@ -476,7 +469,6 @@
                         }
                     })
                     if (willDelete) {
-                        console.log("댓글 삭제");
                         $.ajax({
                             url:'/reply/delete',
                             type:'get',
@@ -484,12 +476,8 @@
                             data : $(`#replyDeleteForm${replyId}`).serialize(),
                             dataType : "json",
                             success : function (){
-                                console.log("Reply Delete Success");
                                 $('.reply_div').load(location.href+' .reply_div');
                             },
-                            error : function (request, status, error){
-                                console.log("Reply Delete Fail" + error);
-                            }
                         });
                         swal("댓글이 삭제되었습니다.", {
                             icon: "success",
@@ -526,14 +514,12 @@
 
         // 게시글 업데이트
         $(document).on('click', '.board_form_send', function() {
-            console.log("Board Update 실행");
             $.ajax({
                 url:'/council/detail/update',
                 type:'get',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 data : $('#board_form').serialize(),
                 success : function (message){
-                    console.log("Board Update Success");
                     $('.council_content').load(window.location.href+' .council_content');
                     $('.council_sidebar').load(window.location.href+' .council_sidebar');
                     $('#board_form').load(window.location.href+' #board_form');
@@ -541,9 +527,6 @@
                     $("#isUpdated").replaceWith(message);
                     $('#content').summernote('reset');
                 },
-                error : function (request, status, error){
-                    console.log("Board Update " + error);
-                }
             });
         });
 
@@ -552,7 +535,7 @@
         var input = document.getElementById("r_content");
         input.addEventListener('keypress', function(key){
             if (input.value == '' && key.key == 'Enter') {
-                alert("댓글을 입력해주세요.");
+                swal("댓글을 입력해주세요.");
             }
             if(input.value != '' && key.key == 'Enter'){
                 if (keydown) {
@@ -563,16 +546,12 @@
                         data : $('#reply_form').serialize(),
                         dataType : "json",
                         success : function (){
-                            console.log("Write Reply Success");
                             $('.reply_div').load(location.href+' .reply_div');
                             input.value ='';
                             keydown = false;
                             $(input).attr("readonly",true);
                             $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                         },
-                        error : function (request, status, error){
-                            console.log("Write Reply Fail" + error);
-                        }
                     });
                 }
             }
@@ -585,10 +564,9 @@
         // 댓글 작성 ajax
         $(document).on('click', '.write_reply', function() {
             if (input.value == '') {
-                alert("댓글을 입력해주세요.");
+                swal("댓글을 입력해주세요.");
             }
             if (input.value != '') {
-                console.log("댓글 작성");
                 $.ajax({
                     url:'/council/detail/reply',
                     type:'get',
@@ -596,16 +574,12 @@
                     data : $('#reply_form').serialize(),
                     dataType : "json",
                     success : function (){
-                        console.log("Write Reply Success");
                         $('.reply_div').load(location.href+' .reply_div');
                         input.value ='';
                         keydown = false;
                         $(input).attr("readonly",true);
                         $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                     },
-                    error : function (request, status, error){
-                        console.log("Write Reply Fail" + error);
-                    }
                 });
             }
             delay(function (){
