@@ -111,7 +111,7 @@ public class StudyController {
         return "study/study-list";
     }
 
-    @GetMapping("/{tagTitle}")
+    @GetMapping("/study/{tagTitle}")
     public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
 
         Tag byTag = tagService.getTag(tagTitle);
@@ -157,7 +157,6 @@ public class StudyController {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         List<Meetings> meetingsList = meetingsRepository.findAllByStudy(studyUpdate);
 
-
         /*Meetings meetings = meetingsRepository.findByMeetingsId(meetingsList)
         List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);*/
 
@@ -194,6 +193,13 @@ public class StudyController {
                                 @RequestParam(required = false, value = "updateMethod") String updateMethod,
                                 @RequestParam(required = false, value = "updateMeetingDescription") String updateMeetingDescription,
                                 @RequestParam(required = false, value = "updatePlaces") String updatePlaces){
+
+        log.info("모임 아이디 : ", meetingId);
+        log.info("모임 제목 : ", updateTitle);
+        log.info("모임 주제 : ", updateMethod);
+        log.info("모임 내용 : ", updateMeetingDescription);
+        log.info("모임 위치 : ", updatePlaces);
+
         Long meetingsId = Long.valueOf(meetingId);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingsId);
         String message = null;
