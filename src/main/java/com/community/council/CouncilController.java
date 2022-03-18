@@ -2,9 +2,7 @@ package com.community.council;
 
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
-import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
-import com.community.board.form.BoardForm;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
 import com.community.board.service.ReplyService;
@@ -38,13 +36,13 @@ public class CouncilController {
         model.addAttribute(new CouncilForm());
         model.addAttribute(councilService);
         model.addAttribute(boardService);
-        return "council/council-posts";
+        return "council/councils";
     }
 
     @PostMapping("/council/detail")
     public String createNewPost(@Valid CouncilForm councilForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         if (errors.hasErrors()) {
-            return "council/council-posts";
+            return "council/councils";
         }
         Council savedPost = councilService.saveNewPosts(councilForm, account);
         redirectAttributes.addAttribute("cid", savedPost.getCid());
@@ -66,7 +64,7 @@ public class CouncilController {
         model.addAttribute(new CouncilForm());
         model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
-        return "council/detail";
+        return "council/council-detail";
     }
 
     // 게시글 수정 후 {boardId}로 리다이렉트

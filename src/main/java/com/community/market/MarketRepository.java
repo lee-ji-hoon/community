@@ -11,5 +11,9 @@ public interface MarketRepository extends JpaRepository<Market, Long> {
 
     List<Market> findAllByMarketTypeOrderByItemUploadTimeDesc(String type);
 
+    /* 검색 쿼리 */
+    List<Market> findByItemNameContainingOrderByItemUploadTimeDesc(String keyword);
+    List<Market> findByItemDetailContainingOrderByItemUploadTimeDesc(String keyword);
+
     List<Market> findAllBySeller(Account seller);
 }

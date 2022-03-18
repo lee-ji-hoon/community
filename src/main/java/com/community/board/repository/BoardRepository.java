@@ -18,6 +18,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     /* 검색 관련 쿼리 */
     List<Board> findByContentContainingOrderByUploadTimeDesc(String keyword);
+    List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
 
     /* 신고된 게시글 제외 쿼리 */
     List<Board> findAllByWriterIdAndIsReportedOrderByUploadTime(long id, Boolean isReported);
