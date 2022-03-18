@@ -171,7 +171,7 @@ public class StudyController {
     @PostMapping(STUDY_PATH_URL + "/meetings")
     public String meetingList(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
-        log.info("스터디 실행");
+        log.info("모임 생성");
         Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
 /*        if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -181,8 +181,51 @@ public class StudyController {
         studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
         model.addAttribute(account);
 
-        log.info("스터디 종료");
+        log.info("모임 생성 성공");
         return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
+    }
+
+    @GetMapping(STUDY_PATH_URL + "/meetings/{meetingsId}")
+    public String deleteMeeting(@CurrentUser Account account, @PathVariable String path,
+                                Model model, @PathVariable long meetingsId) {
+        log.info("모임 삭제 실행");
+        Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
+
+        meetingsRepository.deleteById(meetingsId);
+
+        model.addAttribute(account);
+
+        log.info("모임 삭제 성공");
+
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
+    }
+
+    // 모임 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply")
+    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
+                                   @RequestParam(value = "r_account_id") Long r_account_id,
+                                   @RequestParam(value = "r_content") String r_content,
+                                   ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_meetings_id + "r_meetings_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
     }
 
     @ResponseBody
@@ -222,56 +265,6 @@ public class StudyController {
         log.info("잘못된 게시물 수정 요청 : bid = " + meetingId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
-    }
-
-    /*@GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
-    public String meetingView(@CurrentUser Account account, @PathVariable String path,
-                              Model model, @PathVariable long meetingId) {
-        log.info("스터디 모임 상세 페이지 실행");
-        Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
-        Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
-        List<String> meetingTagsList = studyService.getMeetingTagsList(meetings);
-
-
-        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
-
-        model.addAttribute("meeting", meetings);
-        model.addAttribute("service", studyService);
-        model.addAttribute("reply", replies);
-        model.addAttribute("meetingTagsList", meetingTagsList);
-        model.addAttribute(new MeetingsForm());
-        model.addAttribute(studyUpdate);
-        model.addAttribute(account);
-
-        return "study/study-meetings-detail";
-    }*/
-
-    // 모임 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/study/meetings/reply")
-    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
-                                   @RequestParam(value = "r_account_id") Long r_account_id,
-                                   @RequestParam(value = "r_content") String r_content,
-                                   ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_meetings_id + "r_meetings_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
     }
 
     @ResponseBody
