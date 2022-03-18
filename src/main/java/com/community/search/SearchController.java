@@ -31,14 +31,6 @@ public class SearchController {
     private final MarketRepository marketRepository;
     private final StudyRepository studyRepository;
 
-
-    @GetMapping("/search/lists")
-    public String listPage(@CurrentUser Account account, Model model) {
-        model.addAttribute(account);
-        model.addAttribute(new SearchForm());
-        return "search/search-form";
-    }
-
     @PostMapping("/search/lists")
     public String searchPosts(@CurrentUser Account account, SearchForm searchForm, Model model) {
         log.info("검색 조건 : " + searchForm.getSearchType());
