@@ -17,18 +17,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAllByBoardTitleOrderByUploadTimeDesc(String title, Pageable pageable);
 
     /* 검색 관련 쿼리 */
-    List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
-    List<Board> findByTitleContainingAndWriterOrderByUploadTimeDesc(String keyword, String writer);
-    List<Board> findByTitleContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
-
-    List<Board> findByWriterContainingOrderByUploadTimeDesc(String keyword);
-    List<Board> findByWriterContainingAndWriterOrderByUploadTimeDesc(String keyword, String writer);
-    List<Board> findByWriterContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
-
     List<Board> findByContentContainingOrderByUploadTimeDesc(String keyword);
-    List<Board> findByContentContainingAndWriterOrderByUploadTimeDesc(String keyword, String writer);
-    List<Board> findByContentContainingAndBoardTitleOrderByUploadTimeDesc(String keyword, String boardTitle);
-
 
     /* 신고된 게시글 제외 쿼리 */
     List<Board> findAllByWriterIdAndIsReportedOrderByUploadTime(long id, Boolean isReported);

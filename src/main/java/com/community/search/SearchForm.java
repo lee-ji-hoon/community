@@ -1,4 +1,4 @@
-package com.community.board.form;
+package com.community.search;
 
 import lombok.Data;
 import lombok.ToString;
@@ -12,7 +12,5 @@ public class SearchForm {
     private String searchType;
 
     private String keyword;
-
-    private String boardTitle;
 
 }
