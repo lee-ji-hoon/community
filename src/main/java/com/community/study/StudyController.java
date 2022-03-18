@@ -111,7 +111,7 @@ public class StudyController {
         return "study/study-list";
     }
 
-    @GetMapping("/study/{tagTitle}")
+    @GetMapping("/study/search/{tagTitle}")
     public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
 
         Tag byTag = tagService.getTag(tagTitle);
