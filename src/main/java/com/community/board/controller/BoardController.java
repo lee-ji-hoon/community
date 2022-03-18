@@ -8,7 +8,7 @@ import com.community.board.entity.Reply;
 import com.community.board.form.BoardForm;
 import com.community.board.form.ReplyForm;
 import com.community.report.form.BoardReportForm;
-import com.community.board.form.SearchForm;
+import com.community.search.SearchForm;
 import com.community.board.repository.BoardRepository;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
@@ -20,16 +20,12 @@ import com.community.report.repository.BoardReportRepository;
 import com.community.report.repository.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -202,55 +198,5 @@ public class BoardController {
     // TODO Summernote 사진 업로드 구현해야함.
     public void uploadFile() {
 
-    }
-
-    // 검색 기능
-    @PostMapping("/board/search/{boardTitle}")
-    public String searchPost(@PathVariable String boardTitle, SearchForm searchForm, Model model) {
-        log.info("검색 조건 : " + searchForm.getSearchType());
-        log.info("검색 키워드 : " + searchForm.getKeyword());
-        log.info("검색 게시판 : " + searchForm.getBoardTitle());
-        List<Board> searchPosts = boardService.searchPosts(searchForm.getSearchType(), searchForm.getKeyword(), searchForm.getBoardTitle());
-
-        model.addAttribute("board", searchPosts);
-        model.addAttribute("accountRepo", accountRepository);
-        model.addAttribute("service", boardService);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute("bt", boardTitle);
-
-        model.addAttribute(new SearchForm());
-        return "board/board-list";
-    }
-
-    @GetMapping("/board/search/{writerId}")
-    public String findUserPost(@PathVariable long writerId, Model model) {
-        List<Board> boards = boardRepository.findAllByWriterIdAndIsReportedOrderByUploadTime(writerId, false);
-        Optional<Account> account = accountRepository.findById(writerId);
-        model.addAttribute("board", boards);
-        model.addAttribute("accountRepo", accountRepository);
-        model.addAttribute("service", boardService);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute("bt", account.get().getNickname());
-
-        model.addAttribute(new SearchForm());
-        return "board/board-list";
-    }
-
-
-    // 게시판 별로 분류
-    @GetMapping("/board/bt/{boardTitle}")
-    public String boardList(@PathVariable String boardTitle, Model model) {
-        List<Board> boards = boardRepository.findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
-        model.addAttribute("board", boards);
-        model.addAttribute("service", boardService);
-        model.addAttribute("accountRepo", accountRepository);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute("bt", boardTitle);
-
-        model.addAttribute(new SearchForm());
-        return "board/board-list";
     }
 }

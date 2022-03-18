@@ -110,7 +110,7 @@ public class BoardService {
         return boardRepository.findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
     }
 
-    public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
+    /*public List<Board> searchPosts(String searchType, String keyword, String boardTitle) {
         //TODO boardTitle 검색 구현하기
         if (boardTitle.equals("전체게시판")) {
             switch (searchType) {
@@ -176,7 +176,7 @@ public class BoardService {
 
         log.info("검색 조건 및 키워드가 존재하지 않음으로 전체 검색");
         return boardRepository.findAll();
-    }
+    }*/
 
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
