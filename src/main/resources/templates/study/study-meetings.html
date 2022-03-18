@@ -277,6 +277,7 @@
                                 </div>
                             </div>
 
+                            <!-- 내용 -->
                             <div class=" p-5">
                                 <div href="#"
                                    class="text-xl font-semibold"
@@ -293,23 +294,26 @@
                                     <span class="font-semibold"> 주제가 선정 되지 않은 일정입니다.</span>
                                 </div>
                             </div>
+
+                            <!-- 댓글 -->
                             <div class=" px-6 relative">
                                 <div>
                                     <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 mb-2">
-                                        <form id="reply_form" onsubmit="return false">
+                                        <form th:id="|reply_form${meeting.meetingsId}|" onsubmit="return false">
                                             <input type="hidden" id="r_meetings_id" name="r_meetings_id" class="form-control"
                                                    value="1" th:value="${meeting.meetingsId}" readonly>
                                             <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
                                                    value="1" th:value="${account.id}" readonly>
-                                            <input placeholder="댓글을 입력해주세요." class="bg-transparent max-h-10 shadow-none px-5" id="r_content" name="r_content">
+                                            <input placeholder="댓글을 입력해주세요." class="bg-transparent max-h-10 shadow-none px-5"
+                                                   th:id="|r_content${meeting.meetingsId}|" name="r_content">
                                             <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
-                                                <a class="write_reply">
+                                                <span th:id="|replySubmit${meeting.meetingsId}|" th:onclick="|replyBtn.replyAjax(${meeting.meetingsId})|">
                                                     <ion-icon name="return-down-back-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                                                </a>
+                                                </span>
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="reply_div">
+                                    <div th:id="|reply_div${meeting.meetingsId}|">
                                         <div class="py-4 space-y-4 dark:border-gray-600">
                                             <div class="flex" th:each="reply : ${service.replyList(meeting)}">
                                                 <div class="w-10 h-10 rounded-full relative flex-shrink-0">
@@ -462,17 +466,32 @@
     });
 </script>-->
 <script type="application/javascript">
-    let updateBtn = {
-        replyUpdate: function (replyId) {
-            console.log(`${replyId}`);
-            jQuery(`#orginalReply${replyId}`).hide();
-            jQuery(`#replyUpdateBtn${replyId}`).hide();
-            jQuery(`#replyUpdateSubmit${replyId}`).show();
-            $(`#replyUpdateInput${replyId}`).prop("type", "text");
+    // 댓글 작성 ajax
+    let replyBtn={
+        replyAjax: function (meetingsId) {
+            console.log(`${meetingsId}`);
+            console.log("댓글 작성");
+            $.ajax({
+                url: '/study/meetings/reply',
+                type: 'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data: $(`#reply_form${meetingsId}`).serialize(),
+                dataType: "json",
+                success: function (meetingsId) {
+                    console.log("Write Reply Success");
+                    console.log(meetingsId);
+                    // location.reload();
+                    $(`#reply_div${meetingsId}`).load(location.href+' .reply_div');
+                    input.value = '';
+                },
+                error: function (request, status, error) {
+                    console.log("Write Reply Fail" + error);
+                }
+            });
         }
     }
 
-    let updateComplete = {
+    /*let updateComplete = {
         replyUpdateAjax: function (replyId) {
             console.log(`${replyId}`);
             // 댓글 수정 ajax
@@ -498,9 +517,19 @@
             });
         }
     }
+
+    let updateBtn = {
+        replyUpdate: function (replyId) {
+            console.log(`${replyId}`);
+            jQuery(`#orginalReply${replyId}`).hide();
+            jQuery(`#replyUpdateBtn${replyId}`).hide();
+            jQuery(`#replyUpdateSubmit${replyId}`).show();
+            $(`#replyUpdateInput${replyId}`).prop("type", "text");
+        }
+    }
     // 댓글 삭제
     let deleteReplyBtn = {
-        deleteReply: function (replyId) {
+        deleteReply: function (replyId, meetingId) {
             swal({
                 title: "댓글을 삭제하시겠습니까?",
                 text: "삭제된 댓글은 복구할 수 없습니다.",
@@ -524,7 +553,7 @@
                             dataType : "json",
                             success : function (){
                                 console.log("Reply Delete Success");
-                                $('.reply_div').load(location.href+' .reply_div');
+                                $(`.reply_div${meetingId}`).load(location.href+' .reply_div');
                             },
                             error : function (request, status, error){
                                 console.log("Reply Delete Fail" + error);
@@ -558,9 +587,7 @@
 
         //jQuery('#postTitleSub').show();
 
-
-        // input에 있는 값을 가져옴
-        // 댓글 작성 ajax
+        /!*!// 댓글 작성 ajax
         var input = document.getElementById("r_content");
         input.addEventListener('keypress', function(key){
             if (input.value == '' && key.key == 'Enter') {
@@ -584,32 +611,9 @@
                     }
                 });
             }
-        });
-        // 댓글 작성 ajax
-        $(document).on('click', '.write_reply', function() {
-            if (input.value == '') {
-                alert("댓글을 입력해주세요.");
-            }
-            if (input.value != '') {
-                console.log("댓글 작성");
-                $.ajax({
-                    url:'/study/meetings/reply',
-                    type:'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#reply_form').serialize(),
-                    dataType : "json",
-                    success : function (){
-                        console.log("Write Reply Success");
-                        location.reload();
-                        // $('.reply_div').load(location.href+' .reply_div');
-                        input.value ='';
-                    },
-                    error : function (request, status, error){
-                        console.log("Write Reply Fail" + error);
-                    }
-                });
-            }
-        });
+        });*!/
+
+
 
         // 게시글 업데이트
         $(document).on('click', '#board_form_update', function() {
@@ -633,7 +637,7 @@
             });
         });
 
-    });
+    });*/
 </script>
 </body>
 
