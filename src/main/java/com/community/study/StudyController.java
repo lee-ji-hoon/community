@@ -155,7 +155,7 @@ public class StudyController {
     public String meetingListView(@CurrentUser Account account,
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
-        List<Meetings> meetingsList = meetingsRepository.findAllByStudy(studyUpdate);
+        List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(studyUpdate);
 
         /*Meetings meetings = meetingsRepository.findByMeetingsId(meetingsList)
         List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);*/

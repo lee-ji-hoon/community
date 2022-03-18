@@ -224,7 +224,4 @@ public class StudyService {
         meetingsRepository.save(meetings);
     }
 
-    /*public void getMeetingsId(String meetingId) {
-        meetingsRepository.findById();
-    }*/
 }
