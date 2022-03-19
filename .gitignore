@@ -66,6 +66,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+build/generated/sources/annotationProcessor/java/main/com/community/
 src/main/resources/application-dev.properties
 
 src/main/generated/com/community/
