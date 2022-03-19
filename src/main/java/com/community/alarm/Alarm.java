@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Alarm {
     @Id
     @GeneratedValue
+    @Column(name = "alarm_id ")
     private Long id;
 
     private String title;
@@ -26,7 +27,9 @@ public class Alarm {
     @ManyToOne
     private Account account;
 
-    private LocalDateTime createNoticeDateTime;
+    private LocalDateTime createAlarmTime;
+
+    private boolean checked;
 
     @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
