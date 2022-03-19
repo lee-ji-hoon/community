@@ -228,8 +228,6 @@
             integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx" crossorigin="anonymous">
     </script>
 
-
-
     <!-- 기존에서 불러온 것
     ================================================== -->
     <!-- script -->
@@ -262,29 +260,6 @@
     <script src="/assets/js/summernote.min.js"></script>
 </head>
 
-<!-- 아래부터 기존에 쓰던 link 및 script
-================================================== -->
-
-<!--
-<meta charset="UTF-8">
-<title>멀티커뮤니티</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
-
-
-<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-
--->
 
 <!-- Header -->
 <header th:fragment="header">
@@ -761,6 +736,7 @@
             <li class="" th:classappend="${currentMenu == 'description'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}" class="hover:bg-gray-100"> <i class="icon-material-outline-assignment"></i>소개</a></li>
             <li class="" th:classappend="${currentMenu == 'calendar'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/calendar'}" class="hover:bg-gray-100"> <i class="icon-feather-calendar"></i>일정</a></li>
             <li class="" th:classappend="${currentMenu == 'tag'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="hover:bg-gray-100"> <i class="icon-feather-tag"></i>스터디 주제</a></li>
+            <li class="" th:classappend="${currentMenu == 'alarm'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/alarm'}" class="hover:bg-gray-100"> <i class="icon-feather-bell"></i>스터디 알림</a></li>
             <li class="" th:classappend="${currentMenu == 'config'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/config'}" class="hover:bg-gray-100"> <i class="icon-material-outline-https"></i> 설정</a></li>
         </ul>
     </nav>

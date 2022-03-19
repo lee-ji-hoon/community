@@ -3,6 +3,7 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.alarm.study.StudyCreatedPublish;
 import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +62,7 @@ public class StudyController {
     private final TagService tagService;
     private final ReplyService replyService;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
@@ -381,6 +384,33 @@ public class StudyController {
         redirectAttributes.addFlashAttribute("message", "게시글의 일정이 수정됐습니다.");
 
         return "redirect:/study/" + fixPath(path) + "/settings/calendar";
+    }
+
+    @GetMapping(STUDY_SETTINGS + "alarm")
+    public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        return "study/settings/alarm";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "alarm")
+    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path, String image,
+                                             Errors errors, Model model, RedirectAttributes redirectAttributes) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(studyUpdate);
+            return "study/settings/alarm";
+        }
+        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
+
+        redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림이 갔습니다.");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/alarm";
     }
 
     @PostMapping(STUDY_SETTINGS + "banner")

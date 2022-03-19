@@ -56,10 +56,6 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final BooleanPath studyCreatedByWeb = createBoolean("studyCreatedByWeb");
 
-    public final BooleanPath studyEnrollmentResultByEmail = createBoolean("studyEnrollmentResultByEmail");
-
-    public final BooleanPath studyEnrollmentResultByWeb = createBoolean("studyEnrollmentResultByWeb");
-
     public final BooleanPath studyUpdatedByEmail = createBoolean("studyUpdatedByEmail");
 
     public final BooleanPath studyUpdatedByWeb = createBoolean("studyUpdatedByWeb");

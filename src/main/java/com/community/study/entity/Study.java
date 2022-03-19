@@ -96,6 +96,8 @@ public class Study {
 
     private LocalDateTime publishedDateTime;
 
+    private LocalDateTime recentAlarmDateTime;
+
     private boolean useBanner;
 
     private int memberCount;
