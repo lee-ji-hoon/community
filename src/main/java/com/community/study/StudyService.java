@@ -89,7 +89,7 @@ public class StudyService {
         Study accountWithTagsByPath = studyRepository.findAccountWithTagsByPath(path);
         Study byPath = studyRepository.findByPath(path);
 
-        applicationEventPublisher.publishEvent(new StudyCreatedPublish(byPath));
+
 
         checkExistStudy(path, accountWithTagsByPath);
         checkManager(account, accountWithTagsByPath);
@@ -232,4 +232,8 @@ public class StudyService {
         meetingsRepository.save(meetings);
     }
 
+    public boolean checkAlarmDateTime(Study studyUpdate) {
+        return studyUpdate.getRecentAlarmDateTime().isBefore(LocalDateTime.now().minusHours(24));
+
+    }
 }

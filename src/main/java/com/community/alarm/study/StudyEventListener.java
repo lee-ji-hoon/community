@@ -41,17 +41,21 @@ public class StudyEventListener {
     public void studyCreate(StudyCreatedPublish studyCreatedPublish) {
         log.info("스터디 알람 실행");
         Study study = studyRepository.findStudyWithTagsById(studyCreatedPublish.getStudy().getId());
+        study.setRecentAlarmDateTime(LocalDateTime.now());
 
         Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTags(study.getTags()));
 
         accounts.forEach( account -> {
             if (account.isStudyCreatedByEmail()) {
+                log.info("스터디 이메일 발송 study : {}", study );
+                log.info("스터디 이메일 발송 account : {}", account.getEmail() );
                 sendEmail(study, account);
             }
 
             if (account.isStudyCreatedByWeb()) {
                 sendWeb(study, account);
-
+                log.info("스터디 웹 발송 study : {}", study );
+                log.info("스터디 웹 발송 account : {}", account );
             }
         });
 

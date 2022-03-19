@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEvent;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Slf4j
 public class StudyCreatedPublish{
@@ -14,6 +16,7 @@ public class StudyCreatedPublish{
 
     public StudyCreatedPublish(Study newStudy) {
         log.info("studyCreatePublish");
+        newStudy.setRecentAlarmDateTime(LocalDateTime.now());
         this.study = newStudy;
     }
 }

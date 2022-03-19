@@ -46,6 +46,8 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final DateTimePath<java.time.LocalDateTime> publishedDateTime = createDateTime("publishedDateTime", java.time.LocalDateTime.class);
 
+    public final DateTimePath<java.time.LocalDateTime> recentAlarmDateTime = createDateTime("recentAlarmDateTime", java.time.LocalDateTime.class);
+
     public final StringPath shortDescription = createString("shortDescription");
 
     public final DatePath<java.time.LocalDate> startStudyDate = createDate("startStudyDate", java.time.LocalDate.class);

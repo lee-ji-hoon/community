@@ -110,6 +110,10 @@ public class Study {
         this.memberCount++;
     }
 
+    public boolean checkAlarmDateTime() {
+        return this.recentAlarmDateTime.isBefore(LocalDateTime.now().minusHours(24));
+    }
+
     public boolean isJoinable(UserAccount userAccount) {
         Account account = userAccount.getAccount();
         return this.recruiting() && !this.members.contains(account) && !this.managers.contains(account);

@@ -43,6 +43,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -397,18 +398,29 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "alarm")
-    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path, String image,
-                                             Errors errors, Model model, RedirectAttributes redirectAttributes) {
+    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path,
+                                 RedirectAttributes redirectAttributes, Model model) {
+        log.info("알람 실행");
         Study studyUpdate = studyService.getStudyUpdate(account, path);
+        boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
 
-        if (errors.hasErrors()) {
+        log.info("study tags getTags: {}", studyUpdate.getTags());
+        if (studyUpdate.getTags().isEmpty()) {
+            log.info("study tags 비어있음 getTags: {}", studyUpdate.getTags());
             model.addAttribute(account);
-            model.addAttribute(studyUpdate);
-            return "study/settings/alarm";
+            redirectAttributes.addFlashAttribute("alert", "스터디 주제 설정 후 알림을 보내주시기 바랍니다.");
+            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+        }
+
+        if(!checkAlarmDateTime){
+            log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
+            redirectAttributes.addFlashAttribute("alert", "스터디 알람은 24시간에 한 번씩만 가능합니다.");
+            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+
         }
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
 
-        redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림이 갔습니다.");
+        redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
 
         return "redirect:/study/" + fixPath(path) + "/settings/alarm";
     }

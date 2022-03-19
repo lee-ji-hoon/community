@@ -18,11 +18,14 @@
             <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
                 <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='alarm')"></div>
                 <div class="lg:w-2/3">
+                    <div th:if="${alert}" class="m-5">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${alert})"></div>
+                    </div>
                     <div th:if="${message}" class="m-5">
                         <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
                     </div>
                     <form class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
-                          th:action="@{'/study/' + ${study.getPath()} + '/settings/calendar'}"
+                          th:action="@{'/study/' + ${study.getPath()} + '/settings/alarm'}"
                           method="post" novalidate>
                         <h3 class="text-xl mb-2 font-semibold"> 스터디 알람</h3>
                         <p> 관심분야가 동일한 회원들에게 알림을 보낼 수 있습니다.</p>
