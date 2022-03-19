@@ -15,7 +15,7 @@
     <div class="main_content">
         <div class="mcontainer">
             <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
-                <div th:replace="theme-fragments.html :: profile-settings-menu(currentMenu='notifications')"></div>
+                <div th:replace="theme-fragments.html :: profile-settings-menu(currentMenu='alarm')"></div>
 
                 <div class="lg:w-2/3">
 
@@ -33,10 +33,9 @@
                             <p class="">알림을 받을 항목들을 체크해주세요. </p>
                         </div>
 
-                        <form class="lg:py-8 lg:px-10 flex-1 space-y-4 p-6" action="#"
-                              th:action="@{/settings/notifications}"
-                              th:object="${notificationsForm}"
-                              method="post" novalidate>
+                        <form class="lg:py-8 lg:px-10 flex-1 space-y-4 p-6"
+                              id="updateAlarmForm" name="updateAlarmForm"
+                              onsubmit="return false" novalidate>
 
                             <div>
                                 <h4>스터디 알림</h4>
@@ -45,35 +44,16 @@
                             <div class="switches-list -mt-8 is-large">
                                 <div class="switch-container">
                                     <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyCreatedByWeb}"></span>
+                                        <input type="checkbox" name="studyCreatedByWeb" id="studyCreatedByWeb"
+                                               th:checked="${account.studyCreatedByWeb == true}">
+                                        <span class="switch-button"></span>
                                         웹으로 받기
                                     </label>
 
                                     <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyCreatedByWeb}"></span>
-                                        이메일로 받기
-                                    </label>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div>
-                                <h4>스터디 신청 결과</h4>
-                                <div>신청한 스터디 알림을 받을 방법을 선택해주세요 </div>
-                            </div>
-                            <div class="switches-list -mt-8 is-large">
-                                <div class="switch-container">
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyEnrollmentResultByWeb}"></span>
-                                        웹으로 받기
-                                    </label>
-
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyEnrollmentResultByEmail}"></span>
+                                        <input type="checkbox" name="studyCreatedByEmail" id="studyCreatedByEmail"
+                                               th:checked="${account.studyCreatedByEmail == true}">
+                                        <span class="switch-button"></span>
                                         이메일로 받기
                                     </label>
                                 </div>
@@ -87,20 +67,23 @@
                             <div class="switches-list -mt-8 is-large">
                                 <div class="switch-container">
                                     <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyUpdatedByWeb}"></span>
+                                        <input type="checkbox" name="studyUpdatedByWeb"  id="studyUpdatedByWeb"
+                                               th:checked="${account.studyUpdatedByWeb == true}">
+                                        <span class="switch-button" ></span>
                                         웹으로 받기
                                     </label>
 
                                     <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="switch-button" th:field="*{studyCreatedByWeb}"></span>
+                                        <input type="checkbox" name="studyUpdatedByEmail"  id="studyUpdatedByEmail"
+                                               th:checked="${account.studyUpdatedByEmail == true}">
+                                        <span class="switch-button" ></span>
                                         이메일로 받기
                                     </label>
                                 </div>
                             </div>
 
-                            <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 저장 </button>
+                            <button onclick="alarmUpdateBtn.alarmAjax()"
+                                    aria-describedby="submitHelp" class="button bg-blue-700"> 저장 </button>
                         </form>
                     </div>
                 </div>
@@ -108,5 +91,23 @@
         </div>
     </div>
 </div>
+<script type="application/javascript">
+    let alarmUpdateBtn = {
+        alarmAjax: function () {
+            $.ajax({
+                url:'/settings/alarm/update',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#updateAlarmForm`).serialize(),
+                success : function (message){
+                    location.reload();
+                },
+                error : function (request, status, error){
+                }
+            });
+        }
+    }
+
+</script>
 </body>
 </html>

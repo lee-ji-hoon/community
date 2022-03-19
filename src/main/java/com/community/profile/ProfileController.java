@@ -148,22 +148,32 @@ public class ProfileController {
     @GetMapping(SETTINGS_ALARM_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new NotificationsForm(account));
+        model.addAttribute(new AlarmForm(account));
         return SETTINGS_ALARM_VIEW_NAME;
     }
 
     // 알림 설정 변경 요청
-    @PostMapping(SETTINGS_ALARM_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid NotificationsForm notifications, Errors errors,
-                                      Model model, RedirectAttributes attributes) {
-        if (errors.hasErrors()) {
-            model.addAttribute(account);
-            return SETTINGS_ALARM_VIEW_NAME;
-        }
-        log.info("알림 설정 변경 {}", notifications);
-        profileService.updateNotifications(account, notifications);
+    @GetMapping(SETTINGS_ALARM_URL + "/update")
+    @ResponseBody
+    public ResponseEntity updateNotifications(@CurrentUser Account account, AlarmForm alarmForm, Model model, RedirectAttributes attributes,
+                                              @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
+                                              @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
+                                              @RequestParam(required = false, value = "studyUpdatedByWeb") String studyUpdatedByWeb,
+                                              @RequestParam(required = false, value = "studyUpdatedByEmail") String studyUpdatedByEmail) {
+        log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
+        log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
+        log.info("스터디 모임 이메일 업데이트 : {}", studyUpdatedByEmail);
+        log.info("스터디 모임 웹 업데이트 : {}", studyUpdatedByWeb);
+
+        account.setStudyCreatedByWeb(studyCreatedByWeb != null);
+        account.setStudyCreatedByEmail(studyCreatedByEmail != null);
+        account.setStudyUpdatedByWeb(studyUpdatedByWeb != null);
+        account.setStudyUpdatedByEmail(studyUpdatedByEmail != null);
+        accountRepository.save(account);
+
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
-        return "redirect:" + SETTINGS_ALARM_URL;
+
+        return ResponseEntity.ok().build();
     }
 
     // 닉네임 변경 페이지
@@ -175,6 +185,7 @@ public class ProfileController {
     }
 
     // 닉네임 변경 요청
+
     @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {

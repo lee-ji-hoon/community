@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class NotificationsForm {
+public class AlarmForm {
 
     private boolean studyCreatedByEmail;
 
@@ -16,7 +16,7 @@ public class NotificationsForm {
 
     private boolean studyUpdatedByWeb;
 
-    public NotificationsForm(Account account) {
+    public AlarmForm(Account account) {
         this.studyCreatedByEmail = account.isStudyCreatedByEmail();
         this.studyCreatedByWeb = account.isStudyCreatedByWeb();
         this.studyUpdatedByEmail = account.isStudyUpdatedByEmail();

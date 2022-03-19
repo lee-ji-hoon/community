@@ -5,8 +5,7 @@ import com.community.account.repository.AccountRepository;
 import com.community.account.AccountService;
 import com.community.account.repository.PersistentLoginsRepository;
 import com.community.board.repository.BoardRepository;
-import com.community.profile.form.ProfileImgForm;
-import com.community.profile.form.NotificationsForm;
+import com.community.profile.form.AlarmForm;
 import com.community.profile.form.ProfileForm;
 import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,7 +47,7 @@ public class ProfileService {
     }
 
     // 알림설정 업데이트
-    public void updateNotifications(Account account, NotificationsForm notifications) {
+    public void updateNotifications(Account account, AlarmForm notifications) {
         account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
         account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
