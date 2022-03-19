@@ -405,6 +405,8 @@ public class StudyController {
         boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
 
         log.info("study tags getTags: {}", studyUpdate.getTags());
+
+        // 스터디 태그 미설정 시
         if (studyUpdate.getTags().isEmpty()) {
             log.info("study tags 비어있음 getTags: {}", studyUpdate.getTags());
             model.addAttribute(account);
@@ -412,12 +414,13 @@ public class StudyController {
             return "redirect:/study/" + fixPath(path) + "/settings/alarm";
         }
 
+        /*// 24시간 체크 로직
         if(!checkAlarmDateTime){
             log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
             redirectAttributes.addFlashAttribute("alert", "스터디 알람은 24시간에 한 번씩만 가능합니다.");
             return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+        }*/
 
-        }
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
 
         redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
