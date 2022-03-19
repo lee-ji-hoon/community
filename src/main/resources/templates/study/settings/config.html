@@ -22,10 +22,6 @@
                         <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
                     </div>
                     <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
-                        <h3 class="text-xl mb-2 font-semibold"> 스터디 설정</h3>
-                        <p> 스터디 경로 및 이름을 변경 할 수 있습니다.</p>
-
-                        <hr th:if="${!study.endStudy()}"/>
                         <div class="row" th:if="${study.endStudy()}">
                             <div class="alert alert-primary" role="alert">
                                 스터디 종료 이후에는 경로, 이름 변경이 불가능합니다. <br/>
@@ -33,13 +29,10 @@
                         </div>
 
                         <div class="row" th:if="${!study.endStudy()}">
-                            <h5 class="col-sm-12">스터디 경로</h5>
+                            <span class="col-sm-12 text-xl">스터디 경로</span>
 
                             <form class="col-sm-12 needs-validation" th:action="@{'/study/' + ${study.path} + '/settings/config/path'}"
                                   method="post" novalidate>
-                                <div class="alert alert-primary" role="alert">
-                                    스터디 경로를 수정하면 이전에 사용하던 경로로 스터디에 접근할 수 없으니 주의하세요. <br/>
-                                </div>
                                 <div class="form-group">
                                     <input id="path" type="text" name="newPath" th:value="${study.path}" class="shadow-none with-border form-control"
                                            placeholder="예) study-path" aria-describedby="pathHelp" required>
@@ -50,18 +43,15 @@
                                     <small class="form-text text-danger" th:if="${studyPathError}" th:text="${studyPathError}">Path Error</small>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">경로 수정</button>
+                                    <button class="btn bg-blue-600 text-white" type="submit" aria-describedby="submitHelp">경로 수정</button>
                                 </div>
                             </form>
                         </div>
 
                         <hr th:if="${!study.endStudy()}"/>
                         <div class="row" th:if="${!study.endStudy()}">
-                            <h5 class="col-12">스터디 이름</h5>
+                            <span class="col-sm-12 text-xl">스터디 이름</span>
                             <form class="needs-validation col-12" action="#" th:action="@{'/study/' + ${study.path} + '/settings/config/title'}" method="post" novalidate>
-                                <div class="alert alert-primary" role="alert">
-                                    스터디 이름을 수정합니다.<br/>
-                                </div>
                                 <div class="form-group">
                                     <label for="title">스터디 이름</label>
                                     <input id="title" type="text" name="newTitle" th:value="${study.title}" class="form-control shadow-none with-border"
@@ -73,20 +63,20 @@
                                     <small class="form-text text-danger" th:if="${studyTitleError}" th:text="${studyTitleError}">Title Error</small>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">스터디 이름 수정</button>
+                                    <button class="btn bg-blue-600 text-white" type="submit" aria-describedby="submitHelp">스터디 이름 수정</button>
                                 </div>
                             </form>
                         </div>
 
                         <hr/>
                         <div class="row">
-                            <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
+                            <span class="col-sm-12 text-xl text-red-500">스터디 삭제</span>
                             <form class="col-sm-12" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/config/remove'}" method="post" novalidate>
                                 <div class="alert alert-danger" role="alert">
                                     스터디를 삭제하면 스터디 관련 모든 기록을 삭제하며 복구할 수 없습니다. <br/>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">스터디 삭제</button>
+                                    <button class="btn bg-red-600 text-white" type="submit" aria-describedby="submitHelp">스터디 삭제</button>
                                 </div>
                             </form>
                         </div>

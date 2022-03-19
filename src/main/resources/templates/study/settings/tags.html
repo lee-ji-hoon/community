@@ -37,9 +37,12 @@
             <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
                 <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='tag')"></div>
                 <div class="lg:w-2/3">
-                    <div class="lg:px-10 lg:py-6 p-6" style="padding-bottom: 0.5rem">
-                        <h3 class="font-bold mb-2 text-xl">스터디 주제</h3>
-                        <p class=""> 스터디에서 주로 다루는 주제를 태그로 등록하세요. <p>태그를 입력하고 콤마(,) 또는 엔터를 입력하세요. </p>
+                    <div class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
+                         style="padding-bottom: 0.5rem">
+                        <h3 class="text-xl mb-2 font-semibold">스터디 주제</h3>
+                        <p class=""> 스터디에서 주로 다루는 주제를 태그로 등록하세요.</p>
+                        <hr/>
+                        <p>태그를 입력하고 콤마(,) 또는 엔터를 입력하세요. </p>
                         <div class="" id="tagList" th:text="${tagList}" hidden></div>
                         <div class="keywords-container max-w-lg flow-root">
                             <div class="keyword-input-container">
