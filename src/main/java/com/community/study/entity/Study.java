@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -173,5 +175,9 @@ public class Study {
     public void removeMember(Account account) {
         this.getMembers().remove(account);
         this.memberCount--;
+    }
+
+    public String getEncodePath() {
+        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
     }
 }

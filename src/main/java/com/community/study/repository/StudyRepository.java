@@ -40,4 +40,8 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findFirst9ByOrderByMemberCount();
+
+    @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
+    Study findStudyWithTagsById(Long id);
+
 }
