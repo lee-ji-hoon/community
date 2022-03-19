@@ -56,6 +56,7 @@ public class StudyEventListener {
 
             if (account.isStudyCreatedByWeb()) {
                 sendWeb(study, account);
+                // TODO 웹 view 구현 및 실제 발송 필요
                 log.info("스터디 웹 발송 study : {}", study );
                 log.info("스터디 웹 발송 account : {}", account );
             }
