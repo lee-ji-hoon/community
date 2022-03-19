@@ -95,6 +95,10 @@ public class Account {
 
     private boolean studyUpdatedByWeb = false;
 
+    private boolean replyCreateByEmail = false;
+    
+    private boolean replyCreateByWeb = false;
+
     // TODO
     // 알림 추가
 

@@ -233,6 +233,10 @@ public class StudyService {
     }
 
     public boolean checkAlarmDateTime(Study studyUpdate) {
+
+        if (studyUpdate.getRecentAlarmDateTime() == null) {
+            return true;
+        }
         return studyUpdate.getRecentAlarmDateTime().isBefore(LocalDateTime.now().minusHours(24));
 
     }
