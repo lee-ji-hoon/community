@@ -54,8 +54,6 @@ public class ProfileService {
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
         account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
         account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
-        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
         accountRepository.save(account);
     }
 
