@@ -494,9 +494,7 @@
 
     let updateComplete = {
         replyUpdateAjax: function (replyId) {
-            console.log(`${replyId}`);
             // 댓글 수정 ajax
-            console.log("댓글 수정");
             $.ajax({
                 url:'/study/meetings/reply/update',
                 type:'get',
@@ -522,7 +520,6 @@
 
     let updateMeeting = {
         updateMeetingAjax: function (meetingsId){
-            console.log("Board Update 실행");
             $.ajax({
                 url:'/study/meetings/update',
                 type:'get',
@@ -542,7 +539,6 @@
 
     let updateBtn = {
         replyUpdate: function (replyId) {
-            console.log(`${replyId}`);
             jQuery(`#orginalReply${replyId}`).hide();
             jQuery(`#replyUpdateBtn${replyId}`).hide();
             jQuery(`#replyUpdateSubmit${replyId}`).show();
@@ -566,7 +562,6 @@
                         }
                     })
                     if (willDelete) {
-                        console.log("댓글 삭제");
                         $.ajax({
                             url:'/study/meetings/reply/delete',
                             type:'get',
