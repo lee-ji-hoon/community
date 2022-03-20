@@ -150,6 +150,7 @@ public class StudyController {
         }
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
+
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
     // 스터디 뷰 이동
