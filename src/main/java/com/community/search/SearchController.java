@@ -83,13 +83,10 @@ public class SearchController {
                 List<Study> searchTag = studyRepository.findByTagsContaining(tag);
                 studyList.addAll(searchTag);
             }
-            /*List<Study> searchContent = studyRepository.findByFullDescriptionContaining(keyword);
-            for (Study study : searchContent) {
-                log.info("study Content : " + study.getId());
-            }*/
+            List<Study> searchContent = studyRepository.findByFullDescriptionContaining(keyword);
             List<Study> searchTitle = studyRepository.findByTitleContaining(keyword);
 
-            /*studyList.addAll(searchContent);*/
+            studyList.addAll(searchContent);
             studyList.addAll(searchTitle);
 
             for (Study study : studyList) {
