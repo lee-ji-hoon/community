@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of = "rid")
+@EqualsAndHashCode(of = "report_id")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
