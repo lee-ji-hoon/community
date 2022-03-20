@@ -88,7 +88,7 @@ public class StudyEventListener {
 
         String process = templateEngine.process("account/study-link", context);
         EmailMessage emailMessage = EmailMessage.builder()
-                .subject("unect의 " + study.getTitle() + "스터디가 생겼습 니다.")
+                .subject("unect의 " + study.getTitle() + "스터디가 생겼습니다.")
                 .to(account.getEmail())
                 .message(process)
                 .build();
