@@ -98,8 +98,6 @@ public class Study {
 
     private LocalDateTime recentAlarmDateTime;
 
-    private boolean useBanner;
-
     private int memberCount;
 
     private int limitMember;

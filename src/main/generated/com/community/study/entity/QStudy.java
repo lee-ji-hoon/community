@@ -60,8 +60,6 @@ public class QStudy extends EntityPathBase<Study> {
 
     public final StringPath title = createString("title");
 
-    public final BooleanPath useBanner = createBoolean("useBanner");
-
     public QStudy(String variable) {
         super(Study.class, forVariable(variable));
     }

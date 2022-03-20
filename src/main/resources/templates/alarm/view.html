@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="theme-fragments.html :: head"></head>
+
+<body>
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4 ">
+                <div class="lg:w-1/3">
+                    <nav class="responsive-nav setting-nav setting-menu ">
+                        <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
+                            <li>
+                                <a href="#" class="hover:bg-gray-100">
+                                    스터디
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100">
+                                    댓글
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100">
+                                    좋아요
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100">
+                                    읽은 알림
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="hover:bg-gray-100">
+                                    읽은 알림 삭제
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="lg:w-2/3">
+                    <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#" th:each="study : ${newStudyAlarms}" th:href="@{'/study/' + ${study.path}}"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted" th:text="${study.title}">Noti title</small>
+                                        <small class="fromNow text-muted" th:text="${service.meetingDateTime(study.createAlarmTime)}">3 days ago</small>
+                                    </div>
+                                    <p class="text-left mb-0 mt-1" th:text="${study.message}">message</p>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted">Noti title</small>
+                                        <small class="fromNow text-muted">31 days ago</small>
+                                    </div>
+                                    <p class="text-left mb-0 mt-1">message</p>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted">Noti title</small>
+                                        <small class="fromNow text-muted">31 days ago</small>
+                                    </div>
+                                    <p class="text-left mb-0 mt-1">message</p>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted">Noti title</small>
+                                        <small class="fromNow text-muted">32 days ago</small>
+                                    </div>
+                                    <p class="text-left mb-0 mt-1">message</p>
+                                </a>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <small class="text-muted">Noti title</small>
+                                        <small class="fromNow text-muted">32 days ago</small>
+                                    </div>
+                                    <p class="text-left mb-0 mt-1">message</p>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

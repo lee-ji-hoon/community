@@ -36,6 +36,8 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final StringPath message = createString("message");
 
+    public final StringPath path = createString("path");
+
     public final StringPath title = createString("title");
 
     public QAlarm(String variable) {

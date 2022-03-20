@@ -71,6 +71,7 @@ public class StudyEventListener {
         alarm.setLink("/study/" + study.getEncodePath());
         alarm.setChecked(false);
         alarm.setCreateAlarmTime(LocalDateTime.now());
+        alarm.setPath(study.getPath());
         alarm.setMessage(study.getShortDescription());
         alarm.setAccount(account);
         alarm.setAlarmType(AlarmType.STUDY);
