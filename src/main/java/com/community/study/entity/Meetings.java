@@ -31,7 +31,7 @@ public class Meetings {
     @Basic(fetch = FetchType.EAGER)
     private String meetingDescription;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = Study.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
 
@@ -39,7 +39,7 @@ public class Meetings {
     @JoinColumn(name = "writer_id")
     private Account writer;
 
-    @OneToMany(mappedBy = "meetings")
+    @OneToMany(mappedBy = "meetings", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>();
 
     private String meetingMethod;

@@ -14,7 +14,7 @@ public interface MeetingsRepository extends JpaRepository<Meetings, Long> {
 
     List<Meetings> findFirst9ByOrderByUploadTimeDesc();
 
-    List<Meetings> findAllByStudy(Study study);
+    List<Meetings> findAllByStudyOrderByUploadTimeDesc(Study study);
 
     Meetings findByMeetingsId(long id);
 }

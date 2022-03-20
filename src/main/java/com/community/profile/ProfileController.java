@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,15 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,8 +44,8 @@ public class ProfileController {
     private static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
     private static final String SETTINGS_PASSWORD_URL = "/settings/password";
 
-    private static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
-    private static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
+    private static final String SETTINGS_ALARM_VIEW_NAME = "settings/alarm";
+    private static final String SETTINGS_ALARM_URL = "/settings/alarm";
 
     private static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     private static final String SETTINGS_ACCOUNT_URL = "/settings/account";
@@ -152,25 +145,35 @@ public class ProfileController {
     }
 
     // 알림 설정 변경 페이지
-    @GetMapping(SETTINGS_NOTIFICATIONS_URL)
+    @GetMapping(SETTINGS_ALARM_URL)
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(new NotificationsForm(account));
-        return SETTINGS_NOTIFICATIONS_VIEW_NAME;
+        model.addAttribute(new AlarmForm(account));
+        return SETTINGS_ALARM_VIEW_NAME;
     }
 
     // 알림 설정 변경 요청
-    @PostMapping(SETTINGS_NOTIFICATIONS_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid NotificationsForm notifications, Errors errors,
-                                      Model model, RedirectAttributes attributes) {
-        if (errors.hasErrors()) {
-            model.addAttribute(account);
-            return SETTINGS_NOTIFICATIONS_VIEW_NAME;
-        }
+    @GetMapping(SETTINGS_ALARM_URL + "/update")
+    @ResponseBody
+    public ResponseEntity updateNotifications(@CurrentUser Account account, AlarmForm alarmForm, Model model, RedirectAttributes attributes,
+                                              @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
+                                              @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
+                                              @RequestParam(required = false, value = "studyUpdatedByWeb") String studyUpdatedByWeb,
+                                              @RequestParam(required = false, value = "studyUpdatedByEmail") String studyUpdatedByEmail) {
+        log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
+        log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
+        log.info("스터디 모임 이메일 업데이트 : {}", studyUpdatedByEmail);
+        log.info("스터디 모임 웹 업데이트 : {}", studyUpdatedByWeb);
 
-        profileService.updateNotifications(account, notifications);
+        account.setStudyCreatedByWeb(studyCreatedByWeb != null);
+        account.setStudyCreatedByEmail(studyCreatedByEmail != null);
+        account.setStudyUpdatedByWeb(studyUpdatedByWeb != null);
+        account.setStudyUpdatedByEmail(studyUpdatedByEmail != null);
+        accountRepository.save(account);
+
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
-        return "redirect:" + SETTINGS_NOTIFICATIONS_URL;
+
+        return ResponseEntity.ok().build();
     }
 
     // 닉네임 변경 페이지
@@ -182,6 +185,7 @@ public class ProfileController {
     }
 
     // 닉네임 변경 요청
+
     @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {

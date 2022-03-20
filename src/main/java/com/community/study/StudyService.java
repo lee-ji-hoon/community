@@ -1,6 +1,7 @@
 package com.community.study;
 
 import com.community.account.entity.Account;
+import com.community.alarm.study.StudyCreatedPublish;
 import com.community.board.entity.Reply;
 import com.community.board.repository.ReplyRepository;
 import com.community.board.service.BoardService;
@@ -15,6 +16,7 @@ import com.community.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +40,12 @@ public class StudyService {
     private final ReplyRepository replyRepository;
 
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
+
         return newStudy;
     }
 
@@ -83,6 +87,10 @@ public class StudyService {
 
     public Study getStudyUpdateTag(Account account, String path) {
         Study accountWithTagsByPath = studyRepository.findAccountWithTagsByPath(path);
+        Study byPath = studyRepository.findByPath(path);
+
+
+
         checkExistStudy(path, accountWithTagsByPath);
         checkManager(account, accountWithTagsByPath);
 
@@ -224,7 +232,12 @@ public class StudyService {
         meetingsRepository.save(meetings);
     }
 
-    /*public void getMeetingsId(String meetingId) {
-        meetingsRepository.findById();
-    }*/
+    public boolean checkAlarmDateTime(Study studyUpdate) {
+
+        if (studyUpdate.getRecentAlarmDateTime() == null) {
+            return true;
+        }
+        return studyUpdate.getRecentAlarmDateTime().isBefore(LocalDateTime.now().minusHours(24));
+
+    }
 }

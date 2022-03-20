@@ -3,6 +3,7 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.alarm.study.StudyCreatedPublish;
 import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +43,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +63,7 @@ public class StudyController {
     private final TagService tagService;
     private final ReplyService replyService;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
@@ -111,7 +115,7 @@ public class StudyController {
         return "study/study-list";
     }
 
-    @GetMapping("/study/{tagTitle}")
+    @GetMapping("/study/search/{tagTitle}")
     public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
 
         Tag byTag = tagService.getTag(tagTitle);
@@ -155,7 +159,7 @@ public class StudyController {
     public String meetingListView(@CurrentUser Account account,
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
-        List<Meetings> meetingsList = meetingsRepository.findAllByStudy(studyUpdate);
+        List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(studyUpdate);
 
         /*Meetings meetings = meetingsRepository.findByMeetingsId(meetingsList)
         List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);*/
@@ -171,7 +175,7 @@ public class StudyController {
     @PostMapping(STUDY_PATH_URL + "/meetings")
     public String meetingList(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
-        log.info("스터디 실행");
+        log.info("모임 생성");
         Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
 /*        if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -181,8 +185,51 @@ public class StudyController {
         studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
         model.addAttribute(account);
 
-        log.info("스터디 종료");
+        log.info("모임 생성 성공");
         return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
+    }
+
+    @GetMapping(STUDY_PATH_URL + "/meetings/{meetingsId}")
+    public String deleteMeeting(@CurrentUser Account account, @PathVariable String path,
+                                Model model, @PathVariable long meetingsId) {
+        log.info("모임 삭제 실행");
+        Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
+
+        meetingsRepository.deleteById(meetingsId);
+
+        model.addAttribute(account);
+
+        log.info("모임 삭제 성공");
+
+        return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
+    }
+
+    // 모임 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply")
+    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
+                                   @RequestParam(value = "r_account_id") Long r_account_id,
+                                   @RequestParam(value = "r_content") String r_content,
+                                   ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_meetings_id + "r_meetings_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
     }
 
     @ResponseBody
@@ -222,56 +269,6 @@ public class StudyController {
         log.info("잘못된 게시물 수정 요청 : bid = " + meetingId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
-    }
-
-    /*@GetMapping(STUDY_PATH_URL + "/meetings/{meetingId}")
-    public String meetingView(@CurrentUser Account account, @PathVariable String path,
-                              Model model, @PathVariable long meetingId) {
-        log.info("스터디 모임 상세 페이지 실행");
-        Study studyUpdate = studyService.getStudyToUpdateStatusByMember(path);
-        Meetings meetings = meetingsRepository.findByMeetingsId(meetingId);
-        List<String> meetingTagsList = studyService.getMeetingTagsList(meetings);
-
-
-        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);
-
-        model.addAttribute("meeting", meetings);
-        model.addAttribute("service", studyService);
-        model.addAttribute("reply", replies);
-        model.addAttribute("meetingTagsList", meetingTagsList);
-        model.addAttribute(new MeetingsForm());
-        model.addAttribute(studyUpdate);
-        model.addAttribute(account);
-
-        return "study/study-meetings-detail";
-    }*/
-
-    // 모임 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/study/meetings/reply")
-    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
-                                   @RequestParam(value = "r_account_id") Long r_account_id,
-                                   @RequestParam(value = "r_content") String r_content,
-                                   ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_meetings_id + "r_meetings_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
     }
 
     @ResponseBody
@@ -388,6 +385,47 @@ public class StudyController {
         redirectAttributes.addFlashAttribute("message", "게시글의 일정이 수정됐습니다.");
 
         return "redirect:/study/" + fixPath(path) + "/settings/calendar";
+    }
+
+    @GetMapping(STUDY_SETTINGS + "alarm")
+    public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        return "study/settings/alarm";
+    }
+
+    @PostMapping(STUDY_SETTINGS + "alarm")
+    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path,
+                                 RedirectAttributes redirectAttributes, Model model) {
+        log.info("알람 실행");
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+        boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
+
+        log.info("study tags getTags: {}", studyUpdate.getTags());
+
+        // 스터디 태그 미설정 시
+        if (studyUpdate.getTags().isEmpty()) {
+            log.info("study tags 비어있음 getTags: {}", studyUpdate.getTags());
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("alert", "스터디 주제 설정 후 알림을 보내주시기 바랍니다.");
+            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+        }
+
+        /*// 24시간 체크 로직
+        if(!checkAlarmDateTime){
+            log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
+            redirectAttributes.addFlashAttribute("alert", "스터디 알람은 24시간에 한 번씩만 가능합니다.");
+            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+        }*/
+
+        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
+
+        redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
+
+        return "redirect:/study/" + fixPath(path) + "/settings/alarm";
     }
 
     @PostMapping(STUDY_SETTINGS + "banner")
