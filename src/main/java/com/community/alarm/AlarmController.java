@@ -3,8 +3,10 @@ package com.community.alarm;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.study.StudyService;
+import com.community.study.entity.Meetings;
 import com.community.study.entity.Study;
-import com.community.tag.Tag;
+import com.community.study.form.MeetingsForm;
+import com.community.study.repository.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ import java.util.List;
 public class AlarmController {
 
     private final AlarmRepository alarmRepository;
+    private final MeetingsRepository meetingsRepository;
 
     private final StudyService studyService;
     private final AlarmService alarmService;
@@ -34,26 +39,40 @@ public class AlarmController {
         model.addAttribute(account);
         model.addAttribute("service", alarmService);
         model.addAttribute("new", true);
-//        alarmService.markAsRead(alarmList);
         return "alarm/view";
     }
 
-    @GetMapping("/alarm/{type}/{path}")
-    public String moveAlarmLink(@CurrentUser Account account, @PathVariable String type, @PathVariable String path, Model model) {
-        log.info("alarmByPath : {}", path);
-        log.info("alarmByType : {}", type);
+    @GetMapping("/alarm/{alarmId}")
+    public String moveAlarmLink(@CurrentUser Account account,
+                                @PathVariable Long alarmId, Model model) {
+        log.info("alarmByPath : {}", alarmId);
+        log.info("accountId : {}", account.getId());
 
-        if (type.equals("study")) {
-            log.info("study 페이징 이동 : {}", path);
-            Study bypath = studyService.getPath(path);
-            model.addAttribute(account);
-            model.addAttribute(bypath);
-            return "study/study-view";
+        Alarm byAlarmId = alarmRepository.findByAlarmId(alarmId);
+        AlarmType type = byAlarmId.getAlarmType();
+        String path = byAlarmId.getPath();
+
+        alarmService.markAsRead(byAlarmId);
+
+        log.info("byPathAndType : {}", byAlarmId);
+        model.addAttribute(account);
+        switch (type){
+            case STUDY: log.info("study 페이지 이동 : {}", path);
+                Study studyByPath = studyService.getPath(path);
+                model.addAttribute(studyByPath);
+                return "study/study-view";
+
+            case MEETING: log.info("meeting 페이지 이동 : {}", path);
+                Study meetingByPath = studyService.getPath(path);
+                List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(meetingByPath);
+
+                model.addAttribute("service", studyService);
+                model.addAttribute("meetingsList", meetingsList);
+                model.addAttribute(meetingByPath);
+                model.addAttribute(new MeetingsForm());
+                return "study/study-meetings";
         }
-
-
         return "alarm/view";
-
     }
 
     void alarmType(Model model, List<Alarm> alarmList, long countChecked, long countNotChecked) {

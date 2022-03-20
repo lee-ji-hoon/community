@@ -67,15 +67,15 @@
                             <div class="switches-list -mt-8 is-large">
                                 <div class="switch-container">
                                     <label class="switch">
-                                        <input type="checkbox" name="studyUpdatedByWeb"  id="studyUpdatedByWeb"
-                                               th:checked="${account.studyUpdatedByWeb == true}">
+                                        <input type="checkbox" name="studyMeetingByWeb"  id="studyMeetingByWeb"
+                                               th:checked="${account.isStudyMeetingByWeb == true}">
                                         <span class="switch-button" ></span>
                                         웹으로 받기
                                     </label>
 
                                     <label class="switch">
-                                        <input type="checkbox" name="studyUpdatedByEmail"  id="studyUpdatedByEmail"
-                                               th:checked="${account.studyUpdatedByEmail == true}">
+                                        <input type="checkbox" name="studyMeetingByEmail"  id="studyMeetingByEmail"
+                                               th:checked="${account.isStudyMeetingByEmail == true}">
                                         <span class="switch-button" ></span>
                                         이메일로 받기
                                     </label>

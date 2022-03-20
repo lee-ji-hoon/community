@@ -40,6 +40,7 @@ out/
 # Project exclude paths
 /src/main/resources/static/node_modules/
 theme_template/
+/node_modules/**
 
 .gradle
 /build/

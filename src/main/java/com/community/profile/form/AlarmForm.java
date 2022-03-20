@@ -19,7 +19,7 @@ public class AlarmForm {
     public AlarmForm(Account account) {
         this.studyCreatedByEmail = account.isStudyCreatedByEmail();
         this.studyCreatedByWeb = account.isStudyCreatedByWeb();
-        this.studyUpdatedByEmail = account.isStudyUpdatedByEmail();
-        this.studyUpdatedByWeb = account.isStudyUpdatedByWeb();
+        this.studyUpdatedByEmail = account.isStudyMeetingByEmail();
+        this.studyUpdatedByWeb = account.isStudyMeetingByWeb();
     }
 }
