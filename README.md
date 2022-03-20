@@ -20,10 +20,10 @@
 ### Spring Initializr 세팅 
 ![image](https://user-images.githubusercontent.com/53300830/152991455-f48272b1-a1b2-4267-aa0f-2948daa15546.png)
 
-### postgress // h2
-- create database community;
-- create user master with encrypted password '1234';
-- grant all privileges on database community to master;
+### MYSQL // h2
+- CREATE DATABASE community;
+- CREATE USER master@'%' IDENTIFIED BY 'nsuspring';
+- GRANT ALL PRIVILEGES ON community.* TO master@'%' WITH GRANT OPTION;
 
 <hr/>
 
