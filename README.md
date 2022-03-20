@@ -28,9 +28,9 @@
 <hr/>
 
 ### 1차 기획안 발표 3/16(수)
-[Google Slide] https://docs.google.com/presentation/d/11x7zjGIO5-ZYY59PbaNRUh9odlZ44SJzNyocKh50_XQ/edit#slide=id.g11d3f6e9f66_0_977
+[[Google Slide](https://docs.google.com/presentation/d/11x7zjGIO5-ZYY59PbaNRUh9odlZ44SJzNyocKh50_XQ/edit#slide=id.g11d3f6e9f66_0_977)]
 
-[Notion] https://www.notion.so/15886ef901a64ed9b2c1b325609bc8bf
+[[Notion](https://www.notion.so/15886ef901a64ed9b2c1b325609bc8bf)]
 
 #### 결과
 - 전체적인 호평이 있었으며, 이대로 쭉 진행하면 될 것 같음

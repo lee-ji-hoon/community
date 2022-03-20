@@ -87,18 +87,20 @@ public class Account {
     private String profileImage;
 
     // 임시 알림 설정
-    private boolean studyCreatedByEmail;
+    private boolean studyCreatedByEmail = false;
 
-    private boolean studyCreatedByWeb = true;
+    private boolean studyCreatedByWeb = false;
 
-    private boolean studyUpdatedByEmail;
+    private boolean studyUpdatedByEmail = false;
 
-    private boolean studyUpdatedByWeb = true;
+    private boolean studyUpdatedByWeb = false;
+
+    private boolean replyCreateByEmail = false;
+    
+    private boolean replyCreateByWeb = false;
+
     // TODO
-    // 이메일 등 장터로 바꿔야
-    private boolean studyEnrollmentResultByEmail;
-
-    private boolean studyEnrollmentResultByWeb = true;
+    // 알림 추가
 
     // 알림 설정 끝
 
