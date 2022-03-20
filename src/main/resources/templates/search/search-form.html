@@ -35,33 +35,39 @@
                     </div>
                 </th:block>
                 <th:block th:if="${searchType.equals('커뮤니티')}">
-                    <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    <th:block th:if="${result.size() != 0}">
+                        <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    </th:block>
                     <br>
                     <div th:each="search_result : ${result}">
                         <div class="divide-y -mt-3 card px-5 py-2 mb-7">
                             <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
                                 <div class="flex-1 relative md:mt-0">
-                                    <a class="text-xl font-semibold leading-6 line-clamp-1" th:href="@{/board/detail/{bid}(bid=${search_result})}"  th:text="${search_result.value}">제목</a>
+                                    <a class="text-xl font-semibold leading-6 line-clamp-1" th:href="@{/board/detail/{bid}(bid=${search_result.key})}" th:text="${search_result.value}">제목</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </th:block>
-                <!--<th:block th:if="${searchType.equals('스터디')}">
-                    <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                <th:block th:if="${searchType.equals('스터디')}">
+                    <th:block th:if="${result.size() != 0}">
+                        <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    </th:block>
                     <br>
                     <div th:each="search_result : ${result}">
                         <div class="divide-y -mt-3 card px-5 py-2 mb-7">
                             <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
                                 <div class="flex-1 relative md:mt-0">
-                                    <a class="text-xl font-semibold leading-6 line-clamp-1" th:href="@{/board/detail/{bid}(bid=${search_result})}"  th:text="${search_result.value}">제목</a>
+                                    <a class="text-xl font-semibold leading-6 line-clamp-1" th:href="@{/study/{path}(path=${search_result.key})}"  th:text="${search_result.value}">제목</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </th:block>-->
+                </th:block>
                 <th:block th:if="${searchType.equals('장터')}">
-                    <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    <th:block th:if="${result.size() != 0}">
+                        <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    </th:block>
                     <br>
                     <div th:each="search_result : ${result}">
                         <div class="divide-y -mt-3 card px-5 py-2 mb-7">
@@ -74,6 +80,9 @@
                     </div>
                 </th:block>
                 <th:block th:if="${searchType.equals('학생회')}">
+                    <th:block th:if="${result.size() != 0}">
+                        <p class="text-lg my-2">총 <a th:text="${result.size()}" class="font-bold"></a>건 검색</p>
+                    </th:block>
                     <div th:each="search_result : ${result}">
                         <div class="divide-y -mt-3 card px-5 py-2 mb-7">
                             <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">

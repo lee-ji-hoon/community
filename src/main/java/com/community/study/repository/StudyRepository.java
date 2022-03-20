@@ -44,4 +44,11 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithTagsById(Long id);
 
+    /* 검색 쿼리 */
+    List<Study> findByTitleContaining(String keyword);
+
+    List<Study> findByFullDescriptionContaining(String keyword);
+
+    List<Study> findByTagsContaining(Tag tag);
+
 }
