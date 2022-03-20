@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class ChatController {
 
-    @GetMapping("chat/lists")
+    @GetMapping("/chat/lists")
     public String chatLists(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         return "chat/chat-detail";

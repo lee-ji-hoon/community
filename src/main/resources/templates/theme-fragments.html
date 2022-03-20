@@ -449,25 +449,25 @@
                             <div class="drop_headline">
                                 <h4> 쪽지 </h4>
                                 <div class="btn_action">
-                                    <a href="#" data-tippy-placement="left" title="Notifications">
-                                        <ion-icon name="settings-outline" uk-tooltip="title: Message settings ; pos: left"></ion-icon>
+                                    <a href="#" data-tippy-placement="left" title="알림 설정">
+                                        <ion-icon name="settings-outline" uk-tooltip="pos: left"></ion-icon>
                                     </a>
-                                    <a href="#" data-tippy-placement="left" title="Mark as read all">
+                                    <a href="#" data-tippy-placement="left" title="모두 읽음">
                                         <ion-icon name="checkbox-outline"></ion-icon>
                                     </a>
                                 </div>
                             </div>
-                            <input type="text" class="uk-input" placeholder="쪽지를 검색해보세요.">
+                            <!--<input type="text" class="uk-input" placeholder="쪽지를 검색해보세요.">-->
                             <ul>
                                 <li class="un-read">
-                                    <a href="#">
+                                    <a th:href="@{/chat/lists}">
                                         <div class="drop_avatar">
                                             <svg th:if="${#strings.isEmpty(account?.profileImage)}"
                                                  th:data-jdenticon-value="${account.studentId}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                                 alt=""></svg>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+                                                 alt=""/>
                                         </div>
                                         <div class="drop_text">
                                             <strong> ezhoon </strong> <time>5분 전</time><br>
@@ -475,7 +475,22 @@
                                         </div>
                                     </a>
                                 </li>
-
+                                <li>
+                                    <a th:href="@{/chat/lists}">
+                                        <div class="drop_avatar">
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="drop_text">
+                                            <strong> ezhoon </strong> <time>5분 전</time><br>
+                                            <p>  쪽지 내용 길이 체크 ...  </p>
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <a class="see-all"> 전체 보기</a>
@@ -552,7 +567,7 @@
 <!-- sidebar -->
 <div th:fragment="side_bar" class="sidebar">
 
-    <div class="sidebar_inner" data-simplebar>
+    <div class="sidebar_inner">
         <ul>
             <li th:classappend="${currentSideMenu == 'study'}? active"><a th:href="@{/study}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-blue-500">
