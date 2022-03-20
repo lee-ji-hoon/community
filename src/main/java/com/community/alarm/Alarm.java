@@ -20,6 +20,10 @@ public class Alarm {
 
     private String title;
 
+    // 웹 by 웹 접근
+    private String path;
+
+    // 이메일 by 웹
     private String link;
 
     private String message;

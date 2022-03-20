@@ -38,9 +38,9 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final MeetingsRepository meetingsRepository;
     private final ReplyRepository replyRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     private final ModelMapper modelMapper;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
