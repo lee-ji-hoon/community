@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "alarmId")
 public class Alarm {
     @Id
     @GeneratedValue
     @Column(name = "alarm_id ")
-    private Long id;
+    private Long alarmId;
 
     private String title;
 

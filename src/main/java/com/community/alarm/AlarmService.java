@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +20,14 @@ public class AlarmService {
 
     private final AlarmRepository alarmRepository;
 
-    public void markAsRead(List<Alarm> alarmList) {
-        alarmList.forEach(n -> n.setChecked(true));
-        alarmRepository.saveAll(alarmList);
+//    public void markAsRead(List<Alarm> alarmList) {
+//        alarmList.forEach(n -> n.setChecked(true));
+//        alarmRepository.saveAll(alarmList);
+//    }
+
+    public void markAsRead(Alarm byId) {
+        byId.setChecked(true);
+        alarmRepository.save(byId);
     }
 
     public String meetingDateTime(LocalDateTime localDateTime){

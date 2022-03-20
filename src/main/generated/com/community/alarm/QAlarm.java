@@ -24,13 +24,13 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final com.community.account.entity.QAccount account;
 
+    public final NumberPath<Long> alarmId = createNumber("alarmId", Long.class);
+
     public final EnumPath<AlarmType> alarmType = createEnum("alarmType", AlarmType.class);
 
     public final BooleanPath checked = createBoolean("checked");
 
     public final DateTimePath<java.time.LocalDateTime> createAlarmTime = createDateTime("createAlarmTime", java.time.LocalDateTime.class);
-
-    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath link = createString("link");
 
