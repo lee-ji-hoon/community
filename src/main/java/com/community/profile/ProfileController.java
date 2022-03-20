@@ -158,17 +158,17 @@ public class ProfileController {
     public ResponseEntity updateNotifications(@CurrentUser Account account, AlarmForm alarmForm, Model model, RedirectAttributes attributes,
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
-                                              @RequestParam(required = false, value = "studyUpdatedByWeb") String studyUpdatedByWeb,
-                                              @RequestParam(required = false, value = "studyUpdatedByEmail") String studyUpdatedByEmail) {
+                                              @RequestParam(required = false, value = "studyMeetingByWeb") String studyMeetingByWeb,
+                                              @RequestParam(required = false, value = "studyMeetingByEmail") String studyMeetingByEmail) {
         log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
         log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
-        log.info("스터디 모임 이메일 업데이트 : {}", studyUpdatedByEmail);
-        log.info("스터디 모임 웹 업데이트 : {}", studyUpdatedByWeb);
+        log.info("스터디 모임 이메일 업데이트 : {}", studyMeetingByEmail);
+        log.info("스터디 모임 웹 업데이트 : {}", studyMeetingByWeb);
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
-        account.setStudyUpdatedByWeb(studyUpdatedByWeb != null);
-        account.setStudyUpdatedByEmail(studyUpdatedByEmail != null);
+        account.setStudyMeetingByWeb(studyMeetingByWeb != null);
+        account.setStudyMeetingByEmail(studyMeetingByEmail != null);
         accountRepository.save(account);
 
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");

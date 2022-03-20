@@ -16,4 +16,8 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Transactional
     void deleteByAccountAndChecked(Account account, boolean checked);
+
+    List<Alarm> findByPathAndAlarmTypeAndAccountAndChecked(String path, AlarmType valueOf, Account account, boolean checked);
+
+    Alarm findByAlarmId(Long alarm);
 }

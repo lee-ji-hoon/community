@@ -2,7 +2,6 @@ package com.community.account.entity;
 
 import com.community.like.Likes;
 import com.community.market.Market;
-import com.community.study.entity.Meetings;
 import com.community.tag.Tag;
 import com.community.study.entity.Study;
 import lombok.*;
@@ -91,9 +90,9 @@ public class Account {
 
     private boolean studyCreatedByWeb = false;
 
-    private boolean studyUpdatedByEmail = false;
+    private boolean studyMeetingByEmail = false;
 
-    private boolean studyUpdatedByWeb = false;
+    private boolean studyMeetingByWeb = false;
 
     private boolean replyCreateByEmail = false;
     

@@ -50,8 +50,8 @@ public class ProfileService {
     public void updateNotifications(Account account, AlarmForm notifications) {
         account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
-        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyMeetingByWeb(notifications.isStudyUpdatedByWeb());
+        account.setStudyMeetingByEmail(notifications.isStudyUpdatedByEmail());
         accountRepository.save(account);
     }
 
