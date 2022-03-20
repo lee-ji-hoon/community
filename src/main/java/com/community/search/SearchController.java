@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +35,14 @@ public class SearchController {
     private final StudyRepository studyRepository;
     private final TagRepository tagRepository;
 
+    @GetMapping("/search/lists/result")
+    public String searchPostsGet(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return "search/search-form";
+    }
+
     @PostMapping("/search/lists")
-    public String searchPosts(@CurrentUser Account account, SearchForm searchForm, Model model) {
+    public String searchPosts(@CurrentUser Account account, SearchForm searchForm, RedirectAttributes redirectAttributes) {
         log.info("검색 조건 : " + searchForm.getSearchType());
         log.info("검색 키워드 : " + searchForm.getKeyword());
         String keyword = searchForm.getKeyword();
@@ -94,12 +101,12 @@ public class SearchController {
                 log.info("study : " + study.getId());
             }
         }
-        model.addAttribute(account);
-        model.addAttribute("result", map);
-        model.addAttribute("searchType", searchForm.getSearchType());
-        model.addAttribute("keyword", searchForm.getKeyword());
-        model.addAttribute(new SearchForm());
+        redirectAttributes.addFlashAttribute(account);
+        redirectAttributes.addFlashAttribute("result", map);
+        redirectAttributes.addFlashAttribute("searchType", searchForm.getSearchType());
+        redirectAttributes.addFlashAttribute("keyword", searchForm.getKeyword());
+        redirectAttributes.addFlashAttribute(new SearchForm());
 
-        return "search/search-form";
+        return "redirect:/search/lists/result";
     }
 }

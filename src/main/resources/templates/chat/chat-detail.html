@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="theme-fragments.html :: head"></head>
+<body class="is_message">
+
+
+    <div id="Wrapper" class="is-small">
+
+        <!-- Header -->
+        <header th:replace="theme-fragments.html :: header"></header>
+
+        <!-- sidebar -->
+        <div th:replace="theme-fragments.html :: side_bar"></div>
+
+        <!-- Main Contents -->
+        <div class="main_content">
+
+            <!--<span uk-toggle="target: .message-content;" class="fixed left-0 top-36 bg-red-600 z-10 py-1 px-4 rounded-r-3xl text-white"> Users</span>-->
+
+            <div class="messages-container">
+                <div class="messages-container-inner">
+
+                   
+                    <div class="messages-inbox">
+                        <div class="messages-headline">
+                            <div class="input-with-icon" hidden>
+                                    <input id="autocomplete-input" type="text" placeholder="Search">
+                                <i class="icon-material-outline-search"></i>
+                            </div>
+                            <h2 class="text-2xl font-semibold">Chats</h2>
+                            <span class="absolute icon-feather-edit mr-4 text-xl uk-position-center-right cursor-pointer"></span>
+                        </div>
+                        <div class="messages-inbox-inner" data-simplebar>
+                            <ul>
+                                <li class="active-message">
+                                    <a href="#" uk-toggle="target: .message-content;">
+                                        <div class="message-avatar">
+                                            <i class="status-icon status-online"></i>
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-by">
+                                            <div class="message-by-headline">
+                                                <h5>Stella Johnson</h5>
+                                                <span>4 hours ago</span>
+                                            </div>
+                                            <p>laoreet dolore magna aliquam erat volutpat sed diam nonummy</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" uk-toggle="target: .message-content;">
+                                        <div class="message-avatar">
+                                            <i class="status-icon status-offline"></i>
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-by">
+                                            <div class="message-by-headline">
+                                                <h5>Alia Dolgove</h5>
+                                                <span>2 days ago</span>
+                                            </div>
+                                            <p>Dipiscing elit, sed diam nonummy nibh euismod tincidunt </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" uk-toggle="target: .message-content;">
+                                        <div class="message-avatar">
+                                            <i class="status-icon status-online"></i>
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-by">
+                                            <div class="message-by-headline">
+                                                <h5>Jonathan Madano</h5>
+                                                <span>2 days ago</span>
+                                            </div>
+                                            <p>Nisl ut aliquip ex ea commodo consequa!</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="message-content" aria-hidden="true" hidden>
+
+                        <div class="messages-headline">
+                            <h4> Stella Johnson </h4>
+                            <a href="#" class="message-action text-blue-500 flex-none" uk-toggle="target: .message-content;">
+                                <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
+                            </a>
+                        </div>
+
+                        <div class="message-content-scrolbar" data-simplebar>
+
+                            <!-- Message Content Inner -->
+                            <div class="message-content-inner">
+
+                                <!-- Time Sign -->
+                                <div class="message-time-sign">
+                                    <span>28 June, 2020</span>
+                                </div>
+
+                                <div class="message-bubble me">
+                                    <div class="message-bubble-inner">
+                                        <div class="message-avatar">
+                                            <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-text"><p>Consectetuer adipiscing elit, sed diam nonummy nibh euismod laoreet.</p></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="message-bubble">
+                                    <div class="message-bubble-inner">
+                                        <div class="message-avatar">
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-text"><p>Laoreet.  dolore magna imperdiet quod mazim placerat facer possim. 👍</p></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="message-bubble me">
+                                    <div class="message-bubble-inner">
+                                        <div class="message-avatar">
+                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                 alt=""></svg>
+                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                 th:src="${account?.profileImage}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="message-text"><p>Albuom commodo consequat. 😉</p></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- Message Content Inner / End -->
+                            <!-- Reply Area -->
+                            <div class="message-reply">
+                                <textarea cols="1" rows="1" placeholder="Your Message"></textarea>
+                                <button class="button ripple-effect">Send</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div> 
+            
+        </div>
+        
+    </div>
+
+
+
+
+</body>
+</html>
