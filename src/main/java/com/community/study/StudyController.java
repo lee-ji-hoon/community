@@ -3,6 +3,7 @@ package com.community.study;
 import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.alarm.meeting.MeetingCreatedPublish;
 import com.community.alarm.study.StudyCreatedPublish;
 import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
@@ -162,12 +163,9 @@ public class StudyController {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(studyUpdate);
 
-        /*Meetings meetings = meetingsRepository.findByMeetingsId(meetingsList)
-        List<Reply> replies = replyRepository.findAllByMeetingsOrderByUploadTimeDesc(meetings);*/
-
         model.addAttribute("meetingsList", meetingsList);
-        model.addAttribute(account);
         model.addAttribute("service", studyService);
+        model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(new MeetingsForm());
         return "study/study-meetings";
@@ -176,6 +174,9 @@ public class StudyController {
     @PostMapping(STUDY_PATH_URL + "/meetings")
     public String meetingList(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
+
+
+
         log.info("모임 생성");
         Study studyUpdate = studyService.getStudyToUpdateStatus(account, path);
 /*        if (errors.hasErrors()) {
@@ -183,7 +184,8 @@ public class StudyController {
             model.addAttribute(studyUpdate);
             return "study/meetings/view";
         }*/
-        studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
+        applicationEventPublisher.publishEvent(new MeetingCreatedPublish(newMeeting));
         model.addAttribute(account);
 
         log.info("모임 생성 성공");
