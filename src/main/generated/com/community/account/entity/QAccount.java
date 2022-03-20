@@ -60,9 +60,9 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final BooleanPath studyCreatedByWeb = createBoolean("studyCreatedByWeb");
 
-    public final BooleanPath studyUpdatedByEmail = createBoolean("studyUpdatedByEmail");
+    public final BooleanPath studyMeetingByEmail = createBoolean("studyMeetingByEmail");
 
-    public final BooleanPath studyUpdatedByWeb = createBoolean("studyUpdatedByWeb");
+    public final BooleanPath studyMeetingByWeb = createBoolean("studyMeetingByWeb");
 
     public final SetPath<com.community.tag.Tag, com.community.tag.QTag> tags = this.<com.community.tag.Tag, com.community.tag.QTag>createSet("tags", com.community.tag.Tag.class, com.community.tag.QTag.class, PathInits.DIRECT2);
 
