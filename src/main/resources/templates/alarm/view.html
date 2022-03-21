@@ -49,31 +49,38 @@
 
                 <div class="lg:w-2/3">
                     <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
-                        <div class="">
-                            <h5>새로운 스터디 알림</h5>
-                            <ul class="list-group list-group-flush">
-                                <a href="#" th:each="study : ${newStudyAlarms}" th:href="@{'/alarm/study/' + ${study.path}}"
-                                   class="card p-5 m-5">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <small class="text-muted" th:text="${study.title}">Noti title</small>
-                                        <small class="fromNow text-muted" th:text="${service.meetingDateTime(study.createAlarmTime)}">3 days ago</small>
-                                    </div>
-                                    <p class="text-left mb-0 mt-1" th:text="${study.message}">message</p>
-                                </a>
-                            </ul>
-                            <h5>새로운 모임 알림</h5>
-                            <ul class="list-group list-group-flush">
-                                <li class="card m-5 p-5" th:each="meeting : ${newMeetingAlarms}">
-                                    <a class="" href="#"
-                                       th:href="@{'/alarm/' + ${meeting.alarmId}}">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <small class="text-muted" th:text="${meeting.title}">Noti title</small>
-                                            <small class="fromNow text-muted" th:text="${service.meetingDateTime(meeting.createAlarmTime)}">3 days ago</small>
-                                        </div>
-                                        <p class="text-left mb-0 mt-1" th:text="${meeting.message}">message</p>
-                                    </a>
-                                </li>
-                            </ul>
+                        <div>
+                            <div class="p-5">
+                                <h5 th:text="'스터디 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 모임 알림</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="card m-5 p-5" th:each="alarm : ${newStudyAlarms}">
+                                        <a href="#"
+                                           th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <small class="text-muted" th:text="${alarm.title}">Noti title</small>
+                                                <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
+                                            </div>
+                                            <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="p-5">
+                                <h5 th:text="'모임 알림 ('+${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="card m-5 p-5" th:each="alarm : ${newMeetingAlarms}">
+                                        <a class="" href="#"
+                                           th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <small class="text-muted" th:text="${alarm.title}">Noti title</small>
+                                                <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
+                                            </div>
+                                            <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div class="card p-5">
