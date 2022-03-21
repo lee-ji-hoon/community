@@ -1548,4 +1548,23 @@
     </div>
 </div>
 
+<div th:fragment="alarm-list(type)" class="p-5">
+    <ul class="list-group list-group-flush">
+        <li class="card m-5 p-5" th:each="alarm : ${type}">
+            <a href="#"
+               th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                <div class="d-flex w-100 justify-content-between">
+                    <small class="text-muted" th:text="${alarm.title}">Noti title</small>
+                    <small class="fromNow text-muted" th:text="${alarm.alarmType}">Noti title</small>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
+                    <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
+                </div>
+
+            </a>
+        </li>
+    </ul>
+</div>
+
 </html>

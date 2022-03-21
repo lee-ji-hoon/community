@@ -4,10 +4,8 @@ import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
 import com.community.alarm.meeting.MeetingCreatedPublish;
-import com.community.alarm.meeting.MeetingReplyCreatePublish;
-import com.community.alarm.meeting.MeetingReplyEventListener;
+import com.community.alarm.meeting.ReplyCreatePublish;
 import com.community.alarm.study.StudyCreatedPublish;
-import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
 import com.community.board.repository.ReplyRepository;
@@ -46,8 +44,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -258,24 +254,25 @@ public class StudyController {
 
         replyForm.setContent(r_content);
 
-        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+
         Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-
-        Set<Account> managers = currentMeetings.getStudy().getManagers();
-        for (Account manager : managers) {
-            Optional<Account> managerId = accountRepository.findById(manager.getId());
-            log.info("manager : {}",managerId.get().getId());
-            log.info("account : {}",currentAccount.get().getId());
-            if(!managerId.get().getId().equals(currentAccount.get().getId())) {
-                applicationEventPublisher.publishEvent(new MeetingReplyCreatePublish(currentMeetings));
-            }
-        }
-
 
         if (currentAccount.isPresent()) {
             String accountEmail = currentAccount.get().getEmail();
             Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+            Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+            Reply reply = replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+
+            Set<Account> managers = currentMeetings.getStudy().getManagers();
+            for (Account manager : managers) {
+                Optional<Account> managerId = accountRepository.findById(manager.getId());
+                log.info("manager : {}",managerId.get().getId());
+                log.info("account : {}",currentAccount.get().getId());
+                if(!managerId.get().getId().equals(currentAccount.get().getId())) {
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply));
+                }
+            }
+
             List<Reply> replies = replyRepository.findAll();
             int reply_size = replies.size();
             return reply_size;

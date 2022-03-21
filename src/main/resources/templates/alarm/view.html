@@ -49,91 +49,28 @@
 
                 <div class="lg:w-2/3">
                     <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
+                        <!-- 스터디 -->
                         <div>
-                            <div class="p-5">
-                                <h5 th:text="'스터디 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 모임 알림</h5>
-                                <ul class="list-group list-group-flush">
-                                    <li class="card m-5 p-5" th:each="alarm : ${newStudyAlarms}">
-                                        <a href="#"
-                                           th:href="@{'/alarm/' + ${alarm.alarmId}}">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <small class="text-muted" th:text="${alarm.title}">Noti title</small>
-                                                <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
-                                            </div>
-                                            <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="p-5">
-                                <h5 th:text="'모임 알림 ('+${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
-                                <ul class="list-group list-group-flush">
-                                    <li class="card m-5 p-5" th:each="alarm : ${newMeetingAlarms}">
-                                        <a class="" href="#"
-                                           th:href="@{'/alarm/' + ${alarm.alarmId}}">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <small class="text-muted" th:text="${alarm.title}">Noti title</small>
-                                                <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
-                                            </div>
-                                            <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <h5 class="px-5" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
+                            <h5 class="px-5" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
                         </div>
 
-                        <div class="card p-5">
-                            <ul class="list-group list-group-flush">
-                                <a href="#"
-                                   class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <small class="text-muted">Noti title</small>
-                                        <small class="fromNow text-muted">31 days ago</small>
-                                    </div>
-                                    <p class="text-left mb-0 mt-1">message</p>
-                                </a>
-                            </ul>
-                        </div>
-
+                        <!-- 모임 댓글 -->
                         <div>
-                            <ul class="list-group list-group-flush">
-                                <a href="#"
-                                   class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <small class="text-muted">Noti title</small>
-                                        <small class="fromNow text-muted">31 days ago</small>
-                                    </div>
-                                    <p class="text-left mb-0 mt-1">message</p>
-                                </a>
-                            </ul>
+                            <h5 class="px-5" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
                         </div>
 
+                        <!-- 좋아요 -->
                         <div>
-                            <ul class="list-group list-group-flush">
-                                <a href="#"
-                                   class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <small class="text-muted">Noti title</small>
-                                        <small class="fromNow text-muted">32 days ago</small>
-                                    </div>
-                                    <p class="text-left mb-0 mt-1">message</p>
-                                </a>
-                            </ul>
                         </div>
 
+                        <!-- 읽은 알림 -->
                         <div>
-                            <ul class="list-group list-group-flush">
-                                <a href="#"
-                                   class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <small class="text-muted">Noti title</small>
-                                        <small class="fromNow text-muted">32 days ago</small>
-                                    </div>
-                                    <p class="text-left mb-0 mt-1">message</p>
-                                </a>
-                            </ul>
                         </div>
+
                     </div>
                 </div>
             </div>

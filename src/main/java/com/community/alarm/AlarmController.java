@@ -78,6 +78,7 @@ public class AlarmController {
     void alarmType(Model model, List<Alarm> alarmList, long countChecked, long countNotChecked) {
         List<Alarm> newStudyAlarms = new ArrayList<>();
         List<Alarm> newMeetingAlarms = new ArrayList<>();
+        List<Alarm> newMeetingsReplyAlarms = new ArrayList<>();
 
         for (var alarm : alarmList) {
             switch (alarm.getAlarmType()) {
@@ -87,6 +88,8 @@ public class AlarmController {
                 case MEETING:
                     newMeetingAlarms.add(alarm);
                     break;
+                case REPLY:
+                    newMeetingsReplyAlarms.add(alarm);
             }
         }
 
@@ -96,5 +99,6 @@ public class AlarmController {
 
         model.addAttribute("newStudyAlarms", newStudyAlarms);
         model.addAttribute("newMeetingAlarms", newMeetingAlarms);
+        model.addAttribute("newMeetingsReplyAlarms", newMeetingsReplyAlarms);
     }
 }

@@ -40,7 +40,7 @@ public class ReplyService {
         replyRepository.save(reply);
     }
 
-    public void saveMeetingsReply(@Valid ReplyForm replyForm, Account account, Meetings meetings) {
+    public Reply saveMeetingsReply(@Valid ReplyForm replyForm, Account account, Meetings meetings) {
         Reply reply = Reply.builder()
                 .content(replyForm.getContent())
                 .account(account)
@@ -51,6 +51,8 @@ public class ReplyService {
                 .reportCount(0)
                 .build();
         replyRepository.save(reply);
+
+        return reply;
     }
 
     public void saveMarketReply(@Valid ReplyForm replyForm, Account account, Market market) {

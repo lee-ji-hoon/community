@@ -47,10 +47,6 @@ public class ReplyController {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 
-
-
-
-
     // 댓글 관련 내용
     @ResponseBody
     @RequestMapping(value = "/board/detail/reply")
@@ -78,8 +74,6 @@ public class ReplyController {
         int reply_size = replies.size();
         return reply_size;
     }
-
-
 
     @ResponseBody
     @RequestMapping(value = "/council/detail/reply")
