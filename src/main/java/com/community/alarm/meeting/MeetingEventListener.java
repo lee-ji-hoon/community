@@ -1,7 +1,6 @@
 package com.community.alarm.meeting;
 
 import com.community.account.entity.Account;
-import com.community.account.repository.AccountRepository;
 import com.community.alarm.Alarm;
 import com.community.alarm.AlarmRepository;
 import com.community.alarm.AlarmType;
@@ -44,15 +43,15 @@ public class MeetingEventListener {
 
         Meetings meetings = meetingCreatedPublish.getMeetings();
         Meetings byMeetingsId = meetingsRepository.findByMeetingsId(meetings.getMeetingsId());
-        log.info("meetingId : {}", byMeetingsId.getStudy());
-
         Study study = byMeetingsId.getStudy();
+
+        log.info("study : {}", study);
 
         Set<Account> members =study.getMembers();
 
         for (Account member : members) {
             log.info("member : {}", member);
-            if (member.isStudyMeetingByEmail()) {
+            if (member.isReplyByMeetings()) {
                 log.info("모임 이메일 발송 study : {}", study.getId() );
                 log.info("모임 이메일 발송 account : {}", member.getEmail());
                 sendEmail(meetings, member, study);
