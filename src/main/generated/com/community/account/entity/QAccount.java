@@ -50,6 +50,10 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final StringPath profileImage = createString("profileImage");
 
+    public final BooleanPath replyByMeetings = createBoolean("replyByMeetings");
+
+    public final BooleanPath replyByPost = createBoolean("replyByPost");
+
     public final BooleanPath replyCreateByEmail = createBoolean("replyCreateByEmail");
 
     public final BooleanPath replyCreateByWeb = createBoolean("replyCreateByWeb");
@@ -59,10 +63,6 @@ public class QAccount extends EntityPathBase<Account> {
     public final BooleanPath studyCreatedByEmail = createBoolean("studyCreatedByEmail");
 
     public final BooleanPath studyCreatedByWeb = createBoolean("studyCreatedByWeb");
-
-    public final BooleanPath studyMeetingByEmail = createBoolean("studyMeetingByEmail");
-
-    public final BooleanPath studyMeetingByWeb = createBoolean("studyMeetingByWeb");
 
     public final SetPath<com.community.tag.Tag, com.community.tag.QTag> tags = this.<com.community.tag.Tag, com.community.tag.QTag>createSet("tags", com.community.tag.Tag.class, com.community.tag.QTag.class, PathInits.DIRECT2);
 

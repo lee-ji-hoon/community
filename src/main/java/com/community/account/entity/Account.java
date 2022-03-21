@@ -88,15 +88,15 @@ public class Account {
     // 임시 알림 설정
     private boolean studyCreatedByEmail = false;
 
-    private boolean studyCreatedByWeb = false;
+    private boolean studyCreatedByWeb = true;
 
-    private boolean studyMeetingByEmail = false;
+    private boolean replyByMeetings = true;
 
-    private boolean studyMeetingByWeb = false;
+    private boolean replyByPost = true;
 
-    private boolean replyCreateByEmail = false;
+    private boolean replyCreateByEmail = true;
     
-    private boolean replyCreateByWeb = false;
+    private boolean replyCreateByWeb = true;
 
     // TODO
     // 알림 추가
