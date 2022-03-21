@@ -155,20 +155,20 @@ public class ProfileController {
     // 알림 설정 변경 요청
     @GetMapping(SETTINGS_ALARM_URL + "/update")
     @ResponseBody
-    public ResponseEntity updateNotifications(@CurrentUser Account account, AlarmForm alarmForm, Model model, RedirectAttributes attributes,
+    public ResponseEntity updateNotifications(@CurrentUser Account account, RedirectAttributes attributes,
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
-                                              @RequestParam(required = false, value = "studyMeetingByWeb") String studyMeetingByWeb,
-                                              @RequestParam(required = false, value = "studyMeetingByEmail") String studyMeetingByEmail) {
+                                              @RequestParam(required = false, value = "replyByMeetings") String replyByMeetings,
+                                              @RequestParam(required = false, value = "replyByPost") String replyByPost) {
         log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
         log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
-        log.info("스터디 모임 이메일 업데이트 : {}", studyMeetingByEmail);
-        log.info("스터디 모임 웹 업데이트 : {}", studyMeetingByWeb);
+        log.info("스터디 모임 이메일 업데이트 : {}", replyByPost);
+        log.info("스터디 모임 웹 업데이트 : {}", replyByMeetings);
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
-        account.setStudyMeetingByWeb(studyMeetingByWeb != null);
-        account.setStudyMeetingByEmail(studyMeetingByEmail != null);
+        account.setReplyByPost(replyByMeetings != null);
+        account.setReplyByMeetings(replyByPost != null);
         accountRepository.save(account);
 
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
