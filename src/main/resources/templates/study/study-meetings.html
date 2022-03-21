@@ -403,7 +403,7 @@
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold justify-items-center">
-                                    <a th:each="managers : ${study.managers}" th:href="@{'/profile/' + ${managers.nickname}}">
+                                    <a th:each="managers : ${study.managers}" th:href="@{'/profile/' + ${managers.nickname}}" style="width:64px" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
                                             <svg th:if="${#strings.isEmpty(managers.profileImage)}"
                                                  th:data-jdenticon-value="${managers.studentId}"
@@ -414,9 +414,9 @@
                                                  th:src="${managers.profileImage}" alt=""
                                                  class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
                                         </div>
-                                        <div th:text="${managers.nickname} + '[리더]'" class="text-center text-sm truncate"> 유저 닉네임 </div>
+                                        <span th:text="${managers.nickname}" class="text-center text-sm"> 유저 닉네임 </span> <i class="fa fa-id-badge"></i>
                                     </a>
-                                    <a th:each="member : ${study.members}" th:href="@{'/profile/' + ${member.nickname}}">
+                                    <a th:each="member : ${study.members}" th:href="@{'/profile/' + ${member.nickname}}" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
                                             <svg th:if="${#strings.isEmpty(member.profileImage)}"
                                                  th:data-jdenticon-value="${member.studentId}"
@@ -427,7 +427,7 @@
                                                  th:src="${member.profileImage}" alt=""
                                                  class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
                                         </div>
-                                        <div th:text="${member.nickname}" class="text-center text-sm truncate"> 유저 닉네임 </div>
+                                        <span th:text="${member.nickname}" class="text-center text-sm truncate"> 유저 닉네임 </span>
                                     </a>
                                 </div>
                             </div>
@@ -602,10 +602,10 @@
             placeholder: '스터디 모집글을 아래 양식을 참고해 작성해주세요. <br> 꼼꼼히 작성하면 멋진 스터디 팀원을 만나실 수 있을거예요.  <br/> [개발 스터디 모집 내용 예시] <br/> 스터디 주제 : <br/> 스터디 목표 : ' //placeholder 설정
 
         });
-    });
+        let name = [[ ${study.path} ]];
+        history.replaceState('data to be passed', 'Title of the page', '/study/' + name + '/meetings');
 
-    let name = [[ ${study.path} ]];
-    history.replaceState('data to be passed', 'Title of the page', '/study/' + name + '/meetings');
+    });
 </script>
 </body>
 

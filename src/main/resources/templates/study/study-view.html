@@ -116,8 +116,10 @@
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>
 <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 <script th:inline="javascript">
-    let name = [[ ${study.path} ]];
-    history.replaceState('data to be passed', 'Title of the page', '/study/' + name);
+    $(document).ready(function () {
+        let name = [[ ${study.path}]];
+        history.replaceState('data to be passed', 'Title of the page', '/study/' + name);
+    });
 </script>
 <script th:replace="theme-fragments.html :: studyBanner"></script>
 </body>
