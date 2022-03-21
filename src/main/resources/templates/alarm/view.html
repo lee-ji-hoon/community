@@ -39,7 +39,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="hover:bg-gray-100">
+                                <a th:href="@{alarm}" class="hover:bg-gray-100">
                                     읽은 알림 삭제
                                 </a>
                             </li>
@@ -69,6 +69,8 @@
 
                         <!-- 읽은 알림 -->
                         <div>
+                            <h5 class="px-5" th:text="'읽은 댓글'+ ${byChecked.size()}+')'">새로운 모임 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${byChecked})"></div>
                         </div>
 
                     </div>

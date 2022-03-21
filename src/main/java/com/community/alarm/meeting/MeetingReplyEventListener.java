@@ -60,7 +60,7 @@ public class MeetingReplyEventListener {
         alarm.setPath(study.getPath());
         alarm.setMessage(reply.getContent());
         alarm.setAccount(account);
-        alarm.setAlarmType(AlarmType.REPLY);
+        alarm.setAlarmType(AlarmType.MEETING_REPLY);
         alarmRepository.save(alarm);
     }
 

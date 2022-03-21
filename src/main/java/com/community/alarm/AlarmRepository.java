@@ -20,4 +20,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByPathAndAlarmTypeAndAccountAndChecked(String path, AlarmType valueOf, Account account, boolean checked);
 
     Alarm findByAlarmId(Long alarm);
+
+    List<Alarm> findByChecked(boolean b);
 }

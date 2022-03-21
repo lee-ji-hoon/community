@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,7 +50,7 @@ public class AlarmController {
         AlarmType type = byAlarmId.getAlarmType();
         String path = byAlarmId.getPath();
 
-        alarmService.markAsRead(byAlarmId);
+        alarmService.alarmRead(byAlarmId);
 
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
@@ -62,7 +60,7 @@ public class AlarmController {
                 model.addAttribute(studyByPath);
                 return "study/study-view";
 
-            case MEETING: log.info("meeting 페이지 이동 : {}", path);
+            case MEETING: case MEETING_REPLY : log.info("meeting 페이지 이동 : {}", path);
                 Study meetingByPath = studyService.getPath(path);
                 List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(meetingByPath);
 
@@ -71,6 +69,10 @@ public class AlarmController {
                 model.addAttribute(meetingByPath);
                 model.addAttribute(new MeetingsForm());
                 return "study/study-meetings";
+            /*case REPLY: log.info("reply 페이지 이동 : {}", path);
+                Study meetingReplyPath = studyService.getPath(path);*/
+
+
         }
         return "alarm/view";
     }
@@ -79,6 +81,7 @@ public class AlarmController {
         List<Alarm> newStudyAlarms = new ArrayList<>();
         List<Alarm> newMeetingAlarms = new ArrayList<>();
         List<Alarm> newMeetingsReplyAlarms = new ArrayList<>();
+        List<Alarm> byChecked = alarmRepository.findByChecked(true);
 
         for (var alarm : alarmList) {
             switch (alarm.getAlarmType()) {
@@ -88,7 +91,7 @@ public class AlarmController {
                 case MEETING:
                     newMeetingAlarms.add(alarm);
                     break;
-                case REPLY:
+                case MEETING_REPLY:
                     newMeetingsReplyAlarms.add(alarm);
             }
         }
@@ -100,5 +103,6 @@ public class AlarmController {
         model.addAttribute("newStudyAlarms", newStudyAlarms);
         model.addAttribute("newMeetingAlarms", newMeetingAlarms);
         model.addAttribute("newMeetingsReplyAlarms", newMeetingsReplyAlarms);
+        model.addAttribute("byChecked", byChecked);
     }
 }
