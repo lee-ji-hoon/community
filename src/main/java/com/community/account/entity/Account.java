@@ -24,11 +24,11 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 //@ToString
-@SequenceGenerator(
+/*@SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
         initialValue = 1,
-        allocationSize = 1)
+        allocationSize = 1)*/
 
 @NamedEntityGraph(name = "Account.withTags", attributeNodes = {
         @NamedAttributeNode("tags")
@@ -36,8 +36,7 @@ import java.util.*;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                    generator = "MEMBER_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
     private Long id;
 
@@ -81,14 +80,13 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
     @Lob
-    @Type(type = "text")
     private String profileImage;
 
     // 임시 알림 설정
@@ -101,7 +99,7 @@ public class Account {
     private boolean replyByPost = true;
 
     private boolean likesByPost = true;
-    
+
     private boolean replyCreateByWeb = true;
 
     // TODO
@@ -111,6 +109,7 @@ public class Account {
 
     // 태그
     @ManyToMany
+    @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크

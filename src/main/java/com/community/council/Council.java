@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Council {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cid;
 
     private String postSort;

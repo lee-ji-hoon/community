@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class ReplyReport {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long report_id;
 
     // 신고자
