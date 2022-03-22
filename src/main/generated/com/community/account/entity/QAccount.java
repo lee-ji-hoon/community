@@ -20,6 +20,8 @@ public class QAccount extends EntityPathBase<Account> {
 
     public static final QAccount account = new QAccount("account");
 
+    public final ListPath<com.community.alarm.Alarm, com.community.alarm.QAlarm> alarmList = this.<com.community.alarm.Alarm, com.community.alarm.QAlarm>createList("alarmList", com.community.alarm.Alarm.class, com.community.alarm.QAlarm.class, PathInits.DIRECT2);
+
     public final StringPath bannerImage = createString("bannerImage");
 
     public final StringPath bio = createString("bio");

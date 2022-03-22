@@ -68,7 +68,6 @@ public class AlarmController {
 
         model.addAttribute(account);
         model.addAttribute("byChecked", byChecked);
-        model.addAttribute("service", alarmService);
         return "alarm/view";
     }
 
