@@ -17,8 +17,8 @@
 
     <div class="main_content">
         <div class="mcontainer">
-            <!--<div th:text="${account.alarmList.size()}"></div>
-            <ul>
+            <div th:text="${account.alarmList.size()}"></div>
+            <!--<ul>
                 <li th:each="alarm : ${account.alarmList}">
                     <th:block th:if="${!alarm.isChecked()}">
                         <a th:href="@{'/alarm/' + ${alarm.alarmId}}">
@@ -225,5 +225,8 @@
     </div>
 
 </div>
+<script type="application/javascript">
+    $('.refresh_alarm').load(location.href+' .refresh_alarm');
+</script>
 </body>
 </html>
