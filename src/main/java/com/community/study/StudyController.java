@@ -4,7 +4,7 @@ import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
 import com.community.alarm.meeting.MeetingCreatedPublish;
-import com.community.alarm.meeting.ReplyCreatePublish;
+import com.community.alarm.reply.ReplyCreatePublish;
 import com.community.alarm.study.StudyCreatedPublish;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
@@ -179,7 +179,7 @@ public class StudyController {
             return "study/meetings/view";
         }*/
         Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
-        applicationEventPublisher.publishEvent(new MeetingCreatedPublish(newMeeting));
+        applicationEventPublisher.publishEvent(new MeetingCreatedPublish(newMeeting, account));
         model.addAttribute(account);
 
         log.info("모임 생성 성공");
@@ -269,7 +269,7 @@ public class StudyController {
                 log.info("manager : {}",managerId.get().getId());
                 log.info("account : {}",currentAccount.get().getId());
                 if(!managerId.get().getId().equals(currentAccount.get().getId())) {
-                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply));
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
                 }
             }
 
@@ -432,7 +432,7 @@ public class StudyController {
             return "redirect:/study/" + fixPath(path) + "/settings/alarm";
         }*/
 
-        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
+        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 
         redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
 

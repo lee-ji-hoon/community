@@ -159,16 +159,20 @@ public class ProfileController {
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
                                               @RequestParam(required = false, value = "replyByMeetings") String replyByMeetings,
-                                              @RequestParam(required = false, value = "replyByPost") String replyByPost) {
+                                              @RequestParam(required = false, value = "replyByPost") String replyByPost,
+                                              @RequestParam(required = false, value = "likes") String likes) {
         log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
         log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
-        log.info("스터디 모임 이메일 업데이트 : {}", replyByPost);
-        log.info("스터디 모임 웹 업데이트 : {}", replyByMeetings);
+        log.info("커뮤니티 댓글 웹 업데이트 : {}", replyByPost);
+        log.info("모임 댓글 웹 업데이트 : {}", replyByMeetings);
+        log.info("좋아요 웹 업데이트 : {}", likes);
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
         account.setReplyByPost(replyByMeetings != null);
         account.setReplyByMeetings(replyByPost != null);
+        account.setLikesByPost(likes != null);
+
         accountRepository.save(account);
 
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");

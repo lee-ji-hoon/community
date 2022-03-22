@@ -27,7 +27,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
 
-    public void saveReply(@Valid ReplyForm replyForm, Account account, Board board) {
+    public Reply saveReply(@Valid ReplyForm replyForm, Account account, Board board) {
         Reply reply = Reply.builder()
                 .content(replyForm.getContent())
                 .account(account)
@@ -38,6 +38,7 @@ public class ReplyService {
                 .reportCount(0)
                 .build();
         replyRepository.save(reply);
+        return reply;
     }
 
     public Reply saveMeetingsReply(@Valid ReplyForm replyForm, Account account, Meetings meetings) {

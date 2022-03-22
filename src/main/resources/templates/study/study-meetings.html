@@ -468,8 +468,6 @@
             if (input.value == '') {
                 swal("댓글을 입력해주세요.");
             } else {
-                console.log(`${meetingsId}`);
-                console.log("댓글 작성");
                 $.ajax({
                     url: '/study/meetings/reply',
                     type: 'get',
@@ -505,13 +503,11 @@
                     jQuery(`#orginalReply${replyId}`).show();
                     jQuery(`#replyUpdateBtn${replyId}`).show();
                     jQuery(`#replyUpdateSubmit${replyId}`).hide();
-                    console.log("Reply Update Success");
                     $('.form_refresh').load(location.href+' .form_refresh');
                     // $('.reply_div').load(location.href+' .reply_div');
                     $(`#replyUpdateInput${replyId}`).prop("type", "hidden");
                 },
                 error : function (request, status, error){
-                    console.log("Reply Update Fail" + error);
                 }
             });
         }
@@ -526,12 +522,10 @@
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 data : $(`#updateForm${meetingsId}`).serialize(),
                 success : function (message){
-                    console.log("Board Update Success");
                     $('.form_refresh').load(window.location.href+' .form_refresh');
                     location.reload();
                 },
                 error : function (request, status, error){
-                    console.log("Board Update " + error);
                 }
             });
         }
@@ -569,11 +563,9 @@
                             data : $(`#replyDeleteForm${replyId}`).serialize(),
                             dataType : "json",
                             success : function (){
-                                console.log("Reply Delete Success");
                                 $('.form_refresh').load(location.href+' .form_refresh');
                             },
                             error : function (request, status, error){
-                                console.log("Reply Delete Fail" + error);
                             }
                         });
                         swal("댓글이 삭제되었습니다.", {

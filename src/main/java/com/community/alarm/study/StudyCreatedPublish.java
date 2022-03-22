@@ -1,5 +1,6 @@
 package com.community.alarm.study;
 
+import com.community.account.entity.Account;
 import com.community.study.entity.Study;
 import lombok.Data;
 import lombok.Getter;
@@ -13,10 +14,12 @@ import java.time.LocalDateTime;
 public class StudyCreatedPublish{
 
     private final Study study;
+    private final Account fromAccount;
 
-    public StudyCreatedPublish(Study newStudy) {
+    public StudyCreatedPublish(Study newStudy, Account Account) {
         log.info("studyCreatePublish");
         newStudy.setRecentAlarmDateTime(LocalDateTime.now());
         this.study = newStudy;
+        this.fromAccount = Account;
     }
 }

@@ -16,15 +16,15 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
 
-    public boolean addLike(Account account, Long boardId) {
+    public Likes addLike(Account account, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow();
 
         //중복 좋아요 방지
         if(isNotAlreadyLike(account, board)) {
-            likeRepository.save(new Likes(board, account));
-            return true;
+            Likes save = likeRepository.save(new Likes(board, account));
+            return save;
         }
-        return false;
+        return null;
     }
 
 

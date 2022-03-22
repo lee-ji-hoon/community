@@ -19,7 +19,7 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 @SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
@@ -94,7 +94,7 @@ public class Account {
 
     private boolean replyByPost = true;
 
-    private boolean replyCreateByEmail = true;
+    private boolean likesByPost = true;
     
     private boolean replyCreateByWeb = true;
 

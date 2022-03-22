@@ -1539,11 +1539,6 @@
             <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
             </div>
             <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}"> 자세히 보기 </a>
-            <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-            </div>-->
         </div>
     </div>
 </div>
@@ -1554,12 +1549,16 @@
             <a href="#"
                th:href="@{'/alarm/' + ${alarm.alarmId}}">
                 <div class="d-flex w-100 justify-content-between">
-                    <small class="text-muted" th:text="${alarm.title}">Noti title</small>
-                    <small class="fromNow text-muted" th:text="${alarm.alarmType}">Noti title</small>
+                    <small class="text-left mb-0 text-lg font-semibold" th:text="${alarm.title}">title</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">모임 댓글</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">커뮤니티 댓글</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">모임 생성</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">관심 스터디 생성</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">좋아요</small>
                 </div>
                 <div class="d-flex w-100 justify-content-between">
                     <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
-                    <small class="fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
+                    <small class="mt-0 fromNow text-muted" th:text="${service.meetingDateTime(alarm.createAlarmTime)}">3 days ago</small>
                 </div>
 
             </a>

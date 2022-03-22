@@ -29,7 +29,10 @@ public class Alarm {
     private String message;
 
     @ManyToOne
-    private Account account;
+    private Account toAccount;
+
+    @ManyToOne
+    private Account fromAccount;
 
     private LocalDateTime createAlarmTime;
 

@@ -9,17 +9,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
-    long countByAccountAndChecked(Account account, boolean checked);
-
-    @Transactional
-    List<Alarm> findByAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
-
-    @Transactional
-    void deleteByAccountAndChecked(Account account, boolean checked);
-
-    List<Alarm> findByPathAndAlarmTypeAndAccountAndChecked(String path, AlarmType valueOf, Account account, boolean checked);
+    long countByToAccountAndChecked(Account account, boolean checked);
 
     Alarm findByAlarmId(Long alarm);
 
-    List<Alarm> findByChecked(boolean b);
+    @Transactional
+    List<Alarm> findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
+
+    @Transactional
+    void deleteByToAccountAndChecked(Account account, boolean checked);
 }

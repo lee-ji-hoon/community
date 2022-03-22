@@ -82,6 +82,28 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <h4>기타 알림 </h4>
+                                <div>모임, 게시글 댓글들 중 어떤 것들을 받을지 선택해주세요 </div>
+                            </div>
+                            <div class="switches-list -mt-8 is-large">
+                                <div class="switch-container">
+                                    <label class="switch">
+                                        <input type="checkbox" name="likes"  id="likes"
+                                               th:checked="${account.isLikesByPost() == true}">
+                                        <span class="switch-button" ></span>
+                                        좋아요 받기
+                                    </label>
+
+                                    <!--<label class="switch">
+                                        <input type="checkbox" name="replyByPost"  id="replyByPost"
+                                               th:checked="${account.isReplyByMeetings == true}">
+                                        <span class="switch-button" ></span>
+                                        커뮤니티 댓글 받기
+                                    </label>-->
+                                </div>
+                            </div>
+
                             <button onclick="alarmUpdateBtn.alarmAjax()"
                                     aria-describedby="submitHelp" class="button bg-blue-700"> 저장 </button>
                         </form>

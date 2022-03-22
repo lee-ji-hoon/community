@@ -44,6 +44,7 @@ public class MeetingEventListener {
         Meetings meetings = meetingCreatedPublish.getMeetings();
         Meetings byMeetingsId = meetingsRepository.findByMeetingsId(meetings.getMeetingsId());
         Study study = byMeetingsId.getStudy();
+        Account fromAccount = meetingCreatedPublish.getFromAccount();
 
         log.info("study : {}", study);
 
@@ -60,12 +61,12 @@ public class MeetingEventListener {
             if (member.isStudyCreatedByWeb()) {
                 log.info("모임 웹 발송 study : {}", study.getId() );
                 log.info("모임 웹 발송 account : {}", member.getEmail());
-                sendWeb(meetings, member, study);
+                sendWeb(meetings, member, study, fromAccount);
             }
         }
 
     }
-    private void sendWeb(Meetings meetings, Account account, Study study) {
+    private void sendWeb(Meetings meetings, Account toAccount, Study study, Account fromAccount) {
         Alarm alarm = new Alarm();
         alarm.setTitle(meetings.getMeetingTitle());
         alarm.setLink("/study/" + study.getEncodePath() +"/meetings");
@@ -73,7 +74,8 @@ public class MeetingEventListener {
         alarm.setCreateAlarmTime(LocalDateTime.now());
         alarm.setPath(study.getPath());
         alarm.setMessage(meetings.getMeetingPlaces());
-        alarm.setAccount(account);
+        alarm.setToAccount(toAccount);
+        alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING);
         alarmRepository.save(alarm);
     }

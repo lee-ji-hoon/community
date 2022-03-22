@@ -36,6 +36,8 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final DateTimePath<java.time.LocalDateTime> joinedAt = createDateTime("joinedAt", java.time.LocalDateTime.class);
 
+    public final BooleanPath likesByPost = createBoolean("likesByPost");
+
     public final ListPath<com.community.like.Likes, com.community.like.QLikes> likesList = this.<com.community.like.Likes, com.community.like.QLikes>createList("likesList", com.community.like.Likes.class, com.community.like.QLikes.class, PathInits.DIRECT2);
 
     public final StringPath location = createString("location");
@@ -53,8 +55,6 @@ public class QAccount extends EntityPathBase<Account> {
     public final BooleanPath replyByMeetings = createBoolean("replyByMeetings");
 
     public final BooleanPath replyByPost = createBoolean("replyByPost");
-
-    public final BooleanPath replyCreateByEmail = createBoolean("replyCreateByEmail");
 
     public final BooleanPath replyCreateByWeb = createBoolean("replyCreateByWeb");
 

@@ -23,6 +23,4 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Queryds
     @EntityGraph(value = "Account.withTags", type = EntityGraph.EntityGraphType.FETCH)
     Account findAccountWithTagsById(Long Id);
 
-//    @EntityGraph(attributePaths = {"tags"})
-//    Account findTagsById(Long id);
 }
