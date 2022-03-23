@@ -1,7 +1,8 @@
 package com.community.account;
 
-import com.community.account.form.SignUpForm;
-import com.community.account.repository.AccountRepository;
+import com.community.web.dto.SignUpForm;
+import com.community.domain.account.AccountRepository;
+import com.community.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MainControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired AccountService accountService;
+    @Autowired
+    AccountService accountService;
     @Autowired
     AccountRepository accountRepository;
 

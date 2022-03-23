@@ -1,7 +1,7 @@
 package com.community.chat;
 
-import com.community.account.CurrentUser;
-import com.community.account.entity.Account;
+import com.community.domain.account.Account;
+import com.community.domain.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
