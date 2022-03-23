@@ -1,4 +1,4 @@
-package com.community.chat;
+package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
