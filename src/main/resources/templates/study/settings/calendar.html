@@ -21,7 +21,8 @@
                     <div th:if="${message}" class="m-5">
                         <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
                     </div>
-                    <form class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
+                    <form id="calendarForm"
+                          class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
                           th:action="@{'/study/' + ${study.getPath()} + '/settings/calendar'}"
                           th:object="${studyCalendarForm}"
                           method="post" novalidate>
@@ -34,6 +35,7 @@
                             <input id="limitMember" type="number"
                                    th:value="${study.limitMember}"
                                    class="shadow-none with-border p-3 form-control" aria-describedby="limitMembersHelp" min="2" max="30">
+                            <input type="hidden" id="limitMemberNum" value="" th:field="*{limitMember}">
                             <small id="limitMemberHelp" class="form-text text-muted">
                                 스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
                             </small>
@@ -81,13 +83,26 @@
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
                             </div>
                         </div>
-                        <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 변경 </button>
+                        <a type="submit" id="calendar-submit"
+                           href="javascript:update_calendar();"
+                           aria-describedby="submitHelp" class="button bg-blue-700"> 변경 </a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="application/javascript">
+    function update_calendar() {
+        let limitMember = document.getElementById("limitMember");
+        let limitMemberNum = document.getElementById("limitMemberNum");
+
+        limitMemberNum.value = limitMember.value;
+
+        $("#calendarForm").submit();
+    }
+
+</script>
 <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>
 <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
