@@ -119,9 +119,10 @@ public class AccountController {
     // 프로필 배너 이미지 변경
     @PostMapping("/profile/{nickname}/update-banner")
     public String updateBanner(@CurrentUser Account account, @PathVariable String nickname,
-                               RedirectAttributes redirectAttributes, Model model, ProfileForm profileForm) {
-        accountService.updateProfileBanner(account, profileForm);
+                               RedirectAttributes redirectAttributes, String image) {
+        accountService.updateProfileBanner(account, image);
         redirectAttributes.addFlashAttribute("message", "프로필을 수정했습니다.");
+        log.info("image : {}",image);
 
         return "redirect:/profile/{nickname}";
     }

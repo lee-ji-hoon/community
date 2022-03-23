@@ -453,7 +453,8 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "banner")
-    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
+    public String studyImageUpToDate(@CurrentUser Account account,
+                                     @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
 
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         studyService.getStudyImage(studyUpdate, image);
