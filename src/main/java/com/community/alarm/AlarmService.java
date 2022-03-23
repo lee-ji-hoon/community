@@ -27,12 +27,13 @@ public class AlarmService {
         alarmRepository.save(byId);
     }
 
+    @Transactional
     public void deleteByChecked(Account account) {
         log.info("fromAccountId : {}", account.getId());
         List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
         for (Alarm alarm : alarmList) log.info("삭제 할 alarmList : {}", alarm);
-        List<Alarm> AccountAlarmList = account.getAlarmList();
-//        for (Alarm alarm : AccountAlarmList) log.info("account alarmList : {}", alarm);
+        /*List<Alarm> AccountAlarmList = account.getAlarmList();
+        for (Alarm alarm : AccountAlarmList) log.info("account alarmList : {}", alarm);*/
 
     }
 }
