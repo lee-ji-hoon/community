@@ -13,6 +13,7 @@ import com.querydsl.core.types.dsl.PathInits;
 /**
  * QAccount is a Querydsl query type for Account
  */
+@Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QAccount extends EntityPathBase<Account> {
 
     private static final long serialVersionUID = -383407980L;
