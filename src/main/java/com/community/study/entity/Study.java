@@ -51,7 +51,7 @@ import java.util.*;
 public class Study {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "study_id")
     private Long id;
 

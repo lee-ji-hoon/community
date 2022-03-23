@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "alarmId")
 public class Alarm {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "alarm_id ")
     private Long alarmId;
 
@@ -28,8 +28,12 @@ public class Alarm {
 
     private String message;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account toAccount;
+
     @ManyToOne
-    private Account account;
+    private Account fromAccount;
 
     private LocalDateTime createAlarmTime;
 

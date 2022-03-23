@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Likes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)

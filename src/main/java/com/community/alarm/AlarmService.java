@@ -1,61 +1,38 @@
 package com.community.alarm;
 
+import com.community.account.entity.Account;
+import com.community.account.repository.AccountRepository;
 import com.community.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class AlarmService {
-
-
     private final AlarmRepository alarmRepository;
+    private final AccountRepository accountRepository;
 
-//    public void markAsRead(List<Alarm> alarmList) {
-//        alarmList.forEach(n -> n.setChecked(true));
-//        alarmRepository.saveAll(alarmList);
-//    }
-
-    public void markAsRead(Alarm byId) {
+    public void alarmRead(Alarm byId) {
         byId.setChecked(true);
         alarmRepository.save(byId);
     }
 
-    public String meetingDateTime(LocalDateTime localDateTime){
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        Date date = Date.from(instant);
+    public void deleteByChecked(Account account) {
+        log.info("fromAccountId : {}", account.getId());
+        List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
+        for (Alarm alarm : alarmList) log.info("삭제 할 alarmList : {}", alarm);
+        List<Alarm> AccountAlarmList = account.getAlarmList();
+//        for (Alarm alarm : AccountAlarmList) log.info("account alarmList : {}", alarm);
 
-        long curTime = System.currentTimeMillis();
-        long regTime = date.getTime();
-        long diffTime = (curTime - regTime) / 1000;
-        String msg = null;
-        if (diffTime < BoardService.SEC) {
-            // sec
-            msg = diffTime + "초 전";
-        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
-            // min
-            msg = diffTime + "분 전";
-        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
-            // hour
-            msg = (diffTime) + "시간 전";
-        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
-            // day
-            msg = (diffTime) + "일 전";
-        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
-            // day
-            msg = (diffTime) + "달 전";
-        } else {
-            msg = (diffTime) + "년 전";
-        }
-        return msg;
     }
 }

@@ -4,8 +4,8 @@ import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
 import com.community.alarm.meeting.MeetingCreatedPublish;
+import com.community.alarm.reply.ReplyCreatePublish;
 import com.community.alarm.study.StudyCreatedPublish;
-import com.community.board.controller.ReplyController;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
 import com.community.board.repository.ReplyRepository;
@@ -44,10 +44,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -108,9 +107,6 @@ public class StudyController {
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
 
-//        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
-//        model.addAttribute("suggestStudyList", studyRepository.findStudyByTags((accountWithTagsById.getTags())));
-
         model.addAttribute("accountWithTagsById", accountRepository.findAccountWithTagsById(account.getId()));
 
         return "study/study-list";
@@ -120,8 +116,6 @@ public class StudyController {
     public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
 
         Tag byTag = tagService.getTag(tagTitle);
-
-        System.out.println("byTag = " + byTag);
 
         model.addAttribute(account);
         model.addAttribute("tag", byTag);
@@ -185,7 +179,7 @@ public class StudyController {
             return "study/meetings/view";
         }*/
         Meetings newMeeting = studyService.createNewMeeting(modelMapper.map(meetingsForm, Meetings.class), studyUpdate, account);
-        applicationEventPublisher.publishEvent(new MeetingCreatedPublish(newMeeting));
+        applicationEventPublisher.publishEvent(new MeetingCreatedPublish(newMeeting, account));
         model.addAttribute(account);
 
         log.info("모임 생성 성공");
@@ -207,34 +201,6 @@ public class StudyController {
         return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
     }
 
-    // 모임 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/study/meetings/reply")
-    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
-                                   @RequestParam(value = "r_account_id") Long r_account_id,
-                                   @RequestParam(value = "r_content") String r_content,
-                                   ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_meetings_id + "r_meetings_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMeetingsReply(replyForm, account, currentMeetings);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
     @ResponseBody
     @RequestMapping(value = "/study/meetings/update", method = RequestMethod.GET)
     public String meetingUpdate(MeetingsForm meetingsForm, @CurrentUser Account account,
@@ -249,6 +215,7 @@ public class StudyController {
         log.info("모임 주제 : ", updateMethod);
         log.info("모임 내용 : ", updateMeetingDescription);
         log.info("모임 위치 : ", updatePlaces);
+
 
         Long meetingsId = Long.valueOf(meetingId);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingsId);
@@ -272,6 +239,47 @@ public class StudyController {
         log.info("잘못된 게시물 수정 요청 : bid = " + meetingId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/study/meetings/reply")
+    public int addMeetingReplyLink(@RequestParam(value = "r_meetings_id") Long r_meetings_id,
+                                   @RequestParam(value = "r_account_id") Long r_account_id,
+                                   @RequestParam(value = "r_content") String r_content,
+                                   ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_meetings_id + "r_meetings_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+
+
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            Meetings currentMeetings = meetingsRepository.findByMeetingsId(r_meetings_id);
+            Reply reply = replyService.saveMeetingsReply(replyForm, account, currentMeetings);
+
+            Set<Account> managers = currentMeetings.getStudy().getManagers();
+            for (Account manager : managers) {
+                Optional<Account> managerId = accountRepository.findById(manager.getId());
+                log.info("manager : {}",managerId.get().getId());
+                log.info("account : {}",currentAccount.get().getId());
+                if(!managerId.get().getId().equals(currentAccount.get().getId())) {
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+                }
+            }
+
+            List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
     }
 
     @ResponseBody
@@ -424,7 +432,7 @@ public class StudyController {
             return "redirect:/study/" + fixPath(path) + "/settings/alarm";
         }*/
 
-        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate));
+        applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 
         redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
 

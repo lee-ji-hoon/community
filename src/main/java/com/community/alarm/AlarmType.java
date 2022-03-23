@@ -3,5 +3,5 @@ package com.community.alarm;
 
 public enum AlarmType {
 
-    REPLY, STUDY, MEETING
+    BOARD_REPLY, MEETING_REPLY, STUDY, MEETING, LIKES
 }

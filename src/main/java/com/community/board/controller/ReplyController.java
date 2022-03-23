@@ -1,8 +1,8 @@
 package com.community.board.controller;
 
-import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
+import com.community.alarm.reply.ReplyCreatePublish;
 import com.community.board.entity.Board;
 import com.community.board.entity.Reply;
 import com.community.board.form.ReplyForm;
@@ -11,18 +11,13 @@ import com.community.board.repository.ReplyRepository;
 import com.community.board.service.ReplyService;
 import com.community.council.Council;
 import com.community.council.CouncilRepository;
-import com.community.like.Likes;
-import com.community.market.Market;
-import com.community.market.MarketRepository;
-import com.community.study.entity.Meetings;
-import com.community.study.repository.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -38,18 +33,13 @@ public class ReplyController {
     private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
     private final CouncilRepository councilRepository;
-    private final MeetingsRepository meetingsRepository;
-    private final MarketRepository marketRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     private final ReplyService replyService;
 
     private String updatePath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
-
-
-
-
 
     // 댓글 관련 내용
     @ResponseBody
@@ -69,7 +59,17 @@ public class ReplyController {
         if (currentAccount.isPresent()) {
             String accountEmail = currentAccount.get().getEmail();
             Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveReply(replyForm, account, currentBoard);
+            Reply reply = replyService.saveReply(replyForm, account, currentBoard);
+
+            Account writer = currentBoard.getWriter();
+            log.info("manager : {}",writer.getId());
+            log.info("account : {}",currentAccount.get().getId());
+
+            if(!writer.getId().equals(currentAccount.get().getId())) {
+                log.info("board 댓글 알림 이벤트 실행");
+                applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+            }
+
             List<Reply> replies = replyRepository.findAll();
             int reply_size = replies.size();
             return reply_size;
@@ -78,8 +78,6 @@ public class ReplyController {
         int reply_size = replies.size();
         return reply_size;
     }
-
-
 
     @ResponseBody
     @RequestMapping(value = "/council/detail/reply")
