@@ -152,35 +152,26 @@
         /* 아래쪽 툴팁 끝 */
     </style>
 
-
     <!-- theme header
     ================================================== -->
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Favicon -->
     <link href="/assets/images/favicon.png" rel="icon" type="image/png">
-
     <!-- Basic Page Needs
         ================================================== -->
     <title>멀티커뮤니티</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Socialite is - Professional A unique and beautiful collection of UI elements">
-
-
-
     <!-- icons
     ================================================== -->
     <link rel="stylesheet" href="/assets/css/icons.css">
-
     <!-- CSS
     ================================================== -->
     <link rel="stylesheet" href="/assets/css/uikit.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
     <!-- Javascript
     ================================================== -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -220,6 +211,8 @@
                     return false;
                 }
             });
+
+            $('.refresh_alarm').load(location.href+' .refresh_alarm');
         });
 
     </script>
@@ -347,95 +340,40 @@
                                     </a>
                                 </div>
                             </div>
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                        </div>
-                                        <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
-                                        <div class="drop_text">
-                                            <p>
-                                                <strong> ezhoon </strong>님이 회원님의 글을 좋아합니다.<br>
-                                                <span class="text-link">게시물 제목 </span>
-                                            </p>
-                                            <time> 2시간 전 </time>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="drop_avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                        </div>
-                                        <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
-                                        <div class="drop_text">
-                                            <p>
-                                                <strong> ezhoon </strong>님이 회원님의 글을 좋아합니다.<br>
-                                                <span class="text-link">게시물 제목 </span>
-                                            </p>
-                                            <time> 2시간 전 </time>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="not-read">
-                                    <a href="#">
-                                        <div class="drop_avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                        </div>
-                                        <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
-                                        <div class="drop_text">
-                                            <p>
-                                                <strong> ezhoon </strong>님이 회원님의 글을 좋아합니다.<br>
-                                                <span class="text-link">게시물 제목 </span>
-                                            </p>
-                                            <time> 2시간 전 </time>
-                                        </div>
-                                    </a>
-                                <li>
-                                <a href="#">
-                                    <div class="drop_avatar">
-                                        <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                             th:data-jdenticon-value="${account.studentId}"
-                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                        <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                             th:src="${account?.profileImage}"
-                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                    </div>
-                                    <span class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                 </span>
-                                    <div class="drop_text">
-                                        <p>
-                                            <strong> ezhoon </strong>님이 회원님의 글을 좋아합니다.<br>
-                                            <span class="text-link">게시물 제목 </span>
-                                        </p>
-                                        <time> 2시간 전 </time>
-                                    </div>
-                                </a>
-                                </li>
-                            </ul>
+                            <div class="refresh_alarm">
+                                <!--<ul>
+                                    <li th:each="alarm : ${account.alarmList}">
+                                        <th:block th:if="${!alarm.isChecked()}">
+                                            <a th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                                                <div class="drop_avatar">
+                                                    <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                         th:data-jdenticon-value="${alarm.fromAccount.studentId}"
+                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                                    <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                         th:src="${alarm.fromAccount.profileImage}"
+                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+                                                </div>
+                                                <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
+                                                 <i class="icon-feather-thumbs-up"></i>
+                                            </span>
+                                                <div class="drop_text">
+                                                    <p>
+                                                        <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
+                                                        <br>
+                                                        <span th:text="${alarm.title}" class="text-link">게시물 제목 </span>
+                                                    </p>
+                                                    <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
+                                                </div>
+                                            </a>
+                                        </th:block>
+                                    </li>
+                                </ul>-->
+                            </div>
                         </div>
                     </div>
 
@@ -1555,13 +1493,31 @@
             <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
             </div>
             <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}"> 자세히 보기 </a>
-            <!--<div class="job-tags mt-5 mb-2 space-x-2.5 space-y-2">
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Wordpress </a>
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Design </a>
-                <a href="#" class="border px-3 py-1.5 rounded-md text-sm inline-block"> Joomla </a>
-            </div>-->
         </div>
     </div>
+</div>
+
+<div th:fragment="alarm-list(type)" class="p-5">
+    <ul class="list-group list-group-flush">
+        <li class="card m-5 p-5" th:each="alarm : ${type}">
+            <a href="#"
+               th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                <div class="d-flex w-100 justify-content-between">
+                    <small class="text-left mb-0 text-lg font-semibold" th:text="${alarm.title}">title</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">모임 댓글</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">커뮤니티 댓글</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">모임 생성</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">관심 스터디 생성</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">좋아요</small>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="text-left mb-0 mt-1" th:text="${alarm.message}">message</p>
+                    <small class="mt-0 fromNow text-muted" th:text="${account.dateTime(alarm.createAlarmTime)}">3 days ago</small>
+                </div>
+
+            </a>
+        </li>
+    </ul>
 </div>
 
 </html>

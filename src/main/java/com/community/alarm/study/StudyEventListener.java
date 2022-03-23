@@ -1,6 +1,7 @@
 package com.community.alarm.study;
 
 import com.community.account.AccountPredicates;
+import com.community.account.CurrentUser;
 import com.community.account.entity.Account;
 import com.community.account.repository.AccountRepository;
 import com.community.alarm.Alarm;
@@ -40,32 +41,32 @@ public class StudyEventListener {
     @EventListener
     public void studyCreate(StudyCreatedPublish studyCreatedPublish) {
         log.info("스터디 알람 실행");
+        log.info("fromAccount : {}", studyCreatedPublish.getFromAccount().getNickname());
+
         Study study = studyRepository.findStudyWithTagsById(studyCreatedPublish.getStudy().getId());
+        Account fromAccount = studyCreatedPublish.getFromAccount();
         study.setRecentAlarmDateTime(LocalDateTime.now());
 
         Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTags(study.getTags()));
 
         log.info("tag가 동일한 account : {}", accounts);
 
-        accounts.forEach( account -> {
-            if (account.isStudyCreatedByEmail()) {
+        accounts.forEach( toAccount -> {
+            if (toAccount.isStudyCreatedByEmail()) {
                 log.info("스터디 이메일 발송 study : {}", study );
-                log.info("스터디 이메일 발송 account : {}", account.getEmail() );
-                sendEmail(study, account);
+                log.info("스터디 이메일 발송 account : {}", toAccount.getEmail() );
+                sendEmail(study, toAccount);
             }
 
-            if (account.isStudyCreatedByWeb()) {
-                sendWeb(study, account);
-                // TODO 웹 view 구현 및 실제 발송 필요
+            if (toAccount.isStudyCreatedByWeb()) {
                 log.info("스터디 웹 발송 study : {}", study );
-                log.info("스터디 웹 발송 account : {}", account );
+                log.info("스터디 웹 발송 account : {}", toAccount );
+                sendWeb(study, toAccount, fromAccount);
             }
         });
-
-
     }
 
-    private void sendWeb(Study study, Account account) {
+    private void sendWeb(Study study, Account toAccount, Account formAccount) {
         Alarm alarm = new Alarm();
         alarm.setTitle(study.getTitle());
         alarm.setLink("/study/" + study.getEncodePath());
@@ -73,7 +74,8 @@ public class StudyEventListener {
         alarm.setCreateAlarmTime(LocalDateTime.now());
         alarm.setPath(study.getPath());
         alarm.setMessage(study.getShortDescription());
-        alarm.setAccount(account);
+        alarm.setToAccount(toAccount);
+        alarm.setFromAccount(formAccount);
         alarm.setAlarmType(AlarmType.STUDY);
         alarmRepository.save(alarm);
     }

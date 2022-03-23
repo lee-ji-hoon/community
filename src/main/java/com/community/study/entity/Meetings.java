@@ -21,7 +21,7 @@ import java.util.List;
 public class Meetings {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "meetings_id")
     private Long meetingsId;
 

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Reply {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rid;
 
     @ManyToOne(targetEntity = Board.class, fetch = FetchType.LAZY)

@@ -17,6 +17,39 @@
 
     <div class="main_content">
         <div class="mcontainer">
+<!--            <div th:text="${account.alarmList.size()}"></div>-->
+            <!--<ul>
+                <li th:each="alarm : ${account.alarmList}">
+                    <th:block th:if="${!alarm.isChecked()}">
+                        <a th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                            <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                 th:data-jdenticon-value="${alarm.fromAccount.studentId}"
+                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                            <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                 th:src="${alarm.fromAccount.profileImage}"
+                                 alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+
+                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
+                                 <i class="icon-feather-thumbs-up"></i>
+                            </span>
+                            <div class="drop_text">
+                                <p>
+                                    <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
+                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
+                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
+                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
+                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
+                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
+                                    <br>
+                                    <span th:text="${alarm.title}" class="text-link">게시물 제목 </span>
+                                </p>
+                                <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
+                            </div>
+                        </a>
+                    </th:block>
+
+                </li>
+            </ul>-->
 
             <div class="lg:flex lg:space-x-10">
 
@@ -192,5 +225,8 @@
     </div>
 
 </div>
+<script type="application/javascript">
+    $('.refresh_alarm').load(location.href+' .refresh_alarm');
+</script>
 </body>
 </html>

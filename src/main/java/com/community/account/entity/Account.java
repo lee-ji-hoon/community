@@ -1,5 +1,7 @@
 package com.community.account.entity;
 
+import com.community.alarm.Alarm;
+import com.community.board.service.BoardService;
 import com.community.like.Likes;
 import com.community.market.Market;
 import com.community.tag.Tag;
@@ -9,7 +11,9 @@ import org.hibernate.annotations.Type;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Entity
@@ -19,12 +23,12 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@SequenceGenerator(
+//@ToString
+/*@SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
         initialValue = 1,
-        allocationSize = 1)
+        allocationSize = 1)*/
 
 @NamedEntityGraph(name = "Account.withTags", attributeNodes = {
         @NamedAttributeNode("tags")
@@ -32,8 +36,7 @@ import java.util.*;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-                    generator = "MEMBER_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id")
     private Long id;
 
@@ -77,26 +80,27 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alarm> alarmList = new ArrayList<>();
+
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
     @Lob
-    @Type(type = "text")
-    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     // 임시 알림 설정
     private boolean studyCreatedByEmail = false;
 
-    private boolean studyCreatedByWeb = false;
+    private boolean studyCreatedByWeb = true;
 
-    private boolean studyMeetingByEmail = false;
+    private boolean replyByMeetings = true;
 
-    private boolean studyMeetingByWeb = false;
+    private boolean replyByPost = true;
 
-    private boolean replyCreateByEmail = false;
-    
-    private boolean replyCreateByWeb = false;
+    private boolean likesByPost = true;
+
+    private boolean replyCreateByWeb = true;
 
     // TODO
     // 알림 추가
@@ -105,6 +109,7 @@ public class Account {
 
     // 태그
     @ManyToMany
+    @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
@@ -139,5 +144,34 @@ public class Account {
 
     public boolean isMemeber(Study byPath) {
         return byPath.getMembers().contains(this);
+    }
+
+    public String dateTime(LocalDateTime localDateTime){
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+
+        long curTime = System.currentTimeMillis();
+        long regTime = date.getTime();
+        long diffTime = (curTime - regTime) / 1000;
+        String msg = null;
+        if (diffTime < BoardService.SEC) {
+            // sec
+            msg = diffTime + "초 전";
+        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
+            // min
+            msg = diffTime + "분 전";
+        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
+            // hour
+            msg = (diffTime) + "시간 전";
+        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
+            // day
+            msg = (diffTime) + "일 전";
+        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
+            // day
+            msg = (diffTime) + "달 전";
+        } else {
+            msg = (diffTime) + "년 전";
+        }
+        return msg;
     }
 }

@@ -20,6 +20,8 @@ public class QAccount extends EntityPathBase<Account> {
 
     public static final QAccount account = new QAccount("account");
 
+    public final ListPath<com.community.alarm.Alarm, com.community.alarm.QAlarm> alarmList = this.<com.community.alarm.Alarm, com.community.alarm.QAlarm>createList("alarmList", com.community.alarm.Alarm.class, com.community.alarm.QAlarm.class, PathInits.DIRECT2);
+
     public final StringPath bannerImage = createString("bannerImage");
 
     public final StringPath bio = createString("bio");
@@ -36,6 +38,8 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final DateTimePath<java.time.LocalDateTime> joinedAt = createDateTime("joinedAt", java.time.LocalDateTime.class);
 
+    public final BooleanPath likesByPost = createBoolean("likesByPost");
+
     public final ListPath<com.community.like.Likes, com.community.like.QLikes> likesList = this.<com.community.like.Likes, com.community.like.QLikes>createList("likesList", com.community.like.Likes.class, com.community.like.QLikes.class, PathInits.DIRECT2);
 
     public final StringPath location = createString("location");
@@ -50,7 +54,9 @@ public class QAccount extends EntityPathBase<Account> {
 
     public final StringPath profileImage = createString("profileImage");
 
-    public final BooleanPath replyCreateByEmail = createBoolean("replyCreateByEmail");
+    public final BooleanPath replyByMeetings = createBoolean("replyByMeetings");
+
+    public final BooleanPath replyByPost = createBoolean("replyByPost");
 
     public final BooleanPath replyCreateByWeb = createBoolean("replyCreateByWeb");
 
@@ -59,10 +65,6 @@ public class QAccount extends EntityPathBase<Account> {
     public final BooleanPath studyCreatedByEmail = createBoolean("studyCreatedByEmail");
 
     public final BooleanPath studyCreatedByWeb = createBoolean("studyCreatedByWeb");
-
-    public final BooleanPath studyMeetingByEmail = createBoolean("studyMeetingByEmail");
-
-    public final BooleanPath studyMeetingByWeb = createBoolean("studyMeetingByWeb");
 
     public final SetPath<com.community.tag.Tag, com.community.tag.QTag> tags = this.<com.community.tag.Tag, com.community.tag.QTag>createSet("tags", com.community.tag.Tag.class, com.community.tag.QTag.class, PathInits.DIRECT2);
 

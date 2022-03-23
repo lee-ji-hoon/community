@@ -22,8 +22,6 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public static final QAlarm alarm = new QAlarm("alarm");
 
-    public final com.community.account.entity.QAccount account;
-
     public final NumberPath<Long> alarmId = createNumber("alarmId", Long.class);
 
     public final EnumPath<AlarmType> alarmType = createEnum("alarmType", AlarmType.class);
@@ -32,6 +30,8 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final DateTimePath<java.time.LocalDateTime> createAlarmTime = createDateTime("createAlarmTime", java.time.LocalDateTime.class);
 
+    public final com.community.account.entity.QAccount fromAccount;
+
     public final StringPath link = createString("link");
 
     public final StringPath message = createString("message");
@@ -39,6 +39,8 @@ public class QAlarm extends EntityPathBase<Alarm> {
     public final StringPath path = createString("path");
 
     public final StringPath title = createString("title");
+
+    public final com.community.account.entity.QAccount toAccount;
 
     public QAlarm(String variable) {
         this(Alarm.class, forVariable(variable), INITS);
@@ -58,7 +60,8 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public QAlarm(Class<? extends Alarm> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.account = inits.isInitialized("account") ? new com.community.account.entity.QAccount(forProperty("account")) : null;
+        this.fromAccount = inits.isInitialized("fromAccount") ? new com.community.account.entity.QAccount(forProperty("fromAccount")) : null;
+        this.toAccount = inits.isInitialized("toAccount") ? new com.community.account.entity.QAccount(forProperty("toAccount")) : null;
     }
 
 }

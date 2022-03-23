@@ -1,7 +1,6 @@
 package com.community.alarm.meeting;
 
 import com.community.account.entity.Account;
-import com.community.account.repository.AccountRepository;
 import com.community.alarm.Alarm;
 import com.community.alarm.AlarmRepository;
 import com.community.alarm.AlarmType;
@@ -44,15 +43,16 @@ public class MeetingEventListener {
 
         Meetings meetings = meetingCreatedPublish.getMeetings();
         Meetings byMeetingsId = meetingsRepository.findByMeetingsId(meetings.getMeetingsId());
-        log.info("meetingId : {}", byMeetingsId.getStudy());
-
         Study study = byMeetingsId.getStudy();
+        Account fromAccount = meetingCreatedPublish.getFromAccount();
+
+        log.info("study : {}", study);
 
         Set<Account> members =study.getMembers();
 
         for (Account member : members) {
             log.info("member : {}", member);
-            if (member.isStudyMeetingByEmail()) {
+            if (member.isReplyByMeetings()) {
                 log.info("모임 이메일 발송 study : {}", study.getId() );
                 log.info("모임 이메일 발송 account : {}", member.getEmail());
                 sendEmail(meetings, member, study);
@@ -61,12 +61,12 @@ public class MeetingEventListener {
             if (member.isStudyCreatedByWeb()) {
                 log.info("모임 웹 발송 study : {}", study.getId() );
                 log.info("모임 웹 발송 account : {}", member.getEmail());
-                sendWeb(meetings, member, study);
+                sendWeb(meetings, member, study, fromAccount);
             }
         }
 
     }
-    private void sendWeb(Meetings meetings, Account account, Study study) {
+    private void sendWeb(Meetings meetings, Account toAccount, Study study, Account fromAccount) {
         Alarm alarm = new Alarm();
         alarm.setTitle(meetings.getMeetingTitle());
         alarm.setLink("/study/" + study.getEncodePath() +"/meetings");
@@ -74,7 +74,8 @@ public class MeetingEventListener {
         alarm.setCreateAlarmTime(LocalDateTime.now());
         alarm.setPath(study.getPath());
         alarm.setMessage(meetings.getMeetingPlaces());
-        alarm.setAccount(account);
+        alarm.setToAccount(toAccount);
+        alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING);
         alarmRepository.save(alarm);
     }
