@@ -26,13 +26,15 @@ public class QChat extends EntityPathBase<Chat> {
 
     public final StringPath content = createString("content");
 
+    public final com.community.domain.market.QMarket market_id;
+
     public final BooleanPath readChk = createBoolean("readChk");
 
     public final DateTimePath<java.time.LocalDateTime> readTime = createDateTime("readTime", java.time.LocalDateTime.class);
 
     public final com.community.domain.account.QAccount receiver;
 
-    public final StringPath room = createString("room");
+    public final NumberPath<Long> room = createNumber("room", Long.class);
 
     public final com.community.domain.account.QAccount sender;
 
@@ -56,6 +58,7 @@ public class QChat extends EntityPathBase<Chat> {
 
     public QChat(Class<? extends Chat> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.market_id = inits.isInitialized("market_id") ? new com.community.domain.market.QMarket(forProperty("market_id"), inits.get("market_id")) : null;
         this.receiver = inits.isInitialized("receiver") ? new com.community.domain.account.QAccount(forProperty("receiver")) : null;
         this.sender = inits.isInitialized("sender") ? new com.community.domain.account.QAccount(forProperty("sender")) : null;
     }

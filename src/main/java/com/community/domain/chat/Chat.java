@@ -1,6 +1,7 @@
 package com.community.domain.chat;
 
 import com.community.domain.account.Account;
+import com.community.domain.market.Market;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ public class Chat {
     @JoinColumn(name = "receiver_id")
     private Account receiver;
 
-    private String room;
+    private Long room;
 
     private String content;
 
@@ -35,4 +36,8 @@ public class Chat {
     private LocalDateTime readTime;
 
     private Boolean readChk;
+
+    @ManyToOne(targetEntity = Market.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "market_id")
+    private Market market_id;
 }
