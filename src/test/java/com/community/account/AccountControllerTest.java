@@ -1,7 +1,7 @@
 package com.community.account;
 
-import com.community.account.entity.Account;
-import com.community.account.repository.AccountRepository;
+import com.community.domain.account.Account;
+import com.community.domain.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
