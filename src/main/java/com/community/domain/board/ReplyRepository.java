@@ -1,7 +1,5 @@
 package com.community.domain.board;
 
-import com.community.domain.board.Board;
-import com.community.domain.board.Reply;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;
