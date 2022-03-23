@@ -1025,11 +1025,11 @@
         let $confirmBtn = $("#confirm-button");
         let $resetBtn = $("#reset-button");
         let $cutBtn = $("#cut-button");
-        let $saveBtn = $("#save-button");
         let $newStudyImage = $("#new-study-image");
         let $currentStudyImage = $("#current-study-image");
         let $resultImage = $("#cropped-new-study-image");
         let $studyImage = $("#studyImage");
+        let $updateBanner = $("#update-banner");
 
         $newStudyImage.hide();
         $cutBtn.hide();
@@ -1066,6 +1066,7 @@
                         $cutBtn.show();
                         $confirmBtn.hide();
                         $resetBtn.show();
+                        $updateBanner.hide();
                     }
                 };
 
@@ -1094,21 +1095,16 @@
             $resultImage.html(newImage);
             $resultImage.show();
             $confirmBtn.show();
+            $cutBtn.hide();
             $newStudyImage.hide();
-
 
             $confirmBtn.click(function () {
                 $newStudyImage.html(newImage);
-                $cutBtn.hide();
-                $confirmBtn.hide();
                 $studyImage.val(dataUrl);
-                $saveBtn.show();
+                $("#imageForm").submit();
             });
         });
 
-        $saveBtn.click(function() {
-            $("#imageForm").submit();
-        })
     });
 </script>
 
@@ -1167,14 +1163,12 @@
 
             <input type="file" id="study-image-file" name="uploadfile" accept="*">
         </div>
-        <span id="cut-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+        <span id="cut-button"
+              class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
             자르기
         </span>
-        <span id="confirm-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+        <span id="confirm-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
             확인
-        </span>
-        <span class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5" id="save-button">
-            저장
         </span>
         <span id="reset-button" class="flex items-center justify-center h-8 px-3 bg-red-600 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
             취소
