@@ -29,11 +29,11 @@
                         <p> 스터디 인원 및 기간을 수정할 수 있습니다..</p>
                         <hr/>
                         <div>
-                            <label for="limitMember" class="font-bold">인원</label>
+                            <label th:value="${study.limitMember}" for="limitMember" class="font-bold">인원</label>
+
                             <input id="limitMember" type="number"
-                                   th:field="*{limitMember}"
                                    th:value="${study.limitMember}"
-                                   class="shadow-none with-border p-3 form-control" placeholder="2" aria-describedby="limitMembersHelp" min="2" max="30">
+                                   class="shadow-none with-border p-3 form-control" aria-describedby="limitMembersHelp" min="2" max="30">
                             <small id="limitMemberHelp" class="form-text text-muted">
                                 스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
                             </small>
@@ -81,7 +81,6 @@
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
                             </div>
                         </div>
-
                         <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 변경 </button>
                     </form>
                 </div>
@@ -89,10 +88,12 @@
         </div>
     </div>
 </div>
-
+<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+<script src="/node_modules/cropper/dist/cropper.min.js"></script>
+<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
 <script th:replace="theme-fragments.html :: editor-script"></script>
-<script th:replace="theme-fragments.html :: studyBanner"></script>>
+<script th:replace="theme-fragments.html :: studyBanner"></script>
 </body>
 
 </html>
