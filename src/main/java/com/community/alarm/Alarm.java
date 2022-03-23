@@ -28,8 +28,8 @@ public class Alarm {
 
     private String message;
 
-    @ManyToOne
-    @JoinColumn(name = "alarm_list")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
     private Account toAccount;
 
     @ManyToOne

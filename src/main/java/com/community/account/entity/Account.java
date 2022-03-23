@@ -80,7 +80,7 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarmList = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)

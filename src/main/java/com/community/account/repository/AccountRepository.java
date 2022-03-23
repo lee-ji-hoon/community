@@ -2,10 +2,13 @@ package com.community.account.repository;
 
 import com.community.account.entity.Account;
 import com.community.account.entity.PersistentLogins;
+import com.community.alarm.Alarm;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 public interface AccountRepository extends JpaRepository<Account, Long>, QuerydslPredicateExecutor<Account> {
