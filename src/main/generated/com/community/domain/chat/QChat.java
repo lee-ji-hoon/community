@@ -34,8 +34,6 @@ public class QChat extends EntityPathBase<Chat> {
 
     public final com.community.domain.account.QAccount receiver;
 
-    public final NumberPath<Long> room = createNumber("room", Long.class);
-
     public final com.community.domain.account.QAccount sender;
 
     public final DateTimePath<java.time.LocalDateTime> sendTime = createDateTime("sendTime", java.time.LocalDateTime.class);

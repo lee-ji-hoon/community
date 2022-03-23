@@ -28,19 +28,15 @@ public class ChatService {
     public void saveMarketChat(ChatForm chatForm, Account account) {
         Optional<Account> accountOptional = accountRepository.findById(chatForm.getReceiver());
         Market market = marketRepository.findByMarketId(chatForm.getMarketId());
-        Chat roomNumBase = chatRepository.findTop1ByOrderByChat_idDesc();
-        Long roomNum = 1L;
-        if (roomNumBase.getChat_id() != null) {
-            roomNum = roomNumBase.getChat_id() + 1L;
-        }
         Chat chat = Chat.builder()
                 .sender(account)
                 .receiver(accountOptional.get())
                 .content(chatForm.getContent())
                 .sendTime(LocalDateTime.now())
                 .market_id(market)
-                .room(roomNum)
                 .build();
+
+        chatRepository.save(chat);
 
     }
 
