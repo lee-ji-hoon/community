@@ -3,7 +3,7 @@ package com.community.domain.board;
 import com.community.domain.account.Account;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
-import com.community.domain.study.Meetings;
+import com.community.domain.meetings.Meetings;
 import lombok.*;
 
 import javax.persistence.*;
