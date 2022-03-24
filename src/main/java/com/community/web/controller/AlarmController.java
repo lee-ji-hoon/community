@@ -109,7 +109,7 @@ public class AlarmController {
         AlarmType type = byAlarmId.getAlarmType();
         String path = byAlarmId.getPath();
 
-        alarmService.alarmRead(byAlarmId);
+        alarmService.alarmRead(byAlarmId, account);
 
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);

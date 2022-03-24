@@ -7,9 +7,12 @@ import com.community.domain.market.Market;
 import com.community.domain.tag.Tag;
 import com.community.domain.study.Study;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,6 +25,7 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 //@ToString
 /*@SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
@@ -79,16 +83,14 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toAccount",
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     // 임시 알림 설정
@@ -103,10 +105,6 @@ public class Account {
     private boolean likesByPost = true;
 
     private boolean replyCreateByWeb = true;
-
-    // TODO
-    // 알림 추가
-
     // 알림 설정 끝
 
     // 태그
@@ -175,5 +173,24 @@ public class Account {
             msg = (diffTime) + "년 전";
         }
         return msg;
+    }
+
+    public void deleteCheckedAlarms(List<Alarm> alarmLists) {
+        boolean bool = alarmList.removeAll(alarmLists);
+        log.info("account alarmList 삭제 : {}", bool);
+    }
+
+    public void addAlarm(Alarm alarm) {
+        alarmList.add(alarm);
+    }
+
+    public void checkedAlarm(Alarm alarm) {
+        for (Alarm accountAlarm : alarmList) {
+            if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
+                log.info("알람 체크 확인 account alarmList : {}, alarmList : {}",
+                        accountAlarm.getAlarmId(), alarm.getAlarmId());
+                accountAlarm.setChecked(true);
+            }
+        }
     }
 }

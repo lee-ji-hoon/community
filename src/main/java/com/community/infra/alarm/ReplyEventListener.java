@@ -75,6 +75,8 @@ public class ReplyEventListener {
         alarm.setToAccount(writer);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.BOARD_REPLY);
+
+        writer.addAlarm(alarm);
         alarmRepository.save(alarm);
     }
 

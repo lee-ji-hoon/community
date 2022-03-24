@@ -28,7 +28,7 @@ public class Alarm {
 
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "account_id")
     private Account toAccount;
 
