@@ -103,6 +103,10 @@ public class StudyController {
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
+        model.addAttribute("suggestStudyList", studyRepository.findByAccount(
+                accountWithTagsById.getTags()
+        ));
         model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByPublishedDateTimeDesc());
         model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));

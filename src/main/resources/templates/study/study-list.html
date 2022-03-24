@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <!--관리 중인 스터디-->
-                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
+                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${suggestStudyList})"></div>
                 </div>
                 <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
                     <div th:if="${accountWithTagsById.tags.isEmpty()}">
