@@ -42,14 +42,16 @@
                     <br>
 
                     <!-- Clips -->
-                    <div class="my-2 flex justify-between pb-3">
-                        <h5 class="text-lg font-semibold"> 내가 참여중인 스터디 ✏️ </h5>
-                        <a href="#" th:href="@{/study}" class="text-blue-500"> 전체 보기 </a>
-                    </div>
-                    <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:if="${enrollStudy.size + myStudy.size() != 0}">
+                    <div th:if="${enrollStudy.size + myStudy.size() != 0}">
+                        <div class="my-2 flex justify-between pb-3">
+                            <h5 class="text-lg font-semibold"> 내가 참여중인 스터디 ✏️ </h5>
+                            <a href="#" th:href="@{/study}" class="text-blue-500"> 전체 보기 </a>
+                        </div>
+                        <div class="divide-y -mt-3 card px-5 py-2 mb-7">
 
-                        <div th:replace="theme-fragments.html :: studyLists (type = ${enrollStudy})"></div>
-                        <div th:replace="theme-fragments.html :: studyLists (type = ${myStudy})"></div>
+                            <div th:replace="theme-fragments.html :: studyLists (type = ${enrollStudy})"></div>
+                            <div th:replace="theme-fragments.html :: studyLists (type = ${myStudy})"></div>
+                        </div>
                     </div>
                     <div class="my-2 flex justify-between pb-3">
                         <h5 class="text-lg font-semibold"> 인기 게시글 🔥 </h5>
