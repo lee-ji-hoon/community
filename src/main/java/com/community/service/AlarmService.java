@@ -19,13 +19,8 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final AccountRepository accountRepository;
 
-    public void readAlarm(Alarm alarm, Account account) {
-        alarm.setChecked(true);
-        account.checkedAlarm(alarm);
-        account.deleteAlarmSize();
-
-        alarmRepository.save(alarm);
-        accountRepository.save(account);
+    public void checked(Alarm alarm, Account account) {
+        readAlarm(alarm, account);
     }
 
     public void deleteByChecked(Account account) {
@@ -38,7 +33,19 @@ public class AlarmService {
     public void checkedAll(Account account) {
         List<Alarm> notCheckedAlarmList = alarmRepository.findByToAccountAndChecked(account, false);
         for (Alarm alarm : notCheckedAlarmList) {
-            alarm.setChecked(true);
+            readAlarm(alarm, account);
         }
     }
+
+    private void readAlarm(Alarm alarm, Account account) {
+        alarm.setChecked(true);
+        account.checkedAlarm(alarm);
+        account.deleteAlarmSize();
+
+        alarmRepository.save(alarm);
+        accountRepository.save(account);
+
+    }
+
+
 }

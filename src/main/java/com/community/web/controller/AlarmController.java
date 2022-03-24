@@ -24,6 +24,7 @@ import com.community.web.dto.MeetingsForm;
 import com.community.domain.study.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -56,13 +57,9 @@ public class AlarmController {
 
     @GetMapping("/alarm/view")
     public String alarmView(@CurrentUser Account account, Model model) {
-        log.info("account.getNickname : {}", account.getNickname());
         List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
         List<Alarm> byChecked = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
 
-        for (Alarm alarm : alarmList) {
-            log.info("alarm.account : {}", alarm.getToAccount().getNickname());
-        }
         long countByAccountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
         alarmType(model, alarmList, countByAccountAndChecked, alarmList.size());
 
@@ -71,42 +68,31 @@ public class AlarmController {
         return "alarm/view";
     }
 
+
     @ResponseBody
     @RequestMapping(value = "/alarm/allChecked", method = RequestMethod.GET)
-    public String checkedAllAlarm(@CurrentUser Account account) {
-        String message = null;
-        if(alarmRepository.countByToAccountAndChecked(account, false) == 1)
+    public ResponseEntity checkedAllAlarm(@CurrentUser Account account) {
         log.info("알람 모두 읽기 실행");
-        alarmService.checkedAll(account);
+        long count = alarmRepository.countByToAccountAndChecked(account, false);
 
-        return message;
+        if(count > 0) {
+            alarmService.checkedAll(account);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @ResponseBody
     @RequestMapping(value = "/alarm/deleteAll", method = RequestMethod.GET)
-    public String deleteCheckedAlarm(@CurrentUser Account account){
-        String message = null;
-        log.info("삭제 할 알람 수 {}", alarmRepository.countByToAccountAndChecked(account, true));
-        if(alarmRepository.countByToAccountAndChecked(account, true) == 0){
-            message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
-                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                    "        <i class=\"icon-feather-x\"></i>\n" +
-                    "    </button>\n" +
-                    "    <h3 class=\"text-lg font-semibold text-white\">오류</h3>\n" +
-                    "    <p class=\"text-white text-opacity-75\">읽은 알람이 존재하지 않습니다.</p>\n" +
-                    "</div>";
-            return message;
+    public ResponseEntity deleteCheckedAlarm(@CurrentUser Account account){
+        long accountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
+        log.info("삭제 할 알람 수 {}", accountAndChecked);
+        if(accountAndChecked == 0){
+            return ResponseEntity.badRequest().build();
         }
         alarmService.deleteByChecked(account);
-
-        message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
-                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                "        <i class=\"icon-feather-x\"></i>\n" +
-                "    </button>\n" +
-                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
-                "    <p class=\"text-white text-opacity-75\">알림 삭제에 성공했습니다.</p>\n" +
-                "</div>";
-        return message;
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/alarm/detail/{alarmId}")
@@ -120,7 +106,7 @@ public class AlarmController {
         AlarmType type = byAlarmId.getAlarmType();
         String path = byAlarmId.getPath();
 
-        alarmService.readAlarm(byAlarmId, account);
+        alarmService.checked(byAlarmId, account);
 
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
