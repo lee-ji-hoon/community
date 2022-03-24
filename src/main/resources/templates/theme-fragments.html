@@ -4,7 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 
 <head th:fragment="head">
-    <link href="assets/images/favicon.png" rel="icon" type="image/png">
     <style>
         .custom-file label {
             color: white;
@@ -174,7 +173,7 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <!-- Javascript
     ================================================== -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
     <script src="/assets/js/tippy.all.min.js"></script>
     <script src="/assets/js/uikit.js"></script>
     <script src="/assets/js/simplebar.js"></script>
@@ -325,7 +324,7 @@
 
                     <a href="#" class="is_icon" uk-tooltip="title: 알림">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-                        <span class="pt-1">3</span>
+                        <span th:text="${account.countAlarmSize}" class="pt-1">3</span>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown ">
                         <div  class="dropdown_scrollbar" data-simplebar>
@@ -344,7 +343,7 @@
                                 <ul>
                                     <li th:each="alarm : ${account.alarmList}">
                                         <th:block th:if="${!alarm.isChecked()}">
-                                            <a th:href="@{'/alarm/' + ${alarm.alarmId}}">
+                                            <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
                                                 <div class="drop_avatar">
                                                     <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:data-jdenticon-value="${alarm.fromAccount.studentId}"
@@ -1489,8 +1488,7 @@
 <div th:fragment="alarm-list(type)" class="p-5">
     <ul class="list-group list-group-flush">
         <li class="card m-5 p-5" th:each="alarm : ${type}">
-            <a href="#"
-               th:href="@{'/alarm/' + ${alarm.alarmId}}">
+            <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
                 <div class="d-flex w-100 justify-content-between">
                     <small class="text-left mb-0 text-lg font-semibold" th:text="${alarm.title}">title</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">모임 댓글</small>

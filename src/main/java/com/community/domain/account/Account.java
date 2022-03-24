@@ -112,6 +112,9 @@ public class Account {
     @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
 
+    private int countAlarmSize;
+
+
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -180,10 +183,6 @@ public class Account {
         log.info("account alarmList 삭제 : {}", bool);
     }
 
-    public void addAlarm(Alarm alarm) {
-        alarmList.add(alarm);
-    }
-
     public void checkedAlarm(Alarm alarm) {
         for (Alarm accountAlarm : alarmList) {
             if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
@@ -192,5 +191,14 @@ public class Account {
                 accountAlarm.setChecked(true);
             }
         }
+    }
+
+    public void addAlarmSize() {
+        countAlarmSize += 1;
+    }
+
+    public void deleteAlarmSize() {
+        log.info("deleteAlarmSize 실행");
+        countAlarmSize = countAlarmSize - 1;
     }
 }

@@ -59,6 +59,7 @@ public class LikeEventListener {
         alarm.setToAccount(byId.get());
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.LIKES);
+        byId.get().addAlarmSize();
         alarmRepository.save(alarm);
     }
 }

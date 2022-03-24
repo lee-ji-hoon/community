@@ -313,6 +313,7 @@ public class StudyController {
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
 
+        log.info("스터디 페이지 실행 중복 확인");
         Study bypath = studyService.getPath(path);
 
         model.addAttribute(account);
