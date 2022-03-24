@@ -23,7 +23,6 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor

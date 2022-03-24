@@ -46,6 +46,8 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 }
 
+def querydslDir = "$buildDir/generated/querydsl"
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

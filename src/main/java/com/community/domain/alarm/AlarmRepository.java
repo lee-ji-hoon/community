@@ -17,7 +17,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
 
     @Transactional
-    @EntityGraph(value = "Alarm.withToAccount", type = EntityGraph.EntityGraphType.FETCH)
     List<Alarm> deleteByToAccountAndChecked(Account account, boolean checked);
 
     List<Alarm> findByToAccountAndChecked(Account account, boolean b);

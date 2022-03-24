@@ -27,8 +27,8 @@ public class AlarmService {
 
     public void deleteByChecked(Account account) {
         log.info("fromAccountId : {}", account.getId());
-//        List<Alarm> byToAccountAndChecked = alarmRepository.findByToAccountAndChecked(account, true);
-//        alarmRepository.deleteAll(byToAccountAndChecked);
+        /*List<Alarm> byToAccountAndChecked = alarmRepository.findByToAccountAndChecked(account, true);
+        alarmRepository.deleteAll(byToAccountAndChecked);*/
 
         List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
         for (Alarm alarm : alarmList) log.info("삭제 할 alarmList : {}", alarm.getAlarmId());

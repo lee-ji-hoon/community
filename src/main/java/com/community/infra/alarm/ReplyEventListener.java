@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -75,8 +74,8 @@ public class ReplyEventListener {
         alarm.setToAccount(writer);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.BOARD_REPLY);
-
         writer.addAlarm(alarm);
+
         alarmRepository.save(alarm);
     }
 

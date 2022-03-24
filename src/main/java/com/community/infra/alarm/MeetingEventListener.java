@@ -24,7 +24,6 @@ import java.util.Set;
 
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
