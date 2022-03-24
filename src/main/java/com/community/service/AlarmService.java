@@ -34,4 +34,11 @@ public class AlarmService {
         account.deleteCheckedAlarms(alarmList);
 
     }
+
+    public void checkedAll(Account account) {
+        List<Alarm> notCheckedAlarmList = alarmRepository.findByToAccountAndChecked(account, false);
+        for (Alarm alarm : notCheckedAlarmList) {
+            alarm.setChecked(true);
+        }
+    }
 }

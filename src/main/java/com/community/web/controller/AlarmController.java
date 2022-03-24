@@ -72,6 +72,17 @@ public class AlarmController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/alarm/allChecked", method = RequestMethod.GET)
+    public String checkedAllAlarm(@CurrentUser Account account) {
+        String message = null;
+        if(alarmRepository.countByToAccountAndChecked(account, false) == 1)
+        log.info("알람 모두 읽기 실행");
+        alarmService.checkedAll(account);
+
+        return message;
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/alarm/deleteAll", method = RequestMethod.GET)
     public String deleteCheckedAlarm(@CurrentUser Account account){
         String message = null;
