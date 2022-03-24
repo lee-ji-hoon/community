@@ -132,7 +132,7 @@
                                     목표, 일정, 진행방식, 위치, 모집인원 등 최대한 자세히 적어주세요
                                 </small>
                                 <small class="invalid-feedback">상세 소개를 입력하세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">fullDescription Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">fullDescription Error</p>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                                     스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
                                 </small>
                                 <small class="invalid-feedback"> 스터디 모집 인원을 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</p>
                             </div>
                             <div>
                                 <label for="limitMemberDate">인원 모집 기간</label>
@@ -165,7 +165,7 @@
                                     인원 모집 시작은 설정에서 가능합니다.
                                 </small>
                                 <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</p>
                             </div>
 
 
@@ -179,7 +179,7 @@
                                     스터디 시작 날짜를 설정해주세요
                                 </small>
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('startStudyDate')}" th:errors="*{startStudyDate}">startStudyDate Error</small>
-                                <small class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</small>
+                                <p class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</p>
                             </div>
                             <div>
                                 <label for="limitStudyDate">스터디 종료일</label>
@@ -191,7 +191,7 @@
                                     스터디 종료 날짜를 설정해주세요<br>
                                 </small>
                                 <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</p>
                             </div>
                         </div>
                         <div class="bg-gray-10 p-3 flex justify-end space-x-1">
