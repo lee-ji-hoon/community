@@ -23,7 +23,8 @@
                             <nav class="responsive-nav border-b md:m-0 -mx-4">
                                 <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                     <li><a href="#" class="lg:px-2"> 신규 </a></li>
-                                    <li><a href="#" class="lg:px-2"> 인기 </a></li>
+                                    <li><a href="#" class="lg:px-2"> 참여 </a></li>
+                                    <li><a href="#" class="lg:px-2"> 관리 </a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -41,27 +42,22 @@
                     <div class="uk-switcher" id="timeline-tab">
                         <!--전체-->
                         <div th:replace="theme-fragments.html :: study-list-type(studyType=${studyListId})"></div>
-                        <!--인기 스터디-->
-                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${popularityStudyLIst})"></div>
+                        <!--참여 중 스터디-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
+                        <!--관리 중 스터디-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
+
                     </div>
 
                     <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
                         <div>
-                            <h2 class="text-xl font-semibold"> 멤버 스터디 </h2>
-                            <p class="font-medium text-gray-500 leading-6"> 현재 참여중인 스터디 목록입니다. </p>
+                            <h2 class="text-xl font-semibold"> 추천 스터디 </h2>
+                            <p class="font-medium text-gray-500 leading-6"> 본인의 태그와 관련된 추천 스터디 입니다. </p>
                         </div>
                     </div>
-                    <!--참여 중인 스터디-->
-                    <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
-
-                    <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
-                        <div>
-                            <h2 class="text-xl font-semibold"> 매니저 스터디 </h2>
-                            <p class="font-medium text-gray-500 leading-6"> 현재 관리중인 스터디 목록입니다. </p>
-                        </div>
-                    </div>
-                    <!--관리 중인 스터디-->
+                    <!--추천 중인 스터디-->
                     <div th:replace="theme-fragments.html :: study-list-type(studyType=${suggestStudyList})"></div>
+
                 </div>
                 <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
                     <div th:if="${accountWithTagsById.tags.isEmpty()}">

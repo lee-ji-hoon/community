@@ -1409,15 +1409,16 @@
 
 <div th:fragment="study-tag-list (tagList)" class="relative -mt-3" >
     <div class=" px-1 py-3">
-        <button class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-2" >
+        <a th:href="@{/study}" class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-2" >
             <span>#</span>
-            <a th:href="@{/study}">전체보기</a>
-        </button>
-        <button th:each="tag: ${tagList}"
-                class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-2" >
+            <span>전체보기</span>
+        </a>
+        <a th:each="tag: ${tagList}"
+            th:href="@{'/study/search/'+${tag.title}}"
+            class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-2" >
             <span>#</span>
-            <a th:href="@{/{tagTitle}(tagTitle=${tag.title})}" th:text="${tag.title}">Tag</a>
-        </button>
+            <span th:text="${tag.title}">Tag</span>
+        </a>
     </div>
 </div>
 
