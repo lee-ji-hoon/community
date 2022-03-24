@@ -356,7 +356,8 @@
                                 <ul>
                                     <div class="refresh_alarm">
                                         <li th:each="alarm : ${account.alarmList}">
-                                        <th:block th:if="${!alarm.isChecked()}">
+                                        <th:block th:if="${!alarm.isChecked() && alarmStat.count < 5}">
+
                                             <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
                                                 <div class="drop_avatar">
                                                     <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
@@ -385,6 +386,12 @@
                                             </a>
                                         </th:block>
                                     </li>
+                                        <div class="flex justify-center">
+                                            <a th:href="@{/alarm/view}"
+                                               class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
+                                                더보기
+                                            </a>
+                                        </div>
                                     </div>
                                 </ul>
                             </div>
