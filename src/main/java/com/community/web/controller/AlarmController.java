@@ -111,7 +111,7 @@ public class AlarmController {
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
 
-        if (type == AlarmType.STUDY) {
+        /*if (type == AlarmType.STUDY) {
             Study studyByPath = studyService.getPath(path);
             model.addAttribute(studyByPath);
             return "study/study-view";
@@ -167,8 +167,8 @@ public class AlarmController {
             model.addAttribute(new BoardForm());
 
             return "board/board-detail";
-        }
-        /*switch (type){
+        }*/
+        switch (type){
             case STUDY: log.info("study 페이지 이동 : {}", path);
                 Study studyByPath = studyService.getPath(path);
                 model.addAttribute(studyByPath);
@@ -223,7 +223,7 @@ public class AlarmController {
                 model.addAttribute(new BoardForm());
 
                 return "board/board-detail";
-        }*/
+        }
         return "error-page";
     }
 

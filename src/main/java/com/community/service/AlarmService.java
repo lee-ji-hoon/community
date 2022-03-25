@@ -25,15 +25,8 @@ public class AlarmService {
     }
 
     public void deleteByChecked(Account account) {
-        log.info("fromAccountId : {}", account.getId());
         List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
         account.getAlarmList().removeAll(alarmList);
-        List<Alarm> accountAlarmList= account.getAlarmList();
-
-        for (Alarm alarm : accountAlarmList) {
-            log.info("삭제 후 accountAlarmList {}", alarm.getAlarmId());
-            log.info("삭제 후 accountAlarmList {}", alarm.isChecked());
-        }
     }
 
     public void checkedAll(Account account) {
@@ -41,18 +34,12 @@ public class AlarmService {
         for (Alarm alarm : notCheckedAlarmList) {
             readAlarm(alarm, account);
         }
-        for (Alarm alarm : account.getAlarmList()) {
-            log.info("체크 후 accountAlarmList {}", alarm.getAlarmId());
-            log.info("체크 후 accountAlarmList {}", alarm.isChecked());
-        }
     }
 
     private void readAlarm(Alarm alarm, Account account) {
         alarm.setChecked(true);
         for (Alarm accountAlarm : account.getAlarmList()) {
             if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
-                log.info("알람 체크 확인 account alarmList : {}, alarmList : {}",
-                        accountAlarm.getAlarmId(), alarm.getAlarmId());
                 accountAlarm.setChecked(true);
             }
         }
