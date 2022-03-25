@@ -99,10 +99,11 @@
         </div>
     </div>
 </div>
-
-<script th:replace="theme-fragments.html :: form-validation"></script>
-<script th:replace="theme-fragments.html :: editor-script"></script>
-<script th:replace="theme-fragments.html :: studyBanner"></script>>
+    <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
+    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+    <script th:replace="theme-fragments.html :: studyBanner"></script>
+    <script th:replace="theme-fragments.html :: form-validation"></script>
 </body>
 
 </html>

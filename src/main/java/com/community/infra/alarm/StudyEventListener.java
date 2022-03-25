@@ -23,7 +23,6 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -76,6 +75,7 @@ public class StudyEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(formAccount);
         alarm.setAlarmType(AlarmType.STUDY);
+        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

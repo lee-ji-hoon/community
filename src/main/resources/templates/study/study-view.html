@@ -19,6 +19,9 @@
 
             <div class="md:flex  md:space-x-8">
                 <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                    <div th:if="${message}">
+                        <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
+                    </div>
                     <div class="card p-5">
                         <h1 class="block text-lg font-bold"> 정보  </h1>
                         <div class="space-y-4 mt-3">
@@ -56,9 +59,8 @@
                     </div>
                     <div class="card p-5" style="margin-bottom: 18.75px">
                         <h1 class="block text-lg font-bold"> 설명  </h1>
-                        <div class="line-clamp-3" id="more-text" th:utext="${study.fullDescription}">
+                        <div class="line-clamp-3" th:utext="${study.fullDescription}">
                         </div>
-                        <a href="#" id="more-text" uk-toggle="target: #more-text ; cls: line-clamp-3"> 자세히 보기 </a>
                     </div>
                 </div>
 

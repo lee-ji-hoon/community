@@ -7,13 +7,12 @@ import com.community.domain.alarm.AlarmType;
 import com.community.infra.config.AppProperties;
 import com.community.infra.mail.EmailMessage;
 import com.community.infra.mail.EmailService;
-import com.community.domain.study.Meetings;
+import com.community.domain.meetings.Meetings;
 import com.community.domain.study.Study;
-import com.community.domain.study.MeetingsRepository;
+import com.community.domain.meetings.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
@@ -24,7 +23,6 @@ import java.util.Set;
 
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -77,6 +75,7 @@ public class MeetingEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING);
+        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

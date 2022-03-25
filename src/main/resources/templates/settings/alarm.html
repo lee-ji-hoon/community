@@ -3,6 +3,11 @@
 
 <head th:replace="theme-fragments.html :: head"></head>
 
+<style>
+    .switch{
+        width: 30%;
+    }
+</style>
 <body>
 
 <div id="wrapper">
@@ -47,14 +52,14 @@
                                         <input type="checkbox" name="studyCreatedByWeb" id="studyCreatedByWeb"
                                                th:checked="${account.studyCreatedByWeb == true}">
                                         <span class="switch-button"></span>
-                                        웹으로 받기
+                                        웹 알림
                                     </label>
 
                                     <label class="switch">
                                         <input type="checkbox" name="studyCreatedByEmail" id="studyCreatedByEmail"
                                                th:checked="${account.studyCreatedByEmail == true}">
                                         <span class="switch-button"></span>
-                                        이메일로 받기
+                                        이메일 알림
                                     </label>
                                 </div>
                             </div>
@@ -70,14 +75,14 @@
                                         <input type="checkbox" name="replyByMeetings"  id="replyByMeetings"
                                                th:checked="${account.isReplyByPost == true}">
                                         <span class="switch-button" ></span>
-                                        모임 댓글 받기
+                                        모임 댓글 알림
                                     </label>
 
                                     <label class="switch">
                                         <input type="checkbox" name="replyByPost"  id="replyByPost"
                                                th:checked="${account.isReplyByMeetings == true}">
                                         <span class="switch-button" ></span>
-                                        커뮤니티 댓글 받기
+                                        커뮤니티 댓글 알림
                                     </label>
                                 </div>
                             </div>
@@ -92,7 +97,7 @@
                                         <input type="checkbox" name="likes"  id="likes"
                                                th:checked="${account.isLikesByPost() == true}">
                                         <span class="switch-button" ></span>
-                                        좋아요 받기
+                                        좋아요 알림
                                     </label>
 
                                     <!--<label class="switch">

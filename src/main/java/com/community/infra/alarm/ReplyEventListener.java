@@ -7,12 +7,11 @@ import com.community.domain.alarm.AlarmRepository;
 import com.community.domain.alarm.AlarmType;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
-import com.community.domain.study.Meetings;
+import com.community.domain.meetings.Meetings;
 import com.community.domain.study.Study;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -75,6 +73,7 @@ public class ReplyEventListener {
         alarm.setToAccount(writer);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.BOARD_REPLY);
+        writer.addAlarmSize();
         alarmRepository.save(alarm);
     }
 
@@ -89,6 +88,7 @@ public class ReplyEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING_REPLY);
+        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

@@ -19,18 +19,33 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final AccountRepository accountRepository;
 
-    public void alarmRead(Alarm byId) {
-        byId.setChecked(true);
-        alarmRepository.save(byId);
+    public void checked(Alarm alarm, Account account) {
+        readAlarm(alarm, account);
     }
 
-    @Transactional
     public void deleteByChecked(Account account) {
         log.info("fromAccountId : {}", account.getId());
         List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
-        for (Alarm alarm : alarmList) log.info("삭제 할 alarmList : {}", alarm);
-        /*List<Alarm> AccountAlarmList = account.getAlarmList();
-        for (Alarm alarm : AccountAlarmList) log.info("account alarmList : {}", alarm);*/
+        account.deleteCheckedAlarms(alarmList);
 
     }
+
+    public void checkedAll(Account account) {
+        List<Alarm> notCheckedAlarmList = alarmRepository.findByToAccountAndChecked(account, false);
+        for (Alarm alarm : notCheckedAlarmList) {
+            readAlarm(alarm, account);
+        }
+    }
+
+    private void readAlarm(Alarm alarm, Account account) {
+        alarm.setChecked(true);
+        account.checkedAlarm(alarm);
+        account.deleteAlarmSize();
+
+        alarmRepository.save(alarm);
+        accountRepository.save(account);
+
+    }
+
+
 }
