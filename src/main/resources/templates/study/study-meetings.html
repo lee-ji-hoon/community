@@ -138,7 +138,7 @@
                                 <input placeholder="일정을 등록해주세요." class="bg-gray-100 hover:bg-gray-200 flex-1 h-10 px-6 rounded-full">
                             </div>
                         </div>
-                        <div th:if="${message}" class="m-5">
+                        <div th:if="${message}">
                             <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
                         </div>
                         <!-- 모임 view  -->
