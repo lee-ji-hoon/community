@@ -568,15 +568,12 @@
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data : $('#board_form').serialize(),
                     success : function (message){
-                        $('.form_refresh').load(window.location.href+' .form_refresh');
-                        $('#board_form').load(window.location.href+' #board_form');
+                        location.reload();
                         $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                         $("#isUpdated").replaceWith(message);
-                        $('#content').summernote('reset');
                     },
                 });
             });
-
             // 게시글 업데이트 관련
             $('#postTitle').val('');
             jQuery('#selectBox').change(function() {
