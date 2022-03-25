@@ -356,8 +356,8 @@
                                 <ul>
                                     <div class="refresh_alarm">
                                         <li th:each="alarm : ${account.alarmList}">
-                                        <th:block th:if="${!alarm.isChecked() && alarmStat.count < 5}">
-
+                                        <th:block th:if="${!alarm.isChecked()}">
+<!--                                            && alarmStat.count < 5-->
                                             <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
                                                 <div class="drop_avatar">
                                                     <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
@@ -365,7 +365,8 @@
                                                          alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                                     <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:src="${alarm.fromAccount.profileImage}"
-                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+                                                         style="width: 35px; border-radius: 100%"
+                                                         alt="" class=" shadow w-12 h-12 is_avatar"/>
                                                 </div>
                                                 <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
                                                  <i class="icon-feather-thumbs-up"></i>
@@ -692,8 +693,8 @@
          uk-sticky="top:30 ; offset:80 ; media:@m ;bottom:true; animation: uk-animation-slide-top">
         <h4 class="mb-0 p-3 uk-visible@m hidden"> Setting Navigation </h4>
         <ul>
-            <li class="" th:classappend="${currentMenu == 'profile'}? uk-active"><a href="#" th:href="@{/settings/profile-settings}" class="hover:bg-gray-100"> <i class="uil-user"></i>프로필</a></li>
-            <li class="" th:classappend="${currentMenu == 'profile-img'}? uk-active" ><a href="#" th:href="@{/settings/profile-img}" class="hover:bg-gray-100"> <i class="uil-scenery"></i>사진변경</a></li>
+            <li class="" th:classappend="${currentMenu == 'profile'}? uk-active"><a href="#" th:href="@{/settings/profile-settings}" class="hover:bg-gray-100"> <i class="uil-user"></i>소개</a></li>
+            <li class="" th:classappend="${currentMenu == 'profile-img'}? uk-active" ><a href="#" th:href="@{/settings/profile-img}" class="hover:bg-gray-100"> <i class="uil-scenery"></i>이미지 변경</a></li>
             <li class="" th:classappend="${currentMenu == 'tag'}? uk-active"><a href="#" th:href="@{/settings/tags}" class="hover:bg-gray-100"> <i class="icon-material-outline-local-offer"></i> 태그</a></li>
             <li class="" th:classappend="${currentMenu == 'account'}? uk-active"><a href="#" th:href="@{/settings/account}" class="hover:bg-gray-100"> <i class="icon-material-outline-person-pin"></i> 닉네임</a></li>
             <li class="" th:classappend="${currentMenu == 'alarm'}? uk-active"><a href="#" th:href="@{/settings/alarm}" class="hover:bg-gray-100"> <i class="icon-material-baseline-notifications-none"></i> 알림</a></li>
