@@ -44,7 +44,7 @@ public class ChatController {
     // 장터 전용 쪽지 보내기
     @ResponseBody
     @RequestMapping(value = "/market/chat/new")
-    public int addMarketReplyUpdate(@RequestParam(value = "c_marketId") Long c_marketId,
+    public String addMarketReplyUpdate(@RequestParam(value = "c_marketId") Long c_marketId,
                                     @RequestParam(value = "c_receiver") Long c_receiver,
                                     @RequestParam(value = "c_content") String c_content,
                                     ChatForm chatForm, @CurrentUser Account account) throws IOException {
@@ -53,7 +53,15 @@ public class ChatController {
         chatForm.setContent(c_content);
         chatService.saveMarketChat(chatForm, account);
 
+        String sendChat = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">쪽지를 보냈습니다.</p>\n" +
+                "</div>";
 
-        return 1;
+
+        return sendChat;
     }
 }
