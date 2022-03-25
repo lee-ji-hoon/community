@@ -106,8 +106,7 @@ public class StudyController {
         model.addAttribute("suggestStudyList", studyRepository.findByAccount(
                 accountWithTagsById.getTags()
         ));
-        model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByPublishedDateTimeDesc());
-        model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
+        model.addAttribute("studyListId", studyRepository.findFirst9ByMembersNotContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
@@ -327,19 +326,22 @@ public class StudyController {
 
     // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
-    public String joinStudy(@CurrentUser Account account, @PathVariable String path) {
+    public String joinStudy(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
 
         studyService.addMember(studyWithMembersByPath, account);
+        redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");
 
         return "redirect:/study/" + fixPath(path) + "/meetings";
     }
 
     // 스터디 탈퇴
     @GetMapping(STUDY_PATH_VIEW + "/remove")
-    public String removeStudy(@CurrentUser Account account, @PathVariable String path) {
+    public String removeStudy(@CurrentUser Account account, RedirectAttributes redirectAttributes,
+                              @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
         studyService.removeMember(studyWithMembersByPath, account);
+        redirectAttributes.addFlashAttribute("message", "스터디 탈퇴됐습니다.");
 
         return "redirect:/study/" + fixPath(path);
     }
