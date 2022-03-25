@@ -326,7 +326,7 @@
                                         </th:block>
                                         <br>
                                         <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
-                                        <div>
+                                        <div class="w-full">
                                             <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                             <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                             <th:block th:if="${!reply.getIsReported}">
@@ -388,6 +388,7 @@
                 jQuery(`#replyUpdateBtn${replyId}`).hide();
                 jQuery(`#replyUpdateSubmit${replyId}`).show();
                 $(`#replyUpdateInput${replyId}`).prop("type", "text");
+                $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
             }
         }
         // 등록 버튼 클릭 시
