@@ -124,8 +124,7 @@
 
                 <div class="md:flex md:space-x-6">
                     <div class="space-y-5 flex-shrink-0 md:w-7/12">
-                        <div class="card lg:mx-0 p-4" uk-toggle="target: #create-post-modal"
-                             th:if="${study.isManager(#authentication.principal)}"
+                        <div th:if="${study.isManager(#authentication.principal)}"class="card lg:mx-0 p-4" uk-toggle="target: #create-post-modal"
                              href="#create-post-modal">
                             <div class="flex space-x-3">
                                 <svg th:if="${#strings.isEmpty(account.profileImage)}"
@@ -144,7 +143,7 @@
                         <!-- 모임 view  -->
                         <div class="form_refresh">
                             <div th:each="meeting : ${meetingsList}"
-                             class="card lg:mx-0 uk-animation-slide-bottom-small my-5">
+                             class="card lg:mx-0 uk-animation-slide-bottom-small mb-5">
                             <!--<div th:if="${isReportedReplyMessage}">
                                 <div th:replace="theme-fragments.html :: red-notice(message=${isReportedReplyMessage})"></div>
                             </div>
