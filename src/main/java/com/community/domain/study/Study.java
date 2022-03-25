@@ -2,6 +2,7 @@ package com.community.domain.study;
 
 import com.community.domain.account.UserAccount;
 import com.community.domain.account.Account;
+import com.community.domain.meetings.Meetings;
 import com.community.domain.tag.Tag;
 import lombok.*;
 

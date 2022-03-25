@@ -18,31 +18,61 @@
             <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
                 <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='alarm')"></div>
                 <div class="lg:w-2/3">
-                    <div th:if="${alert}" class="m-5">
-                        <div th:replace="theme-fragments.html :: red-notice(message=${alert})"></div>
+                    <div id="isUpdatedForm" class="m-5">
+                        <div id="isUpdated"></div>
                     </div>
                     <div th:if="${message}" class="m-5">
                         <div th:replace="theme-fragments.html :: blue-notice(message=${message})"></div>
                     </div>
-                    <form class="needs-validation lg:py-4 lg:px-10 flex-1 space-y-4 p-6"
-                          th:action="@{'/study/' + ${study.getPath()} + '/settings/alarm'}"
-                          method="post" novalidate>
+                    <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
                         <h3 class="text-xl mb-2 font-semibold"> 스터디 알람</h3>
                         <p> 관심분야가 동일한 회원들에게 알림을 보낼 수 있습니다.</p>
                         <hr/>
 
-                        <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 알림 전송 </button>
+                        <span onclick="sendAlarm()" class="button bg-blue-700"> 알림 전송 </span>
                         <div class="alert alert-danger" role="alert">
                             하루에 한 번씩만 홍보 알림을 보낼 수 있습니다. <br/>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+<script src="/node_modules/cropper/dist/cropper.min.js"></script>
+<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+<script th:replace="theme-fragments.html :: studyBanner"></script>
 
-<script th:replace="theme-fragments.html :: studyBanner"></script>>
+<script th:inline="javascript">
+    function sendAlarm() {
+        /*<![CDATA[*/
+        var path = [[${study.path}]];
+        /*]]>*/
+
+        swal({
+            title: "알림 전송.",
+            text: "보낸 시점으로 24시간 후에 다시 보낼 수 있습니다.",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/study/'+path+'/settings/sendAlarm',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+
+    }
+
+</script>
 </body>
 
 </html>

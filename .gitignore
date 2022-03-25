@@ -63,6 +63,7 @@ theme_template/
 ### NetBeans ###
 nbproject/private/
 build/
+generated/
 nbbuild/
 dist/
 nbdist/

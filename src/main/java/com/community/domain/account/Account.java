@@ -7,9 +7,12 @@ import com.community.domain.market.Market;
 import com.community.domain.tag.Tag;
 import com.community.domain.study.Study;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,6 +25,7 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 //@ToString
 /*@SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
@@ -79,13 +83,14 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     // 임시 알림 설정
@@ -100,16 +105,15 @@ public class Account {
     private boolean likesByPost = true;
 
     private boolean replyCreateByWeb = true;
-
-    // TODO
-    // 알림 추가
-
     // 알림 설정 끝
 
     // 태그
     @ManyToMany
     @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
+
+    private int countAlarmSize;
+
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
@@ -172,5 +176,29 @@ public class Account {
             msg = (diffTime) + "년 전";
         }
         return msg;
+    }
+
+    public void deleteCheckedAlarms(List<Alarm> alarmLists) {
+        boolean bool = alarmList.removeAll(alarmLists);
+        log.info("account alarmList 삭제 : {}", bool);
+    }
+
+    public void checkedAlarm(Alarm alarm) {
+        for (Alarm accountAlarm : alarmList) {
+            if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
+                log.info("알람 체크 확인 account alarmList : {}, alarmList : {}",
+                        accountAlarm.getAlarmId(), alarm.getAlarmId());
+                accountAlarm.setChecked(true);
+            }
+        }
+    }
+
+    public void addAlarmSize() {
+        countAlarmSize += 1;
+    }
+
+    public void deleteAlarmSize() {
+        log.info("deleteAlarmSize 실행");
+        countAlarmSize = countAlarmSize - 1;
     }
 }

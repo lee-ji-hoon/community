@@ -38,23 +38,24 @@
                     </div>
                 </div>
                 <hr>
-                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                <div class="grid lg:grid-cols-4 sm:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 스터디 소개</h3>
                         <p>스터디에 사용될 주소, 이름, 연락처, 진행방식을 적어주세요.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow lg:col-span-3 sm:col-span-2 lg:mx-16">
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div class="col-span-2">
                                 <label for="path"> 스터디 주소</label>
                                 <input id="path" type="text" th:field="*{path}" class="shadow-none with-border form-control"
-                                       placeholder="예) study-path" aria-describedby="pathHelp" required min="2" max="20">
+                                       placeholder="예) study-path" aria-describedby="pathHelp" required min="2" max="20"
+                                       pattern="[ㄱ-ㅎ가-힣a-zA-Z0-9_-]{2,20}">
                                 <small id="pathHelp" class="form-text text-muted">
                                     공백없이 2~20자 이내로 입력하세요. <br>
                                     스터디 주소에 사용합니다. 예) /study/<b>study-path</b>
                                 </small>
-                                <small class="invalid-feedback">스터디 경로를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">path Error</small>
+                                <small class="invalid-feedback">스터디 경로를 확인해주세요. 0~20자 이내로 작성해주세요</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('path')}" th:errors="*{path}">path Error</p>
                             </div>
                             <div class="col-span-2">
                                 <label for="title"> 스터디 이름</label>
@@ -64,7 +65,7 @@
                                     스터디 이름은 설정에서 변경이 가능합니다
                                 </small>
                                 <small class="invalid-feedback">스터디 이름을 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</p>
                             </div>
                             <div class="col-span-2">
                                 <label for="managerEmail"> 연락처(이메일)</label>
@@ -74,7 +75,7 @@
                                     로그인시 사용하는 이메일이 아닌 다른 이메일을 사용해주시기 바랍니다.
                                 </small>
                                 <small class="invalid-feedback">이메일을 다시 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('managerEmail')}" th:errors="*{managerEmail}">managerEmail Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('managerEmail')}" th:errors="*{managerEmail}">managerEmail Error</p>
                             </div>
                             <div class="col-span-2">
                                 <label for="shortDescription">한 문장 소개</label>
@@ -85,7 +86,7 @@
                                     스터디를 한 문장으로 간단하게 소개해주세요
                                 </small>
                                 <small class="invalid-feedback">짧은 소개를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">shortDescription Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">shortDescription Error</p>
                             </div>
                             <div>
                                 <label for="studyPlaces"> 장소</label>
@@ -96,7 +97,7 @@
                                     스터디를 간단하게 소개해 주세요.
                                 </small>
                                 <small class="invalid-feedback">장소를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('studyPlaces')}" th:errors="*{studyPlaces}">studyPlaces Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('studyPlaces')}" th:errors="*{studyPlaces}">studyPlaces Error</p>
                             </div>
                             <div>
                                 <label for="studyMethod"> 스터디 방식</label>
@@ -112,17 +113,17 @@
                                     스터디 방식을 선택해주세요. 중복 선택 가능합니다.
                                 </small>
                                 <small class="invalid-feedback">스터디 장소 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('studyMethod')}" th:errors="*{studyMethod}">studyMethod Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('studyMethod')}" th:errors="*{studyMethod}">studyMethod Error</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                <div class="grid lg:grid-cols-4 sm:grid-cols-3 mt-12 gap-8">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 상세 설명</h3>
                         <p> 위의 내용을 포함해서 더 자세한 내용을 적어주세요.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow lg:col-span-3 sm:col-span-2 lg:mx-16">
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div class="col-span-2">
                                 <label for="fullDescription">상세 소개</label>
@@ -131,17 +132,17 @@
                                     목표, 일정, 진행방식, 위치, 모집인원 등 최대한 자세히 적어주세요
                                 </small>
                                 <small class="invalid-feedback">상세 소개를 입력하세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">fullDescription Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{fullDescription}">fullDescription Error</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                <div class="grid lg:grid-cols-4 mt-12 gap-8 sm:grid-cols-3">
                     <div>
                         <h3 class="text-xl mb-2 font-semibold"> 기간 및 인원</h3>
                         <p> 스터디 인원 및 기간 설정을 할 수 있습니다.</p>
                     </div>
-                    <div class="bg-white rounded-md lg:shadow-md shadow col-span-2 lg:mx-16">
+                    <div class="bg-white rounded-md lg:shadow-md shadow lg:col-span-3 sm:col-span-2 lg:mx-16">
 
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div>
@@ -151,7 +152,7 @@
                                     스터디 인원은 최소 2명에서 30명까지 선택 가능합니다.
                                 </small>
                                 <small class="invalid-feedback"> 스터디 모집 인원을 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitMember')}" th:errors="*{limitMember}">limitMember Error</p>
                             </div>
                             <div>
                                 <label for="limitMemberDate">인원 모집 기간</label>
@@ -164,7 +165,7 @@
                                     인원 모집 시작은 설정에서 가능합니다.
                                 </small>
                                 <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</p>
                             </div>
 
 
@@ -178,7 +179,7 @@
                                     스터디 시작 날짜를 설정해주세요
                                 </small>
                                 <small class="form-text text-danger" th:if="${#fields.hasErrors('startStudyDate')}" th:errors="*{startStudyDate}">startStudyDate Error</small>
-                                <small class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</small>
+                                <p class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</p>
                             </div>
                             <div>
                                 <label for="limitStudyDate">스터디 종료일</label>
@@ -190,7 +191,7 @@
                                     스터디 종료 날짜를 설정해주세요<br>
                                 </small>
                                 <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</p>
                             </div>
                         </div>
                         <div class="bg-gray-10 p-3 flex justify-end space-x-1">

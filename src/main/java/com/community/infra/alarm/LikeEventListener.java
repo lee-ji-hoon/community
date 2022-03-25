@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
-@Async
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
@@ -60,6 +59,7 @@ public class LikeEventListener {
         alarm.setToAccount(byId.get());
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.LIKES);
+        byId.get().addAlarmSize();
         alarmRepository.save(alarm);
     }
 }

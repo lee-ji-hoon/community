@@ -18,12 +18,13 @@ import com.community.domain.likes.Likes;
 import com.community.web.dto.BoardReportForm;
 import com.community.domain.report.BoardReportRepository;
 import com.community.domain.report.ReplyReportRepository;
-import com.community.domain.study.Meetings;
+import com.community.domain.meetings.Meetings;
 import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
-import com.community.domain.study.MeetingsRepository;
+import com.community.domain.meetings.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -56,13 +57,9 @@ public class AlarmController {
 
     @GetMapping("/alarm/view")
     public String alarmView(@CurrentUser Account account, Model model) {
-        log.info("account.getNickname : {}", account.getNickname());
         List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
         List<Alarm> byChecked = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
 
-        for (Alarm alarm : alarmList) {
-            log.info("alarm.account : {}", alarm.getToAccount().getNickname());
-        }
         long countByAccountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
         alarmType(model, alarmList, countByAccountAndChecked, alarmList.size());
 
@@ -71,34 +68,34 @@ public class AlarmController {
         return "alarm/view";
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/alarm/deleteAll", method = RequestMethod.GET)
-    public String deleteCheckedAlarm(@CurrentUser Account account){
-        String message = null;
-        log.info("삭제 할 알람 수 {}", alarmRepository.countByToAccountAndChecked(account, true));
-        if(alarmRepository.countByToAccountAndChecked(account, true) == 0){
-            message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
-                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                    "        <i class=\"icon-feather-x\"></i>\n" +
-                    "    </button>\n" +
-                    "    <h3 class=\"text-lg font-semibold text-white\">오류</h3>\n" +
-                    "    <p class=\"text-white text-opacity-75\">읽은 알람이 존재하지 않습니다.</p>\n" +
-                    "</div>";
-            return message;
-        }
-        alarmService.deleteByChecked(account);
 
-        message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
-                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                "        <i class=\"icon-feather-x\"></i>\n" +
-                "    </button>\n" +
-                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
-                "    <p class=\"text-white text-opacity-75\">알림 삭제에 성공했습니다.</p>\n" +
-                "</div>";
-        return message;
+    @ResponseBody
+    @RequestMapping(value = "/alarm/allChecked", method = RequestMethod.GET)
+    public ResponseEntity checkedAllAlarm(@CurrentUser Account account) {
+        log.info("알람 모두 읽기 실행");
+        long count = alarmRepository.countByToAccountAndChecked(account, false);
+
+        if(count > 0) {
+            alarmService.checkedAll(account);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/alarm/{alarmId}")
+    @ResponseBody
+    @RequestMapping(value = "/alarm/deleteAll", method = RequestMethod.GET)
+    public ResponseEntity deleteCheckedAlarm(@CurrentUser Account account){
+        long accountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
+        log.info("삭제 할 알람 수 {}", accountAndChecked);
+        if(accountAndChecked == 0){
+            return ResponseEntity.badRequest().build();
+        }
+        alarmService.deleteByChecked(account);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/alarm/detail/{alarmId}")
     public String moveAlarmLink(@CurrentUser Account account,
                                 @PathVariable Long alarmId, Model model,
                                 HttpServletRequest request, HttpServletResponse response) {
@@ -109,11 +106,69 @@ public class AlarmController {
         AlarmType type = byAlarmId.getAlarmType();
         String path = byAlarmId.getPath();
 
-        alarmService.alarmRead(byAlarmId);
+        alarmService.checked(byAlarmId, account);
 
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
-        switch (type){
+
+        if (type == AlarmType.STUDY) {
+            Study studyByPath = studyService.getPath(path);
+            model.addAttribute(studyByPath);
+            return "study/study-view";
+        }
+
+        else if (type == AlarmType.MEETING || type == AlarmType.MEETING_REPLY) {
+            Study meetingByPath = studyService.getPath(path);
+            List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(meetingByPath);
+
+            model.addAttribute("service", studyService);
+            model.addAttribute("meetingsList", meetingsList);
+            model.addAttribute(meetingByPath);
+            model.addAttribute(new MeetingsForm());
+            return "study/study-meetings";
+        }
+
+        else if (type == AlarmType.BOARD_REPLY || type == AlarmType.LIKES) {
+            model.addAttribute("account", account);
+            Long boardNumber = Long.valueOf(path);
+            Boolean hasBoardError = boardService.boardReportedOrNull(boardNumber);
+            if (hasBoardError) {
+                return "error-page";
+            }
+            boardService.viewUpdate(boardNumber, request, response);
+            Board detail = boardRepository.findByBid(boardNumber);
+            log.info("board detail : {}", path);
+
+            // 최근에 올라온 게시물
+            List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
+
+            // 좋아요 및 댓글
+            Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
+            List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
+
+            // 게시물 작성자 account 불러오는 로직
+            Board currentBoard = boardRepository.findByBid(boardNumber);
+            Account boardOwner = currentBoard.getWriter();
+
+            model.addAttribute("board", detail);
+            model.addAttribute("boardOwner", boardOwner);
+            model.addAttribute("service", boardService);
+            model.addAttribute("accountRepo", accountRepository);
+            model.addAttribute("likes", likes);
+            model.addAttribute("likeService", likeService);
+            model.addAttribute("reply", replies);
+            model.addAttribute("replyService", replyService);
+            model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
+            model.addAttribute("replyRepo", replyReportRepository);
+            model.addAttribute("recentlyBoards", recentlyBoards);
+
+            model.addAttribute(new ReplyForm());
+            model.addAttribute(new BoardReportForm());
+            model.addAttribute(new BoardForm());
+
+            return "board/board-detail";
+        }
+        /*switch (type){
             case STUDY: log.info("study 페이지 이동 : {}", path);
                 Study studyByPath = studyService.getPath(path);
                 model.addAttribute(studyByPath);
@@ -136,7 +191,6 @@ public class AlarmController {
                 if (hasBoardError) {
                     return "error-page";
                 }
-
                 boardService.viewUpdate(boardNumber, request, response);
                 Board detail = boardRepository.findByBid(boardNumber);
                 log.info("board detail : {}", path);
@@ -169,8 +223,8 @@ public class AlarmController {
                 model.addAttribute(new BoardForm());
 
                 return "board/board-detail";
-        }
-        return "alarm/view";
+        }*/
+        return "error-page";
     }
 
     void alarmType(Model model, List<Alarm> alarmList, long countChecked, long countNotChecked) {

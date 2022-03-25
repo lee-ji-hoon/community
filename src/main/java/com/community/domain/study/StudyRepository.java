@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface StudyRepository extends JpaRepository<Study, Long> {
+public interface StudyRepository extends JpaRepository<Study, Long>, StudyRepositoryExtension  {
 
     boolean existsByPath(String path);
 
@@ -27,7 +27,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     Study findStudyWithMembersByPath(String path);
 
     @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByOrderByPublishedDateTimeDesc();
+    List<Study> findFirst9ByMembersNotContainingOrderByPublishedDateTimeDesc(Account account);
 
     @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByManagersContainingOrderByPublishedDateTimeDesc(Account account);
@@ -38,9 +38,6 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByTagsContainingOrderByPublishedDateTimeDesc(Tag tag);
 
-    @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findFirst9ByOrderByMemberCount();
-
     @EntityGraph(value = "Study.withTags", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithTagsById(Long id);
 
@@ -50,5 +47,4 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     List<Study> findByFullDescriptionContaining(String keyword);
 
     List<Study> findByTagsContaining(Tag tag);
-
 }

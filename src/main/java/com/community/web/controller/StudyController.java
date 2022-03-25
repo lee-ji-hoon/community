@@ -11,11 +11,11 @@ import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.ReplyService;
 import com.community.service.StudyService;
-import com.community.domain.study.Meetings;
+import com.community.domain.meetings.Meetings;
 import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
 import com.community.web.dto.StudyCalendarForm;
-import com.community.domain.study.MeetingsRepository;
+import com.community.domain.meetings.MeetingsRepository;
 import com.community.domain.study.StudyRepository;
 import com.community.web.dto.validator.MeetingFormValidator;
 import com.community.web.dto.validator.StudyCalendarFormValidator;
@@ -102,8 +102,11 @@ public class StudyController {
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
-        model.addAttribute("studyListId", studyRepository.findFirst9ByOrderByPublishedDateTimeDesc());
-        model.addAttribute("popularityStudyLIst", studyRepository.findFirst9ByOrderByMemberCount());
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
+        model.addAttribute("suggestStudyList", studyRepository.findByAccount(
+                accountWithTagsById.getTags()
+        ));
+        model.addAttribute("studyListId", studyRepository.findFirst9ByMembersNotContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
@@ -312,6 +315,7 @@ public class StudyController {
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
 
+        log.info("스터디 페이지 실행 중복 확인");
         Study bypath = studyService.getPath(path);
 
         model.addAttribute(account);
@@ -322,19 +326,22 @@ public class StudyController {
 
     // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
-    public String joinStudy(@CurrentUser Account account, @PathVariable String path) {
+    public String joinStudy(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
 
         studyService.addMember(studyWithMembersByPath, account);
+        redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");
 
         return "redirect:/study/" + fixPath(path) + "/meetings";
     }
 
     // 스터디 탈퇴
     @GetMapping(STUDY_PATH_VIEW + "/remove")
-    public String removeStudy(@CurrentUser Account account, @PathVariable String path) {
+    public String removeStudy(@CurrentUser Account account, RedirectAttributes redirectAttributes,
+                              @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
         studyService.removeMember(studyWithMembersByPath, account);
+        redirectAttributes.addFlashAttribute("message", "스터디 탈퇴됐습니다.");
 
         return "redirect:/study/" + fixPath(path);
     }
@@ -409,39 +416,58 @@ public class StudyController {
         return "study/settings/alarm";
     }
 
-    @PostMapping(STUDY_SETTINGS + "alarm")
-    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path,
-                                 RedirectAttributes redirectAttributes, Model model) {
+    @ResponseBody
+    @RequestMapping(value = STUDY_SETTINGS + "sendAlarm")
+    public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path, Model model) {
         log.info("알람 실행");
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
 
         log.info("study tags getTags: {}", studyUpdate.getTags());
 
+        String message = null;
         // 스터디 태그 미설정 시
         if (studyUpdate.getTags().isEmpty()) {
-            log.info("study tags 비어있음 getTags: {}", studyUpdate.getTags());
+            log.info("study tags 비어있음");
             model.addAttribute(account);
-            redirectAttributes.addFlashAttribute("alert", "스터디 주제 설정 후 알림을 보내주시기 바랍니다.");
-            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+            message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">오류</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">스터디의 주제가 존재하지 않습니다. 설정 후 다시 시도해주세요.</p>\n" +
+                    "</div>";
+            return message;
         }
 
-        /*// 24시간 체크 로직
-        if(!checkAlarmDateTime){
+        // 24시간 체크 로직
+        /*if(!checkAlarmDateTime){
             log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
-            redirectAttributes.addFlashAttribute("alert", "스터디 알람은 24시간에 한 번씩만 가능합니다.");
-            return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+            message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">오류</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">하루에 한 번 발송 가능합니다. 나중에 다시 시도해주세요.</p>\n" +
+                    "</div>";
+            return message;
         }*/
 
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 
-        redirectAttributes.addFlashAttribute("message", "관심분야로 설정된 회원들에게 알림을 전송했습니다.");
-
-        return "redirect:/study/" + fixPath(path) + "/settings/alarm";
+        message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">알림 전송에 성공했습니다.</p>\n" +
+                "</div>";
+        return message;
     }
 
     @PostMapping(STUDY_SETTINGS + "banner")
-    public String studyImageUpToDate(@CurrentUser Account account, @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
+    public String studyImageUpToDate(@CurrentUser Account account,
+                                     @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
 
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         studyService.getStudyImage(studyUpdate, image);
