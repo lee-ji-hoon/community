@@ -111,7 +111,7 @@ public class StudyController {
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
 
-        model.addAttribute("accountWithTagsById", accountRepository.findAccountWithTagsById(account.getId()));
+        model.addAttribute("accountWithTagsById", accountWithTagsById);
 
         return "study/study-list";
     }
