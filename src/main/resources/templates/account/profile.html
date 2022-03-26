@@ -57,7 +57,6 @@
                             <input id="profileBanner" type="hidden" class="form-control" name="image" />
                         </div>
                     </form>
-
                 </div>
 
                 <div class="study_content">
@@ -104,7 +103,7 @@
                             <a th:href="@{/settings/profile-settings}" id="update-profile"
                                class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
                                 <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
-                                <span> 프로필 수정 </span>
+                                <span style="margin-left: -2그랫px"> 프로필 수정 </span>
                             </a>
                         </div>
                     </div>
@@ -123,33 +122,32 @@
                     <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
 
                         <!-- add story -->
-                        <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-blue-600 text-white space-x-1.5 hover:text-white"  uk-toggle="target: #create-post-modal">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>게시글 작성</span>
+
+                        <a th:if="${isOwner}" href="#"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 text-white">
+                            <span>쪽지 보내기</span>
                         </a>
 
                         <!-- search icon -->
-                        <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-gray-100 space-x-1.5" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small">
+                        <!-- <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-gray-100 space-x-1.5" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small">
                             <ion-icon name="search" class="text-xl"></ion-icon>
                             <span>
                                 스터디 찾기
                             </span>
                         </a>
 
-                        <!-- search dropdown -->
+                        &lt;!&ndash; search dropdown &ndash;&gt;
                         <div class="absolute right-3 bg-white z-10 w-full flex items-center border rounded-md"
                              id="profile-search" hidden>
                             <input type="text" placeholder="Search.." class="flex-1">
                             <ion-icon name="close-outline" class="text-2xl hover:bg-gray-100 p-1 rounded-full mr-2 cursor-pointer" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small"></ion-icon>
                         </div>
 
-                        <!-- more icon -->
+                        &lt;!&ndash; more icon &ndash;&gt;
                         <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
                             <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
                         </a>
-                        <!-- more drowpdown -->
+                        &lt;!&ndash; more drowpdown &ndash;&gt;
                         <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
                              uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
                             <ul class="space-y-1">
@@ -182,9 +180,131 @@
                                     </a>
                                 </li>
                             </ul>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
+
+                <div class="md:flex md:space-x-6">
+                    <!--소개-->
+                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+                            <div class="justify-content-center">
+                                <div class="box col-12 rounded p-5">
+                                    <!-- Grid container -->
+                                    <div class="container p-2">
+                                        <!--Grid row-->
+
+                                        <span style="font-size: 24px;">
+                                            <i class="fa fa-bookmark"></i>
+                                        </span>
+                                        <span style="font-size: 24px; margin-left: 5px">소개</span>
+
+                                        <div class="row mt-4">
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                                <h6 class="font-semibold" >학번</h6>
+                                                <span  th:if="${!#strings.isEmpty(account.studentId)}">
+                                                    <span th:text="${account.studentId}"></span>
+                                                </span>
+                                                <h6 class="text-uppercase text-muted font-weight-bold">학년</h6>
+
+                                                <p th:if="${!#strings.isEmpty(account.studentId)}">
+                                                    <span th:text="${account.grade}"></span>
+                                                </p>
+                                            </div>
+                                            <!--Grid column-->
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                                <h6 class="font-semibold" >전공</h6>
+
+                                                <p class="mt-1" th:if="${!#strings.isEmpty(account.occupation)}">
+                                                    <span th:text="${account.major}"></span>
+                                                </p>
+                                                <p class="mt-1" th:if="${#strings.isEmpty(account.occupation)}">
+                                                    <span>전공을 정하지 않은 회원입나다.</span>
+                                                </p>
+
+                                                <h6 class="text-uppercase text-muted font-weight-bold">가입일</h6>
+
+                                                <p th:if="${isOwner || account.emailVerified}">
+                                                    <span th:if="${isOwner && !account.emailVerified}">
+                                                        인증이 된 회원이 아닙니다.
+                                                    </span>
+                                                                    <span th:if="${!isOwner && !account.emailVerified}">
+                                                        <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
+                                                    </span>
+                                                    <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
+                                                </p>
+                                            </div>
+
+                                            <!--Grid column-->
+                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0 mt-2">
+                                                <h6 class="text-uppercase text-muted font-weight-bold">한 줄 소개</h6>
+                                                <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
+                                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
+                                                    한 줄 소개를 추가하세요.
+                                                </p>
+                                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && !isOwner}">
+                                                    본인 소개를 아직 적지 않은 회원입니다.
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <!--Grid row-->
+                                    </div>
+                                    <!-- Grid container -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- 사이드 태그 -->
+                    <div class="w-full space-y-6">
+                        <div class="widget card p-5">
+                            <h4 class="text-lg font-semibold"> 관심 주제 </h4>
+                            <div class="mt-3">
+                                <div th:if="${accountWithTagsById.tags.isEmpty()}">
+                                    아직 관심 주제를 설정하지 않은 회원입니다.
+                                </div>
+                                <div th:if="${!accountWithTagsById.tags.isEmpty()}">
+                                    <a th:each="tag : ${accountWithTagsById.tags}"
+                                       class="font-semibold text-monospace mt-3 p-1" >
+                                        <span>#</span>
+                                        <span th:text="${tag.title}">Tag</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <a th:if="${isOwner}"
+                               th:href="@{/settings/tags}" class="button gray mt-3 w-full"> 태그 추가 </a>
                         </div>
                     </div>
                 </div>
+
+                <!--게시글-->
+                <div class="md:flex md:space-x-6 lg:mx-16">
+                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+
+                            <!-- post header-->
+
+                        </div>
+                    </div>
+                </div>
+                <!--스터디-->
+                <div class="md:flex md:space-x-6 lg:mx-16">
+                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+
+                            <!-- post header-->
+
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
         </div>
@@ -298,90 +418,7 @@
 
 
     <!-- nesting, row안의 row -->
-    <!--<div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
-        <div class="box col-6">
-            <div class="row justify-content-center">
-                <div class="box col-12 rounded p-4">
-                    <div class="row justify-content-center p-4">
-                        <div class="col-4">
-                            <svg th:if="${#strings.isEmpty(account.profileImage)}" class="img-fluid float-left rounded border img-thumbnail" th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
-                            <img th:if="${!#strings.isEmpty(account.profileImage)}" class="float-left rounded-circle border" th:src="${account.profileImage}" width="125" height="125"/>
-                        </div>
-                        <div class="col-3" style="float: none; margin: 0 auto; align-items:center; display: flex; font-family: 'Open Sans', sans-serif;">
-                            <h3 class="text-muted" style="text-align: center" th:text="${account.nickname}">닉네임</h3>
-                        </div>
-                        <div th:if="${isOwner}" class="col-4" style="float: none; margin: 0 auto; align-items:center; display: flex;">
-                            <a class="modify_button text-muted" href="#" th:href="@{/settings/profile-settings}">프로필 수정</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="empty col-12 p-3"></div>
-                <div class="box col-12 rounded p-4">
-                    &lt;!&ndash; Grid container &ndash;&gt;
-                    <div class="container p-2">
-                        &lt;!&ndash;Grid row&ndash;&gt;
-                        <span style="font-size: 20px;">
-                                <i class="fa fa-bookmark"></i>
-                            </span>
-                        <span style="font-size: 20px; margin-left: 5px">소개</span>
-
-                        <div class="row mt-4">
-                            &lt;!&ndash;Grid column&ndash;&gt;
-                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
-                                <h6 class="text-uppercase text-muted font-weight-bold" >학번</h6>
-
-                                <p th:if="${!#strings.isEmpty(account.studentId)}">
-                                    <span th:text="${account.studentId}"></span>
-                                </p>
-                                <h6 class="text-uppercase text-muted font-weight-bold">학년</h6>
-
-                                <p th:if="${!#strings.isEmpty(account.studentId)}">
-                                    <span>추가 필요</span>
-                                </p>
-                            </div>
-                            &lt;!&ndash;Grid column&ndash;&gt;
-
-                            &lt;!&ndash;Grid column&ndash;&gt;
-                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
-                                <h6 class="text-uppercase text-muted font-weight-bold">전공</h6>
-
-                                <p th:if="${!#strings.isEmpty(account.occupation)}">
-                                    <span th:text="${account.occupation}"></span>
-                                </p>
-                                <p th:if="${#strings.isEmpty(account.occupation)}">
-                                    <span>전공을 정하지 않은 회원입나다.</span>
-                                </p>
-
-                                <h6 class="text-uppercase text-muted font-weight-bold">가입일</h6>
-
-                                <p th:if="${isOwner || account.emailVerified}">
-                                        <span th:if="${isOwner && !account.emailVerified}">
-                                            인증이 된 회원이 아닙니다.
-                                        </span>
-                                    <span th:if="${!isOwner && !account.emailVerified}">
-                                            <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
-                                        </span>
-                                    <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
-                                </p>
-                            </div>
-                            &lt;!&ndash;Grid column&ndash;&gt;
-                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0 mt-2">
-                                <h6 class="text-uppercase text-muted font-weight-bold">한 줄 소개</h6>
-                                <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
-                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
-                                    한 줄 소개를 추가하세요.
-                                </p>
-                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && !isOwner}">
-                                    본인 소개를 아직 적지 않은 회원입니다.
-                                </p>
-                            </div>
-                        </div>
-                        &lt;!&ndash;Grid row&ndash;&gt;
-                    </div>
-                    &lt;!&ndash; Grid container &ndash;&gt;
-                </div>
-            </div>
-        </div>
+    <!--    <div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
         <div class="empty box col-1"></div>
         <div class="box col-5 rounded p-5">
             <div class="h-100">
