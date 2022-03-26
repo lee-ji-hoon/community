@@ -60,6 +60,10 @@ public class Account {
 
     private String emailCheckToken;
 
+    private String major;
+
+    private String grade;
+
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     private LocalDateTime joinedAt;
