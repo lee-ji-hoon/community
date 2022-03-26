@@ -8,7 +8,7 @@ import com.community.domain.board.BoardRepository;
 import com.community.domain.board.ReplyRepository;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
