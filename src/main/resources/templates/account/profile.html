@@ -4,20 +4,8 @@
 <head th:replace="theme-fragments.html :: head"></head>
 
 <style>
-    .custom-file label {
-        color: white;
-        cursor: pointer;
-    }
-
-    .custom-file input[type="file"] {  /* 파일 필드 숨기기 */
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip:rect(0,0,0,0);
-        border: 0;
+    h6 {
+        font-size: 20px;
     }
 
 </style>
@@ -34,37 +22,14 @@
     <div class="main_content">
         <div class="mcontainer">
             <!-- Profile cover -->
-            <div id="new-profile-image"></div>
 
-            <div th:if="${message}" class="callout bg-blue-600" data-closable style="border-radius: 10px; margin-bottom: 20px; padding: 15px; color: white">
-                <button class="close-button" aria-label="Close alert" type="button" data-close="" >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <span th:text="${message}">메시지</span>
-            </div>
-
-            <div class="profile user-profile">
-                <div id="profile-banner-image">
-                    <div id="current-profile-image">
-                        <img alt="" th:src="${byAccount.getBannerImage()}" class="rounded" width="100%" height="150px">
-                    </div>
-                    <div id="new-profile-banner"></div>
-                    <div id="cropped-new-profile-image"></div>
-
-                    <form id="imageForm" name="update_banner_form"  action="#"
-                          th:action="@{'/profile/' + ${#authentication.name} + '/update-banner'}"  method="post">
-                        <div class="form-group">
-                            <input id="profileBanner" type="hidden" class="form-control" name="image" />
-                        </div>
-                    </form>
-                </div>
-
-                <div class="study_content">
-                    <div class="profile_avatar">
+            <div class="profile user-profile mt-4">
+                <div class="study_content" style="margin-top: -100px; padding-bottom: 15px;">
+                    <div class="profile_avatar mt-16">
                         <div class="profile_avatar_holder" th:if="${isOwner}">
                             <svg th:if="${#strings.isEmpty(account.profileImage)}"
                                  th:data-jdenticon-value="${account.studentId}"
-                                style="width: 160px; height: 160px"></svg>
+                                 style="width: 160px; height: 160px"></svg>
                             <img th:if="${!#strings.isEmpty(account.profileImage)}"
                                  th:src="${account.profileImage}" />
                         </div>
@@ -75,37 +40,11 @@
                             <img th:if="${!#strings.isEmpty(byAccount.profileImage)}"
                                  th:src="${byAccount.profileImage}" />
                         </div>
-                        <div class="user_status status_online"></div>
-                        <div class="icon_change_photo" hidden> <ion-icon name="camera" class="text-xl"></ion-icon> </div>
                     </div>
 
                     <div class="study_info">
                         <h1 class="uk-text-center" th:text="${byAccount.username}"></h1>
                         <p class="uk-text-center" th:text="${byAccount.getBio()}"></p>
-                        <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 lg:flex" th:if="${isOwner}">
-                            <div class="custom-file">
-                                <label for="profile-image-file" id="update-banner"
-                                       class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                                    <ion-icon name="create-outline" class="text-xl mr-1 hidden"></ion-icon>
-                                    배너 이미지 수정
-                                </label>
-                                <input type="file" id="profile-image-file" name="uploadfile" accept="*">
-                            </div>
-                            <span id="cut-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
-                                자르기
-                            </span>
-                            <span id="confirm-button" class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
-                                확인
-                            </span>
-                            <span id="reset-button" class="flex items-center justify-center h-8 px-3 bg-red-600 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                                취소
-                            </span>
-                            <a th:href="@{/settings/profile-settings}" id="update-profile"
-                               class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                                <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
-                                <span style="margin-left: -2그랫px"> 프로필 수정 </span>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -113,74 +52,23 @@
                     <nav class="responsive-nav pl-3">
                         <ul  uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                             <li><a href="#">소개</a></li>
-                            <li><a href="#">작성 게시글 <span>3,243</span> </a></li>
-                            <li><a href="#">스터디 </a></li>
+                            <li><a href="#">스터디</a></li>
+                            <li><a href="#">작성 게시글</a></li>
                         </ul>
                     </nav>
 
-                    <!-- button actions -->
                     <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
-
-                        <!-- add story -->
-
+                        <!-- 쪽지 -->
+                        <a th:href="@{/settings/profile-settings}" id="update-profile"
+                           class="flex items-center justify-center h-8 px-3 rounded-md bg-green-600 text-white">
+                            <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
+                            <span style="margin-left: -2px"> 프로필 수정 </span>
+                        </a>
                         <a th:if="${isOwner}" href="#"
                            class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 text-white">
                             <span>쪽지 보내기</span>
                         </a>
 
-                        <!-- search icon -->
-                        <!-- <a href="#" class="flex items-center justify-center h-10 px-5 rounded-md bg-gray-100 space-x-1.5" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small">
-                            <ion-icon name="search" class="text-xl"></ion-icon>
-                            <span>
-                                스터디 찾기
-                            </span>
-                        </a>
-
-                        &lt;!&ndash; search dropdown &ndash;&gt;
-                        <div class="absolute right-3 bg-white z-10 w-full flex items-center border rounded-md"
-                             id="profile-search" hidden>
-                            <input type="text" placeholder="Search.." class="flex-1">
-                            <ion-icon name="close-outline" class="text-2xl hover:bg-gray-100 p-1 rounded-full mr-2 cursor-pointer" uk-toggle="target: #profile-search;animation: uk-animation-slide-top-small"></ion-icon>
-                        </div>
-
-                        &lt;!&ndash; more icon &ndash;&gt;
-                        <a href="#" class="flex items-center justify-center h-10 w-10 rounded-md bg-gray-100">
-                            <ion-icon name="ellipsis-horizontal" class="text-xl"></ion-icon>
-                        </a>
-                        &lt;!&ndash; more drowpdown &ndash;&gt;
-                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-                             uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small; offset:5">
-                            <ul class="space-y-1">
-                                <li>
-                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <ion-icon name="arrow-redo-outline" class="pr-2 text-xl"></ion-icon> 프로필 공유하기
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <ion-icon name="create-outline" class="pr-2 text-xl"></ion-icon>  프로필 수정하기
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <ion-icon name="notifications-off-outline" class="pr-2 text-lg"></ion-icon>   알림 끄기
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-100 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                        <ion-icon name="star-outline"  class="pr-2 text-xl"></ion-icon>  즐겨찾기
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="-mx-2 my-2 dark:border-gray-800">
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-50 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                                        <ion-icon name="stop-circle-outline" class="pr-2 text-xl"></ion-icon>  즐겨찾기 해제
-                                    </a>
-                                </li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -188,7 +76,7 @@
 
                 <div class="md:flex md:space-x-6">
                     <!--소개-->
-                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
+                    <div class="space-y-5 flex-shrink-0 md:w-7/12 mb-5">
                         <div class="card lg:mx-0 uk-animation-slide-bottom-small">
                             <div class="justify-content-center">
                                 <div class="box col-12 rounded p-5">
@@ -196,54 +84,52 @@
                                     <div class="container p-2">
                                         <!--Grid row-->
 
-                                        <span style="font-size: 24px;">
-                                            <i class="fa fa-bookmark"></i>
-                                        </span>
-                                        <span style="font-size: 24px; margin-left: 5px">소개</span>
-
                                         <div class="row mt-4">
 
-                                            <!--Grid column-->
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold" >학번</h6>
                                                 <span  th:if="${!#strings.isEmpty(account.studentId)}">
                                                     <span th:text="${account.studentId}"></span>
                                                 </span>
-                                                <h6 class="text-uppercase text-muted font-weight-bold">학년</h6>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                                <h6 class="font-semibold">학년</h6>
 
-                                                <p th:if="${!#strings.isEmpty(account.studentId)}">
+                                                <p th:if="${!#strings.isEmpty(account.grade)}">
                                                     <span th:text="${account.grade}"></span>
                                                 </p>
+                                                <p th:if="${#strings.isEmpty(account.grade)}">
+                                                    <span>학년을 공개하지 않은 회원입나다.</span>
+                                                </p>
                                             </div>
-                                            <!--Grid column-->
 
-                                            <!--Grid column-->
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold" >전공</h6>
 
-                                                <p class="mt-1" th:if="${!#strings.isEmpty(account.occupation)}">
+                                                <p class="mt-1" th:if="${!#strings.isEmpty(account.major)}">
                                                     <span th:text="${account.major}"></span>
                                                 </p>
-                                                <p class="mt-1" th:if="${#strings.isEmpty(account.occupation)}">
+                                                <p class="mt-1" th:if="${#strings.isEmpty(account.major)}">
                                                     <span>전공을 정하지 않은 회원입나다.</span>
                                                 </p>
+                                            </div>
 
-                                                <h6 class="text-uppercase text-muted font-weight-bold">가입일</h6>
 
+                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
+                                                <h6 class="font-semibold">가입일</h6>
                                                 <p th:if="${isOwner || account.emailVerified}">
                                                     <span th:if="${isOwner && !account.emailVerified}">
                                                         인증이 된 회원이 아닙니다.
                                                     </span>
-                                                                    <span th:if="${!isOwner && !account.emailVerified}">
+                                                    <span th:if="${!isOwner && !account.emailVerified}">
                                                         <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
                                                     </span>
                                                     <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
                                                 </p>
                                             </div>
 
-                                            <!--Grid column-->
-                                            <div class="col-lg-6 col-md-6 mb-4 mb-md-0 mt-2">
-                                                <h6 class="text-uppercase text-muted font-weight-bold">한 줄 소개</h6>
+                                            <div class="col-lg-12 col-md-12 mb-4 mb-md-0 mt-2">
+                                                <h6 class="font-semibold">한 줄 소개</h6>
                                                 <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
                                                 <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
                                                     한 줄 소개를 추가하세요.
@@ -281,20 +167,81 @@
                             <a th:if="${isOwner}"
                                th:href="@{/settings/tags}" class="button gray mt-3 w-full"> 태그 추가 </a>
                         </div>
-                    </div>
-                </div>
 
-                <!--게시글-->
-                <div class="md:flex md:space-x-6 lg:mx-16">
-                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
-                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+                        <div class="widget card p-1">
+                            <h4 th:text="${account.nickname} + '님의 스터디'"
+                                class="text-lg font-semibold p-4"></h4>
+                            <div th:each="study: ${enrolledStudyList}"
+                                 th:if="${study.isManager(#authentication.principal) || study.isMember(#authentication.principal)}"
+                                 class="flex items-start flex-wrap p-3 sm:space-x-6">
+                                <a th:href="@{'/study/' + ${study.path}}">
+                                    <img th:src="${study.image}"
+                                         th:alt="${study.title}"
+                                         class="w-20 h-20 relative mt-1 order-1">
+                                    <div class="flex-1 order-2 ml-2">
+                                        <h4 class="text-lg text-gray-500 font-medium mb-2" th:text="${study.title}">Phaseout </h4>
+                                        <!--<span th:each="tag: ${study.tags}" th:if="${tagStat.count} < 4"
+                                              class="rounded-full font-weight-light text-sm text-monospace">
+                                            <a  class="text-decoration-none text-white">
+                                                <i class="fa fa-tag text-sm"></i> <span class="text-sm" th:text="${tag.title}">Tag</span>
+                                            </a>
+                                        </span>-->
+                                    </div>
+                                </a>
+                            </div>
 
-                            <!-- post header-->
+                            <div th:each="study: ${myStudyList}"
+                                 th:if="${study.isManager(#authentication.principal) || study.isMember(#authentication.principal)}"
+                                 class="flex items-start flex-wrap p-3 sm:space-x-6">
+                                <a th:href="@{'/study/' + ${study.path}}">
+                                    <img th:src="${study.image}"
+                                         th:alt="${study.title}"
+                                         class="w-20 h-20 relative mt-1 order-1">
+                                    <div class="flex-1 order-2 ml-2">
+                                        <p class="text-lg text-gray-500 font-medium mb-2" th:text="${study.title}">Phaseout </p>
+                                        <span th:each="tag: ${study.tags}" th:if="${tagStat.count} < 4"
+                                              class="rounded-full font-weight-light text-sm text-monospace">
+                                            <a  class="text-decoration-none text-white">
+                                                <i class="fa fa-tag text-sm"></i> <span class="text-sm" th:text="${tag.title}">Tag</span>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
 
                         </div>
                     </div>
+
                 </div>
+
                 <!--스터디-->
+                <div class=" md:space-x-6">
+                    <div class="space-y-5 flex-shrink-0">
+
+                        <div class="card md:p-6 p-2 mx-auto">
+                            <nav class="responsive-nav border-b">
+                                <ul uk-switcher="connect: #timeline-tab-study; animation: uk-animation-fade">
+                                    <li><a href="#" class="lg:px-2"> 멤버 <span th:text="${enrolledStudyList.size()}"></span></a></li>
+                                    <li><a href="#" class="lg:px-2"> 매니저 <span th:text="${myStudyList.size()}"></span></a></li>
+                                </ul>
+                            </nav>
+                            <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab-study">
+                                <!-- 참여 중 -->
+                                <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
+                                    <div th:replace="theme-fragments.html :: profile-study-list
+                                    (studyType=${enrolledStudyList})"></div>
+                                </div>
+                                <!-- 매니저 -->
+                                <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
+                                    <div th:replace="theme-fragments.html :: profile-study-list
+                                    (studyType=${myStudyList})"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--게시글-->
                 <div class="md:flex md:space-x-6 lg:mx-16">
                     <div class="space-y-5 flex-shrink-0 md:w-7/12">
                         <div class="card lg:mx-0 uk-animation-slide-bottom-small">
@@ -310,291 +257,10 @@
         </div>
     </div>
 </div>
-<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
-<script src="/node_modules/cropper/dist/cropper.min.js"></script>
-<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
-<script type="application/javascript">
-    $(function() {
-        cropper = '';
-        let $confirmBtn = $("#confirm-button");
-        let $resetBtn = $("#reset-button");
-        let $cutBtn = $("#cut-button");
-        let $newProfileImage = $("#new-profile-image");
-        let $newProfileBannerImage = $("#new-profile-banner");
-        let $currentProfileImage = $("#current-profile-image");
-        let $resultImage = $("#cropped-new-profile-image");
-        let $profileImage = $("#profileImage");
-        let $bannerSubmit = $("#banner-submit");
-        let $updateBanner = $("#update-banner");
-        let $updateProfile = $("#update-profile");
-        let $profileBanner = $("#profileBanner");
-
-        $newProfileImage.hide();
-        $newProfileBannerImage.hide();
-        $cutBtn.hide();
-        $resetBtn.hide();
-        $confirmBtn.hide();
-        $bannerSubmit.hide();
-
-        $("#profile-image-file").change(function(e) {
-            if (e.target.files.length === 1) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    if (e.target.result) {
-                        if (!e.target.result.startsWith("data:image")) {
-                            alert("이미지 파일을 선택하세요.");
-                            return;
-                        }
-                        let img = document.createElement("img");
-                        img.id = 'new-profile';
-                        img.width = 1000;
-                        img.height = 150;
-                        img.src = e.target.result;
-                        img.setAttribute('width', '100%');
-
-                        $newProfileImage.html(img);
-                        $newProfileImage.show();
-                        $currentProfileImage.hide();
-
-                        let $newImage = $(img);
-                        $newImage.cropper({aspectRatio: 3.5/1});
-                        cropper = $newImage.data('cropper');
-
-                        $cutBtn.show();
-                        $confirmBtn.hide();
-                        $resetBtn.show();
-                        $updateBanner.hide();
-                        $updateProfile.hide();
-                    }
-                };
-
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-
-        $resetBtn.click(function() {
-            $currentProfileImage.show();
-            $newProfileImage.hide();
-            $resultImage.hide();
-            $resetBtn.hide();
-            $cutBtn.hide();
-            $confirmBtn.hide();
-            $profileImage.val('');
-            $newProfileBannerImage.hide('');
-            $updateBanner.show();
-            $updateProfile.show();
-            $bannerSubmit.hide();
-        });
-
-        $cutBtn.click(function () {
-            let dataUrl = cropper.getCroppedCanvas().toDataURL();
-            if (dataUrl.length > 1000 * 1024) {
-                alert("이미지 파일이 너무 큽니다. 1024000 보다 작은 파일을 사용하세요. 현재 이미지 사이즈 " + dataUrl.length);
-                return;
-            }
-            console.log(dataUrl.length);
-
-            let newImage = document.createElement("img");
-            newImage.id = "cropped-new-profile-image";
-            newImage.src = dataUrl;
-            newImage.width = 1000;
-            $resultImage.html(newImage);
-            $resultImage.show();
-            $confirmBtn.show();
-            $newProfileImage.hide();
-            $cutBtn.hide();
-
-
-            $confirmBtn.click(function () {
-                $newProfileBannerImage.html(newImage);
-                $profileBanner.val(dataUrl)
-                $("#imageForm").submit();
-            });
-        });
-    });
-</script>
 </body>
 </html>
 
 
-    <!-- nesting, row안의 row -->
-    <!--    <div class="row mt-5" style="margin-left: 150px; margin-right: 150px">
-        <div class="empty box col-1"></div>
-        <div class="box col-5 rounded p-5">
-            <div class="h-100">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="mb-0">알림</h6>
-                    <a href="">전체 보기</a>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3 ">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
-                            <small class="text-muted">15 minutes ago</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
-                            <small class="text-muted">15 minutes ago</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
-                            <small class="text-muted">15 minutes ago</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
-                            <small class="text-muted">15 minutes ago</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center border-bottom py-3">
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <small>등록된 태그의 스터디가 새로 생겼습니다.</small>
-                            <small class="text-muted">15 minutes ago</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-left mt-2">
-                    <small class="text-muted">최대 5개의 알림이 보입니다.</small>
-                </div>
+<!-- nesting, row안의 row -->
 
-                <div class="mt-4">
-                    <span >알림 스터디 주제</span><br/>
-                    <span th:each="tag: ${account.tags}" class="font-weight-light text-monospace badge badge-pill badge-secondary mr-3 mt-3">
-                            <i class="text-decoration-none text-white">
-                                <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
-                            </i>
-                        </span>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
-
-   <!-- <div class="main">
-        <input id="community" type="radio" name="tabs">
-        <label for="community">게시글</label>
-
-        <input id="study" type="radio" name="tabs" checked>
-        <label for="study">참여중인 스터디</label>
-
-        <section id="community_content">
-            <div class="row row-cols-1 row-cols-md-2">
-                <div class="col mb-4" th:each="board : ${board}" >
-                    <div class="card"
-                         th:onclick="|location.href='@{/board/detail/{boardId}(boardId=${board.bid})}'|"
-                         style="cursor: pointer">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted" th:text="${board.boardTitle}">Card subtitle</h6>
-                            <h5 class="card-title text-truncate" th:text="${board.title}">title</h5>
-                            <p class="card-text"></p>
-                            <a href="#" class="card-link"><i class="fa fa-thumbs-up"></i><a class="btn btn-default badge" th:text="${likeService.boardLikeSize(board)}">좋아요 수</a></a>
-                            <a href="#" class="card-link"><i class="fa fa-eye"></i><a class="btn btn-default badge" th:text="${board.pageView}">조회수</a></a>
-                            <h6 class="card-subtitle text-muted float-right" th:text="${boardService.boardDateTime(board.uploadTime)}">시간</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="study_content">
-            <div class="container">
-                <div class="row justify-content-center pt-3">
-                    <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(studyManager)}">관리중인 스터디가 없습니다.</h5>
-                    <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(studyManager)}">관리중인 스터디</h5>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-md-4" th:each="study: ${studyManager}">
-                                <div class="card mb-4 shadow-sm">
-                                    <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
-                                    <div class="card-body">
-                                        <a th:href="@{'/study/' + ${study.path}}" class="text-decoration-none">
-                                            <h5 class="card-title context" th:text="${study.title}"></h5>
-                                        </a>
-                                        <p class="card-text" th:text="${study.shortDescription}">Short description</p>
-                                        <p class="card-text context">
-                                                <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-2 mb-1">
-                                                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
-                                                        <i class="fa fa-tag" style="font-size: 10px"></i>
-                                                        <span th:text="${tag.title}" style="font-size: 12px; font-weight: lighter">Tag</span>
-                                                    </a>
-                                                </span>
-                                            <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-2">
-                                                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-                                                        <i class="fa fa-globe" style="font-size: 10px"></i>
-                                                        <span th:text="${zone.localNameOfCity}" class="text-white" style="font-size: 12px">City</span>
-                                                    </a>
-                                                </span>
-                                        </p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">
-                                                <i class="fa fa-user-circle"></i>
-                                                <span th:text="${study.memberCount}"></span>명
-                                            </small>
-                                            <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container">
-                <div class="row justify-content-center pt-3">
-                    <h5 class="font-weight-light mt-3" th:if="${#lists.isEmpty(studyMember)}">참여중인 스터디가 없습니다.</h5>
-                    <h5 class="font-weight-light mt-3" th:if="${!#lists.isEmpty(studyMember)}">참여중인 스터디</h5>
-                    <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-md-4" th:each="study: ${studyMember}">
-                                <div class="card mb-4 shadow-sm">
-                                    <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >
-                                    <div class="card-body">
-                                        <a th:href="@{'/study/' + ${study.path}}" class="text-decoration-none">
-                                            <h5 class="card-title context" th:text="${study.title}"></h5>
-                                        </a>
-                                        <p class="card-text" th:text="${study.shortDescription}">Short description</p>
-                                        <p class="card-text context">
-                                                    <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                                                        <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
-                                                            <i class="fa fa-tag" style="font-size: 10px"></i>
-                                                            <span th:text="${tag.title}" style="font-size: 12px; font-weight: lighter">Tag</span>
-                                                        </a>
-                                                    </span>
-                                            <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                                                        <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-                                                            <i class="fa fa-globe" style="font-size: 10px"></i>
-                                                            <span th:text="${zone.localNameOfCity}" class="text-white" style="font-size: 12px">City</span>
-                                                        </a>
-                                                    </span>
-                                        </p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">
-                                                <i class="fa fa-user-circle"></i>
-                                                <span th:text="${study.memberCount}"></span>명
-                                            </small>
-                                            <small class="text-muted date" th:text="${study.publishedDateTime}">9 mins</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>-->
 
