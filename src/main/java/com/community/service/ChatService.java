@@ -39,5 +39,20 @@ public class ChatService {
         chatRepository.save(chat);
 
     }
+    public void addChat(Long roomId, ChatForm chatForm, Account account) {
+        Optional<Account> accountOptional = accountRepository.findById(chatForm.getReceiver());
+        Market market = marketRepository.findByMarketId(chatForm.getMarketId());
+        Chat chat = Chat.builder()
+                .sender(account)
+                .receiver(accountOptional.get())
+                .room(roomId)
+                .content(chatForm.getContent())
+                .sendTime(LocalDateTime.now())
+                .market_id(market)
+                .build();
+
+        chatRepository.save(chat);
+
+    }
 
 }

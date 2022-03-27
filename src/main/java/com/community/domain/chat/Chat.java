@@ -27,7 +27,7 @@ public class Chat {
     @JoinColumn(name = "receiver_id")
     private Account receiver;
 
-    /*private Long room;*/
+    private Long room;
 
     private String content;
 
