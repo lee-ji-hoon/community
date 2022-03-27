@@ -68,14 +68,6 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    @Lob
-    @Basic(fetch = FetchType.EAGER)
-    private String bannerImage;
-
-    public String getBannerImage() {
-        return bannerImage != null ? bannerImage : "/images/study-banner.jpeg";
-    }
-
     private String bio;
 
     private String url;

@@ -140,10 +140,5 @@ public class AccountService implements UserDetailsService {
         }
         return byNickname;
     }
-
-    public void updateProfileBanner(Account account, String image) {
-        account.setBannerImage(image);
-        accountRepository.save(account);
-    }
 }
 

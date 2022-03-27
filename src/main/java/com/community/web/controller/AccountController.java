@@ -123,17 +123,6 @@ public class AccountController {
         return "account/profile";
     }
 
-    // 프로필 배너 이미지 변경
-    @PostMapping("/profile/{nickname}/update-banner")
-    public String updateBanner(@CurrentUser Account account, @PathVariable String nickname,
-                               RedirectAttributes redirectAttributes, String image) {
-        accountService.updateProfileBanner(account, image);
-        redirectAttributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        log.info("image : {}",image);
-
-        return "redirect:/profile/{nickname}";
-    }
-
     // 이메일 로그인
     @GetMapping("/email-login")
     public String sendEmailLoginLinkView(@CurrentUser Account account, Model model) {
