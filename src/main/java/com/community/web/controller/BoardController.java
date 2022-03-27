@@ -166,9 +166,11 @@ public class BoardController {
     // 게시물 삭제
     @GetMapping("/board/detail/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
+        log.info("보드 찾기 : " + boardId);
         Board currentBoard = boardRepository.findByBid(boardId);
         if (account.getId().equals(currentBoard.getWriter().getId())) {
-            boardRepository.delete(currentBoard);
+            log.info("보드 삭제 : " + currentBoard);
+            boardRepository.deleteById(currentBoard.getBid());
             redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
             return "redirect:/board";
         }
