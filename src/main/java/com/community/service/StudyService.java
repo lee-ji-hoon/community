@@ -113,10 +113,6 @@ public class StudyService {
         if (accountWithTagsByPath == null) throw new IllegalArgumentException(path + "해당 하는 스터디가 없습니다.");
     }
 
-    public void recruitClose(Study studyUpdate) {
-        studyUpdate.recruitClose();
-    }
-
     public void updateStudyTitle(Study studyToUpdateStatus, String newTitle) {
         studyToUpdateStatus.setTitle(newTitle);
     }
