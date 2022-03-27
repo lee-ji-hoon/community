@@ -20,6 +20,10 @@ public class ProfileForm {
 
     private String profileBanner;
 
+    private String major;
+
+    private String grade;
+
     public ProfileForm(Account account) {
         this.bio = account.getBio();
         this.url = account.getUrl();
@@ -27,5 +31,7 @@ public class ProfileForm {
         this.location = account.getLocation();
         this.profileImage = account.getProfileImage();
         this.profileBanner = account.getBannerImage();
+        this.major = account.getMajor();
+        this.grade = account.getGrade();
     }
 }

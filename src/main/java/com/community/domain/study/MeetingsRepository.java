@@ -1,6 +1,5 @@
-package com.community.domain.meetings;
+package com.community.domain.study;
 
-import com.community.domain.study.Study;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

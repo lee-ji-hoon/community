@@ -14,7 +14,7 @@ import com.community.web.dto.ReplyReportForm;
 import com.community.domain.report.BoardReportRepository;
 import com.community.domain.report.ReplyReportRepository;
 import com.community.service.ReportService;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

@@ -35,6 +35,8 @@ public class ProfileService {
         account.setBio(profile.getBio());
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
+        account.setGrade(profile.getGrade());
+        account.setMajor(profile.getMajor());
 
         accountRepository.save(account);
     }

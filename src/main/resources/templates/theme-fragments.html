@@ -312,18 +312,18 @@
             <div class="header_search">
                 <form id="searchForm" th:action="@{/search/lists}" method="post">
                     <div class="flex items-center">
-                            <select class="w-4 h-4 fill-current text-blue-500 ml-4 z-10 bg-gray-200" name="searchType">
-                                <option value="" selected>검색 분류를 선택해주세요.</option>
-                                <option value="스터디">스터디</option>
-                                <option value="커뮤니티">커뮤니티</option>
-                                <option value="장터">장터</option>
-                                <option value="학생회">학생회 공지 및 행사</option>
-                            </select>
-                            <input type='text' placeholder="검색어를 입력해주세요." name="keyword" autocomplete="off"
-                                   class="w-full -ml-8 pl-10 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"/>
-                            <button type="submit" id="search_btn">
-                                <svg class="w-4 h-4 fill-current text-blue-500 -ml-8 z-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                            </button>
+                        <select class="w-4 h-4 fill-current text-blue-500 ml-4 z-10 bg-gray-200" name="searchType">
+                            <option value="" selected>검색 분류를 선택해주세요.</option>
+                            <option value="스터디">스터디</option>
+                            <option value="커뮤니티">커뮤니티</option>
+                            <option value="장터">장터</option>
+                            <option value="학생회">학생회 공지 및 행사</option>
+                        </select>
+                        <input type='text' placeholder="검색어를 입력해주세요." name="keyword" autocomplete="off"
+                               class="w-full -ml-8 pl-10 px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-green-500"/>
+                        <button type="submit" id="search_btn">
+                            <svg class="w-4 h-4 fill-current text-blue-500 -ml-8 z-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -356,36 +356,37 @@
                                 <ul>
                                     <div class="refresh_alarm">
                                         <li th:each="alarm : ${account.alarmList}">
-                                        <th:block th:if="${!alarm.isChecked() && alarmStat.count < 5}">
-
-                                            <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
-                                                <div class="drop_avatar">
-                                                    <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
-                                                         th:data-jdenticon-value="${alarm.fromAccount.studentId}"
-                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                                    <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
-                                                         th:src="${alarm.fromAccount.profileImage}"
-                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                                </div>
-                                                <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
-                                                 <i class="icon-feather-thumbs-up"></i>
-                                            </span>
-                                                <div class="drop_text">
-                                                    <p>
-                                                        <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
-                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
-                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
-                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
-                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
-                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
-                                                        <br>
-                                                        <span th:text="${alarm.title}" class="text-link">게시물 제목 </span>
-                                                    </p>
-                                                    <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
-                                                </div>
-                                            </a>
-                                        </th:block>
-                                    </li>
+                                            <th:block th:if="${!alarm.isChecked()}">
+    <!--                                            && alarmStat.count < 5-->
+                                                <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
+                                                    <div class="drop_avatar">
+                                                        <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                             th:data-jdenticon-value="${alarm.fromAccount.studentId}"
+                                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                                        <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                             th:src="${alarm.fromAccount.profileImage}"
+                                                             style="width: 35px; border-radius: 100%"
+                                                             alt="" class=" shadow w-12 h-12 is_avatar"/>
+                                                    </div>
+                                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
+                                                     <i class="icon-feather-thumbs-up"></i>
+                                                </span>
+                                                    <div class="drop_text">
+                                                        <p>
+                                                            <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
+                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
+                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
+                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
+                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
+                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
+                                                            <br>
+                                                            <span th:text="${alarm.title}" class="text-link">게시물 제목 </span>
+                                                        </p>
+                                                        <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
+                                                    </div>
+                                                </a>
+                                            </th:block>
+                                        </li>
                                         <div class="flex justify-center">
                                             <a th:href="@{/alarm/view}"
                                                class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
@@ -692,8 +693,8 @@
          uk-sticky="top:30 ; offset:80 ; media:@m ;bottom:true; animation: uk-animation-slide-top">
         <h4 class="mb-0 p-3 uk-visible@m hidden"> Setting Navigation </h4>
         <ul>
-            <li class="" th:classappend="${currentMenu == 'profile'}? uk-active"><a href="#" th:href="@{/settings/profile-settings}" class="hover:bg-gray-100"> <i class="uil-user"></i>프로필</a></li>
-            <li class="" th:classappend="${currentMenu == 'profile-img'}? uk-active" ><a href="#" th:href="@{/settings/profile-img}" class="hover:bg-gray-100"> <i class="uil-scenery"></i>사진변경</a></li>
+            <li class="" th:classappend="${currentMenu == 'profile'}? uk-active"><a href="#" th:href="@{/settings/profile-settings}" class="hover:bg-gray-100"> <i class="uil-user"></i>소개</a></li>
+            <li class="" th:classappend="${currentMenu == 'profile-img'}? uk-active" ><a href="#" th:href="@{/settings/profile-img}" class="hover:bg-gray-100"> <i class="uil-scenery"></i>이미지 변경</a></li>
             <li class="" th:classappend="${currentMenu == 'tag'}? uk-active"><a href="#" th:href="@{/settings/tags}" class="hover:bg-gray-100"> <i class="icon-material-outline-local-offer"></i> 태그</a></li>
             <li class="" th:classappend="${currentMenu == 'account'}? uk-active"><a href="#" th:href="@{/settings/account}" class="hover:bg-gray-100"> <i class="icon-material-outline-person-pin"></i> 닉네임</a></li>
             <li class="" th:classappend="${currentMenu == 'alarm'}? uk-active"><a href="#" th:href="@{/settings/alarm}" class="hover:bg-gray-100"> <i class="icon-material-baseline-notifications-none"></i> 알림</a></li>
@@ -1183,8 +1184,6 @@
                 <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
                 배너 이미지 수정
             </label>
-
-
             <input type="file" id="study-image-file" name="uploadfile" accept="*">
         </div>
         <span id="cut-button"

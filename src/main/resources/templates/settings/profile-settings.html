@@ -27,12 +27,42 @@
                                 <p class=""> 간단하게 본인을 소개해주세요. </p>
                             </div>
 
-                            <form class="lg:py-8 lg:px-10 flex-1 space-y-4 p-6"
+                            <form class="lg:py-2 lg:px-10 flex-1 space-y-4 p-6"
                                   th:action="@{/settings/profile-settings}"
                                   th:object="${profileForm}" method="post" novalidate>
+                                <div class="col-span-2">
+                                    <label for="grade" class="font-bold">학년 </label>
+                                    <select th:field="*{grade}"
+                                            id="grade" name="grade" aria-describedby="gradeHelp"
+                                            class="shadow-none with-border px-2 mb-2 selectpicker">
+                                        <option data-icon="icon-material-outline-assignment"
+                                                th:selected="${account.grade} == '미선택'"
+                                                th:value="미선택">미선택
+                                        </option>
+                                        <option data-icon="icon-material-outline-assignment"
+                                                th:selected="${account.grade} == '1학년'"
+                                                th:value="1학년">1학년
+                                        </option>
+                                        <option data-icon="icon-material-outline-assignment"
+                                                th:selected="${account.grade} == '2학년'"
+                                                th:value="2학년">2학년
+                                        </option>
+                                        <option data-icon="icon-material-outline-assignment"
+                                                th:selected="${account.grade} == '3학년'"
+                                                th:value="3학년">3학년
+                                        </option>
+                                        <option data-icon="icon-material-outline-assignment"
+                                                th:selected="${account.grade} == '4학년'"
+                                                th:value="4학년">4학년
+                                        </option>
+                                    </select>
+                                    <small id="gradeHelp" class="form-text text-muted">
+                                        본인의 학년을 선택해주세요.
+                                    </small>
+                                </div>
 
                                 <div class="col-span-2">
-                                    <label for="bio">한 줄 소개</label>
+                                    <label for="bio" class="font-bold">한 줄 소개</label>
                                     <textarea id="bio" type="text" th:field="*{bio}" class="shadow-none with-border text-muted p-5"
                                            placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>
                                     </textarea>
@@ -45,11 +75,11 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <label for="url">링크</label>
+                                    <label for="url" class="font-bold">링크</label>
                                     <input id="url" type="url" th:field="*{url}" class="shadow-none with-border p-5"
                                            placeholder="http://ezhoon.com" aria-describedby="urlHelp" required>
                                     <small id="urlHelp" class="form-text text-muted">
-                                        블로그, 유튜브 또는 포트폴리오나 좋아하는 웹 사이트 등 본인을 표현할 수 있는 링크를 추가하세요.
+                                        본인의 GitHub나 블로그 주소를 올려주세요
                                     </small>
                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">
                                         옳바른 URL이 아닙니다. 예시처럼 입력해 주세요.
@@ -57,27 +87,37 @@
                                 </div>
 
                                 <div class="col-span-2">
-                                    <label for="company">직업</label>
+                                    <label for="company" class="font-bold">직업</label>
                                     <input id="company" type="text" th:field="*{occupation}" class="shadow-none with-border"
                                            placeholder="어떤 일을 하고 계신가요?" aria-describedby="occupationHelp" required>
                                     <small id="occupationHelp" class="form-text text-muted">
-                                        개발자? 매니저? 취준생? 대표님?
+                                        현재 학생인지 아니면 따로 하고 있는 일이 있으시면 적어주세요.
                                     </small>
                                 </div>
 
                                 <div class="col-span-2">
-                                    <label for="location">활동 지역</label>
+                                    <label for="location" class="font-bold">활동 지역</label>
                                     <input id="location" type="text" th:field="*{location}" class="shadow-none with-border"
-                                           placeholder="Redmond, WA, USA"
+                                           placeholder="서울, 천안"
                                            aria-describedby="locationdHelp" required>
                                     <small id="locationdHelp" class="form-text text-muted">
-                                        주요 활동(사는 곳이나 직장을 다니는 곳 또는 놀러 다니는 곳) 지역의 도시 이름을 알려주세요.
+                                        스터디를 주로 원하는 지역을 적어주세요.
+                                    </small>
+                                </div>
+
+                                <div class="col-span-2">
+                                    <label for="major" class="font-bold">전공</label>
+                                    <input id="major" type="text" th:field="*{major}" class="shadow-none with-border"
+                                           placeholder="프론트엔드, 백엔드, 영상, 2D, 3D"
+                                           aria-describedby="majorHelp" required>
+                                    <small id="majorHelp" class="form-text text-muted">
+                                        본인이 공부하고 있는 전공이나 지향하는 전공을 적어주세요.
                                     </small>
                                 </div>
 
                                 <div class="bg-gray-10 pt-0 flex justify-end space-x-3">
-                                    <button type="reset" class="p-2 px-4 rounded bg-gray-50 text-red-500"> 취소 </button>
-                                    <button type="submit" aria-describedby="submitHelp" class="button bg-blue-700"> 저장 </button>
+                                    <button type="reset" class="p-2 px-4 rounded bg-red-600 text-white"> 취소 </button>
+                                    <button type="submit" aria-describedby="submitHelp" class="button bg-blue-600"> 저장 </button>
                                 </div>
                             </form>
                         </div>

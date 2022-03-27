@@ -1,4 +1,4 @@
-package com.community.domain.meetings;
+package com.community.domain.study;
 
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;

@@ -1,6 +1,7 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
+import com.community.domain.tag.Tag;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
 import com.community.web.dto.validator.SignUpFormValidator;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -106,6 +108,12 @@ public class AccountController {
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
         Account byAccount = accountService.getAccount(nickname);
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
+        Set<Tag> tags = accountWithTagsById.getTags();
+        for (Tag tag : tags) {
+            log.info("tags = {}", tag);
+        }
+
         model.addAttribute(new ProfileForm(account));
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
@@ -113,6 +121,7 @@ public class AccountController {
         model.addAttribute(account);
         model.addAttribute("byAccount", byAccount);
         model.addAttribute("isOwner", byAccount.equals(account));
+        model.addAttribute("accountWithTagsById", accountWithTagsById);
         return "account/profile";
     }
 
