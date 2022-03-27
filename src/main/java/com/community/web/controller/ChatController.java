@@ -56,6 +56,11 @@ public class ChatController {
                                     ChatForm chatForm, @CurrentUser Account account) throws IOException {
         Optional<Account> receiver = accountRepository.findById(c_receiver);
         Optional<Chat> existChat = chatRepository.findBySenderAndReceiver(account, receiver.get());
+        Optional<Chat> maxRoomNum = chatRepository.findTop1ByOrderByChatIdDesc();
+        Long roomNum = 1L;
+        if (maxRoomNum.isPresent()) {
+            roomNum = maxRoomNum.get().getRoom();
+        }
         if (existChat.isEmpty()) {
             chatForm.setReceiver(c_receiver);
             chatForm.setMarketId(c_marketId);
