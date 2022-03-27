@@ -8,11 +8,13 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-    List<Chat> findBySenderOrderBySendTimeDesc(Account sender);
+    /*List<Chat> findBySenderOrderBySendTimeAsc(Account sender);
 
-    Optional<Chat> findBySenderAndReceiver(Account sender, Account receiver);
+    List<Chat> findBySenderAndReceiver(Account sender, Account receiver);
+
+    Boolean existsByRoom(Long roomId);
 
     List<Chat> findByRoom(Long roomId);
 
-    Optional<Chat> findTop1ByOrderByChatIdDesc();
+    Optional<Chat> findTop1ByOrderByChatIdDesc();*/
 }

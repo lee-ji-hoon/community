@@ -5,18 +5,21 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "chatId")
+@EqualsAndHashCode(of = "roomId")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Chat {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long chatId;
+    @Column(name = "roomId")
+    private Long roomId;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "roomHost")
@@ -26,15 +29,11 @@ public class Chat {
     @JoinColumn(name = "roomAttender")
     private Account roomAttender;
 
-    @ManyToOne(targetEntity = Room.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomId")
-    private Room room;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    //fetch = FetchType.EAGER
+    private List<Chat> chatList = new ArrayList<>();
 
-    private String content;
+    private String lastSendMsg;
 
-    private LocalDateTime sendTime;
-
-    private LocalDateTime readTime;
-
-    private Boolean readChk;
+    private LocalDateTime lastSendTime;
 }
