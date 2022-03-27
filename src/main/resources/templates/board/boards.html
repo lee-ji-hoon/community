@@ -52,7 +52,7 @@
                                         <i class="icon-feather-close"></i>
                                     </button>
 
-                                    <div class="uk-modal-header">
+                                    <div class="uk-modal-header bg-white">
                                         <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
                                     </div>
                                     <form class="needs-validation" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
@@ -126,9 +126,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="uk-modal-footer uk-text-right">
-                                            <button class="bg-red-100 font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm uk-modal-close" type="button">취소</button>
-                                            <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium" id="board_form_send" type="submit">저장</button>
+                                        <div class="uk-modal-footer uk-text-right bg-white">
+                                            <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">취소</button>
+                                            <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" id="board_form_send" type="submit">저장</button>
                                         </div>
                                     </form>
 
