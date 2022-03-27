@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "chat_id")
+@EqualsAndHashCode(of = "chatId")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long chat_id;
+    private Long chatId;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
@@ -27,6 +27,7 @@ public class Chat {
     @JoinColumn(name = "receiver_id")
     private Account receiver;
 
+    @Column(unique = true)
     private Long room;
 
     private String content;

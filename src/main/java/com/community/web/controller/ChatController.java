@@ -5,7 +5,6 @@ import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
-import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.ChatService;
 import com.community.web.dto.ChatForm;
@@ -36,7 +35,7 @@ public class ChatController {
     public String chatLists(@CurrentUser Account account, Model model) {
         List<Chat> sendChatLists = chatRepository.findBySenderOrderBySendTimeDesc(account);
         for (Chat sendChatList : sendChatLists) {
-            log.info(sendChatList.getReceiver().getNickname());
+            log.info("chatList : " + sendChatList.getReceiver().getNickname());
         }
         model.addAttribute(sendChatLists);
         model.addAttribute(account);
