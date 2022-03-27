@@ -276,14 +276,10 @@
                                 </form>
                             </div>
                         </div>
-
+                        <div id="isDeletedForm">
+                            <div id="isDeleted"></div>
+                        </div>
                         <div class="card p-6">
-                            <th:block th:if="${r_del_error_message}">
-                                <div th:replace="theme-fragments.html :: red-notice(message=${r_del_error_message})"></div>
-                            </th:block>
-                            <th:block th:if="${r_del_complete_message}">
-                                <div th:replace="theme-fragments.html :: blue-notice(message=${r_del_complete_message})"></div>
-                            </th:block>
                             <div class="reply_div">
                                 <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
 
@@ -433,13 +429,12 @@
                                 type:'get',
                                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                                 data : $(`#replyDeleteForm${replyId}`).serialize(),
-                                dataType : "json",
-                                success : function (){
+                                //dataType : "json",
+                                success : function (r_del_message){
                                     $('.reply_div').load(location.href+' .reply_div');
+                                    $("#isDeletedForm").html('<div id="isDeleted"></div>');
+                                    $("#isDeleted").replaceWith(r_del_message);
                                 },
-                            });
-                            swal("댓글이 삭제되었습니다.", {
-                                icon: "success",
                             });
                         } else {
                             swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");

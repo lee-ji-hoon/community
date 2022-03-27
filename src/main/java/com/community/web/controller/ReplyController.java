@@ -118,16 +118,37 @@ public class ReplyController {
     }
     @ResponseBody
     @RequestMapping(value = "/reply/delete")
-    public int replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
-        log.info("rid : " + reply_delete_rid);
-        Reply reply = replyRepository.findByRid(reply_delete_rid);
-        replyRepository.delete(reply);
+    public String replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
+        log.info("삭제 요청 : " + reply_delete_rid);
+        String r_del_message = "";
+        Reply findReply = replyRepository.findByRid(reply_delete_rid);
+        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
+        String path = String.valueOf(board.getBid());
 
-        int reply_size = 0;
-        return reply_size;
+        if (findReply.getIsReported() || findReply.getReportCount() > 0) {
+            log.info("이미 신고된 댓글");
+            r_del_message = "<div class=\"bg-red-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">신고된 댓글은 삭제할 수 없습니다.</p>\n" +
+                    "</div>";
+            return r_del_message;
+        }
+        log.info("신고되지 않은 댓글");
+        r_del_message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">댓글이 삭제되었습니다.</p>\n" +
+                "</div>";
+        replyRepository.delete(findReply);
+        return r_del_message;
     }
 
-    @GetMapping("/board/detail/reply/delete/{rid}")
+    /*@GetMapping("/board/detail/reply/delete/{rid}")
     public String boardReplyDelete(@PathVariable Long rid,
                                    RedirectAttributes redirectAttributes) {
         String r_del_error_message = null;
@@ -142,6 +163,6 @@ public class ReplyController {
         redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
         replyRepository.delete(findReply);
         return "redirect:/board/detail/" + updatePath(path);
-    }
+    }*/
 
 }
