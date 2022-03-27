@@ -112,7 +112,7 @@
                                                                 <i class="icon-feather-close"></i>
                                                             </button>
 
-                                                            <div class="uk-modal-header">
+                                                            <div class="uk-modal-header bg-white">
                                                                 <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
                                                             </div>
                                                             <form class="needs-validation" id="board_form" onsubmit="return false">
@@ -192,9 +192,16 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="uk-modal-footer uk-text-right">
-                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
-                                                                    <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">수정하기</button>
+                                                                <div class="uk-modal-footer uk-text-right bg-white">
+                                                                    <th:block th:if="${board.reportCount > 0}">
+                                                                        <div class="items-center space-x-2 mt-2">
+                                                                            <div> <b class="text-red-500">신고된 게시글</b>은 수정 및 삭제할 수 없습니다. </div>
+                                                                        </div>
+                                                                    </th:block>
+                                                                    <th:block th:if="${board.reportCount == 0}">
+                                                                        <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
+                                                                        <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">수정하기</button>
+                                                                    </th:block>
                                                                 </div>
                                                             </form>
 
@@ -216,8 +223,10 @@
                                                             <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
                                                             <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
                                                             <div class="like-btn" uk-tooltip="Like">
-                                                                <a class="like_heart_click">
-                                                                    <i class="likeAddBtn uil-thumbs-up text-blue-500"></i>
+                                                                <a class="like_heart_click text-sm">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeAddBtn text-blue-500" fill="currentColor">
+                                                                        <path d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3 0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8 0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"/>
+                                                                    </svg>
                                                                 </a>
                                                             </div>
                                                         </form>
@@ -228,19 +237,23 @@
                                                             <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
                                                             <div class="like-btn" uk-tooltip="Unlike">
                                                                 <a class="like_heart_click">
-                                                                    <i class="likeDelBtn uil-thumbs-down text-red-500"></i>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeDelBtn text-red-500" fill="currentColor">
+                                                                        <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
+                                                                    </svg>
                                                                 </a>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
-                                                <span id="like_result" class="text-justify flex-none w-5" th:text="${likeService.boardLikeSize(board)}"></span>
-                                                <div class="text-red-500 flex-none" uk-tooltip="신고하기">
-                                                    <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
-                                                        <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                                                        <span class="likes">신고</span>
-                                                    </a>
-                                                </div>
+                                                <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${likeService.boardLikeSize(board)}"></span>
+                                                <th:block th:if="${board.writer != account}">
+                                                    <div class="text-red-500 flex-none" uk-tooltip="신고하기">
+                                                        <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
+                                                            <i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i>
+                                                            <span class="likes">신고</span>
+                                                        </a>
+                                                    </div>
+                                                </th:block>
                                             </div>
                                         </div>
 
@@ -272,14 +285,10 @@
                                 </form>
                             </div>
                         </div>
-
+                        <div id="isDeletedForm">
+                            <div id="isDeleted"></div>
+                        </div>
                         <div class="card p-6">
-                            <th:block th:if="${r_del_error_message}">
-                                <div th:replace="theme-fragments.html :: red-notice(message=${r_del_error_message})"></div>
-                            </th:block>
-                            <th:block th:if="${r_del_complete_message}">
-                                <div th:replace="theme-fragments.html :: blue-notice(message=${r_del_complete_message})"></div>
-                            </th:block>
                             <div class="reply_div">
                                 <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
 
@@ -322,7 +331,7 @@
                                         </th:block>
                                         <br>
                                         <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
-                                        <div>
+                                        <div class="w-full">
                                             <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                             <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                             <th:block th:if="${!reply.getIsReported}">
@@ -384,6 +393,7 @@
                 jQuery(`#replyUpdateBtn${replyId}`).hide();
                 jQuery(`#replyUpdateSubmit${replyId}`).show();
                 $(`#replyUpdateInput${replyId}`).prop("type", "text");
+                $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
             }
         }
         // 등록 버튼 클릭 시
@@ -428,13 +438,12 @@
                                 type:'get',
                                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                                 data : $(`#replyDeleteForm${replyId}`).serialize(),
-                                dataType : "json",
-                                success : function (){
+                                //dataType : "json",
+                                success : function (r_del_message){
                                     $('.reply_div').load(location.href+' .reply_div');
+                                    $("#isDeletedForm").html('<div id="isDeleted"></div>');
+                                    $("#isDeleted").replaceWith(r_del_message);
                                 },
-                            });
-                            swal("댓글이 삭제되었습니다.", {
-                                icon: "success",
                             });
                         } else {
                             swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
@@ -500,7 +509,7 @@
             $(document).on('click', '.like_heart_click', function() {
                 // .like_heart_click은 <a></a>태그의 class 이름
                 // 해당 태그를 클릭하면 진행되는 메소드
-                if($(this).children('i').attr('class') == "likeAddBtn uil-thumbs-up text-blue-500"){
+                if($(this).children('svg').attr('class') == "likeAddBtn text-blue-500"){
                     // this는 클릭한 태그 전역
                     // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
                     $.ajax({
@@ -514,7 +523,7 @@
                             $('#like_div').load(location.href+' #like_div');
                         },
                     });
-                }else if($(this).children('i').attr('class') == "likeDelBtn uil-thumbs-down text-red-500"){
+                }else if($(this).children('svg').attr('class') == "likeDelBtn text-red-500"){
                     $.ajax({
                         url:'/board/detail/like-cancel',
                         type:'get',
@@ -563,15 +572,12 @@
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data : $('#board_form').serialize(),
                     success : function (message){
-                        $('.form_refresh').load(window.location.href+' .form_refresh');
-                        $('#board_form').load(window.location.href+' #board_form');
+                        location.reload();
                         $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                         $("#isUpdated").replaceWith(message);
-                        $('#content').summernote('reset');
                     },
                 });
             });
-
             // 게시글 업데이트 관련
             $('#postTitle').val('');
             jQuery('#selectBox').change(function() {

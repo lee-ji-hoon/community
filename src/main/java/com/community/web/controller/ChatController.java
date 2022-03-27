@@ -3,8 +3,8 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
+import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
-import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.ChatService;
 import com.community.web.dto.ChatForm;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -32,6 +33,11 @@ public class ChatController {
 
     @GetMapping("/chat/lists")
     public String chatLists(@CurrentUser Account account, Model model) {
+        List<Chat> sendChatLists = chatRepository.findBySenderOrderBySendTimeDesc(account);
+        for (Chat sendChatList : sendChatLists) {
+            log.info("chatList : " + sendChatList.getReceiver().getNickname());
+        }
+        model.addAttribute(sendChatLists);
         model.addAttribute(account);
         return "chat/chat-detail";
     }
@@ -48,10 +54,26 @@ public class ChatController {
                                     @RequestParam(value = "c_receiver") Long c_receiver,
                                     @RequestParam(value = "c_content") String c_content,
                                     ChatForm chatForm, @CurrentUser Account account) throws IOException {
-        chatForm.setReceiver(c_receiver);
-        chatForm.setMarketId(c_marketId);
-        chatForm.setContent(c_content);
-        chatService.saveMarketChat(chatForm, account);
+        Optional<Account> receiver = accountRepository.findById(c_receiver);
+        Optional<Chat> existChat = chatRepository.findBySenderAndReceiver(account, receiver.get());
+        Optional<Chat> maxRoomNum = chatRepository.findTop1ByOrderByChatIdDesc();
+        Long roomNum = 1L;
+        if (maxRoomNum.isPresent()) {
+            roomNum = maxRoomNum.get().getRoom();
+        }
+        if (existChat.isEmpty()) {
+            chatForm.setReceiver(c_receiver);
+            chatForm.setMarketId(c_marketId);
+            chatForm.setContent(c_content);
+            chatService.saveMarketChat(chatForm, account);
+        }
+        if (existChat.isPresent()) {
+            Long roomId = existChat.get().getRoom();
+            chatForm.setReceiver(c_receiver);
+            chatForm.setMarketId(c_marketId);
+            chatForm.setContent(c_content);
+            chatService.addChat(roomId, chatForm, account);
+        }
 
         String sendChat = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
                 "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
