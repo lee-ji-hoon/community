@@ -143,9 +143,12 @@
                             <form class="sticky bottom-0 right-0 w-full" th:id="|sendChatForm${chatRoom.roomId}|" onsubmit="return false">
                                 <div class="message-reply bg-white">
                                     <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
-                                    <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" th:id="|chatInput${chatRoom.roomId}|"/>
+                                    <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" id="chatInput"/>
                                     <button class="button ripple-effect ml-5"
-                                            th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">전송</button>
+                                            th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">
+                                        <i class="fa fa-paper-plane fa-lg"></i>
+                                        <!--<ion-icon name="return-down-back-outline" class="p-1.5 text-4xl"></ion-icon>-->
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -157,6 +160,7 @@
 <script type="application/javascript">
     let chatSendFx = {
         chatSendAjax: function (roomId) {
+            var input = document.getElementById("chatInput");
             console.log(`${roomId}`);
             // 댓글 수정 ajax
             console.log("댓글 수정");
@@ -169,6 +173,7 @@
                     $(`#chattingRoom${roomId}`).load(location.href+` #chattingRoom${roomId}`);
                     $('.chat-room-lists').load(location.href+' .chat-room-lists');
                     // $(`#chatInput${roomId}`).value = '';
+                    input.value ='';
                 }
             });
         }
