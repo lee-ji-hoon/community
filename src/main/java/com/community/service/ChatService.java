@@ -64,4 +64,17 @@ public class ChatService {
         roomRepository.save(currentRoom);
     }
 
+    public void existChatUpdate(Long roomId, ChatForm chatForm, Account sender) {
+        Room currentRoom = roomRepository.findByRoomId(roomId);
+        Chat chat = Chat.builder()
+                .sender(sender)
+                .room(currentRoom)
+                .content(chatForm.getContent())
+                .sendTime(LocalDateTime.now())
+                .readChk(false)
+                .build();
+
+        chatRepository.save(chat);
+    }
+
 }

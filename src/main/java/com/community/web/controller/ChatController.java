@@ -34,9 +34,7 @@ public class ChatController {
 
     private final AccountRepository accountRepository;
     private final RoomRepository roomRepository;
-    private final ChatRepository chatRepository;
     private final ChatService chatService;
-    private final BoardService boardService;
 
     @GetMapping("/chat/lists")
     public String chatLists(@CurrentUser Account account, Model model) {
@@ -55,12 +53,20 @@ public class ChatController {
         return "chat/chat-detail";
     }
 
-    @GetMapping("/chat/new")
-    public String createNewChat(@CurrentUser Account account, Model model) {
+    // 채팅방에서 쪽지 보내기
+    @ResponseBody
+    @RequestMapping(value = "/chat/send")
+    public String createNewChat(@RequestParam(value = "roomId") Long roomId,
+                                @RequestParam(value = "c_content") String c_content,
+                                ChatForm chatForm, @CurrentUser Account account) {
+        chatForm.setContent(c_content);
+        chatService.existChatUpdate(roomId, chatForm, account);
+
+
         return "";
     }
 
-    // 장터 전용 쪽지 보내기
+    // 장터에서 쪽지 보내기
     @ResponseBody
     @RequestMapping(value = "/market/chat/new")
     public String sendChat(@RequestParam(value = "c_attender") Long c_attender,
