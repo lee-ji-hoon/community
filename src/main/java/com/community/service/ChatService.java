@@ -75,6 +75,9 @@ public class ChatService {
                 .build();
 
         chatRepository.save(chat);
+        currentRoom.setLastSendMsg(chat.getContent());
+        currentRoom.setLastSendTime(LocalDateTime.now());
+        roomRepository.save(currentRoom);
     }
 
 }
