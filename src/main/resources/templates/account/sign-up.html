@@ -41,9 +41,9 @@
                     <div class="form-group">
                         <label class="mb-0" for="email">이메일</label>
                         <input id="email" type="email" th:field="*{email}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               placeholder="Info@example.com" aria-describedby="emailHelp" required>
+                               placeholder="Info@example.com" aria-describedby="emailHelp" pattern=".+@nsu\.ac\.kr" required>
                         <small id="emailHelp" class="form-text text-muted">
-                            인증이 필요하므로 사용하는 이메일로 입력해주시기 바랍니다.
+                            학교 인증이 필요하므로 이메일@nsu.ac.kr로 적어주시기 바랍니다.
                         </small><br>
                         <small class="invalid-feedback">이메일을 양식에 맞게 입력해주세요.</small>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
