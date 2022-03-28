@@ -19,12 +19,8 @@ public class Chat {
     private Long chatId;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomHost")
-    private Account roomHost;
-
-    @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomAttender")
-    private Account roomAttender;
+    @JoinColumn(name = "sender")
+    private Account sender;
 
     @ManyToOne(targetEntity = Room.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "roomId")
