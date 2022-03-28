@@ -1449,7 +1449,8 @@
                 <span th:if="${type == myStudy}" class="text-blue-500 font-bold ml-1">
                     매니저
                 </span>
-                <p class="leading-6 line-clamp-2 mt-2" th:text="${studyList.shortDescription}">가장 인기있는 스터디입니다. 가장 인기있는 스터디입니다. 가장 인기있는 스터디입니다. 가장 인기있는 스터디입니다. 가장 인기있는 스터디입니다. </p>
+                <p class="leading-6 line-clamp-2 mt-2"
+                   th:text="${studyList.shortDescription}"></p>
                 <div class="flex mt-3.5 space-x-2">
                     <div th:each="manager : ${studyList.managers}" style="font-size: 14px">
                         <strong th:text="${manager.nickname}">Johnson</strong>와
@@ -1527,6 +1528,68 @@
             </a>
         </li>
     </ul>
+</div>
+
+<div th:fragment="profile-study-list(studyType)" th:each="study: ${studyType}" class="card p-2">
+    <a th:href="@{'/study/' + ${study.path}}">
+        <img th:src="${study.image}"
+             th:alt="${study.title}"
+             class="h-36 object-cover rounded-md shadow-sm w-full">
+    </a>
+    <div class="pt-3 px-1">
+        <a th:href="@{'/study/' + ${study.path}}"
+           th:text="${study.title}"
+           class="text-base font-semibold mb-0.5">  James Lewis </a>
+        <div class="flex items-center flex-wrap space-x-1 mt-1 mb-2 text-xs text-gray-500 capitalize">
+            <div th:each="tag: ${study.tags}">
+                <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
+                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                    <a  class="text-decoration-none text-white">
+                        <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
+                    </a>
+                </span>
+            </div>
+        </div>
+        <div th:each="manager : ${study.managers}" style="font-size: 14px">
+            <strong th:text="${manager.nickname}">Johnson</strong>와
+            <span th:text="${study.memberCount - 1} + '명이 참여'">5 freind are members</span>
+        </div>
+        <div th:each="member : ${study.members}">
+            <div th:if="${memberStat.count} < 3">
+                <svg th:if="${#strings.isEmpty(member?.profileImage)}"
+                     th:data-jdenticon-value="${member.studentId}"
+                     class="border-2 border-grey rounded-full w-7 is_avatar "
+                     style="height: 28px">
+                </svg>
+                <img th:if="${!#strings.isEmpty(member?.profileImage)}"
+                     th:src="${member?.profileImage}"
+                     class="border-2 border-grey rounded-full w-7 is_avatar"/>
+            </div>
+            <div th:if="${memberStat.count} == 3">
+                <div class="w-7 h-7 is_avatar rounded-full flex justify-center items-center bg-blue-100 text-blue-500 font-semibold"
+                     th:text="${study.memberCount-3} + '+'">
+                </div>
+            </div>
+        </div>
+
+        <a th:href="@{'/study/' + ${study.path}}"
+           th:if="${!study.openStudy() && !study.endStudy()}"
+           class="bg-gray-500 w-full flex font-semibold h-8 items-center justify-center mt-3 px-3 rounded-md text-white text-sm mb-1">
+            준비중
+        </a>
+
+        <a th:href="@{'/study/' + ${study.path}}"
+           th:if="${study.openStudy()}"
+           class="bg-blue-500 w-full flex font-semibold h-8 items-center justify-center mt-3 px-3 rounded-md text-white text-sm mb-1">
+            진행중
+        </a>
+
+        <a th:href="@{'/study/' + ${study.path}}"
+           th:if="${study.endStudy()}"
+           class="bg-red-500 w-full flex font-semibold h-8 items-center justify-center mt-3 px-3 rounded-md text-white text-sm mb-1">
+            종료
+        </a>
+    </div>
 </div>
 
 </html>

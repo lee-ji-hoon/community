@@ -18,8 +18,6 @@ public class ProfileForm {
 
     private String profileImage;
 
-    private String profileBanner;
-
     private String major;
 
     private String grade;
@@ -30,7 +28,6 @@ public class ProfileForm {
         this.occupation = account.getOccupation();
         this.location = account.getLocation();
         this.profileImage = account.getProfileImage();
-        this.profileBanner = account.getBannerImage();
         this.major = account.getMajor();
         this.grade = account.getGrade();
     }

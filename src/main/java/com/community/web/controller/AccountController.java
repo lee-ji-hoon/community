@@ -107,33 +107,20 @@ public class AccountController {
     // 프로필 진입
     @GetMapping("/profile/{nickname}")
     public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
-        Account byAccount = accountService.getAccount(nickname);
-        Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
-        Set<Tag> tags = accountWithTagsById.getTags();
-        for (Tag tag : tags) {
-            log.info("tags = {}", tag);
-        }
-
-        model.addAttribute(new ProfileForm(account));
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
+        Account byAccount = accountService.getAccount(nickname);
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
+
+        model.addAttribute(new ProfileForm(account));
         model.addAttribute(account);
         model.addAttribute("byAccount", byAccount);
+        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
+        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
         model.addAttribute("isOwner", byAccount.equals(account));
         model.addAttribute("accountWithTagsById", accountWithTagsById);
         return "account/profile";
-    }
-
-    // 프로필 배너 이미지 변경
-    @PostMapping("/profile/{nickname}/update-banner")
-    public String updateBanner(@CurrentUser Account account, @PathVariable String nickname,
-                               RedirectAttributes redirectAttributes, String image) {
-        accountService.updateProfileBanner(account, image);
-        redirectAttributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        log.info("image : {}",image);
-
-        return "redirect:/profile/{nickname}";
     }
 
     // 이메일 로그인
