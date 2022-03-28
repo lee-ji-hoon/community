@@ -90,7 +90,7 @@
                             <div class="message-content-scrolbar" data-simplebar>
 
                                 <!-- Message Content Inner -->
-                                <div class="message-content-inner">
+                                <div class="message-content-inner" th:id="|chatContents${chatRoom.roomId}|">
 
                                     <!-- Time Sign -->
                                     <div class="message-time-sign">
@@ -134,26 +134,42 @@
                                     </th:block>
 
                                 </div>
-                                <div class="message-reply sticky bottom-0 right-0 w-full bg-white">
-                                    <input class="px-4" placeholder="Your Message"/>
-                                    <button class="button ripple-effect ml-5">Send</button>
-                                </div>
-                                <!-- Message Content Inner / End -->
                                 <!-- Reply Area -->
-
+                                <form class="sticky bottom-0 right-0 w-full" th:id="|sendChatForm${chatRoom.roomId}|" onsubmit="return false">
+                                    <div class="message-reply bg-white">
+                                        <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
+                                        <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" th:id="|chatInput${chatRoom.roomId}|"/>
+                                        <button class="button ripple-effect ml-5"
+                                                th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">Send</button>
+                                    </div>
+                                </form>
+                                <!-- Message Content Inner / End -->
                             </div>
-
                         </div>
                     </th:block>
                 </div>
             </div>
-
         </div>
-
     </div>
-
-
-
+<script type="application/javascript">
+    let chatSendFx = {
+        chatSendAjax: function (roomId) {
+            console.log(`${roomId}`);
+            // 댓글 수정 ajax
+            console.log("댓글 수정");
+            $.ajax({
+                url:'/chat/send',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#sendChatForm${roomId}`).serialize(),
+                success : function (){
+                    $('.message-content-inner').load(location.href+' .message-content-inner');
+                    $(`#chatInput${roomId}`).value = '';
+                }
+            });
+        }
+    }
+</script>
 
 </body>
 </html>
