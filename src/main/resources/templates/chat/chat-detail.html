@@ -33,7 +33,7 @@
                             <span class="absolute icon-feather-edit mr-4 text-xl uk-position-center-right cursor-pointer"></span>
                         </div>
                         <div class="messages-inbox-inner" data-simplebar>
-                            <ul>
+                            <ul class="chat-room-lists">
                                 <li th:each="room : ${myRooms}">
                                     <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|">
                                         <div class="message-avatar">
@@ -167,7 +167,7 @@
                 data : $(`#sendChatForm${roomId}`).serialize(),
                 success : function (){
                     $(`#chattingRoom${roomId}`).load(location.href+` #chattingRoom${roomId}`);
-                    // $('.content-wrapper').load(location.href+' .content-wrapper');
+                    $('.chat-room-lists').load(location.href+' .chat-room-lists');
                     // $(`#chatInput${roomId}`).value = '';
                 }
             });
