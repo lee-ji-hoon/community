@@ -33,100 +33,156 @@
                             <span class="absolute icon-feather-edit mr-4 text-xl uk-position-center-right cursor-pointer"></span>
                         </div>
                         <div class="messages-inbox-inner" data-simplebar>
-                            <ul>
-                                <li th:each="chatList : ${sendChatLists}">
-                                    <a href="#" uk-toggle="target: .message-content;">
+                            <ul class="chat-room-lists">
+                                <li th:each="room : ${myRooms}">
+                                    <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt=""/>
+                                            <th:block th:if="${account == room.roomAttender}">
+                                                <svg th:if="${#strings.isEmpty(room.roomHost?.profileImage)}"
+                                                     th:data-jdenticon-value="${room.roomHost.studentId}" style="width: 40px; height: 40px;"
+                                                     alt=""></svg>
+                                                <img th:if="${!#strings.isEmpty(room.roomHost?.profileImage)}"
+                                                     th:src="${room.roomHost?.profileImage}"
+                                                     alt=""/>
+                                            </th:block>
+                                            <th:block th:if="${account == room.roomHost}">
+                                                <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
+                                                     th:data-jdenticon-value="${room.roomAttender.studentId}" style="width: 40px; height: 40px;"
+                                                     alt=""></svg>
+                                                <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
+                                                     th:src="${room.roomAttender?.profileImage}"
+                                                     alt=""/>
+                                            </th:block>
                                         </div>
                                         <div class="message-by">
                                             <div class="message-by-headline">
-                                                <h5 th:text="${chatList.getSender().nickname}"></h5>
-                                                <span>4 hours ago</span>
+                                                <th:block th:if="${account == room.roomAttender}">
+                                                    <h5 th:text="${room.roomHost.nickname}"> 받는 사람 닉네임</h5>
+                                                </th:block>
+                                                <th:block th:if="${account == room.roomHost}">
+                                                    <h5 th:text="${room.roomAttender.nickname}"> 받는 사람 닉네임</h5>
+                                                </th:block>
+                                                <span th:text="${account.dateTime(room.lastSendTime)}"></span>
                                             </div>
-                                            <p>laoreet dolore magna aliquam erat volutpat sed diam nonummy</p>
+                                            <p th:text="${room.lastSendMsg}">내용</p>
                                         </div>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </div>
+                    <th:block th:each="chatRoom : ${myRooms}">
+                        <div class="message-content" th:id="|roomNum${chatRoom.roomId}|" aria-hidden="true" hidden>
 
-                    <div class="message-content" aria-hidden="true" hidden>
-
-                        <div class="messages-headline">
-                            <h4> Stella Johnson </h4>
-                            <a href="#" class="message-action text-blue-500 flex-none" uk-toggle="target: .message-content;">
-                                <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
-                            </a>
-                        </div>
-
-                        <div class="message-content-scrolbar" data-simplebar>
-
-                            <!-- Message Content Inner -->
-                            <div class="message-content-inner">
-
-                                <!-- Time Sign -->
-                                <div class="message-time-sign">
-                                    <span>28 June, 2020</span>
-                                </div>
-                                <div class="message-bubble me">
-                                    <div class="message-bubble-inner">
-                                        <div class="message-avatar">
-                                            <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="message-text"><p>Consectetuer adipiscing elit, sed diam nonummy nibh euismod laoreet.</p></div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="message-bubble">
-                                    <div class="message-bubble-inner">
-                                        <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="message-text"><p>Laoreet.  dolore magna imperdiet quod mazim placerat facer possim. 👍</p></div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
+                            <div class="messages-headline">
+                                <th:block th:if="${account == chatRoom.roomAttender}">
+                                    <h4 th:text="${chatRoom.roomHost.nickname}">상대방 닉네임</h4>
+                                </th:block>
+                                <th:block th:if="${account == chatRoom.roomHost}">
+                                    <h4 th:text="${chatRoom.roomAttender.nickname}">상대방 닉네임</h4>
+                                </th:block>
+                                <a href="#" class="message-action text-blue-500 flex-none" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
+                                    <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
+                                </a>
                             </div>
-                            <div class="message-reply sticky bottom-0 right-0 w-full bg-white">
-                                <input class="px-4" placeholder="Your Message"/>
-                                <button class="button ripple-effect ml-5">Send</button>
+
+                            <div class="message-content-scrolbar pb-20" data-simplebar>
+                                <div class="content-wrapper">
+                                    <!-- Message Content Inner -->
+                                    <div class="message-content-inner max-w-fit">
+                                        <div th:each="chat : ${chatRoom.chatList}" th:id="|chattingRoom${chat.room.roomId}|">
+                                            <!-- Time Sign -->
+                                            <!--<div class="message-time-sign">
+                                                <p th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd')}"></p>
+                                            </div>-->
+                                            <th:block th:if="${chat.sender == account}">
+                                                <div class="message-bubble me">
+                                                    <div class="message-bubble-inner">
+                                                        <div class="message-avatar">
+                                                            <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+                                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                                 alt=""></svg>
+                                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                                 th:src="${account?.profileImage}"
+                                                                 alt=""/>
+                                                        </div>
+                                                        <div class="message-text">
+                                                            <p th:text="${chat.content}">내용</p>
+                                                            <small class="float-right" th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd HH:mm')}"></small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </th:block>
+                                            <th:block th:if="${chat.sender != account}">
+                                                <div class="message-bubble">
+                                                    <div class="message-bubble-inner">
+                                                        <div class="message-avatar">
+                                                            <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                 th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
+                                                                 alt=""></svg>
+                                                            <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                 th:src="${chat.sender?.profileImage}"
+                                                                 alt=""/>
+                                                        </div>
+                                                        <div class="message-text"><p th:text="${chat.content}">내용</p></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </th:block>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Message Content Inner / End -->
                             </div>
-                            <!-- Message Content Inner / End -->
                             <!-- Reply Area -->
-
+                            <form class="sticky bottom-0 right-0 w-full" th:id="|sendChatForm${chatRoom.roomId}|" onsubmit="return false">
+                                <div class="message-reply bg-white">
+                                    <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
+                                    <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" id="chatInput"/>
+                                    <button class="button ripple-effect ml-5"
+                                            th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">
+                                        <i class="fa fa-paper-plane fa-lg"></i>
+                                        <!--<ion-icon name="return-down-back-outline" class="p-1.5 text-4xl"></ion-icon>-->
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-
-                    </div>
+                    </th:block>
                 </div>
             </div>
-
         </div>
-
     </div>
+<script type="application/javascript">
+    let chatSendFx = {
+        chatSendAjax: function (roomId) {
+            var input = document.getElementById("chatInput");
+            console.log(`${roomId}`);
+            // 댓글 수정 ajax
+            console.log("댓글 수정");
+            $.ajax({
+                url:'/chat/send',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#sendChatForm${roomId}`).serialize(),
+                success : function (){
+                    $(`#chattingRoom${roomId}`).load(location.href+` #chattingRoom${roomId}`);
+                    $('.chat-room-lists').load(location.href+' .chat-room-lists');
+                    // $(`#chatInput${roomId}`).value = '';
+                    input.value ='';
+                }
+            });
+        }
+    }
+    $(document).ready(function() {
+        $('.simplebar-placeholder').css({"max-width": "max-content"});
+    });
 
-
-
+</script>
 
 </body>
 </html>
