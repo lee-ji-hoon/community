@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +25,8 @@ public class AlarmService {
     }
 
     public void deleteByChecked(Account account) {
-        log.info("fromAccountId : {}", account.getId());
         List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
-        account.deleteCheckedAlarms(alarmList);
-
+        account.getAlarmList().removeAll(alarmList);
     }
 
     public void checkedAll(Account account) {
@@ -39,13 +38,13 @@ public class AlarmService {
 
     private void readAlarm(Alarm alarm, Account account) {
         alarm.setChecked(true);
-        account.checkedAlarm(alarm);
+        for (Alarm accountAlarm : account.getAlarmList()) {
+            if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
+                accountAlarm.setChecked(true);
+            }
+        }
         account.deleteAlarmSize();
 
         alarmRepository.save(alarm);
-        accountRepository.save(account);
-
     }
-
-
 }

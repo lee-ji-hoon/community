@@ -60,17 +60,13 @@ public class Account {
 
     private String emailCheckToken;
 
+    private String major;
+
+    private String grade;
+
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     private LocalDateTime joinedAt;
-
-    @Lob
-    @Basic(fetch = FetchType.EAGER)
-    private String bannerImage;
-
-    public String getBannerImage() {
-        return bannerImage != null ? bannerImage : "/images/study-banner.jpeg";
-    }
 
     private String bio;
 
@@ -178,27 +174,11 @@ public class Account {
         return msg;
     }
 
-    public void deleteCheckedAlarms(List<Alarm> alarmLists) {
-        boolean bool = alarmList.removeAll(alarmLists);
-        log.info("account alarmList 삭제 : {}", bool);
-    }
-
-    public void checkedAlarm(Alarm alarm) {
-        for (Alarm accountAlarm : alarmList) {
-            if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
-                log.info("알람 체크 확인 account alarmList : {}, alarmList : {}",
-                        accountAlarm.getAlarmId(), alarm.getAlarmId());
-                accountAlarm.setChecked(true);
-            }
-        }
-    }
-
     public void addAlarmSize() {
         countAlarmSize += 1;
     }
 
     public void deleteAlarmSize() {
-        log.info("deleteAlarmSize 실행");
-        countAlarmSize = countAlarmSize - 1;
+        countAlarmSize -= 1;
     }
 }

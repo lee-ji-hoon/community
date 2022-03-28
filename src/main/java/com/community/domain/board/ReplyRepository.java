@@ -2,7 +2,7 @@ package com.community.domain.board;
 
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

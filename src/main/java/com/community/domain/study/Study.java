@@ -2,7 +2,6 @@ package com.community.domain.study;
 
 import com.community.domain.account.UserAccount;
 import com.community.domain.account.Account;
-import com.community.domain.meetings.Meetings;
 import com.community.domain.tag.Tag;
 import lombok.*;
 
@@ -161,14 +160,6 @@ public class Study {
 
     private boolean isNotOpenAndClosed() {
         return this.startStudyDate.isBefore(LocalDate.now()) && limitStudyDate.isAfter(LocalDate.now());
-    }
-
-    public void recruitClose() {
-        if (this.recruiting()) {
-            this.limitMemberDate = LocalDate.now();
-        } else {
-            throw new RuntimeException("스터디원 모집을 종료 할 수 없습니다. 이미 종료됐거나 시작하지 않은 스터디입니다. 다시 확인해주세요.");
-        }
     }
 
     public void addMember(Account account) {

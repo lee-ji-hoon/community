@@ -3,12 +3,12 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
 import com.community.domain.board.ReplyRepository;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
 import com.community.web.dto.StudyCalendarForm;
 import com.community.web.dto.StudyDescriptionForm;
-import com.community.domain.meetings.MeetingsRepository;
+import com.community.domain.study.MeetingsRepository;
 import com.community.domain.study.StudyRepository;
 import com.community.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -111,10 +111,6 @@ public class StudyService {
 
     private void checkExistStudy(String path, Study accountWithTagsByPath) {
         if (accountWithTagsByPath == null) throw new IllegalArgumentException(path + "해당 하는 스터디가 없습니다.");
-    }
-
-    public void recruitClose(Study studyUpdate) {
-        studyUpdate.recruitClose();
     }
 
     public void updateStudyTitle(Study studyToUpdateStatus, String newTitle) {

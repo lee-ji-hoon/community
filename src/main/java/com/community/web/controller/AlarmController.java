@@ -18,10 +18,10 @@ import com.community.domain.likes.Likes;
 import com.community.web.dto.BoardReportForm;
 import com.community.domain.report.BoardReportRepository;
 import com.community.domain.report.ReplyReportRepository;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
-import com.community.domain.meetings.MeetingsRepository;
+import com.community.domain.study.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -111,7 +111,7 @@ public class AlarmController {
         log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
 
-        if (type == AlarmType.STUDY) {
+        /*if (type == AlarmType.STUDY) {
             Study studyByPath = studyService.getPath(path);
             model.addAttribute(studyByPath);
             return "study/study-view";
@@ -167,8 +167,8 @@ public class AlarmController {
             model.addAttribute(new BoardForm());
 
             return "board/board-detail";
-        }
-        /*switch (type){
+        }*/
+        switch (type){
             case STUDY: log.info("study 페이지 이동 : {}", path);
                 Study studyByPath = studyService.getPath(path);
                 model.addAttribute(studyByPath);
@@ -223,7 +223,7 @@ public class AlarmController {
                 model.addAttribute(new BoardForm());
 
                 return "board/board-detail";
-        }*/
+        }
         return "error-page";
     }
 

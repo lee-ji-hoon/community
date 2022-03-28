@@ -60,32 +60,30 @@
                             <div id="new-profile-image" class="mt-3 self-center" ></div>
                             <div class="custom-file mt-2">
                                 <input type="file" class="" id="profile-image-file">
-                                <label class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5"
+                                <label class="flex p-2 items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5"
                                        for="profile-image-file">프로필 이미지 변경</label>
                             </div>
 
                             <button id="cut-button"
-                                    class="flex mt-1 items-center justify-center h-8 px-3 rounded-md bg-green-700 bg-opacity-70 text-white space-x-1.5">
+                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-green-700 bg-opacity-70 text-white space-x-1.5">
                                 자르기
                             </button>
                             <button id="confirm-button"
-                                    class="flex mt-1 items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5">
+                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5">
                                 확인
                             </button>
                             <button id="reset-button"
-                                    class="flex mt-1 items-center justify-center h-8 px-3 rounded-md bg-red-700 bg-opacity-70 text-white space-x-1.5">
+                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-red-700 bg-opacity-70 text-white space-x-1.5">
                                 취소
                             </button>
 
                             <form action="#"
                                   th:action="@{/settings/profile-img}"
-                                  th:object="${profileForm}" method="post" novalidate>
+                                  th:object="${profileForm}"
+                                  id="imageForm" method="post" novalidate>
                                 <input id="profileImage" type="hidden" th:field="*{profileImage}" class="form-control" />
 
-                                <button type="submit" id="profile-img-submit"
-                                        class="flex mt-1 items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
-                                    <span> 저장 </span>
-                                </button>
+
 
                                 <div id="cropped-new-profile-image" class="mt-3"></div>
                             </form>
@@ -109,6 +107,7 @@
             let $resultImage = $("#cropped-new-profile-image");
             let $profileImage = $("#profileImage");
             let $submitBtn = $("#profile-img-submit");
+            let $profileImageFile = $("#profile-image-file");
 
             $newProfileImage.hide();
             $cutBtn.hide();
@@ -125,6 +124,8 @@
                             img.id = 'new-profile';
                             img.src = e.target.result;
                             img.width = 250;
+
+                            $profileImageFile.hide();
 
                             $newProfileImage.html(img);
                             $newProfileImage.show();
@@ -167,10 +168,8 @@
 
                 $confirmBtn.click(function () {
                     $newProfileImage.html(newImage);
-                    $cutBtn.hide();
-                    $confirmBtn.hide();
                     $profileImage.val(dataUrl);
-                    $submitBtn.show();
+                    $("#imageForm").submit();
                 });
             });
         });

@@ -11,11 +11,11 @@ import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.ReplyService;
 import com.community.service.StudyService;
-import com.community.domain.meetings.Meetings;
+import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
 import com.community.web.dto.StudyCalendarForm;
-import com.community.domain.meetings.MeetingsRepository;
+import com.community.domain.study.MeetingsRepository;
 import com.community.domain.study.StudyRepository;
 import com.community.web.dto.validator.MeetingFormValidator;
 import com.community.web.dto.validator.StudyCalendarFormValidator;
@@ -111,7 +111,7 @@ public class StudyController {
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
 
-        model.addAttribute("accountWithTagsById", accountRepository.findAccountWithTagsById(account.getId()));
+        model.addAttribute("accountWithTagsById", accountWithTagsById);
 
         return "study/study-list";
     }
