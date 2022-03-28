@@ -31,11 +31,8 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
-    private final LikeService likeService;
-    private final BoardService boardService;
 
     private final AccountRepository accountRepository;
-    private final BoardRepository boardRepository;
     private final StudyRepository studyRepository;
 
     @InitBinder("signUpForm")
@@ -125,7 +122,7 @@ public class AccountController {
 
     // 이메일 로그인
     @GetMapping("/email-login")
-    public String sendEmailLoginLinkView(@CurrentUser Account account, Model model) {
+    public String sendEmailLoginLinkView() {
         return "account/email-login";
     }
 
@@ -157,7 +154,7 @@ public class AccountController {
         model.addAttribute(account);
 
 
-        if (account == null || !account.isValidToken(token)) {
+        if (!account.isValidToken(token)) {
             model.addAttribute("error", "로그인 할 수 없습니다.");
             return "account/email-login-view";
         }
