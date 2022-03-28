@@ -711,6 +711,7 @@
         <ul>
             <li class="" th:classappend="${currentMenu == 'description'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}" class="hover:bg-gray-100"> <i class="icon-material-outline-assignment"></i>소개</a></li>
             <li class="" th:classappend="${currentMenu == 'calendar'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/calendar'}" class="hover:bg-gray-100"> <i class="icon-feather-calendar"></i>일정</a></li>
+            <li class="" th:classappend="${currentMenu == 'members'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/members'}" class="hover:bg-gray-100"> <i class="icon-material-outline-person-pin"></i>멤버</a></li>
             <li class="" th:classappend="${currentMenu == 'tag'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="hover:bg-gray-100"> <i class="icon-feather-tag"></i>스터디 주제</a></li>
             <li class="" th:classappend="${currentMenu == 'alarm'}? uk-active" ><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/alarm'}" class="hover:bg-gray-100"> <i class="icon-feather-bell"></i>스터디 알림</a></li>
             <li class="" th:classappend="${currentMenu == 'config'}? uk-active"><a href="#" th:href="@{'/study/' + ${study.path} + '/settings/config'}" class="hover:bg-gray-100"> <i class="icon-material-outline-https"></i> 설정</a></li>
