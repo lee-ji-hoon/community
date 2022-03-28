@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="theme-fragments.html :: head"></head>
+
+<body>
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar"></div>
+
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'settings')"></div>
+            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4">
+                <div th:replace="theme-fragments.html :: study-settings-menu(currentMenu='members')"></div>
+                <div class="lg:w-2/3">
+                    <div id="isUpdatedForm" class="m-5">
+                        <div id="isUpdated"></div>
+                    </div>
+
+                    <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
+                        <h3 class="text-xl mb-2 font-semibold"> 스터디 멤버</h3>
+                        <p> 스터디에 참여중인 멤버들을 관리 할 수 있습니다.</p>
+                        <hr/>
+
+                        <ul role="list" class="p-6 divide-y divide-slate-200">
+                            <li th:each="studyMembers : ${study.members}"
+                                class="flex py-4 first:pt-0 last:pb-0 justify-content-between">
+                                <div>
+                                    <svg th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
+                                         th:data-jdenticon-value="${studyMembers.studentId}"
+                                         class="h-10 w-10 rounded-full uk-position-absolute"></svg>
+                                    <img th:if="${!#strings.isEmpty(studyMembers?.profileImage)}"
+                                         th:src="${studyMembers?.profileImage}"
+                                         class="h-10 w-10 rounded-full uk-position-absolute"/>
+                                    <div class="ml-14 overflow-hidden">
+                                        <p th:text="${studyMembers.nickname}"
+                                           class="text-sm font-medium text-slate-900" >{person.name}</p>
+                                        <p th:text="${studyMembers.bio}"
+                                           class="text-sm text-slate-500 truncate">{person.bio}</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-x-1">
+                                    <a th:href="@{'/study/' + ${study.path} + '/settings/members/' + ${studyMembers.nickname}}"
+                                       class="button bg-red-600"> 퇴출 </a>
+                                    <a th:href="@{'/profile/' + ${studyMembers.nickname}}"
+                                    class="button bg-green-600"> 정보</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
+<script src="/node_modules/cropper/dist/cropper.min.js"></script>
+<script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+<script th:replace="theme-fragments.html :: studyBanner"></script>
+
+<script th:inline="javascript">
+    function removeMember() {
+        /*<![CDATA[*/
+        var path = [[${study.path}]];
+        /*]]>*/
+
+        swal({
+            title: "알림 전송.",
+            text: "보낸 시점으로 24시간 후에 다시 보낼 수 있습니다.",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/study/'+path+'/settings/sendAlarm',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+
+    }
+
+</script>
+</body>
+
+</html>
