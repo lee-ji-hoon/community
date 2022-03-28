@@ -38,16 +38,31 @@
                                     <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
-                                                 th:data-jdenticon-value="${room.roomAttender.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
-                                                 th:src="${room.roomAttender?.profileImage}"
-                                                 alt=""/>
+                                            <th:block th:if="${account == room.roomAttender}">
+                                                <svg th:if="${#strings.isEmpty(room.roomHost?.profileImage)}"
+                                                     th:data-jdenticon-value="${room.roomHost.studentId}" style="width: 40px; height: 40px;"
+                                                     alt=""></svg>
+                                                <img th:if="${!#strings.isEmpty(room.roomHost?.profileImage)}"
+                                                     th:src="${room.roomHost?.profileImage}"
+                                                     alt=""/>
+                                            </th:block>
+                                            <th:block th:if="${account == room.roomHost}">
+                                                <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
+                                                     th:data-jdenticon-value="${room.roomAttender.studentId}" style="width: 40px; height: 40px;"
+                                                     alt=""></svg>
+                                                <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
+                                                     th:src="${room.roomAttender?.profileImage}"
+                                                     alt=""/>
+                                            </th:block>
                                         </div>
                                         <div class="message-by">
                                             <div class="message-by-headline">
-                                                <h5 th:text="${room.roomAttender.nickname}"> 받는 사람 닉네임</h5>
+                                                <th:block th:if="${account == room.roomAttender}">
+                                                    <h5 th:text="${room.roomHost.nickname}"> 받는 사람 닉네임</h5>
+                                                </th:block>
+                                                <th:block th:if="${account == room.roomHost}">
+                                                    <h5 th:text="${room.roomAttender.nickname}"> 받는 사람 닉네임</h5>
+                                                </th:block>
                                                 <span th:text="${account.dateTime(room.lastSendTime)}"></span>
                                             </div>
                                             <p th:text="${room.lastSendMsg}">내용</p>
@@ -61,7 +76,12 @@
                         <div class="message-content" th:id="|roomNum${chatRoom.roomId}|" aria-hidden="true" hidden>
 
                             <div class="messages-headline">
-                                <h4 th:text="${chatRoom.roomAttender.nickname}">상대방 닉네임</h4>
+                                <th:block th:if="${account == chatRoom.roomAttender}">
+                                    <h4 th:text="${chatRoom.roomHost.nickname}">상대방 닉네임</h4>
+                                </th:block>
+                                <th:block th:if="${account == chatRoom.roomHost}">
+                                    <h4 th:text="${chatRoom.roomAttender.nickname}">상대방 닉네임</h4>
+                                </th:block>
                                 <a href="#" class="message-action text-blue-500 flex-none" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
                                     <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
                                 </a>
@@ -77,7 +97,7 @@
                                         <span>28 June, 2020</span>
                                     </div>
                                     <th:block th:each="chat : ${chatRoom.chatList}">
-                                        <th:block th:if="${chat.roomHost == account}">
+                                        <th:block th:if="${chat.sender == account}">
                                             <div class="message-bubble me">
                                                 <div class="message-bubble-inner">
                                                     <div class="message-avatar">
@@ -94,15 +114,15 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                         </th:block>
-                                        <th:block th:if="${chat.roomHost != account}">
+                                        <th:block th:if="${chat.sender != account}">
                                             <div class="message-bubble">
                                                 <div class="message-bubble-inner">
                                                     <div class="message-avatar">
-                                                        <svg th:if="${#strings.isEmpty(chat.roomAttender?.profileImage)}"
-                                                             th:data-jdenticon-value="${chat.roomAttender.studentId}" style="width: 40px; height: 40px;"
+                                                        <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                             th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
                                                              alt=""></svg>
-                                                        <img th:if="${!#strings.isEmpty(chat.roomAttender?.profileImage)}"
-                                                             th:src="${chat.roomAttender?.profileImage}"
+                                                        <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
+                                                             th:src="${chat.sender?.profileImage}"
                                                              alt=""/>
                                                     </div>
                                                     <div class="message-text"><p th:text="${chat.content}">내용</p></div>
