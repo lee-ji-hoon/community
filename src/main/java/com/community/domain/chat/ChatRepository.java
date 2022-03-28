@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
+    List<Chat> findByRoom(Room room);
+
     /*List<Chat> findBySenderOrderBySendTimeAsc(Account sender);
 
     List<Chat> findBySenderAndReceiver(Account sender, Account receiver);

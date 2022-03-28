@@ -4,6 +4,8 @@ import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
+import com.community.domain.chat.Room;
+import com.community.domain.chat.RoomRepository;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.web.dto.ChatForm;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,35 +27,45 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final AccountRepository accountRepository;
     private final MarketRepository marketRepository;
+    private final RoomRepository roomRepository;
 
-    public void saveMarketChat(ChatForm chatForm, Account account, Long roomNum) {
-        /*Optional<Account> accountOptional = accountRepository.findById(chatForm.getReceiver());
-        Market market = marketRepository.findByMarketId(chatForm.getMarketId());
-        Chat chat = Chat.builder()
-                .sender(account)
-                .receiver(accountOptional.get())
-                .room(roomNum)
-                .content(chatForm.getContent())
-                .sendTime(LocalDateTime.now())
-                .market_id(market)
+    public void saveNewRoom(ChatForm chatForm, Account roomHost, Account roomAttender) {
+        Room room = Room.builder()
+                .roomHost(roomHost)
+                .roomAttender(roomAttender)
+                .lastSendMsg(chatForm.getContent())
+                .lastSendTime(LocalDateTime.now())
                 .build();
 
-        chatRepository.save(chat);*/
+        roomRepository.save(room);
 
+        Chat chat = Chat.builder()
+                .roomHost(roomHost)
+                .roomAttender(roomAttender)
+                .room(room)
+                .content(chatForm.getContent())
+                .sendTime(LocalDateTime.now())
+                .readChk(false)
+                .build();
+
+        chatRepository.save(chat);
     }
-    public void addChat(Long roomId, ChatForm chatForm, Account account) {
-        /*Optional<Account> accountOptional = accountRepository.findById(chatForm.getReceiver());
-        Market market = marketRepository.findByMarketId(chatForm.getMarketId());
+    public void updateChat(ChatForm chatForm, Account roomHost, Account roomAttender) {
+        Room currentRoom = roomRepository.findByRoomHostAndRoomAttender(roomHost, roomAttender);
         Chat chat = Chat.builder()
-                .sender(account)
-                .receiver(accountOptional.get())
-                .room(roomId)
+                .roomHost(roomHost)
+                .roomAttender(roomAttender)
+                .room(currentRoom)
                 .content(chatForm.getContent())
                 .sendTime(LocalDateTime.now())
-                .market_id(market)
+                .readChk(false)
                 .build();
-
-        chatRepository.save(chat);*/
+        chatRepository.save(chat);
+        log.info("chat={}", chat);
+        currentRoom.setLastSendMsg(chat.getContent());
+        currentRoom.setLastSendTime(LocalDateTime.now());
+        roomRepository.save(currentRoom);
+        log.info("currentRoom={}", currentRoom);
 
     }
 

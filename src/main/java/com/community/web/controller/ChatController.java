@@ -5,6 +5,8 @@ import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
+import com.community.domain.chat.Room;
+import com.community.domain.chat.RoomRepository;
 import com.community.domain.market.MarketRepository;
 import com.community.service.BoardService;
 import com.community.service.ChatService;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -29,23 +33,24 @@ import java.util.Optional;
 public class ChatController {
 
     private final AccountRepository accountRepository;
+    private final RoomRepository roomRepository;
     private final ChatRepository chatRepository;
     private final ChatService chatService;
     private final BoardService boardService;
 
     @GetMapping("/chat/lists")
     public String chatLists(@CurrentUser Account account, Model model) {
-        /*HashMap<Account, Chat> chatList = new HashMap<>();
-        HashMap<Long, List<Chat>> chatContents = new HashMap<>();
-        List<Chat> sendChatLists = chatRepository.findBySenderOrderBySendTimeAsc(account);
-        for (Chat sendChatList : sendChatLists) {
-            chatList.put(sendChatList.getReceiver(), sendChatList);
-            chatContents.put(sendChatList.getRoom(), chatRepository.findByRoom(sendChatList.getRoom()));
+        List<Room> findRoomHostList = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
+        List<Room> findRoomAttenderList = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
+
+        List<Room> myRooms = new ArrayList<>();
+        myRooms.addAll(findRoomHostList);
+        myRooms.addAll(findRoomAttenderList);
+        for (Room myRoom : myRooms) {
+            log.info("myRoom={}", myRoom);
         }
 
-        model.addAttribute("sendChatLists", chatList);
-        model.addAttribute("chatContents", chatContents);
-        */
+        model.addAttribute("myRooms", myRooms);
         model.addAttribute(account);
         return "chat/chat-detail";
     }
@@ -58,41 +63,43 @@ public class ChatController {
     // 장터 전용 쪽지 보내기
     @ResponseBody
     @RequestMapping(value = "/market/chat/new")
-    public String sendChat(@RequestParam(value = "c_marketId") Long c_marketId,
-                                    @RequestParam(value = "c_receiver") Long c_receiver,
-                                    @RequestParam(value = "c_content") String c_content,
-                                    ChatForm chatForm, @CurrentUser Account account) throws IOException {
-        /*Optional<Account> receiver = accountRepository.findById(c_receiver);
-        Optional<Account> sender = accountRepository.findById(account.getId());
+    public String sendChat(@RequestParam(value = "c_attender") Long c_attender,
+                           @RequestParam(value = "c_content") String c_content,
+                           ChatForm chatForm, @CurrentUser Account account) throws IOException {
+        Optional<Account> roomAttender = accountRepository.findById(c_attender);
+        Optional<Account> roomHost = accountRepository.findById(account.getId());
+        Room findAccountEqualHost = roomRepository.findByRoomHostAndRoomAttender(roomHost.get(), roomAttender.get());
+        Room findAccountEqualAttender = roomRepository.findByRoomHostAndRoomAttender(roomAttender.get(), roomHost.get());
 
-        Optional<Chat> maxRoomNum = chatRepository.findTop1ByOrderByChatIdDesc();
-        List<Chat> existChat = chatRepository.findBySenderAndReceiver(sender.get(), receiver.get());
-        // DB에 쪽지가 아예 없는 경우
-        Long roomNum = 1L;
+        /*
+        * 보낸 사람 = Host, 받는 사람 = Attender
+        * isExistHostEqualHost = 쪽지를 보낸사람이 Host, 받은 사람이 Attender
+        * isExistHostEqualAttender = 쪽지를 보낸사람이 Attender, 받은 사람이 Host
+        */
+        Boolean isExistHostEqualHost = roomRepository.existsByRoomHostAndRoomAttender(roomHost.get(), roomAttender.get());
+        Boolean isExistHostEqualAttender = roomRepository.existsByRoomHostAndRoomAttender(roomAttender.get(), roomHost.get());
 
-        // DB에 쪽지가 1개라도 존재할 경우 roomNum 지정
-        if (maxRoomNum.isPresent()) {
-            roomNum = (maxRoomNum.get().getRoom())+1L;
+        // 두 사람이 나눈 쪽지가 아예 없을 경우
+        if (!isExistHostEqualHost && !isExistHostEqualAttender) {
+            log.info(roomHost.get().getNickname() + "와 " + roomAttender.get().getNickname() + "이 나눈 대화가 없음");
+            chatForm.setContent(c_content);
+            chatService.saveNewRoom(chatForm, roomHost.get(), roomAttender.get());
         }
 
-        // 기존 쪽지가 없을 경우
-        if (existChat.isEmpty()) {
-            chatForm.setReceiver(c_receiver);
-            chatForm.setMarketId(c_marketId);
-            chatForm.setContent(c_content);
-            chatService.saveMarketChat(chatForm, account, roomNum);
-        }
+        // 두 사람이 나눈 쪽지가 있을 경우
+        if (isExistHostEqualHost || isExistHostEqualAttender) {
+            log.info(roomHost.get().getNickname() + "와 " + roomAttender.get().getNickname() + "이 나눈 대화가 있음");
 
-        // 기존 쪽지가 있을 경우
-        if (existChat.size() != 0) {
-            Long roomId = existChat.get(0).getRoom();
-            chatForm.setReceiver(c_receiver);
-            chatForm.setMarketId(c_marketId);
-            chatForm.setContent(c_content);
-            chatService.addChat(roomId, chatForm, account);
-        }*/
-        /*Optional<Account> receiver = accountRepository.findById(c_receiver);
-        Boolean isExistRoom = chatRepository.existsByRoom(roomNum);*/
+            if (findAccountEqualHost != null) {
+                chatForm.setContent(c_content);
+                chatService.updateChat(chatForm, roomHost.get(), roomAttender.get());
+            }
+            if (findAccountEqualAttender != null) {
+                chatForm.setContent(c_content);
+                chatService.updateChat(chatForm, roomAttender.get(), roomHost.get());
+            }
+
+        }
 
         String sendChat = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
                 "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
