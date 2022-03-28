@@ -381,7 +381,7 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "calendar")
-    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,
+    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path,
                                              @Valid StudyCalendarForm studyCalendarForm,
                                              Errors errors, Model model, RedirectAttributes redirectAttributes) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -397,6 +397,18 @@ public class StudyController {
 
         return "redirect:/study/" + fixPath(path) + "/settings/calendar";
     }
+
+    @GetMapping(STUDY_SETTINGS + "members")
+    public String studyMembersView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        return "study/settings/members";
+    }
+
+    @PostMapping
 
     @GetMapping(STUDY_SETTINGS + "alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
