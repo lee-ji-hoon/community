@@ -29,7 +29,7 @@ public class ChatService {
     private final MarketRepository marketRepository;
     private final RoomRepository roomRepository;
 
-    public void saveNewRoom(ChatForm chatForm, Account roomHost, Account roomAttender) {
+    public void saveNewRoom(ChatForm chatForm, Account roomHost, Account roomAttender, Account currentUser) {
         Room room = Room.builder()
                 .roomHost(roomHost)
                 .roomAttender(roomAttender)
@@ -40,8 +40,7 @@ public class ChatService {
         roomRepository.save(room);
 
         Chat chat = Chat.builder()
-                .roomHost(roomHost)
-                .roomAttender(roomAttender)
+                .sender(currentUser)
                 .room(room)
                 .content(chatForm.getContent())
                 .sendTime(LocalDateTime.now())
@@ -50,23 +49,19 @@ public class ChatService {
 
         chatRepository.save(chat);
     }
-    public void updateChat(ChatForm chatForm, Account roomHost, Account roomAttender) {
+    public void updateChat(ChatForm chatForm, Account roomHost, Account roomAttender, Account currentUser) {
         Room currentRoom = roomRepository.findByRoomHostAndRoomAttender(roomHost, roomAttender);
         Chat chat = Chat.builder()
-                .roomHost(roomHost)
-                .roomAttender(roomAttender)
+                .sender(currentUser)
                 .room(currentRoom)
                 .content(chatForm.getContent())
                 .sendTime(LocalDateTime.now())
                 .readChk(false)
                 .build();
         chatRepository.save(chat);
-        log.info("chat={}", chat);
         currentRoom.setLastSendMsg(chat.getContent());
         currentRoom.setLastSendTime(LocalDateTime.now());
         roomRepository.save(currentRoom);
-        log.info("currentRoom={}", currentRoom);
-
     }
 
 }

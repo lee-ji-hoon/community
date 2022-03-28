@@ -83,7 +83,7 @@ public class ChatController {
         if (!isExistHostEqualHost && !isExistHostEqualAttender) {
             log.info(roomHost.get().getNickname() + "와 " + roomAttender.get().getNickname() + "이 나눈 대화가 없음");
             chatForm.setContent(c_content);
-            chatService.saveNewRoom(chatForm, roomHost.get(), roomAttender.get());
+            chatService.saveNewRoom(chatForm, roomHost.get(), roomAttender.get(), account);
         }
 
         // 두 사람이 나눈 쪽지가 있을 경우
@@ -92,11 +92,11 @@ public class ChatController {
 
             if (findAccountEqualHost != null) {
                 chatForm.setContent(c_content);
-                chatService.updateChat(chatForm, roomHost.get(), roomAttender.get());
+                chatService.updateChat(chatForm, roomHost.get(), roomAttender.get(), account);
             }
             if (findAccountEqualAttender != null) {
                 chatForm.setContent(c_content);
-                chatService.updateChat(chatForm, roomAttender.get(), roomHost.get());
+                chatService.updateChat(chatForm, roomAttender.get(), roomHost.get(), account);
             }
 
         }
