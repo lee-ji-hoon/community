@@ -34,6 +34,7 @@ public class ChatController {
 
     private final AccountRepository accountRepository;
     private final RoomRepository roomRepository;
+    private final ChatRepository chatRepository;
     private final ChatService chatService;
 
     @GetMapping("/chat/lists")
@@ -51,6 +52,18 @@ public class ChatController {
         model.addAttribute("myRooms", myRooms);
         model.addAttribute(account);
         return "chat/chat-detail";
+    }
+
+    // 읽음 확인
+    @ResponseBody
+    @RequestMapping(value = "/chat/readChk")
+    public String readCheck(@RequestParam(value = "roomId") Long roomId,
+                            @CurrentUser Account account) {
+        Room currentRoom = roomRepository.findByRoomId(roomId);
+        List<Chat> findChatLists = chatRepository.findByRoom(currentRoom);
+        chatService.readCheckService(findChatLists, account);
+
+        return "";
     }
 
     // 채팅방에서 쪽지 보내기

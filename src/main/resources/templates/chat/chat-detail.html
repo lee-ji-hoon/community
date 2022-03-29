@@ -83,9 +83,13 @@
                                 <th:block th:if="${account == chatRoom.roomHost}">
                                     <h4 th:text="${chatRoom.roomAttender.nickname}">상대방 닉네임</h4>
                                 </th:block>
-                                <a href="#" class="message-action text-blue-500 flex-none" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
-                                    <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
-                                </a>
+                                <form th:id="|readChkForm${chatRoom.roomId}|" onsubmit="return false">
+                                    <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
+                                    <a href="#" class="message-action text-blue-500 flex-none" th:id="|readChkBtn${chatRoom.roomId}|" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
+                                        <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
+                                    </a>
+                                </form>
+
                             </div>
 
                             <div class="message-content-scrolbar" th:id="|chatScroll${chatRoom.roomId}|" data-simplebar>
@@ -178,12 +182,22 @@
             $(`#roomNum${roomId}`)
                 .attr('hidden', 'false')
                 .css('display', 'block');
-            delay(function (){
+            delay(function () {
                 console.log($(`#chatContents${roomId}`)[0].scrollHeight);
                 $('.simplebar-content').stop().animate({
                     scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
                 }, 0);
             }, 1);
+            $.ajax({
+                url:'/chat/readChk',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#readChkForm${roomId}`).serialize(),
+                success : function (){
+                    $('.messages-inbox').load(location.href+' .messages-inbox');
+                    console.log(roomId + "확인");
+                }
+            });
             exRoomNum = roomId;
             return exRoomNum;
         }
