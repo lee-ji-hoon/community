@@ -10189,8 +10189,8 @@ input[type="button"].dark1, input[type="submit"].dark1 {
 .user_status {
   position: absolute;
   content: "";
-  height: 14px;
-  width: 14px;
+  height: 16px;
+  width: 16px;
   background-color: #c0c0c0;
   bottom: 0;
   right: 0;
@@ -10201,7 +10201,7 @@ input[type="button"].dark1, input[type="submit"].dark1 {
 }
 
 .user_status.status_online {
-  background-color: #38b653;
+  background-color: #3b82f6;
   visibility: visible;
 }
 

@@ -35,6 +35,7 @@
                         <div class="messages-inbox-inner" data-simplebar>
                             <ul class="chat-room-lists">
                                 <li th:each="room : ${myRooms}">
+                                    <p th:text="${room.chatList.size()}"></p>
                                     <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|"
                                        th:onclick="|roomBtn.roomBtnFx(${room.roomId})|">
                                         <div class="message-avatar">
@@ -46,6 +47,11 @@
                                                 <img th:if="${!#strings.isEmpty(room.roomHost?.profileImage)}"
                                                      th:src="${room.roomHost?.profileImage}"
                                                      alt=""/>
+                                                <th:block th:if="${!room.chatList.get(room.chatList.size()-1).readChk}">
+                                                    <th:block th:if="${room.chatList.get(room.chatList.size()-1).sender != account}">
+                                                        <span class="user_status status_online"></span>
+                                                    </th:block>
+                                                </th:block>
                                             </th:block>
                                             <th:block th:if="${account == room.roomHost}">
                                                 <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
@@ -54,6 +60,11 @@
                                                 <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
                                                      th:src="${room.roomAttender?.profileImage}"
                                                      alt=""/>
+                                                <th:block th:if="${!room.chatList.get(room.chatList.size()-1).readChk}">
+                                                    <th:block th:if="${room.chatList.get(room.chatList.size()-1).sender != account}">
+                                                        <span class="user_status status_online"></span>
+                                                    </th:block>
+                                                </th:block>
                                             </th:block>
                                         </div>
                                         <div class="message-by">
