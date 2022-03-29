@@ -75,7 +75,7 @@ public class TestDataInit {
             *//*boardRepository.save(new Board(null, "정보", "java", "스프링에 대한 설명", "스프링은 과연 무엇인가..", null, null, false, 0,FORUM_TEST_CONTENT_VALUE3, accountRepository.findByEmail("test1@naver.com"), 0, LocalDateTime.now().minusHours(1), null));*//*
         }*/
 
-        if (!accountRepository.existsByStudentId("17-100444")) {
+        if (!accountRepository.existsByStudentId("17-100378")) {
             accountRepository.save(new Account(null, "kawnsdud@nsu.ac.kr", "jwhy", "17-100444", "준영", passwordEncoder.encode("test1234!"),
                     true, "asdf12", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
                     "hello", "https://github.com/Jwhyee", "대학생", "경기도, 수원", null, null, null, null, true, true,
