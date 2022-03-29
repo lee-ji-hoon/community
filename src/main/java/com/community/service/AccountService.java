@@ -38,7 +38,6 @@ public class AccountService implements UserDetailsService {
     private final AppProperties appProperties;
 
     // 회원가입
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
@@ -117,13 +116,10 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-    // 이메일 또는 닉네임 로그인
+    // 이메일 로그인
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
-        if (account == null) {
-            account = accountRepository.findByNickname(emailOrNickname);
-        }
 
         if (account == null) {
             throw new UsernameNotFoundException(emailOrNickname);
@@ -135,7 +131,6 @@ public class AccountService implements UserDetailsService {
     public Account getAccount(String nickname) {
         Account byNickname = accountRepository.findByNickname(nickname);
         if (byNickname == null) {
-            log.info(nickname);
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
         return byNickname;
