@@ -408,8 +408,6 @@ public class StudyController {
         return "study/settings/members";
     }
 
-    @PostMapping
-
     @GetMapping(STUDY_SETTINGS + "alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);

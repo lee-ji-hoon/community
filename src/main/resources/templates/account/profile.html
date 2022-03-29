@@ -173,44 +173,9 @@
                         <div class="widget card p-1">
                             <h4 th:text="${account.nickname} + '님의 스터디'"
                                 class="text-lg font-semibold p-4"></h4>
-                            <div th:each="study: ${enrolledStudyList}"
-                                 th:if="${study.isManager(#authentication.principal) || study.isMember(#authentication.principal)}"
-                                 class="flex items-start flex-wrap p-3 sm:space-x-6">
-                                <a th:href="@{'/study/' + ${study.path}}">
-                                    <img th:src="${study.image}"
-                                         th:alt="${study.title}"
-                                         class="w-20 h-20 relative mt-1 order-1">
-                                    <div class="flex-1 order-2 ml-2">
-                                        <h4 class="text-lg text-gray-500 font-medium mb-2" th:text="${study.title}">Phaseout </h4>
-                                        <!--<span th:each="tag: ${study.tags}" th:if="${tagStat.count} < 4"
-                                              class="rounded-full font-weight-light text-sm text-monospace">
-                                            <a  class="text-decoration-none text-white">
-                                                <i class="fa fa-tag text-sm"></i> <span class="text-sm" th:text="${tag.title}">Tag</span>
-                                            </a>
-                                        </span>-->
-                                    </div>
-                                </a>
-                            </div>
 
-                            <div th:each="study: ${myStudyList}"
-                                 th:if="${study.isManager(#authentication.principal) || study.isMember(#authentication.principal)}"
-                                 class="flex items-start flex-wrap p-3 sm:space-x-6">
-                                <a th:href="@{'/study/' + ${study.path}}">
-                                    <img th:src="${study.image}"
-                                         th:alt="${study.title}"
-                                         class="w-20 h-20 relative mt-1 order-1">
-                                    <div class="flex-1 order-2 ml-2">
-                                        <p class="text-lg text-gray-500 font-medium mb-2" th:text="${study.title}">Phaseout </p>
-                                        <span th:each="tag: ${study.tags}" th:if="${tagStat.count} < 4"
-                                              class="rounded-full font-weight-light text-sm text-monospace">
-                                            <a  class="text-decoration-none text-white">
-                                                <i class="fa fa-tag text-sm"></i> <span class="text-sm" th:text="${tag.title}">Tag</span>
-                                            </a>
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-
+                            <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${myStudyList})"></ul>
+                            <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${enrolledStudyList})"></ul>
                         </div>
                     </div>
 
