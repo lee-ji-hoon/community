@@ -35,7 +35,6 @@
                         <div class="messages-inbox-inner" data-simplebar>
                             <ul class="chat-room-lists">
                                 <li th:each="room : ${myRooms}">
-                                    <p th:text="${room.chatList.size()}"></p>
                                     <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|"
                                        th:onclick="|roomBtn.roomBtnFx(${room.roomId})|">
                                         <div class="message-avatar">
