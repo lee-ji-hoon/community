@@ -256,7 +256,7 @@
                                             <div class="flex-1 font-semibold capitalize">
                                                 <a th:text="${meeting.writer.nickname}" href="#" class="text-black dark:text-gray-100"> Johnson smith </a>
             <!--                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>-->
-                                                <div class="text-sm" th:text="${service.meetingDateTime(meeting.uploadTime)}"></div>
+                                                <div class="text-sm" th:text="${account.dateTime(meeting.uploadTime)}"></div>
             <!--                                        <span th:text="${#temporals.format(meeting.uploadTime,  'yyyy-MM-dd')}"></span>-->
                                             </div>
                                         </div>
@@ -343,7 +343,7 @@
                                                         </form>
 
                                                         <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
-                                                            <span th:text="${service.meetingDateTime(reply.uploadTime)}"></span>
+                                                            <span th:text="${account.dateTime(reply.uploadTime)}"></span>
                                                             <th:block th:if="${reply.getAccount().id == account.id}">
                                                             <span class="text-blue-500"
                                                                   th:onclick="|updateBtn.replyUpdate(${reply.rid})|"
@@ -449,8 +449,12 @@
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>
 <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="/assets/js/summernote-ko-KR.js"></script>
+<script src="/assets/css/summernote.min.css"></script>
+<script src="/assets/js/summernote.min.js"></script>
 
 <script th:inline="javascript">
     // 댓글 작성 ajax
@@ -579,6 +583,7 @@
                 });
         }
     }
+
 
     $(document).ready(function() {
         //여기 아래 부분

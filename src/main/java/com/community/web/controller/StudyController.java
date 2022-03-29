@@ -215,12 +215,6 @@ public class StudyController {
                                 @RequestParam(required = false, value = "updateMeetingDescription") String updateMeetingDescription,
                                 @RequestParam(required = false, value = "updatePlaces") String updatePlaces){
 
-        log.info("모임 아이디 : ", meetingId);
-        log.info("모임 제목 : ", updateTitle);
-        log.info("모임 주제 : ", updateMethod);
-        log.info("모임 내용 : ", updateMeetingDescription);
-        log.info("모임 위치 : ", updatePlaces);
-
 
         Long meetingsId = Long.valueOf(meetingId);
         Meetings meetings = meetingsRepository.findByMeetingsId(meetingsId);
@@ -251,11 +245,6 @@ public class StudyController {
                                    @RequestParam(value = "r_account_id") Long r_account_id,
                                    @RequestParam(value = "r_content") String r_content,
                                    ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_meetings_id + "r_meetings_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
         replyForm.setContent(r_content);
 
 
@@ -319,9 +308,17 @@ public class StudyController {
     // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
-        Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
+        Study study = studyRepository.findStudyWithMembersByPath(path);
 
-        studyService.addMember(studyWithMembersByPath, account);
+        boolean checkBlockMembers = studyService.checkBlockMembers(study, account);
+
+        log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
+        if(!checkBlockMembers){
+            redirectAttributes.addFlashAttribute("blockMessage", "스터디에서 차단 된 유저입니다.");
+            return "redirect:/study/" + fixPath(path);
+        }
+
+        studyService.addMember(study, account);
         redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");
 
         return "redirect:/study/" + fixPath(path) + "/meetings";
@@ -408,7 +405,48 @@ public class StudyController {
         return "study/settings/members";
     }
 
-    @PostMapping
+    @ResponseBody
+    @RequestMapping(value = STUDY_SETTINGS + "removeMember")
+    public String excludeStudyMembers(@PathVariable String path,
+                                      @RequestParam(value = "studyMemberId") Long studyMemberId) {
+        Optional<Account> byId = accountRepository.findById(studyMemberId);
+        Account account = byId.get();
+
+        Study study = studyService.getStudyUpdate(account, path);
+
+        studyService.blockMembers(account, study);
+
+        String message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">멤버 추방에 성공했습니다.</p>\n" +
+                "</div>";
+        return message;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = STUDY_SETTINGS + "unBlockMember")
+    public String unBlockMembers(@PathVariable String path,
+                                      @RequestParam(value = "blockMemberId") Long blockMemberId) {
+        Optional<Account> byId = accountRepository.findById(blockMemberId);
+        Account account = byId.get();
+
+        log.info("path : {}",path);
+        Study study = studyService.getStudyUpdate(account, path);
+
+        studyService.unBlockMembers(account, study);
+
+        String message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">멤버 차단해제에 성공했습니다.</p>\n" +
+                "</div>";
+        return message;
+    }
 
     @GetMapping(STUDY_SETTINGS + "alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
