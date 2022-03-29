@@ -1551,24 +1551,39 @@
                 </span>
             </div>
         </div>
-        <div th:each="manager : ${study.managers}" style="font-size: 14px">
-            <strong th:text="${manager.nickname}">Johnson</strong>와
-            <span th:text="${study.memberCount - 1} + '명이 참여'">5 freind are members</span>
-        </div>
-        <div th:each="member : ${study.members}">
-            <div th:if="${memberStat.count} < 3">
-                <svg th:if="${#strings.isEmpty(member?.profileImage)}"
-                     th:data-jdenticon-value="${member.studentId}"
-                     class="border-2 border-grey rounded-full w-7 is_avatar "
-                     style="height: 28px">
-                </svg>
-                <img th:if="${!#strings.isEmpty(member?.profileImage)}"
-                     th:src="${member?.profileImage}"
-                     class="border-2 border-grey rounded-full w-7 is_avatar"/>
+        <div class="flex mt-3.5 space-x-1">
+            <div th:each="manager : ${study.managers}" style="font-size: 14px">
+                <strong th:text="${manager.nickname}">Johnson</strong>와
+                <span th:text="${study.memberCount - 1} + '명이 참여'">5 freind are members</span>
             </div>
-            <div th:if="${memberStat.count} == 3">
-                <div class="w-7 h-7 is_avatar rounded-full flex justify-center items-center bg-blue-100 text-blue-500 font-semibold"
-                     th:text="${study.memberCount-3} + '+'">
+
+            <div class="flex -space-x-3 flex items-center" style="margin-top: -5px">
+                <div th:each="manager : ${study.managers}">
+                    <div th:if="${managerStat.count} < 2">
+                        <svg th:if="${#strings.isEmpty(manager?.profileImage)}"
+                             th:data-jdenticon-value="${manager.studentId}"
+                             class="border-2 border-grey rounded-full w-7 is_avatar" style="height: 28px"></svg>
+                        <img th:if="${!#strings.isEmpty(manager?.profileImage)}"
+                             th:src="${manager?.profileImage}"
+                             class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                    </div>
+                </div>
+                <div th:each="member : ${study.members}">
+                    <div th:if="${memberStat.count} < 3">
+                        <svg th:if="${#strings.isEmpty(member?.profileImage)}"
+                             th:data-jdenticon-value="${member.studentId}"
+                             class="border-2 border-grey rounded-full w-7 is_avatar "
+                             style="height: 28px">
+                        </svg>
+                        <img th:if="${!#strings.isEmpty(member?.profileImage)}"
+                             th:src="${member?.profileImage}"
+                             class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                    </div>
+                    <div th:if="${memberStat.count} == 3">
+                        <div class="w-7 h-7 is_avatar rounded-full flex justify-center items-center bg-blue-100 text-blue-500 font-semibold"
+                             th:text="${study.memberCount-3} + '+'">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1592,5 +1607,26 @@
         </a>
     </div>
 </div>
+
+
+<ul th:fragment="profile-open-study-list(studyList)" role="list" class="p-3 divide-y divide-slate-200">
+    <li th:each="study: ${studyList}"
+        th:if="${study.isManager(#authentication.principal) || study.isMember(#authentication.principal)}"
+        class="flex py-4 first:pt-0 last:pb-0">
+        <a th:href="@{'/study/' + ${study.path}}">
+            <img th:src="${study.image}"
+                 th:alt="${study.title}"
+                 class="w-20 h-20 full-width">
+        </a>
+        <div class="ml-3 overflow-hidden">
+            <a th:href="@{'/study/' + ${study.path}}">
+                <p th:text="${study.title}"
+                   class="text-sm font-medium text-slate-900" >{person.name}</p>
+                <p th:text="${study.shortDescription}"
+                   class="text-sm text-slate-500 truncate">{person.bio}</p>
+            </a>
+        </div>
+    </li>
+</ul>
 
 </html>

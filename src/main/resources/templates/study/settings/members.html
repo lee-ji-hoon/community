@@ -3,6 +3,12 @@
 
 <head th:replace="theme-fragments.html :: head"></head>
 
+<style>
+    #removeMember:hover {
+        color: rgba(59, 130, 246, 0.5);
+    }
+
+</style>
 <body>
 <div id="wrapper">
 
@@ -21,39 +27,89 @@
                     <div id="isUpdatedForm" class="m-5">
                         <div id="isUpdated"></div>
                     </div>
+                    <div class="study_members">
 
-                    <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
-                        <h3 class="text-xl mb-2 font-semibold"> 스터디 멤버</h3>
-                        <p> 스터디에 참여중인 멤버들을 관리 할 수 있습니다.</p>
-                        <hr/>
+                        <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
+                            <h3 class="text-xl mb-2 font-semibold"> 스터디 멤버</h3>
+                            <p> 스터디에 참여중인 멤버들을 관리 할 수 있습니다.</p>
+                            <hr/>
 
-                        <ul role="list" class="p-6 divide-y divide-slate-200">
-                            <li th:each="studyMembers : ${study.members}"
-                                class="flex py-4 first:pt-0 last:pb-0 justify-content-between">
-                                <div>
-                                    <svg th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
-                                         th:data-jdenticon-value="${studyMembers.studentId}"
-                                         class="h-10 w-10 rounded-full uk-position-absolute"></svg>
-                                    <img th:if="${!#strings.isEmpty(studyMembers?.profileImage)}"
-                                         th:src="${studyMembers?.profileImage}"
-                                         class="h-10 w-10 rounded-full uk-position-absolute"/>
-                                    <div class="ml-14 overflow-hidden">
-                                        <p th:text="${studyMembers.nickname}"
-                                           class="text-sm font-medium text-slate-900" >{person.name}</p>
-                                        <p th:text="${studyMembers.bio}"
-                                           class="text-sm text-slate-500 truncate">{person.bio}</p>
+                            <ul role="list" class="divide-y divide-slate-200">
+                                <li th:each="studyMembers : ${study.members}"
+                                    class="flex py-4 first:pt-0 last:pb-0">
+                                    <div class="col-6">
+                                        <svg th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
+                                             th:data-jdenticon-value="${studyMembers.studentId}"
+                                             class="h-10 w-10 rounded-full uk-position-absolute"></svg>
+                                        <img th:if="${!#strings.isEmpty(studyMembers?.profileImage)}"
+                                             th:src="${studyMembers?.profileImage}"
+                                             class="h-10 w-10 rounded-full uk-position-absolute"/>
+                                        <div class="ml-14 overflow-hidden">
+                                            <p th:text="${studyMembers.nickname}"
+                                               class="text-sm font-medium text-slate-900" >{person.name}</p>
+                                            <p th:text="${studyMembers.bio}"
+                                               class="text-sm text-slate-500 drop_text truncate">{person.bio}</p>
+                                        </div>
+                                        <form onsubmit="return false" th:id="|studyMemberIdForm${studyMembers.id}|">
+                                            <input type="hidden"
+                                                   name="studyMemberId"
+                                                   th:value="${studyMembers.id}"
+                                                   th:id="|studyMemberIdInput${studyMembers.id}|"/>
+                                        </form>
                                     </div>
-                                </div>
 
-                                <div class="space-x-1">
-                                    <a th:href="@{'/study/' + ${study.path} + '/settings/members/' + ${studyMembers.nickname}}"
-                                       class="button bg-red-600"> 퇴출 </a>
-                                    <a th:href="@{'/profile/' + ${studyMembers.nickname}}"
-                                    class="button bg-green-600"> 정보</a>
-                                </div>
-                            </li>
-                        </ul>
+                                    <div class="col-6 space-x-1">
+                                        <span th:onclick="|removeMemberBtn.removeMember(${studyMembers.id})|"
+                                              th:id="|removeMemberSubmit${studyMembers.id}|"
+                                              id="removeMember"
+                                              class="button bg-red-600 text-white"> 퇴출 </span>
+                                        <a th:href="@{'/profile/' + ${studyMembers.nickname}}"
+                                        class="button bg-green-600"> 정보</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
 
+                        <div class="lg:py-4 lg:px-10 flex-1 space-y-4 p-6">
+                            <h3 class="text-xl mb-2 font-semibold"> 차단 멤버</h3>
+                            <p> 스터디에 차단 된 멤버들을 관리 할 수 있습니다.</p>
+                            <hr/>
+
+                            <ul role="list" class="divide-y divide-slate-200">
+                                <li th:each="blockMembers : ${study.blockMembers}"
+                                    class="flex py-4 first:pt-0 last:pb-0">
+                                    <div class="col-6">
+                                        <svg th:if="${#strings.isEmpty(blockMembers?.profileImage)}"
+                                             th:data-jdenticon-value="${blockMembers.studentId}"
+                                             class="h-10 w-10 rounded-full uk-position-absolute"></svg>
+                                        <img th:if="${!#strings.isEmpty(blockMembers?.profileImage)}"
+                                             th:src="${blockMembers?.profileImage}"
+                                             class="h-10 w-10 rounded-full uk-position-absolute"/>
+                                        <div class="ml-14 overflow-hidden">
+                                            <p th:text="${blockMembers.nickname}"
+                                               class="text-sm font-medium text-slate-900" >{person.name}</p>
+                                            <p th:text="${blockMembers.bio}"
+                                               class="text-sm text-slate-500 drop_text truncate">{person.bio}</p>
+                                        </div>
+                                        <form onsubmit="return false" th:id="|blockMembersIdForm${blockMembers.id}|">
+                                            <input type="hidden"
+                                                   name="blockMemberId"
+                                                   th:value="${blockMembers.id}"
+                                                   th:id="|blockMembersIdInput${blockMembers.id}|"/>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-6 space-x-1">
+                                        <span th:onclick="|blockMembersBtn.blockMembers(${blockMembers.id})|"
+                                              th:id="|blockMembersSubmit${blockMembers.id}|"
+                                              id="blockMembers"
+                                              class="button bg-blue-600 text-white"> 해제 </span>
+                                        <a th:href="@{'/profile/' + ${blockMembers.nickname}}"
+                                           class="button bg-green-600"> 정보</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,32 +122,84 @@
 <script th:replace="theme-fragments.html :: studyBanner"></script>
 
 <script th:inline="javascript">
-    function removeMember() {
-        /*<![CDATA[*/
-        var path = [[${study.path}]];
-        /*]]>*/
+    let blockMembersBtn = {
+        blockMembers: function (memberId) {
 
-        swal({
-            title: "알림 전송.",
-            text: "보낸 시점으로 24시간 후에 다시 보낼 수 있습니다.",
-            icon: "info",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                console.log("willdelete");
-                $.ajax({
-                    url: '/study/'+path+'/settings/sendAlarm',
-                    type: 'GET',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function (message) {
-                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                        $("#isUpdated").replaceWith(message);
-                    },
-                })
-            });
+            /*<![CDATA[*/
+            var path = [[${study.path}]];
+            /*]]>*/
 
+            swal({
+                title: "알림 전송.",
+                text: "해당 유저를 차단목록에서 해제하시겠습니까?.",
+                icon: "info",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    window.addEventListener('keydown', function (e) {
+                        if (e.keyCode == 13) {
+                            swal("엔터키는 사용할 수 없습니다.");
+                        }
+                    })
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/study/' + path + '/settings/unBlockMember',
+                            type: 'GET',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $(`#blockMembersIdForm${memberId}`).serialize(),
+                            success : function (message) {
+                                console.log("삭제 성공");
+                                $('.study_members').load(location.href+' .study_members');
+                                $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                                $("#isUpdated").replaceWith(message);
+                            },
+                        });
+                    } else {
+                        swal("멤버 삭제에 실패했습니다. 다시 시도해주세요.")
+                    }
+                });
+        }
     }
+    let removeMemberBtn = {
+        removeMember: function (memberId) {
+
+            /*<![CDATA[*/
+            var path = [[${study.path}]];
+            /*]]>*/
+
+            swal({
+                title: "알림 전송.",
+                text: "한 번 퇴출한 인원은 다시 신청 할 수 없습니다.",
+                icon: "info",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    window.addEventListener('keydown', function (e) {
+                        if (e.keyCode == 13) {
+                            swal("엔터키는 사용할 수 없습니다.");
+                        }
+                    })
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/study/' + path + '/settings/removeMember',
+                            type: 'GET',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $(`#studyMemberIdForm${memberId}`).serialize(),
+                            success : function (message) {
+                                console.log("삭제 성공");
+                                $('.study_members').load(location.href+' .study_members');
+                                $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                                $("#isUpdated").replaceWith(message);
+                            },
+                        });
+                    } else {
+                        swal("멤버 삭제에 실패했습니다. 다시 시도해주세요.")
+                    }
+                });
+            }
+        }
 
 </script>
 </body>
