@@ -80,4 +80,13 @@ public class ChatService {
         roomRepository.save(currentRoom);
     }
 
+    public void readCheckService(List<Chat> findChatLists, Account account) {
+        for (Chat chat : findChatLists) {
+            if (chat.getSender() != account) {
+                chat.setReadChk(true);
+                chatRepository.save(chat);
+            }
+        }
+    }
+
 }
