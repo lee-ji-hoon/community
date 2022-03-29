@@ -21,6 +21,7 @@ public class SignUpForm {
 
     @Email
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@nsu.ac.kr")
     private String email;
 
     @NotBlank

@@ -45,6 +45,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -240,7 +241,6 @@ public class StudyController {
                     "</div>";
             return message;
         }
-        log.info("잘못된 게시물 수정 요청 : bid = " + meetingId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
     }
@@ -270,8 +270,6 @@ public class StudyController {
             Set<Account> managers = currentMeetings.getStudy().getManagers();
             for (Account manager : managers) {
                 Optional<Account> managerId = accountRepository.findById(manager.getId());
-                log.info("manager : {}",managerId.get().getId());
-                log.info("account : {}",currentAccount.get().getId());
                 if(!managerId.get().getId().equals(currentAccount.get().getId())) {
                     applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
                 }
@@ -290,9 +288,6 @@ public class StudyController {
     @RequestMapping(value = "/study/meetings/reply/update")
     public int addMeetingReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
                                      @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
-        log.info("rid : " + reply_update_rid);
-        log.info("content : " + reply_update_content);
-
         replyService.updateReply(reply_update_rid, reply_update_content);
 
         int reply_size = 0;
@@ -302,9 +297,7 @@ public class StudyController {
     @ResponseBody
     @RequestMapping(value = "/study/meetings/reply/delete")
     public int replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
-        log.info("rid : " + reply_delete_rid);
         Reply byRid = replyRepository.findByRid(reply_delete_rid);
-        log.info("delete_reply" + byRid);
         replyRepository.delete(byRid);
 
         int reply_size = 0;
@@ -315,7 +308,6 @@ public class StudyController {
     @GetMapping(STUDY_PATH_URL)
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
 
-        log.info("스터디 페이지 실행 중복 확인");
         Study bypath = studyService.getPath(path);
 
         model.addAttribute(account);
@@ -389,7 +381,7 @@ public class StudyController {
     }
 
     @PostMapping(STUDY_SETTINGS + "calendar")
-    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,
+    public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path,
                                              @Valid StudyCalendarForm studyCalendarForm,
                                              Errors errors, Model model, RedirectAttributes redirectAttributes) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -406,6 +398,18 @@ public class StudyController {
         return "redirect:/study/" + fixPath(path) + "/settings/calendar";
     }
 
+    @GetMapping(STUDY_SETTINGS + "members")
+    public String studyMembersView(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study studyUpdate = studyService.getStudyUpdate(account, path);
+
+        model.addAttribute(account);
+        model.addAttribute(studyUpdate);
+
+        return "study/settings/members";
+    }
+
+    @PostMapping
+
     @GetMapping(STUDY_SETTINGS + "alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -419,7 +423,6 @@ public class StudyController {
     @ResponseBody
     @RequestMapping(value = STUDY_SETTINGS + "sendAlarm")
     public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path, Model model) {
-        log.info("알람 실행");
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
 
@@ -441,7 +444,7 @@ public class StudyController {
         }
 
         // 24시간 체크 로직
-        /*if(!checkAlarmDateTime){
+        if(!checkAlarmDateTime){
             log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
             message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
                     "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
@@ -451,7 +454,7 @@ public class StudyController {
                     "    <p class=\"text-white text-opacity-75\">하루에 한 번 발송 가능합니다. 나중에 다시 시도해주세요.</p>\n" +
                     "</div>";
             return message;
-        }*/
+        }
 
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 

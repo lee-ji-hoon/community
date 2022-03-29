@@ -99,8 +99,6 @@ public class AlarmController {
     public String moveAlarmLink(@CurrentUser Account account,
                                 @PathVariable Long alarmId, Model model,
                                 HttpServletRequest request, HttpServletResponse response) {
-        log.info("alarmByPath : {}", alarmId);
-        log.info("accountId : {}", account.getId());
 
         Alarm byAlarmId = alarmRepository.findByAlarmId(alarmId);
         AlarmType type = byAlarmId.getAlarmType();
@@ -108,66 +106,8 @@ public class AlarmController {
 
         alarmService.checked(byAlarmId, account);
 
-        log.info("byPathAndType : {}", byAlarmId);
         model.addAttribute(account);
 
-        /*if (type == AlarmType.STUDY) {
-            Study studyByPath = studyService.getPath(path);
-            model.addAttribute(studyByPath);
-            return "study/study-view";
-        }
-
-        else if (type == AlarmType.MEETING || type == AlarmType.MEETING_REPLY) {
-            Study meetingByPath = studyService.getPath(path);
-            List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(meetingByPath);
-
-            model.addAttribute("service", studyService);
-            model.addAttribute("meetingsList", meetingsList);
-            model.addAttribute(meetingByPath);
-            model.addAttribute(new MeetingsForm());
-            return "study/study-meetings";
-        }
-
-        else if (type == AlarmType.BOARD_REPLY || type == AlarmType.LIKES) {
-            model.addAttribute("account", account);
-            Long boardNumber = Long.valueOf(path);
-            Boolean hasBoardError = boardService.boardReportedOrNull(boardNumber);
-            if (hasBoardError) {
-                return "error-page";
-            }
-            boardService.viewUpdate(boardNumber, request, response);
-            Board detail = boardRepository.findByBid(boardNumber);
-            log.info("board detail : {}", path);
-
-            // 최근에 올라온 게시물
-            List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
-
-            // 좋아요 및 댓글
-            Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
-            List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
-
-            // 게시물 작성자 account 불러오는 로직
-            Board currentBoard = boardRepository.findByBid(boardNumber);
-            Account boardOwner = currentBoard.getWriter();
-
-            model.addAttribute("board", detail);
-            model.addAttribute("boardOwner", boardOwner);
-            model.addAttribute("service", boardService);
-            model.addAttribute("accountRepo", accountRepository);
-            model.addAttribute("likes", likes);
-            model.addAttribute("likeService", likeService);
-            model.addAttribute("reply", replies);
-            model.addAttribute("replyService", replyService);
-            model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
-            model.addAttribute("replyRepo", replyReportRepository);
-            model.addAttribute("recentlyBoards", recentlyBoards);
-
-            model.addAttribute(new ReplyForm());
-            model.addAttribute(new BoardReportForm());
-            model.addAttribute(new BoardForm());
-
-            return "board/board-detail";
-        }*/
         switch (type){
             case STUDY: log.info("study 페이지 이동 : {}", path);
                 Study studyByPath = studyService.getPath(path);

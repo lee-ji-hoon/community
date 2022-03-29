@@ -1872,7 +1872,6 @@ button {
 }
 
 a.button, span.button, button.button {
-  background-color: #2a41e8;
   height: 38px;
   padding: 0 20px;
   line-height: 24px;
