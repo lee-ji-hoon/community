@@ -88,52 +88,54 @@
                                 </a>
                             </div>
 
-                            <div class="message-content-scrolbar pb-20" data-simplebar>
+                            <div class="message-content-scrolbar" th:id="|chatScroll${chatRoom.roomId}|" data-simplebar>
                                 <div class="content-wrapper">
                                     <!-- Message Content Inner -->
                                     <div class="message-content-inner max-w-fit">
-                                        <div th:each="chat : ${chatRoom.chatList}" th:id="|chattingRoom${chat.room.roomId}|">
-                                            <!-- Time Sign -->
-                                            <!--<div class="message-time-sign">
-                                                <p th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd')}"></p>
-                                            </div>-->
-                                            <th:block th:if="${chat.sender == account}">
-                                                <div class="message-bubble me">
-                                                    <div class="message-bubble-inner">
-                                                        <div class="message-avatar">
-                                                            <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
-                                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                                 alt=""></svg>
-                                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                                 th:src="${account?.profileImage}"
-                                                                 alt=""/>
+                                        <div th:id="|chatContents${chatRoom.roomId}|">
+                                            <div th:each="chat : ${chatRoom.chatList}">
+                                                <!-- Time Sign -->
+                                                <!--<div class="message-time-sign">
+                                                    <p th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd')}"></p>
+                                                </div>-->
+                                                <th:block th:if="${chat.sender == account}">
+                                                    <div class="message-bubble me">
+                                                        <div class="message-bubble-inner">
+                                                            <div class="message-avatar">
+                                                                <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+                                                                <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                                     th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                                     th:src="${account?.profileImage}"
+                                                                     alt=""/>
+                                                            </div>
+                                                            <div class="message-text">
+                                                                <p th:text="${chat.content}">내용</p>
+                                                                <small class="float-right" th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd HH:mm')}"></small>
+                                                            </div>
                                                         </div>
-                                                        <div class="message-text">
-                                                            <p th:text="${chat.content}">내용</p>
-                                                            <small class="float-right" th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd HH:mm')}"></small>
-                                                        </div>
+                                                        <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </th:block>
-                                            <th:block th:if="${chat.sender != account}">
-                                                <div class="message-bubble">
-                                                    <div class="message-bubble-inner">
-                                                        <div class="message-avatar">
-                                                            <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                 th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
-                                                                 alt=""></svg>
-                                                            <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                 th:src="${chat.sender?.profileImage}"
-                                                                 alt=""/>
+                                                </th:block>
+                                                <th:block th:if="${chat.sender != account}">
+                                                    <div class="message-bubble">
+                                                        <div class="message-bubble-inner">
+                                                            <div class="message-avatar">
+                                                                <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                     th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                     th:src="${chat.sender?.profileImage}"
+                                                                     alt=""/>
+                                                            </div>
+                                                            <div class="message-text"><p th:text="${chat.content}">내용</p></div>
                                                         </div>
-                                                        <div class="message-text"><p th:text="${chat.content}">내용</p></div>
+                                                        <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </th:block>
+                                                </th:block>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -144,8 +146,8 @@
                             <form class="sticky bottom-0 right-0 w-full" th:id="|sendChatForm${chatRoom.roomId}|" onsubmit="return false">
                                 <div class="message-reply bg-white">
                                     <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
-                                    <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" id="chatInput"/>
-                                    <button class="button ripple-effect ml-5 bg-blue-500"
+                                    <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" th:id="|chatInput${chatRoom.roomId}|"/>
+                                    <button class="button ripple-effect ml-5 bg-blue-500" th:id="|chatSendBtn${chatRoom.roomId}|"
                                             th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">
                                         <i class="fa fa-paper-plane fa-lg"></i>
                                         <!--<ion-icon name="return-down-back-outline" class="p-1.5 text-4xl"></ion-icon>-->
@@ -174,26 +176,54 @@
     }
     let chatSendFx = {
         chatSendAjax: function (roomId) {
-            var input = document.getElementById("chatInput");
-            console.log(`${roomId}`);
-            // 댓글 수정 ajax
-            console.log("댓글 수정");
+            // Delay 함수
+            const delay = (function (){
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
             $.ajax({
                 url:'/chat/send',
                 type:'get',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 data : $(`#sendChatForm${roomId}`).serialize(),
                 success : function (){
-                    $(`#chattingRoom${roomId}`).load(location.href+` #chattingRoom${roomId}`);
-                    $('.chat-room-lists').load(location.href+' .chat-room-lists');
-                    // $(`#chatInput${roomId}`).value = '';
-                    input.value ='';
+                    $(`#chatContents${roomId}`)
+                        .load(location.href+` #chatContents${roomId}`);
+                    $('.messages-inbox').load(location.href+' .messages-inbox');
+                    $(`#chatInput${roomId}`)
+                        .val('')
+                        .attr("readonly", true)
+                        .attr("placeholder", "5초 뒤에 쪽지를 입력할 수 있습니다.");
+                    $(`#chatSendBtn${roomId}`)
+                        .attr('hidden', 'true');
                 }
             });
+            $('.simplebar-content').stop().animate({
+                scrollTop: $('.simplebar-content')[0].scrollHeight + $('.content-wrapper').outerHeight(true) + 9999999
+            }, 100);
+            /*$(`#chatScroll${roomId}`).stop().animate({
+                scrollTop: $(`#chatScroll${roomId}`)[0].scrollHeight + $(`#chatScroll${roomId}`).outerHeight(true) + 5000
+            }, 100);*/
+            delay(function (){
+                $(`#chatInput${roomId}`)
+                    .removeAttr("readonly")
+                    .attr("placeholder","내용을 입력해주세요.");
+                $(`#chatSendBtn${roomId}`)
+                    .removeAttr("hidden")
+            }, 5000);
         }
     }
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        };
+    }, true);
     $(document).ready(function() {
         $('.simplebar-placeholder').css({"max-width": "max-content"});
+        $('.simplebar-mask').css({"margin-bottom": "6rem"});
     });
 
 </script>
