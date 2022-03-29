@@ -52,7 +52,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100000")) {
             accountRepository.save(new Account(null, "tester@nsu.ac.kr", "tester", "17-100000", "테스터", passwordEncoder.encode("test1234!"),
                     true, "asdf", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    null, null, null,null, null, null,null, null, true, true, false,
+                    null, null, null,null, null, null,null,null, null, true, true, false,
                     true, true, true, null, 0));
             /*boardRepository.save(new Board(null, "자유", "", "수강신청 다들 성공기원🙏", null,null,  null, false,0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusMinutes(20), null));
             boardRepository.save(new Board(null, "질문", "college", "수강신청은 어떻게 하나요?",null, null, null, false,0,"ㅈㄱㄴ", accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusSeconds(40), null));
@@ -62,7 +62,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100424")) {
             accountRepository.save(new Account(null, "dlwlgns1240@nsu.ac.kr", "ezhoon", "17-100424", "이지훈", passwordEncoder.encode("12401240"),
                     true, "asdf1", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, null,null, true, true,
+                    "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null, null, null,null,null, true, true,
                     true, true, true, true, null, 0));
             /*boardRepository.save(new Board(null, "자유", "", "오늘 학식은 뭔가요?", null, null, null, false, 0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("dlwlgns1240@naver.com"), 0, LocalDateTime.now().minusHours(1), null));*/
         }
@@ -78,7 +78,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100444")) {
             accountRepository.save(new Account(null, "kawnsdud@nsu.ac.kr", "jwhy", "17-100444", "준영", passwordEncoder.encode("test1234!"),
                     true, "asdf12", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    "hello", "https://github.com/Jwhyee", "대학생", "경기도, 수원", null, null, null, null, true, true,
+                    "hello", "https://github.com/Jwhyee", "대학생", "경기도, 수원", null, null, null,null, null, true, true,
                     true, true, true, true, null, 0));
             /*boardRepository.save(new Board(null, "자유", "", "밥 먹으러 갈사람 9함",null, null, null, false, 0,FORUM_TEST_CONTENT_VALUE3, accountRepository.findByEmail("tester0@naver.com"), 0, LocalDateTime.now().minusHours(1), null));*/
         }
@@ -86,7 +86,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("11-111111")) {
             accountRepository.save(new Account(null, "croce@nsu.ac.kr", "CROCE", "11-111111", "학생회", passwordEncoder.encode("mmult1234!"),
                     true, "asdf123", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    "안녕하세요 27대 학생회 CROCE 입니다.", "", "대학생", "충청북도, 성환", null, null, null, null, true, true,
+                    "안녕하세요 27대 학생회 CROCE 입니다.", "", "대학생", "충청북도, 성환", null, null, null,null, null, true, true,
                     true, true, true, true, null, 0));
             /*councilRepository.save(new Council(null, "행사", "💛친해지길 바라💛", "전체 학년", "http://naver.me/G3K7QAeA", "010-1234-1234", COUNCIL_CONTENT_VALUE, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));
             councilRepository.save(new Council(null, "행사", "🍦기말 간식행사🍦", "전체 학년", null, "010-1234-1234", COUNCIL_CONTENT_VALUE1, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2021, 12, 5), LocalDate.of(2021, 12, 5), LocalDate.of(2021, 11, 29), LocalDate.of(2021, 12, 02), LocalDateTime.now()));
