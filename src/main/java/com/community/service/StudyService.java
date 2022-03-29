@@ -14,7 +14,6 @@ import com.community.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,11 +144,6 @@ public class StudyService {
         modelMapper.map(studyDescriptionForm, study);
     }
 
-    public Study getStudyManager(String path) {
-
-        return studyRepository.findAccountWithManagersByPath(path);
-    }
-
     public Meetings createNewMeeting(Meetings meetings, Study study, Account account) {
         meetings.setWriter(account);
         meetings.setUploadTime(LocalDateTime.now());
@@ -157,35 +151,6 @@ public class StudyService {
 
         return meetingsRepository.save(meetings);
 
-    }
-
-    public String meetingDateTime(LocalDateTime localDateTime){
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        Date date = Date.from(instant);
-
-        long curTime = System.currentTimeMillis();
-        long regTime = date.getTime();
-        long diffTime = (curTime - regTime) / 1000;
-        String msg = null;
-        if (diffTime < BoardService.SEC) {
-            // sec
-            msg = diffTime + "초 전";
-        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
-            // min
-            msg = diffTime + "분 전";
-        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
-            // hour
-            msg = (diffTime) + "시간 전";
-        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
-            // day
-            msg = (diffTime) + "일 전";
-        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
-            // day
-            msg = (diffTime) + "달 전";
-        } else {
-            msg = (diffTime) + "년 전";
-        }
-        return msg;
     }
 
     public List<Reply> replyList(Meetings meetings) {
@@ -230,5 +195,10 @@ public class StudyService {
     public void blockMembers(Account account, Study study) {
         study.addBlockMembers(account);
         study.removeMember(account);
+    }
+
+    public boolean checkBlockMembers(Study study, Account account) {
+        boolean contains = study.getBlockMembers().contains(account);
+        return !contains;
     }
 }

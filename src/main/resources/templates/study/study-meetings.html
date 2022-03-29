@@ -256,7 +256,7 @@
                                             <div class="flex-1 font-semibold capitalize">
                                                 <a th:text="${meeting.writer.nickname}" href="#" class="text-black dark:text-gray-100"> Johnson smith </a>
             <!--                                        <div th:text="${meeting.meetingDivision}" class="text-sm"></div>-->
-                                                <div class="text-sm" th:text="${service.meetingDateTime(meeting.uploadTime)}"></div>
+                                                <div class="text-sm" th:text="${account.dateTime(meeting.uploadTime)}"></div>
             <!--                                        <span th:text="${#temporals.format(meeting.uploadTime,  'yyyy-MM-dd')}"></span>-->
                                             </div>
                                         </div>
@@ -343,7 +343,7 @@
                                                         </form>
 
                                                         <div class="text-xs flex items-center space-x-3 mt-2 ml-5">
-                                                            <span th:text="${service.meetingDateTime(reply.uploadTime)}"></span>
+                                                            <span th:text="${account.dateTime(reply.uploadTime)}"></span>
                                                             <th:block th:if="${reply.getAccount().id == account.id}">
                                                             <span class="text-blue-500"
                                                                   th:onclick="|updateBtn.replyUpdate(${reply.rid})|"
