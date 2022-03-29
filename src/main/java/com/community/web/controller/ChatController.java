@@ -68,7 +68,7 @@ public class ChatController {
 
     // 장터에서 쪽지 보내기
     @ResponseBody
-    @RequestMapping(value = "/market/chat/new")
+    @RequestMapping(value = "/chat/new")
     public String sendChat(@RequestParam(value = "c_attender") Long c_attender,
                            @RequestParam(value = "c_content") String c_content,
                            ChatForm chatForm, @CurrentUser Account account) throws IOException {

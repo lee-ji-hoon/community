@@ -671,7 +671,7 @@
             if (c_textarea.value != '') {
                 console.log("쪽지 보내기");
                 $.ajax({
-                    url: '/market/chat/new',
+                    url: '/chat/new',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#chat_form').serialize(),

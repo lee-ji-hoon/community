@@ -22,7 +22,9 @@
     <div class="main_content">
         <div class="mcontainer">
             <!-- Profile cover -->
-
+            <div id="isUpdatedForm">
+                <div id="isUpdated"></div>
+            </div>
             <div class="profile user-profile mt-4">
                 <div class="study_content" style="margin-top: -100px; padding-bottom: 15px;">
                     <div class="profile_avatar mt-16">
@@ -64,7 +66,7 @@
                             <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
                             <span style="margin-left: -2px"> 프로필 수정 </span>
                         </a>
-                        <a th:if="${isOwner}" href="#"
+                        <a th:if="${!isOwner}" href="#create-new-chat" uk-toggle
                            class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 text-white">
                             <span>쪽지 보내기</span>
                         </a>
@@ -257,6 +259,75 @@
         </div>
     </div>
 </div>
+<div id="create-new-chat" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                type="button" uk-close>
+            <i class="icon-feather-close"></i>
+        </button>
+
+        <div class="uk-modal-header">
+            <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>
+        </div>
+        <form class="needs-validation" id="chat_form" onsubmit="return false">
+            <div class="uk-modal-body" uk-overflow-auto>
+                <div class="space-y-4 g:w-8/12">
+                    <div class="form-group d-none">
+                        <div>
+                            <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
+                                   th:value="${byAccount.id}" readonly/>
+                        </div>
+                    </div>
+                    <!-- 본문 -->
+                    <div class="form-group">
+                        <div>
+                            <textarea class="form-control bg-gray-100 p-3"  id="c_content" name="c_content" style="resize: none"
+                                      type="text" aria-describedby="contentHelp" required></textarea>
+                        </div>
+                        <small id="contentHelp" class="form-text text-muted">쪽지</small>
+                        <small class="invalid-feedback">글을 입력해주세요.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-modal-footer uk-text-right">
+                <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">취소</button>
+                <button class="bg-blue-600 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 chat_send uk-modal-close">보내기</button>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var c_textarea = document.getElementById("c_content");
+        $(document).on('click', '.chat_send', function () {
+            if (c_textarea.value == '') {
+                swal("내용을 입력해주세요.");
+            }
+            if (c_textarea.value != '') {
+                console.log("쪽지 보내기");
+                $.ajax({
+                    url: '/chat/new',
+                    type: 'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data: $('#chat_form').serialize(),
+                    success: function (sendChat) {
+                        console.log("쪽지 성공");
+                        $('.form_refresh').load(window.location.href+' .form_refresh');
+                        c_textarea.value = '';
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(sendChat);
+                    },
+                    error: function (request, status, error) {
+                        console.log("쪽지 실패" + error);
+                    }
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
 
