@@ -35,7 +35,8 @@
                         <div class="messages-inbox-inner" data-simplebar>
                             <ul class="chat-room-lists">
                                 <li th:each="room : ${myRooms}">
-                                    <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|">
+                                    <a href="#" th:uk-toggle="|target: #roomNum${room.roomId};|"
+                                       th:onclick="|roomBtn.roomBtnFx(${room.roomId})|">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
                                             <th:block th:if="${account == room.roomAttender}">
@@ -73,7 +74,7 @@
                         </div>
                     </div>
                     <th:block th:each="chatRoom : ${myRooms}">
-                        <div class="message-content" th:id="|roomNum${chatRoom.roomId}|" aria-hidden="true" hidden>
+                        <div class="message-content chatting-room-div" th:id="|roomNum${chatRoom.roomId}|" hidden>
 
                             <div class="messages-headline">
                                 <th:block th:if="${account == chatRoom.roomAttender}">
@@ -144,7 +145,7 @@
                                 <div class="message-reply bg-white">
                                     <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
                                     <input class="px-4" placeholder="내용을 입력해주세요." name="c_content" id="chatInput"/>
-                                    <button class="button ripple-effect ml-5"
+                                    <button class="button ripple-effect ml-5 bg-blue-500"
                                             th:onclick="|chatSendFx.chatSendAjax(${chatRoom.roomId})|">
                                         <i class="fa fa-paper-plane fa-lg"></i>
                                         <!--<ion-icon name="return-down-back-outline" class="p-1.5 text-4xl"></ion-icon>-->
@@ -158,6 +159,19 @@
         </div>
     </div>
 <script type="application/javascript">
+    var exRoomNum;
+    let roomBtn = {
+        roomBtnFx: function (roomId) {
+            $(`#roomNum${exRoomNum}`)
+                .attr('hidden', 'true')
+                .css('display', 'none');
+            $(`#roomNum${roomId}`)
+                .attr('hidden', 'false')
+                .css('display', 'block');
+            exRoomNum = roomId;
+            return exRoomNum;
+        }
+    }
     let chatSendFx = {
         chatSendAjax: function (roomId) {
             var input = document.getElementById("chatInput");
