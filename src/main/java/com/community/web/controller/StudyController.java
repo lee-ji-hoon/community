@@ -407,13 +407,11 @@ public class StudyController {
 
     @ResponseBody
     @RequestMapping(value = STUDY_SETTINGS + "removeMember")
-    public String excludeStudyMembers(@PathVariable String path, RedirectAttributes redirectAttributes,
+    public String excludeStudyMembers(@PathVariable String path,
                                       @RequestParam(value = "studyMemberId") Long studyMemberId) {
         Optional<Account> byId = accountRepository.findById(studyMemberId);
         Account account = byId.get();
 
-        log.info("삭제 될 멤버 : {}", account.getId());
-        log.info("study path : {}", path);
         Study study = studyService.getStudyUpdate(account, path);
 
         studyService.blockMembers(account, study);
@@ -428,7 +426,27 @@ public class StudyController {
         return message;
     }
 
+    @ResponseBody
+    @RequestMapping(value = STUDY_SETTINGS + "unBlockMember")
+    public String unBlockMembers(@PathVariable String path,
+                                      @RequestParam(value = "blockMemberId") Long blockMemberId) {
+        Optional<Account> byId = accountRepository.findById(blockMemberId);
+        Account account = byId.get();
 
+        log.info("path : {}",path);
+        Study study = studyService.getStudyUpdate(account, path);
+
+        studyService.unBlockMembers(account, study);
+
+        String message = "<div class=\"bg-blue-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">확인</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">멤버 차단해제에 성공했습니다.</p>\n" +
+                "</div>";
+        return message;
+    }
 
     @GetMapping(STUDY_SETTINGS + "alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {

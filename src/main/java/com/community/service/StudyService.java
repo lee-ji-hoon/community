@@ -56,9 +56,7 @@ public class StudyService {
 
     public Study getStudyUpdate(Account account, String path) {
         Study byPath = this.getPath(path);
-        if (!account.isManager(byPath) && !account.isMemeber(byPath)) {
-            throw new IllegalArgumentException("해당하는 스터디가 없습니다.");
-        }
+
         return byPath;
     }
 
@@ -195,6 +193,10 @@ public class StudyService {
     public void blockMembers(Account account, Study study) {
         study.addBlockMembers(account);
         study.removeMember(account);
+    }
+
+    public void unBlockMembers(Account account, Study study) {
+        study.getBlockMembers().remove(account);
     }
 
     public boolean checkBlockMembers(Study study, Account account) {
