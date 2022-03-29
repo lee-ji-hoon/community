@@ -60,6 +60,9 @@ public class Study {
     @ManyToMany
     private Set<Account> members = new HashSet<>();
 
+    @ManyToMany
+    private Set<Account> blockMembers = new HashSet<>();
+
     @Column(unique = true)
     private String path;
 
@@ -105,6 +108,10 @@ public class Study {
         this.publishedDateTime = LocalDateTime.now();
         this.managers.add(account);
         this.memberCount++;
+    }
+
+    public void addBlockMembers(Account account) {
+        this.blockMembers.add(account);
     }
 
     public boolean checkAlarmDateTime() {

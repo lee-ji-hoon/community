@@ -3,6 +3,12 @@
 
 <head th:replace="theme-fragments.html :: head"></head>
 
+<style>
+    #removeMember:hover {
+        color: rgba(59, 130, 246, 0.5);
+    }
+
+</style>
 <body>
 <div id="wrapper">
 
@@ -27,10 +33,11 @@
                         <p> 스터디에 참여중인 멤버들을 관리 할 수 있습니다.</p>
                         <hr/>
 
-                        <ul role="list" class="p-6 divide-y divide-slate-200">
+                        <div class="study_members">
+                            <ul role="list" class="divide-y divide-slate-200">
                             <li th:each="studyMembers : ${study.members}"
-                                class="flex py-4 first:pt-0 last:pb-0 justify-content-between">
-                                <div>
+                                class="flex py-4 first:pt-0 last:pb-0">
+                                <div class="col-6">
                                     <svg th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
                                          th:data-jdenticon-value="${studyMembers.studentId}"
                                          class="h-10 w-10 rounded-full uk-position-absolute"></svg>
@@ -41,18 +48,27 @@
                                         <p th:text="${studyMembers.nickname}"
                                            class="text-sm font-medium text-slate-900" >{person.name}</p>
                                         <p th:text="${studyMembers.bio}"
-                                           class="text-sm text-slate-500 truncate">{person.bio}</p>
+                                           class="text-sm text-slate-500 drop_text truncate">{person.bio}</p>
                                     </div>
+                                    <form onsubmit="return false" th:id="|studyMemberIdForm${studyMembers.id}|">
+                                        <input type="hidden"
+                                               name="studyMemberId"
+                                               th:value="${studyMembers.id}"
+                                               th:id="|studyMemberIdInput${studyMembers.id}|"/>
+                                    </form>
                                 </div>
 
-                                <div class="space-x-1">
-                                    <a th:href="@{'/study/' + ${study.path} + '/settings/members/' + ${studyMembers.nickname}}"
-                                       class="button bg-red-600"> 퇴출 </a>
+                                <div class="col-6 space-x-1">
+                                    <span th:onclick="|removeMemberBtn.removeMember(${studyMembers.id})|"
+                                          th:id="|removeMemberSubmit${studyMembers.id}|"
+                                          id="removeMember"
+                                          class="button bg-red-600 text-white"> 퇴출 </span>
                                     <a th:href="@{'/profile/' + ${studyMembers.nickname}}"
                                     class="button bg-green-600"> 정보</a>
                                 </div>
                             </li>
                         </ul>
+                        </div>
 
                     </div>
                 </div>
@@ -66,32 +82,45 @@
 <script th:replace="theme-fragments.html :: studyBanner"></script>
 
 <script th:inline="javascript">
-    function removeMember() {
-        /*<![CDATA[*/
-        var path = [[${study.path}]];
-        /*]]>*/
+    let removeMemberBtn = {
+        removeMember: function (memberId) {
 
-        swal({
-            title: "알림 전송.",
-            text: "보낸 시점으로 24시간 후에 다시 보낼 수 있습니다.",
-            icon: "info",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                console.log("willdelete");
-                $.ajax({
-                    url: '/study/'+path+'/settings/sendAlarm',
-                    type: 'GET',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function (message) {
-                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                        $("#isUpdated").replaceWith(message);
-                    },
-                })
-            });
+            /*<![CDATA[*/
+            var path = [[${study.path}]];
+            /*]]>*/
 
-    }
+            swal({
+                title: "알림 전송.",
+                text: "한 번 퇴출한 인원은 다시 신청 할 수 없습니다.",
+                icon: "info",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    window.addEventListener('keydown', function (e) {
+                        if (e.keyCode == 13) {
+                            swal("엔터키는 사용할 수 없습니다.");
+                        }
+                    })
+                    if (willDelete) {
+                        $.ajax({
+                            url: '/study/' + path + '/settings/removeMember',
+                            type: 'GET',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $(`#studyMemberIdForm${memberId}`).serialize(),
+                            success : function (message) {
+                                console.log("삭제 성공");
+                                $('.study_members').load(location.href+' .study_members');
+                                $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                                $("#isUpdated").replaceWith(message);
+                            },
+                        });
+                    } else {
+                        swal("멤버 삭제에 실패했습니다. 다시 시도해주세요.")
+                    }
+                });
+            }
+        }
 
 </script>
 </body>

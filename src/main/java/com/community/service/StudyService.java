@@ -36,7 +36,6 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final MeetingsRepository meetingsRepository;
     private final ReplyRepository replyRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     private final ModelMapper modelMapper;
 
@@ -72,13 +71,6 @@ public class StudyService {
         Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
         checkExistStudy(path, accountWithManagersByPath);
         checkManager(account, accountWithManagersByPath);
-
-        return accountWithManagersByPath;
-    }
-
-    public Study getStudyToUpdateStatusByMember(String path) {
-        Study accountWithManagersByPath = studyRepository.findAccountWithManagersByPath(path);
-        checkExistStudy(path, accountWithManagersByPath);
 
         return accountWithManagersByPath;
     }
@@ -233,5 +225,10 @@ public class StudyService {
         }
         return studyUpdate.getRecentAlarmDateTime().isBefore(LocalDateTime.now().minusHours(24));
 
+    }
+
+    public void blockMembers(Account account, Study study) {
+        study.addBlockMembers(account);
+        study.removeMember(account);
     }
 }
