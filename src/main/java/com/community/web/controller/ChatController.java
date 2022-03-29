@@ -45,9 +45,7 @@ public class ChatController {
         List<Room> myRooms = new ArrayList<>();
         myRooms.addAll(findRoomHostList);
         myRooms.addAll(findRoomAttenderList);
-        for (Room myRoom : myRooms) {
-            log.info("myRoom={}", myRoom);
-        }
+        chatService.dateCheckFunction(myRooms);
 
         model.addAttribute("myRooms", myRooms);
         model.addAttribute(account);
