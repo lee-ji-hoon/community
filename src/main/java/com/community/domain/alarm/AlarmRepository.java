@@ -1,7 +1,6 @@
 package com.community.domain.alarm;
 
 import com.community.domain.account.Account;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
 
     @Transactional
-    List<Alarm> deleteByToAccountAndChecked(Account account, boolean checked);
+    void deleteByToAccountAndChecked(Account account, boolean checked);
 
     List<Alarm> findByToAccountAndChecked(Account account, boolean b);
 }

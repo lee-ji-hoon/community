@@ -45,7 +45,7 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(name = "account_email", unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column(unique = true)
@@ -81,9 +81,6 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Alarm> alarmList = new ArrayList<>();
-
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
@@ -109,9 +106,6 @@ public class Account {
     @ManyToMany
     @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
-
-    private int countAlarmSize;
-
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
@@ -174,13 +168,5 @@ public class Account {
             msg = (diffTime) + "년 전";
         }
         return msg;
-    }
-
-    public void addAlarmSize() {
-        countAlarmSize += 1;
-    }
-
-    public void deleteAlarmSize() {
-        countAlarmSize -= 1;
     }
 }
