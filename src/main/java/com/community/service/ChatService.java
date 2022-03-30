@@ -15,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -78,6 +81,39 @@ public class ChatService {
         currentRoom.setLastSendMsg(chat.getContent());
         currentRoom.setLastSendTime(LocalDateTime.now());
         roomRepository.save(currentRoom);
+    }
+
+    public void readCheckService(List<Chat> findChatLists, Account account) {
+        for (Chat chat : findChatLists) {
+            if (chat.getSender() != account) {
+                chat.setReadChk(true);
+                chatRepository.save(chat);
+            }
+        }
+    }
+
+    public Map<Long, String> dateCheckFunction(List<Room> myRooms) {
+        Map<Long, String> dateMap = new HashMap<>();
+        Map<String, Long> newMap = new HashMap<>();
+        for (Room myRoom : myRooms) {
+            log.info("roomId 조회 : " + myRoom.getRoomId());
+            List<Chat> chatList = myRoom.getChatList();
+            for (Chat findChatList : chatList) {
+                LocalDateTime chatDate = findChatList.getSendTime();
+                String convertChatDate = chatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                newMap.put(convertChatDate, myRoom.getRoomId());
+            }
+            for (String s : newMap.keySet()) {
+                dateMap.put(myRoom.getRoomId(), s);
+            }
+        }
+        for (Long key : dateMap.keySet()) {
+            log.info("key 조회 : " + key);
+        }
+        for (String value : dateMap.values()) {
+            log.info("value 조회 : " + value);
+        }
+        return dateMap;
     }
 
 }
