@@ -92,6 +92,13 @@ public class ChatService {
         }
     }
 
+    public int unReadCount(Room myRoom) {
+        int cnt;
+        List<Chat> findReadChkFalse = chatRepository.findByRoomAndReadChk(myRoom, false);
+        cnt = findReadChkFalse.size();
+        return cnt;
+    }
+
     public Map<Long, String> dateCheckFunction(List<Room> myRooms) {
         Map<Long, String> dateMap = new HashMap<>();
         Map<String, Long> newMap = new HashMap<>();

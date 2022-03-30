@@ -75,6 +75,7 @@ public class BaseController {
             }
         }
         model.addAttribute("g_chatNotify", chatNotifyLists);
+        model.addAttribute("g_chatService", chatService);
         model.addAttribute("g_myRoom", findMyRooms);
     }
 }
