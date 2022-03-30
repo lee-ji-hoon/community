@@ -3,6 +3,7 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
+import com.community.domain.alarm.Alarm;
 import com.community.domain.alarm.AlarmRepository;
 import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
@@ -33,10 +34,8 @@ public class BaseController {
 
     private final RoomRepository roomRepository;
     private final ChatRepository chatRepository;
-    private final AccountRepository accountRepository;
     private final AlarmRepository alarmRepository;
     private final ChatService chatService;
-    private final AlarmService alarmService;
 
     /*@ExceptionHandler({EventException.class, RuntimeException.class})
     public String eventErrorHandler(EventException exception, Model model) {
@@ -77,5 +76,13 @@ public class BaseController {
         model.addAttribute("g_chatNotify", chatNotifyLists);
         model.addAttribute("g_chatService", chatService);
         model.addAttribute("g_myRoom", findMyRooms);
+
+        // 알림
+        List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+        long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
+        log.info("alarm 수 : {}", countByAccountAndNotChecked);
+
+        model.addAttribute("g_accountAlarmNotChecked", alarmList);
+        model.addAttribute("g_countByAccountAndNotChecked", countByAccountAndNotChecked);
     }
 }

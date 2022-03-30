@@ -75,7 +75,6 @@ public class MeetingEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING);
-        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

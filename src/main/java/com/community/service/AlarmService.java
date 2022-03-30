@@ -18,15 +18,13 @@ import java.util.Objects;
 @Transactional
 public class AlarmService {
     private final AlarmRepository alarmRepository;
-    private final AccountRepository accountRepository;
 
     public void checked(Alarm alarm, Account account) {
         readAlarm(alarm, account);
     }
 
     public void deleteByChecked(Account account) {
-        List<Alarm> alarmList = alarmRepository.deleteByToAccountAndChecked(account, true);
-        account.getAlarmList().removeAll(alarmList);
+        alarmRepository.deleteByToAccountAndChecked(account, true);
     }
 
     public void checkedAll(Account account) {
@@ -38,13 +36,5 @@ public class AlarmService {
 
     private void readAlarm(Alarm alarm, Account account) {
         alarm.setChecked(true);
-        for (Alarm accountAlarm : account.getAlarmList()) {
-            if(Objects.equals(accountAlarm.getAlarmId(), alarm.getAlarmId())) {
-                accountAlarm.setChecked(true);
-            }
-        }
-        account.deleteAlarmSize();
-
-        alarmRepository.save(alarm);
     }
 }
