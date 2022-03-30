@@ -2,6 +2,7 @@ package com.community.domain.account;
 
 import com.community.domain.alarm.Alarm;
 import com.community.domain.chat.Chat;
+import com.community.domain.chat.Room;
 import com.community.service.BoardService;
 import com.community.domain.likes.Likes;
 import com.community.domain.market.Market;
@@ -82,9 +83,6 @@ public class Account {
 
     @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Chat> chatList = new ArrayList<>();
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();

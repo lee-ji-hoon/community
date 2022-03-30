@@ -22,11 +22,11 @@ public class Room {
     private Long roomId;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomHost")
+    @JoinColumn(name = "room_host")
     private Account roomHost;
 
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomAttender")
+    @JoinColumn(name = "room_attender")
     private Account roomAttender;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
