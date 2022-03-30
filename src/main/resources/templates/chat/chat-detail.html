@@ -9,7 +9,7 @@
 <div id="Wrapper" class="is-small">
 
         <!-- Header -->
-        <header th:replace="theme-fragments.html :: header"></header>
+        <header th:replace="theme-fragments.html :: header" id="header_frag"></header>
 
         <!-- sidebar -->
         <div th:replace="theme-fragments.html :: side_bar"></div>
@@ -220,6 +220,7 @@
                 success : function (){
                     $(`#chatContents${roomId}`)
                         .load(location.href+` #chatContents${roomId}`);
+                    $('#header_frag').load(location.href+' #header_frag');
                     $('.messages-inbox').load(location.href+' .messages-inbox');
                     $(`#chatInput${roomId}`)
                         .val('');
