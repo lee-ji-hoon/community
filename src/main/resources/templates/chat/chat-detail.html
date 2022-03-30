@@ -9,7 +9,7 @@
 <div id="Wrapper" class="is-small">
 
         <!-- Header -->
-        <header th:replace="theme-fragments.html :: header" id="header_frag"></header>
+        <header th:replace="theme-fragments.html :: header"></header>
 
         <!-- sidebar -->
         <div th:replace="theme-fragments.html :: side_bar"></div>
@@ -191,7 +191,6 @@
                 .attr('hidden', 'false')
                 .css('display', 'block');
             delay(function () {
-                console.log($(`#chatContents${roomId}`)[0].scrollHeight);
                 $('.simplebar-content').stop().animate({
                     scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
                 }, 0);
@@ -203,7 +202,10 @@
                 data : $(`#readChkForm${roomId}`).serialize(),
                 success : function (){
                     $('.messages-inbox').load(location.href+' .messages-inbox');
-                    console.log(roomId + "확인");
+                    $('#header_frag').load(location.href+' #header_frag');
+                    delay(function () {
+                        $('#loadingSpin').hide();
+                    }, 700);
                 }
             });
             exRoomNum = roomId;
@@ -220,7 +222,6 @@
                 success : function (){
                     $(`#chatContents${roomId}`)
                         .load(location.href+` #chatContents${roomId}`);
-                    $('#header_frag').load(location.href+' #header_frag');
                     $('.messages-inbox').load(location.href+' .messages-inbox');
                     $(`#chatInput${roomId}`)
                         .val('');

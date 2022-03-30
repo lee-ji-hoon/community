@@ -274,7 +274,7 @@
 
 
 <!-- Header -->
-<header th:fragment="header">
+<header th:fragment="header" id="header_frag">
     <div id="loadingSpin">
         <div style="border-top-color:transparent" class="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin"></div>
     </div>
@@ -456,10 +456,10 @@
                                                     </div>
                                                     <div class="drop_text">
                                                         <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
-                                                            <strong th:text="${myRoom.getRoomHost().getNickname()}"> 닉네임 </strong>
+                                                            <strong th:text="${myRoom.getRoomHost().getNickname()}"> 닉네임 </strong><span class="font-bold" style="color: #4761FF" th:text="| (${g_chatService.unReadCount(myRoom)})|"> (2)</span>
                                                         </th:block>
                                                         <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
-                                                            <strong th:text="${myRoom.getRoomAttender().getNickname()}"> 닉네임 </strong>
+                                                            <strong th:text="${myRoom.getRoomAttender().getNickname()}"> 닉네임 </strong><span class="font-bold" style="color: #4761FF" th:text="| (${g_chatService.unReadCount(myRoom)})|"> (2)</span>
                                                         </th:block>
                                                         <time th:text="${account.dateTime(myRoom.getLastSendTime())}">시간</time><br>
                                                         <p th:text="${myRoom.getLastSendMsg()}">마지막 대화</p>
