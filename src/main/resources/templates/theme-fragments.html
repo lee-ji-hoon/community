@@ -540,7 +540,7 @@
                     </a>
                     <div uk-drop="mode: click;offset:4" class="header_dropdown profile_dropdown">
 
-                        <a href="#" th:href="@{'/profile/' + ${#authentication.name}}" class="user">
+                        <a href="#" th:href="@{'/profile/' + ${account.nickname}}" class="user">
                             <div class="user_avatar">
                                 <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
                                      th:data-jdenticon-value="${account.studentId}"></svg>
