@@ -21,8 +21,6 @@
 
             <div class="messages-container">
                 <div class="messages-container-inner">
-
-
                     <div class="messages-inbox">
                         <div class="messages-headline">
                             <div class="input-with-icon" hidden>
@@ -227,7 +225,7 @@
                         .val('');
                     $('.simplebar-content').stop().animate({
                         scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
-                    }, 2500);
+                    }, {duration:1500, easing:"linear"});
                 }
             });
 
