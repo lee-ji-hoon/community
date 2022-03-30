@@ -413,7 +413,7 @@
                                         <div class="flex justify-center">
                                             <a th:href="@{/alarm/view}"
                                                class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
-                                                더보기
+                                                전체 보기
                                             </a>
                                         </div>
                                     </div>
@@ -522,7 +522,12 @@
                                 </div>
                             </ul>
                         </div>
-                        <a class="see-all" th:href="@{/chat/lists}"> 전체 보기</a>
+                        <div class="flex justify-center">
+                            <a th:href="@{/chat/lists}"
+                               class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
+                                전체 보기
+                            </a>
+                        </div>
                     </div>
 
 
