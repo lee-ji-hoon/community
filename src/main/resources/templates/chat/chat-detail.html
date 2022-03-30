@@ -21,8 +21,6 @@
 
             <div class="messages-container">
                 <div class="messages-container-inner">
-
-
                     <div class="messages-inbox">
                         <div class="messages-headline">
                             <div class="input-with-icon" hidden>
@@ -193,7 +191,6 @@
                 .attr('hidden', 'false')
                 .css('display', 'block');
             delay(function () {
-                console.log($(`#chatContents${roomId}`)[0].scrollHeight);
                 $('.simplebar-content').stop().animate({
                     scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
                 }, 0);
@@ -205,7 +202,10 @@
                 data : $(`#readChkForm${roomId}`).serialize(),
                 success : function (){
                     $('.messages-inbox').load(location.href+' .messages-inbox');
-                    console.log(roomId + "확인");
+                    $('#header_frag').load(location.href+' #header_frag');
+                    delay(function () {
+                        $('#loadingSpin').hide();
+                    }, 700);
                 }
             });
             exRoomNum = roomId;
@@ -227,7 +227,7 @@
                         .val('');
                     $('.simplebar-content').stop().animate({
                         scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
-                    }, 2500);
+                    }, {duration:1500, easing:"linear"});
                 }
             });
 

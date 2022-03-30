@@ -236,7 +236,21 @@
                 },
                 error : swal("읽을 알람이 존재하지 않습니다.")
             })
-
+        }
+        function chatChecked() {
+            $.ajax({
+                url: '/chat/allReadChk',
+                type: 'GET',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (message) {
+                    $('.refresh_chat').load(location.href+' .refresh_chat');
+                    $('.refresh_chat_count').load(location.href+' .refresh_chat_count');
+                    swal("모든 쪽지를 읽었습니다.", {
+                        icon: "success",
+                    });
+                },
+                error : swal("읽을 쪽지가 존재하지 않습니다.")
+            })
         }
 
     </script>
@@ -274,7 +288,7 @@
 
 
 <!-- Header -->
-<header th:fragment="header">
+<header th:fragment="header" id="header_frag">
     <div id="loadingSpin">
         <div style="border-top-color:transparent" class="w-16 h-16 border-4 border-blue-400 border-solid rounded-full animate-spin"></div>
     </div>
@@ -352,7 +366,7 @@
                         </div>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown ">
-                        <div  class="dropdown_scrollbar" data-simplebar>
+                        <div  class="dropdown_scrollbar">
                             <div class="drop_headline">
                                 <h4>알림 </h4>
                                 <div class="btn_action">
@@ -414,55 +428,101 @@
                     <!-- Message -->
                     <a href="#" class="is_icon" uk-tooltip="title: 쪽지">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path></svg>
-                        <span class="pt-1">4</span>
+                        <div class="refresh_chat_count">
+                            <span class="pt-1" th:text="${g_chatNotify.size()}"></span>
+                        </div>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown is_message">
-                        <div  class="dropdown_scrollbar" data-simplebar>
+                        <div  class="dropdown_scrollbar">
                             <div class="drop_headline">
                                 <h4> 쪽지 </h4>
                                 <div class="btn_action">
                                     <a href="#" data-tippy-placement="left" title="알림 설정">
                                         <ion-icon name="settings-outline" uk-tooltip="pos: left"></ion-icon>
                                     </a>
-                                    <a href="#" data-tippy-placement="left" title="모두 읽음">
+                                    <a onclick="chatChecked()" data-tippy-placement="left" title="모두 읽음">
                                         <ion-icon name="checkbox-outline"></ion-icon>
                                     </a>
                                 </div>
                             </div>
                             <!--<input type="text" class="uk-input" placeholder="쪽지를 검색해보세요.">-->
                             <ul>
-                                <li class="un-read">
-                                    <a th:href="@{/chat/lists}">
-                                        <div class="drop_avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="drop_text">
-                                            <strong> ezhoon </strong> <time>5분 전</time><br>
-                                            <p>  쪽지 내용 길이 체크 ...  </p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/chat/lists}">
-                                        <div class="drop_avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}"
-                                                 alt=""></svg>
-                                            <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                 th:src="${account?.profileImage}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="drop_text">
-                                            <strong> ezhoon </strong> <time>5분 전</time><br>
-                                            <p>  쪽지 내용 길이 체크 ...  </p>
-                                        </div>
-                                    </a>
-                                </li>
+                                <div class="refresh_chat">
+                                    <th:block th:each="myRoom : ${g_myRoom}">
+                                        <th:block th:if="${!myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
+                                            <th:block th:if="${!myRoom.getChatList().get(myRoom.getChatList().size()-1).getSender().getNickname().equals(account.getNickname())}">
+                                                <li class="un-read">
+                                                    <a th:href="@{/chat/lists}">
+                                                        <div class="drop_avatar">
+                                                            <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
+                                                                <svg th:if="${#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
+                                                                     th:data-jdenticon-value="${myRoom.getRoomAttender().studentId}"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
+                                                                     th:src="${myRoom.getRoomAttender()?.profileImage}"
+                                                                     alt=""/>
+                                                            </th:block>
+                                                            <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
+                                                                <svg th:if="${#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
+                                                                     th:data-jdenticon-value="${myRoom.getRoomHost().studentId}"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
+                                                                     th:src="${myRoom.getRoomHost()?.profileImage}"
+                                                                     alt=""/>
+                                                            </th:block>
+                                                        </div>
+                                                        <div class="drop_text">
+                                                            <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
+                                                                <strong th:text="${myRoom.getRoomHost().getNickname()}"> 닉네임 </strong><span class="font-bold" style="color: #4761FF" th:text="| (${g_chatService.unReadCount(myRoom)})|"> (2)</span>
+                                                            </th:block>
+                                                            <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
+                                                                <strong th:text="${myRoom.getRoomAttender().getNickname()}"> 닉네임 </strong><span class="font-bold" style="color: #4761FF" th:text="| (${g_chatService.unReadCount(myRoom)})|"> (2)</span>
+                                                            </th:block>
+                                                            <time th:text="${account.dateTime(myRoom.getLastSendTime())}">시간</time><br>
+                                                            <p th:text="${myRoom.getLastSendMsg()}">마지막 대화</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
+                                            <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getSender().getNickname().equals(account.getNickname())}">
+                                                <li class="un-read">
+                                                    <a th:href="@{/chat/lists}">
+                                                        <div class="drop_avatar">
+                                                            <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
+                                                                <svg th:if="${#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
+                                                                     th:data-jdenticon-value="${myRoom.getRoomAttender().studentId}"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
+                                                                     th:src="${myRoom.getRoomAttender()?.profileImage}"
+                                                                     alt=""/>
+                                                            </th:block>
+                                                            <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
+                                                                <svg th:if="${#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
+                                                                     th:data-jdenticon-value="${myRoom.getRoomHost().studentId}"
+                                                                     alt=""></svg>
+                                                                <img th:if="${!#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
+                                                                     th:src="${myRoom.getRoomHost()?.profileImage}"
+                                                                     alt=""/>
+                                                            </th:block>
+                                                        </div>
+                                                        <div class="drop_text">
+                                                            <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
+                                                                <strong th:text="${myRoom.getRoomHost().getNickname()}"> 닉네임 </strong>
+                                                            </th:block>
+                                                            <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
+                                                                <strong th:text="${myRoom.getRoomAttender().getNickname()}"> 닉네임 </strong>
+                                                            </th:block>
+                                                            <time th:text="${account.dateTime(myRoom.getLastSendTime())}">시간</time><br>
+                                                            <p th:text="${myRoom.getLastSendMsg()}">마지막 대화</p>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </th:block>
+                                        </th:block>
+                                    </th:block>
+                                </div>
                             </ul>
                         </div>
                         <a class="see-all" th:href="@{/chat/lists}"> 전체 보기</a>

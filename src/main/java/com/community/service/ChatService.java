@@ -85,11 +85,18 @@ public class ChatService {
 
     public void readCheckService(List<Chat> findChatLists, Account account) {
         for (Chat chat : findChatLists) {
-            if (chat.getSender() != account) {
+            if (!account.getNickname().equals(chat.getSender().getNickname())) {
                 chat.setReadChk(true);
                 chatRepository.save(chat);
             }
         }
+    }
+
+    public int unReadCount(Room myRoom) {
+        int cnt;
+        List<Chat> findReadChkFalse = chatRepository.findByRoomAndReadChk(myRoom, false);
+        cnt = findReadChkFalse.size();
+        return cnt;
     }
 
     public Map<Long, String> dateCheckFunction(List<Room> myRooms) {
