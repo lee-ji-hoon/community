@@ -75,7 +75,6 @@ public class StudyEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(formAccount);
         alarm.setAlarmType(AlarmType.STUDY);
-        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

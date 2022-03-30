@@ -73,7 +73,6 @@ public class ReplyEventListener {
         alarm.setToAccount(writer);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.BOARD_REPLY);
-        writer.addAlarmSize();
         alarmRepository.save(alarm);
     }
 
@@ -88,7 +87,6 @@ public class ReplyEventListener {
         alarm.setToAccount(toAccount);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MEETING_REPLY);
-        toAccount.addAlarmSize();
         alarmRepository.save(alarm);
     }
 

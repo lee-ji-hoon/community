@@ -4,7 +4,6 @@ import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.PersistentLoginsRepository;
 import com.community.domain.board.BoardRepository;
-import com.community.web.dto.AlarmForm;
 import com.community.web.dto.ProfileForm;
 import com.community.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -44,15 +43,6 @@ public class ProfileService {
     // 비밀번호 업데이트
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(account);
-    }
-
-    // 알림설정 업데이트
-    public void updateNotifications(Account account, AlarmForm notifications) {
-        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
-        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setReplyByPost(notifications.isStudyUpdatedByWeb());
-        account.setReplyByMeetings(notifications.isStudyUpdatedByEmail());
         accountRepository.save(account);
     }
 

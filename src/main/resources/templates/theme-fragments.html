@@ -362,7 +362,7 @@
                     <a href="#" class="is_icon" uk-tooltip="title: 알림">
                         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
                         <div class="refresh_alarm_count">
-                        <span th:text="${account.countAlarmSize}" class="pt-1">3</span>
+                        <span th:text="${g_countByAccountAndNotChecked}" class="pt-1">3</span>
                         </div>
                     </a>
                     <div uk-drop="mode: click" class="header_dropdown ">
@@ -381,42 +381,39 @@
                             <div>
                                 <ul>
                                     <div class="refresh_alarm">
-                                        <li th:each="alarm : ${account.alarmList}">
-                                            <th:block th:if="${!alarm.isChecked()}">
-    <!--                                            && alarmStat.count < 5-->
-                                                <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
-                                                    <div class="drop_avatar">
-                                                        <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
-                                                             th:data-jdenticon-value="${alarm.fromAccount.studentId}"
-                                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
-                                                        <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
-                                                             th:src="${alarm.fromAccount.profileImage}"
-                                                             style="width: 35px; border-radius: 100%"
-                                                             alt="" class=" shadow w-12 h-12 is_avatar"/>
-                                                    </div>
-                                                    <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
-                                                     <i class="icon-feather-thumbs-up"></i>
-                                                </span>
-                                                    <div class="drop_text">
-                                                        <p>
-                                                            <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
-                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
-                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
-                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
-                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
-                                                            <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
-                                                            <br>
-                                                            <span th:text="${alarm.title}" class="text-link">게시물 제목 </span>
-                                                        </p>
-                                                        <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
-                                                    </div>
-                                                </a>
-                                            </th:block>
+                                        <li th:each="alarm : ${g_accountAlarmNotChecked}">
+                                            <a th:href="@{'/alarm/detail/' + ${alarm.alarmId}}">
+                                                <div class="drop_avatar">
+                                                    <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                         th:data-jdenticon-value="${alarm.fromAccount.studentId}"
+                                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                                    <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
+                                                         th:src="${alarm.fromAccount.profileImage}"
+                                                         style="width: 35px; border-radius: 100%"
+                                                         alt="" class=" shadow w-12 h-12 is_avatar"/>
+                                                </div>
+                                                <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
+                                                 <i class="icon-feather-thumbs-up"></i>
+                                            </span>
+                                                <div class="drop_text">
+                                                    <p>
+                                                        <strong th:text="${alarm.fromAccount.nickname}"> ezhoon </strong>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">님이 회원님의 글을 좋아합니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">님의 게시글에 댓글이 달렸습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">님이 모임글에 댓글이 달렸습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">님의 스터디에 모임이 생성됐습니다.</span>
+                                                        <span th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">님의 관심사에 해당하는 스터디가 생성됐습니다.</span>
+                                                        <br>
+                                                        <span th:text="${alarm.message}" class="text-link">게시물 제목 </span>
+                                                    </p>
+                                                    <time th:text="${account.dateTime(alarm.createAlarmTime)}"> 2시간 전 </time>
+                                                </div>
+                                            </a>
                                         </li>
                                         <div class="flex justify-center">
                                             <a th:href="@{/alarm/view}"
                                                class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
-                                                더보기
+                                                전체 보기
                                             </a>
                                         </div>
                                     </div>
@@ -525,7 +522,12 @@
                                 </div>
                             </ul>
                         </div>
-                        <a class="see-all" th:href="@{/chat/lists}"> 전체 보기</a>
+                        <div class="flex justify-center">
+                            <a th:href="@{/chat/lists}"
+                               class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">
+                                전체 보기
+                            </a>
+                        </div>
                     </div>
 
 
@@ -538,7 +540,7 @@
                     </a>
                     <div uk-drop="mode: click;offset:4" class="header_dropdown profile_dropdown">
 
-                        <a href="#" th:href="@{'/profile/' + ${#authentication.name}}" class="user">
+                        <a href="#" th:href="@{'/profile/' + ${account.nickname}}" class="user">
                             <div class="user_avatar">
                                 <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
                                      th:data-jdenticon-value="${account.studentId}"></svg>
@@ -1368,11 +1370,13 @@
     <p class="text-white text-opacity-75" th:text="${message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 </div>
 
-<div class="relative" uk-slider="finite: true" th:fragment="study-list-type (studyType)">
+<div th:fragment="study-list-type (studyType)"
+     class="relative" uk-slider="finite: true">
     <div class="uk-slider-container px-1 py-3">
         <div>
             <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid-small uk-grid">
-                <li th:each="study: ${studyType}" >
+                <li th:each="study: ${studyType}"
+                    th:if="${study.limitStudyDate > now}">
                     <div class="card">
                         <div class="card-media h-28">
                             <div class="card-media-overly"></div>
