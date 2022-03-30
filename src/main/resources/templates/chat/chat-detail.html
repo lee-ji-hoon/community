@@ -144,8 +144,10 @@
                                                                          th:src="${chat.sender?.profileImage}"
                                                                          alt=""/>
                                                                 </div>
-                                                                <div class="message-text"><p th:text="${chat.content}">내용</p></div>
-                                                                <small class="float-left" th:text="${#temporals.format(chat.sendTime, 'HH:mm')}"></small>
+                                                                <div class="message-text">
+                                                                    <p th:text="${chat.content}">내용</p>
+                                                                    <small class="float-left" th:text="${#temporals.format(chat.sendTime, 'HH:mm')}"></small>
+                                                                </div>
                                                             </div>
                                                             <div class="clearfix"></div>
                                                         </div>
