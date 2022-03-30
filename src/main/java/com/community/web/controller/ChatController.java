@@ -64,6 +64,25 @@ public class ChatController {
         return "";
     }
 
+    // 전체 읽음 확인
+    @ResponseBody
+    @RequestMapping(value = "/chat/allReadChk")
+    public void allReadCheck(@CurrentUser Account account) {
+        List<Room> myRoom = new ArrayList<>();
+        List<Room> roomAttender = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
+        List<Room> roomHost = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
+        myRoom.addAll(roomHost);
+        myRoom.addAll(roomAttender);
+
+        for (Room room : myRoom) {
+            List<Chat> unReadChat = chatRepository.findByRoomAndReadChk(room, false);
+            for (Chat chat : unReadChat) {
+                chat.setReadChk(true);
+                chatRepository.save(chat);
+            }
+        }
+    }
+
     // 채팅방에서 쪽지 보내기
     @ResponseBody
     @RequestMapping(value = "/chat/send")
