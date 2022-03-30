@@ -58,7 +58,7 @@ public class ChatController {
     public String readCheck(@RequestParam(value = "roomId") Long roomId,
                             @CurrentUser Account account) {
         Room currentRoom = roomRepository.findByRoomId(roomId);
-        List<Chat> findChatLists = chatRepository.findByRoom(currentRoom);
+        List<Chat> findChatLists = chatRepository.findByRoomAndReadChk(currentRoom, false);
         chatService.readCheckService(findChatLists, account);
 
         return "";
