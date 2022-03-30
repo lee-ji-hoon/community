@@ -46,6 +46,11 @@
                                                 <img th:if="${!#strings.isEmpty(room.roomHost?.profileImage)}"
                                                      th:src="${room.roomHost?.profileImage}"
                                                      alt=""/>
+                                                <th:block th:if="${!room.chatList.get(room.chatList.size()-1).readChk}">
+                                                    <th:block th:if="${room.chatList.get(room.chatList.size()-1).sender != account}">
+                                                        <span class="user_status status_online"></span>
+                                                    </th:block>
+                                                </th:block>
                                             </th:block>
                                             <th:block th:if="${account == room.roomHost}">
                                                 <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
@@ -54,6 +59,11 @@
                                                 <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
                                                      th:src="${room.roomAttender?.profileImage}"
                                                      alt=""/>
+                                                <th:block th:if="${!room.chatList.get(room.chatList.size()-1).readChk}">
+                                                    <th:block th:if="${room.chatList.get(room.chatList.size()-1).sender != account}">
+                                                        <span class="user_status status_online"></span>
+                                                    </th:block>
+                                                </th:block>
                                             </th:block>
                                         </div>
                                         <div class="message-by">
@@ -83,9 +93,13 @@
                                 <th:block th:if="${account == chatRoom.roomHost}">
                                     <h4 th:text="${chatRoom.roomAttender.nickname}">상대방 닉네임</h4>
                                 </th:block>
-                                <a href="#" class="message-action text-blue-500 flex-none" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
-                                    <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
-                                </a>
+                                <form th:id="|readChkForm${chatRoom.roomId}|" onsubmit="return false">
+                                    <input class="hidden" th:value="${chatRoom.roomId}" name="roomId"/>
+                                    <a href="#" class="message-action text-blue-500 flex-none" th:id="|readChkBtn${chatRoom.roomId}|" th:uk-toggle="|target: #roomNum${chatRoom.roomId};|">
+                                        <ion-icon name="arrow-back-outline" class="w-6 h-6"></ion-icon>
+                                    </a>
+                                </form>
+
                             </div>
 
                             <div class="message-content-scrolbar" th:id="|chatScroll${chatRoom.roomId}|" data-simplebar>
@@ -161,6 +175,14 @@
         </div>
     </div>
 <script type="application/javascript">
+    // Delay 함수
+    const delay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     var exRoomNum;
     let roomBtn = {
         roomBtnFx: function (roomId) {
@@ -170,20 +192,28 @@
             $(`#roomNum${roomId}`)
                 .attr('hidden', 'false')
                 .css('display', 'block');
+            delay(function () {
+                console.log($(`#chatContents${roomId}`)[0].scrollHeight);
+                $('.simplebar-content').stop().animate({
+                    scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
+                }, 0);
+            }, 1);
+            $.ajax({
+                url:'/chat/readChk',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#readChkForm${roomId}`).serialize(),
+                success : function (){
+                    $('.messages-inbox').load(location.href+' .messages-inbox');
+                    console.log(roomId + "확인");
+                }
+            });
             exRoomNum = roomId;
             return exRoomNum;
         }
     }
     let chatSendFx = {
         chatSendAjax: function (roomId) {
-            // Delay 함수
-            const delay = (function (){
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
             $.ajax({
                 url:'/chat/send',
                 type:'get',
@@ -194,26 +224,14 @@
                         .load(location.href+` #chatContents${roomId}`);
                     $('.messages-inbox').load(location.href+' .messages-inbox');
                     $(`#chatInput${roomId}`)
-                        .val('')
-                        .attr("readonly", true)
-                        .attr("placeholder", "5초 뒤에 쪽지를 입력할 수 있습니다.");
-                    $(`#chatSendBtn${roomId}`)
-                        .attr('hidden', 'true');
+                        .val('');
+                    $('.simplebar-content').stop().animate({
+                        scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
+                    }, 2500);
                 }
             });
-            $('.simplebar-content').stop().animate({
-                scrollTop: $('.simplebar-content')[0].scrollHeight + $('.content-wrapper').outerHeight(true) + 9999999
-            }, 100);
-            /*$(`#chatScroll${roomId}`).stop().animate({
-                scrollTop: $(`#chatScroll${roomId}`)[0].scrollHeight + $(`#chatScroll${roomId}`).outerHeight(true) + 5000
-            }, 100);*/
-            delay(function (){
-                $(`#chatInput${roomId}`)
-                    .removeAttr("readonly")
-                    .attr("placeholder","내용을 입력해주세요.");
-                $(`#chatSendBtn${roomId}`)
-                    .removeAttr("hidden")
-            }, 5000);
+
+
         }
     }
     document.addEventListener('keydown', function(event) {
