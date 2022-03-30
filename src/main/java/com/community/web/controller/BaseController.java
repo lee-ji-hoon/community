@@ -78,6 +78,7 @@ public class BaseController {
         model.addAttribute("g_myRoom", findMyRooms);
 
         // 알림
+        log.info("baseController.java의 alarm 실해 ");
         List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
         long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
         log.info("alarm 수 : {}", countByAccountAndNotChecked);

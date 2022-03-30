@@ -4,8 +4,11 @@ import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.alarm.Alarm;
 import com.community.domain.alarm.AlarmRepository;
+import com.community.web.controller.BaseController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     public void checked(Alarm alarm, Account account) {
+        log.info("checked 실행");
         readAlarm(alarm, account);
     }
 
