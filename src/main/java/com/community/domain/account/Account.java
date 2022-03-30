@@ -45,7 +45,7 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(name = "account_email", unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column(unique = true)
