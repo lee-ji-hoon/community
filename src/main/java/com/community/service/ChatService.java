@@ -99,28 +99,20 @@ public class ChatService {
         return cnt;
     }
 
-    public Map<Long, String> dateCheckFunction(List<Room> myRooms) {
+    public Map<String, Chat> dateCheckFunction(Room myRoom) {
+        // Map<Chat, LocalDateTime>
         Map<Long, String> dateMap = new HashMap<>();
-        Map<String, Long> newMap = new HashMap<>();
-        for (Room myRoom : myRooms) {
-            log.info("roomId 조회 : " + myRoom.getRoomId());
-            List<Chat> chatList = myRoom.getChatList();
-            for (Chat findChatList : chatList) {
-                LocalDateTime chatDate = findChatList.getSendTime();
-                String convertChatDate = chatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                newMap.put(convertChatDate, myRoom.getRoomId());
-            }
-            for (String s : newMap.keySet()) {
-                dateMap.put(myRoom.getRoomId(), s);
-            }
+        Map<Chat, LocalDateTime> groupBySendTime = new HashMap<>();
+        // map의 chat id랑 List의 chat id랑 같으면 날짜 출력
+        Map<String, Chat> groupBySendDateTime = new HashMap<>();
+        List<Chat> chatList = myRoom.getChatList();
+        for (Chat chat : chatList) {
+            LocalDateTime chatDate = chat.getSendTime();
+            String convertChatDate = chatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            groupBySendDateTime.put(convertChatDate, chat);
+            break;
         }
-        for (Long key : dateMap.keySet()) {
-            log.info("key 조회 : " + key);
-        }
-        for (String value : dateMap.values()) {
-            log.info("value 조회 : " + value);
-        }
-        return dateMap;
+        return groupBySendDateTime;
     }
 
 }

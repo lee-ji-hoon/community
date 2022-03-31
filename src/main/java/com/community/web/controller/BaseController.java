@@ -76,7 +76,10 @@ public class BaseController {
         model.addAttribute("g_chatNotify", chatNotifyLists);
         model.addAttribute("g_chatService", chatService);
         model.addAttribute("g_myRoom", findMyRooms);
+    }
 
+    @ModelAttribute()
+    public void globalAlarmNotify(Model model, @CurrentUser Account account) {
         // 알림
         log.info("baseController.java의 alarm 실해 ");
         List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
