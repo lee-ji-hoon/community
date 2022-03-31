@@ -663,12 +663,15 @@
                 }
             });
         });
-        var c_textarea = document.getElementById("c_content");
+        var c_textarea = $('#c_content');
         $(document).on('click', '.chat_send', function () {
-            if (c_textarea.value == '') {
-                swal("내용을 입력해주세요.");
+            if (c_textarea.val().length < 5) {
+                swal("5글자 이상의 내용을 입력해주세요.", {
+                    icon: "warning",
+                });
+                c_textarea.val('');
             }
-            if (c_textarea.value != '') {
+            if (c_textarea.val().length >= 5) {
                 console.log("쪽지 보내기");
                 $.ajax({
                     url: '/chat/new',

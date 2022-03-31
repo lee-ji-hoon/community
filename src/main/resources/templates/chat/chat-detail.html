@@ -220,24 +220,31 @@
     }
     let chatSendFx = {
         chatSendAjax: function (roomId) {
-            $.ajax({
-                url:'/chat/send',
-                type:'get',
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                data : $(`#sendChatForm${roomId}`).serialize(),
-                success : function (){
-                    $(`#chatContents${roomId}`)
-                        .load(location.href+` #chatContents${roomId}`);
-                    $('.messages-inbox').load(location.href+' .messages-inbox');
-                    $(`#chatInput${roomId}`)
-                        .val('');
-                    $('.simplebar-content').stop().animate({
-                        scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
-                    }, {duration:1500, easing:"linear"});
-                }
-            });
-
-
+            var chatInput = $(`#chatInput${roomId}`);
+            if(chatInput.val().length < 5){
+                swal("5글자 이상의 내용을 입력해주세요.", {
+                    icon: "warning",
+                });
+                chatInput.val('');
+            }
+            if(chatInput.val().length >= 5){
+                $.ajax({
+                    url:'/chat/send',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $(`#sendChatForm${roomId}`).serialize(),
+                    success : function (){
+                        $(`#chatContents${roomId}`)
+                            .load(location.href+` #chatContents${roomId}`);
+                        $('.messages-inbox').load(location.href+' .messages-inbox');
+                        $(`#chatInput${roomId}`)
+                            .val('');
+                        $('.simplebar-content').stop().animate({
+                            scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
+                        }, {duration:1500, easing:"linear"});
+                    }
+                });
+            }
         }
     }
     document.addEventListener('keydown', function(event) {
