@@ -13,6 +13,7 @@ import com.community.service.ChatService;
 import com.community.web.dto.ChatForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,13 +67,18 @@ public class ChatController {
     // 전체 읽음 확인
     @ResponseBody
     @RequestMapping(value = "/chat/allReadChk")
-    public void allReadCheck(@CurrentUser Account account) {
+    public ResponseEntity allReadCheck(@CurrentUser Account account) {
         List<Room> myRoom = new ArrayList<>();
         List<Room> roomAttender = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
         List<Room> roomHost = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
         myRoom.addAll(roomHost);
         myRoom.addAll(roomAttender);
-
+        for (Room room : myRoom) {
+            Chat roomChat = chatRepository.findTop1ByRoomAndReadChkOrderBySendTimeDesc(room, false);
+            if (roomChat.getSender().getNickname().equals(account.getNickname())) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
         for (Room room : myRoom) {
             List<Chat> unReadChat = chatRepository.findByRoomAndReadChk(room, false);
             for (Chat chat : unReadChat) {
@@ -80,6 +86,7 @@ public class ChatController {
                 chatRepository.save(chat);
             }
         }
+        return ResponseEntity.ok().build();
     }
 
     // 채팅방에서 쪽지 보내기

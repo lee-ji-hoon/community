@@ -7,8 +7,8 @@
     <style>
         #loadingSpin {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 500%;
+            left: 45%;
             z-index: 100;
             width: 3rem;
             height: 3rem;
@@ -192,6 +192,7 @@
     <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 
     <script>
+
         window.jdenticon_config = {
             replaceMode: "observe"
         };
@@ -434,9 +435,6 @@
                             <div class="drop_headline">
                                 <h4> 쪽지 </h4>
                                 <div class="btn_action">
-                                    <a href="#" data-tippy-placement="left" title="알림 설정">
-                                        <ion-icon name="settings-outline" uk-tooltip="pos: left"></ion-icon>
-                                    </a>
                                     <a onclick="chatChecked()" data-tippy-placement="left" title="모두 읽음">
                                         <ion-icon name="checkbox-outline"></ion-icon>
                                     </a>
@@ -482,7 +480,7 @@
                                                 </li>
                                             </th:block>
                                         </th:block>
-                                        <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
+                                        <!--<th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
                                             <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getSender().getNickname().equals(account.getNickname())}">
                                                 <li class="un-read">
                                                     <a th:href="@{/chat/lists}">
@@ -517,7 +515,7 @@
                                                     </a>
                                                 </li>
                                             </th:block>
-                                        </th:block>
+                                        </th:block>-->
                                     </th:block>
                                 </div>
                             </ul>
