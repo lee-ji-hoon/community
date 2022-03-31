@@ -16,16 +16,16 @@ public class InfoPageController {
     @GetMapping("/info/about")
     public String aboutPage(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        return "";
+        return "info/info-about";
     }
     @GetMapping("/info/contact")
     public String contactPage(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        return "";
+        return "info/info-contact";
     }
     @GetMapping("/info/privacy")
     public String privacyPage(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        return "";
+        return "info/info-privacy";
     }
 }
