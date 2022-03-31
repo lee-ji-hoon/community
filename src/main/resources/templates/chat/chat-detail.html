@@ -137,12 +137,14 @@
                                                         <div class="message-bubble">
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
-                                                                    <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                         th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
-                                                                         alt=""></svg>
-                                                                    <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                         th:src="${chat.sender?.profileImage}"
-                                                                         alt=""/>
+                                                                    <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                        <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                             th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
+                                                                             alt=""></svg>
+                                                                        <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                             th:src="${chat.sender?.profileImage}"
+                                                                             alt=""/>
+                                                                    </a>
                                                                 </div>
                                                                 <div class="message-text">
                                                                     <p th:text="${chat.content}">내용</p>
