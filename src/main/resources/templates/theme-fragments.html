@@ -235,7 +235,11 @@
                         icon: "success",
                     });
                 },
-                error : swal("읽을 알람이 존재하지 않습니다.")
+                error: function () {
+                    swal("읽을 알람이 존재하지 않습니다.", {
+                        icon: "error",
+                    });
+                }
             })
         }
         function chatChecked() {
@@ -250,7 +254,11 @@
                         icon: "success",
                     });
                 },
-                error : swal("읽을 쪽지가 존재하지 않습니다.")
+                error: function () {
+                    swal("읽을 쪽지가 존재하지 않습니다.", {
+                        icon: "error",
+                    });
+                }
             })
         }
 
