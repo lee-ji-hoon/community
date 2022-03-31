@@ -9,4 +9,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     List<Chat> findByRoomAndReadChk(Room room, Boolean isRead);
 
+    Chat findTop1ByRoomAndReadChkOrderBySendTimeDesc(Room room, Boolean isRead);
+
 }

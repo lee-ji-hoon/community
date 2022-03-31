@@ -7,8 +7,8 @@
     <style>
         #loadingSpin {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 500%;
+            left: 45%;
             z-index: 100;
             width: 3rem;
             height: 3rem;
@@ -192,6 +192,7 @@
     <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 
     <script>
+
         window.jdenticon_config = {
             replaceMode: "observe"
         };
@@ -234,7 +235,11 @@
                         icon: "success",
                     });
                 },
-                error : swal("읽을 알람이 존재하지 않습니다.")
+                error: function () {
+                    swal("읽을 알람이 존재하지 않습니다.", {
+                        icon: "error",
+                    });
+                }
             })
         }
         function chatChecked() {
@@ -249,7 +254,11 @@
                         icon: "success",
                     });
                 },
-                error : swal("읽을 쪽지가 존재하지 않습니다.")
+                error: function () {
+                    swal("읽을 쪽지가 존재하지 않습니다.", {
+                        icon: "error",
+                    });
+                }
             })
         }
 
@@ -434,9 +443,6 @@
                             <div class="drop_headline">
                                 <h4> 쪽지 </h4>
                                 <div class="btn_action">
-                                    <a href="#" data-tippy-placement="left" title="알림 설정">
-                                        <ion-icon name="settings-outline" uk-tooltip="pos: left"></ion-icon>
-                                    </a>
                                     <a onclick="chatChecked()" data-tippy-placement="left" title="모두 읽음">
                                         <ion-icon name="checkbox-outline"></ion-icon>
                                     </a>
@@ -482,7 +488,7 @@
                                                 </li>
                                             </th:block>
                                         </th:block>
-                                        <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
+                                        <!--<th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getReadChk()}">
                                             <th:block th:if="${myRoom.getChatList().get(myRoom.getChatList().size()-1).getSender().getNickname().equals(account.getNickname())}">
                                                 <li class="un-read">
                                                     <a th:href="@{/chat/lists}">
@@ -517,7 +523,7 @@
                                                     </a>
                                                 </li>
                                             </th:block>
-                                        </th:block>
+                                        </th:block>-->
                                     </th:block>
                                 </div>
                             </ul>
@@ -672,21 +678,21 @@
             </span>
         </a>
 
-        <!--<ul class="side_links" data-sub-title="Pages">
-            <li><a href="feed.html"> <ion-icon name="settings-outline" class="side-icon"></ion-icon>  <span> Setting   </span> </a>
+        <ul class="side_links" data-sub-title="Pages">
+            <!--<li><a href="feed.html"> <ion-icon name="settings-outline" class="side-icon"></ion-icon>  <span> Setting   </span> </a>
                 <ul>
                     <li><a href="pages-setting.html">layout 1</a></li>
                     <li><a href="pages-setting2.html">layout 2</a></li>
                 </ul>
-            </li>
+            </li>-->
             <li><a href="#"> <ion-icon name="albums-outline" class="side-icon"></ion-icon> <span> Info Pages  </span> </a>
                 <ul>
-                    <li><a href="pages-about.html"> About </a></li>
-                    <li><a href="pages-contact.html"> Contact us </a></li>
-                    <li><a href="pages-privacy.html"> Privacy </a></li>
+                    <li><a th:href="@{/info/about}"> About </a></li>
+                    <li><a th:href="@{/info/contact}"> Contact us </a></li>
+                    <li><a th:href="@{/info/privacy}"> Privacy </a></li>
                 </ul>
             </li>
-            <li><a href="#"> <ion-icon name="document-outline" class="side-icon"></ion-icon> <span> Create Content </span>  </a>
+            <!--<li><a href="#"> <ion-icon name="document-outline" class="side-icon"></ion-icon> <span> Create Content </span>  </a>
                 <ul>
                     <li><a href="create-group.html"> Create Group </a></li>
                     <li><a href="create-page.html"> Create Page </a></li>
@@ -704,8 +710,8 @@
                     <li><a href="form-login.html">form login </a></li>
                     <li><a href="form-register.html">form register</a></li>
                 </ul>
-            </li>
-        </ul>-->
+            </li>-->
+        </ul>
 
         <!--  <div class="footer-links">
               <a href="#">About</a>

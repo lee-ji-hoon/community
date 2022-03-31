@@ -27,8 +27,8 @@
                                     <input id="autocomplete-input" type="text" placeholder="Search">
                                 <i class="icon-material-outline-search"></i>
                             </div>
-                            <h2 class="text-2xl font-semibold">Chats</h2>
-                            <span class="absolute icon-feather-edit mr-4 text-xl uk-position-center-right cursor-pointer"></span>
+                            <h2 class="text-2xl font-semibold">쪽지</h2>
+                            <!--<span class="absolute icon-feather-edit mr-4 text-xl uk-position-center-right cursor-pointer"></span>-->
                         </div>
                         <div class="messages-inbox-inner" data-simplebar>
                             <ul class="chat-room-lists">
@@ -117,13 +117,14 @@
                                                         <div class="message-bubble me">
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
-                                                                    <!--<img src="assets/images/avatars/avatar-2.jpg" alt="">-->
-                                                                    <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                                         th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                                         alt=""></svg>
-                                                                    <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                                         th:src="${account?.profileImage}"
-                                                                         alt=""/>
+                                                                    <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                        <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                                             th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
+                                                                             alt=""></svg>
+                                                                        <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                                             th:src="${account?.profileImage}"
+                                                                             alt=""/>
+                                                                    </a>
                                                                 </div>
                                                                 <div class="message-text">
                                                                     <p th:text="${chat.content}">내용</p>
@@ -137,12 +138,14 @@
                                                         <div class="message-bubble">
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
-                                                                    <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                         th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
-                                                                         alt=""></svg>
-                                                                    <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                         th:src="${chat.sender?.profileImage}"
-                                                                         alt=""/>
+                                                                    <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                        <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                             th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
+                                                                             alt=""></svg>
+                                                                        <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                             th:src="${chat.sender?.profileImage}"
+                                                                             alt=""/>
+                                                                    </a>
                                                                 </div>
                                                                 <div class="message-text">
                                                                     <p th:text="${chat.content}">내용</p>
@@ -220,24 +223,31 @@
     }
     let chatSendFx = {
         chatSendAjax: function (roomId) {
-            $.ajax({
-                url:'/chat/send',
-                type:'get',
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                data : $(`#sendChatForm${roomId}`).serialize(),
-                success : function (){
-                    $(`#chatContents${roomId}`)
-                        .load(location.href+` #chatContents${roomId}`);
-                    $('.messages-inbox').load(location.href+' .messages-inbox');
-                    $(`#chatInput${roomId}`)
-                        .val('');
-                    $('.simplebar-content').stop().animate({
-                        scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
-                    }, {duration:1500, easing:"linear"});
-                }
-            });
-
-
+            var chatInput = $(`#chatInput${roomId}`);
+            if(chatInput.val().length < 5){
+                swal("5글자 이상의 내용을 입력해주세요.", {
+                    icon: "warning",
+                });
+                chatInput.val('');
+            }
+            if(chatInput.val().length >= 5){
+                $.ajax({
+                    url:'/chat/send',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $(`#sendChatForm${roomId}`).serialize(),
+                    success : function (){
+                        $(`#chatContents${roomId}`)
+                            .load(location.href+` #chatContents${roomId}`);
+                        $('.messages-inbox').load(location.href+' .messages-inbox');
+                        $(`#chatInput${roomId}`)
+                            .val('');
+                        $('.simplebar-content').stop().animate({
+                            scrollTop: $(`#chatContents${roomId}`)[0].scrollHeight
+                        }, {duration:1500, easing:"linear"});
+                    }
+                });
+            }
         }
     }
     document.addEventListener('keydown', function(event) {
