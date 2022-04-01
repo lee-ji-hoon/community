@@ -2,26 +2,11 @@ package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.alarm.Alarm;
 import com.community.domain.alarm.AlarmRepository;
 import com.community.domain.alarm.AlarmType;
-import com.community.domain.board.Board;
-import com.community.domain.board.Reply;
 import com.community.service.*;
-import com.community.web.dto.BoardForm;
-import com.community.web.dto.ReplyForm;
-import com.community.domain.board.BoardRepository;
-import com.community.domain.board.ReplyRepository;
-import com.community.domain.likes.LikeRepository;
-import com.community.domain.likes.Likes;
-import com.community.web.dto.BoardReportForm;
-import com.community.domain.report.BoardReportRepository;
-import com.community.domain.report.ReplyReportRepository;
-import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
-import com.community.web.dto.MeetingsForm;
-import com.community.domain.study.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,19 +27,8 @@ import java.util.Optional;
 public class AlarmController {
 
     private final AlarmRepository alarmRepository;
-    private final MeetingsRepository meetingsRepository;
-    private final BoardRepository boardRepository;
-    private final LikeRepository likeRepository;
-    private final ReplyRepository replyRepository;
-    private final AccountRepository accountRepository;
-    private final BoardReportRepository boardReportRepository;
-    private final ReplyReportRepository replyReportRepository;
-
-    private final ReplyService replyService;
-    private final LikeService likeService;
     private final StudyService studyService;
     private final AlarmService alarmService;
-    private final BoardService boardService;
 
     @GetMapping("/alarm/view")
     public String alarmView(@CurrentUser Account account, Model model) {
@@ -111,58 +86,15 @@ public class AlarmController {
         switch (type){
             case STUDY: log.info("study 페이지 이동 : {}", path);
                 Study studyByPath = studyService.getPath(path);
-                model.addAttribute(studyByPath);
-                return "study/study-view";
+                return "redirect:/study/" + URLEncoder.encode(studyByPath.getPath(), StandardCharsets.UTF_8);
 
             case MEETING: case MEETING_REPLY : log.info("meeting 페이지 이동 : {}", path);
                 Study meetingByPath = studyService.getPath(path);
-                List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(meetingByPath);
-
-                model.addAttribute("service", studyService);
-                model.addAttribute("meetingsList", meetingsList);
-                model.addAttribute(meetingByPath);
-                model.addAttribute(new MeetingsForm());
-                return "study/study-meetings";
+                return "redirect:/study/" + URLEncoder.encode(meetingByPath.getPath(), StandardCharsets.UTF_8) + "/meetings";
 
             case BOARD_REPLY: case LIKES: log.info("board 페이지 이동 : {}", path);
-                model.addAttribute("account", account);
                 Long boardNumber = Long.valueOf(path);
-                Boolean hasBoardError = boardService.boardReportedOrNull(boardNumber);
-                if (hasBoardError) {
-                    return "error-page";
-                }
-                boardService.viewUpdate(boardNumber, request, response);
-                Board detail = boardRepository.findByBid(boardNumber);
-                log.info("board detail : {}", path);
-
-                // 최근에 올라온 게시물
-                List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
-
-                // 좋아요 및 댓글
-                Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
-                List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
-
-                // 게시물 작성자 account 불러오는 로직
-                Board currentBoard = boardRepository.findByBid(boardNumber);
-                Account boardOwner = currentBoard.getWriter();
-
-                model.addAttribute("board", detail);
-                model.addAttribute("boardOwner", boardOwner);
-                model.addAttribute("service", boardService);
-                model.addAttribute("accountRepo", accountRepository);
-                model.addAttribute("likes", likes);
-                model.addAttribute("likeService", likeService);
-                model.addAttribute("reply", replies);
-                model.addAttribute("replyService", replyService);
-                model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
-                model.addAttribute("replyRepo", replyReportRepository);
-                model.addAttribute("recentlyBoards", recentlyBoards);
-
-                model.addAttribute(new ReplyForm());
-                model.addAttribute(new BoardReportForm());
-                model.addAttribute(new BoardForm());
-
-                return "board/board-detail";
+                return "redirect:/board/detail/"+boardNumber;
         }
         return "error-page";
     }
@@ -174,7 +106,6 @@ public class AlarmController {
         List<Alarm> newMeetingsReplyAlarms = new ArrayList<>();
         List<Alarm> newBoardReplyAlarms = new ArrayList<>();
         List<Alarm> newLikesAlarms = new ArrayList<>();
-
 
         for (var alarm : alarmList) {
             switch (alarm.getAlarmType()) {

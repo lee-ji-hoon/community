@@ -7,14 +7,14 @@
 
     <div class="container" style="margin-top: 150px">
         <div class="py-5 text-center" th:if="${error}">
-            <p class="text-5xl">멀티커뮤니티 이메일 로그인 실패</p>
+            <p class="text-5xl">unect 이메일 로그인 실패</p>
             <div  class="alert alert-danger" role="alert" th:text="${error}">
                 로그인 할 수 없습니다.
             </div>
         </div>
 
         <div class="py-5 text-center" th:if="${error == null}">
-            <p class="text-5xl">멀티커뮤니티 이메일 로그인 성공</p><br>
+            <p class="text-5xl">unect 이메일 로그인 성공</p><br>
             <h2>이메일로 로그인 했습니다. <a th:href="@{/settings/password}"><b style="color: red">패스워드를 변경</b></a>하세요.</h2>
         </div>
     </div>

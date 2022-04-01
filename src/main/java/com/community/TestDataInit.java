@@ -59,13 +59,13 @@ public class TestDataInit {
             boardRepository.save(new Board(null, "정보", "java", "스프링 MVC 모델과 스프링 부트에 대한 설명","스프링은 어렵습니다.", null, null, false,4,FORUM_TEST_CONTENT_VALUE1, accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusSeconds(40), null));*/
         }
 
-        if (!accountRepository.existsByStudentId("17-100424")) {
+        /*if (!accountRepository.existsByStudentId("17-100424")) {
             accountRepository.save(new Account(null, "dlwlgns1240@nsu.ac.kr", "ezhoon", "17-100424", "이지훈", passwordEncoder.encode("12401240"),
                     true, "asdf1", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
                     "잘 부탁드립니다", "https://github.com/lee-ji-hoon", "대학생", "서울, 용산", null,null,null, true, true,
                     true, true, true, true, null));
-            /*boardRepository.save(new Board(null, "자유", "", "오늘 학식은 뭔가요?", null, null, null, false, 0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("dlwlgns1240@naver.com"), 0, LocalDateTime.now().minusHours(1), null));*/
-        }
+            *//*boardRepository.save(new Board(null, "자유", "", "오늘 학식은 뭔가요?", null, null, null, false, 0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("dlwlgns1240@naver.com"), 0, LocalDateTime.now().minusHours(1), null));*//*
+        }*/
 
         /*if (!accountRepository.existsByStudentId("17-100425")) {
             accountRepository.save(new Account(null, "tester3@nsu.ac.kr", "tester3", "17-100425", "테스터", passwordEncoder.encode("12401240"),

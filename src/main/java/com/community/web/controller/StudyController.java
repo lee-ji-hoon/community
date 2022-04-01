@@ -134,17 +134,28 @@ public class StudyController {
 
     // 스터디 추가 뷰
     @GetMapping(STUDY_FORM_URL)
-    public String newStudyForm(@CurrentUser Account account, Model model) {
+    public String newStudyForm(@CurrentUser Account account, Model model, RedirectAttributes redirectAttributes) {
+        boolean emailVerified = account.isEmailVerified();
+
+        log.info("email 체크 : {}", emailVerified);
+        if (!emailVerified) {
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+
+            return "redirect:/study";
+        }
+
         model.addAttribute(account);
         model.addAttribute(new StudyForm());
         return STUDY_FORM_VIEW;
+
 
     }
 
     // 스터디 추가
     @PostMapping(STUDY_FORM_URL)
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model,
-                                 HttpServletRequest httpServletRequest) {
+    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
@@ -308,7 +319,18 @@ public class StudyController {
 
     // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
-    public String joinStudy(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes) {
+    public String joinStudy(@CurrentUser Account account, @PathVariable String path, Model model,
+                            RedirectAttributes redirectAttributes) {
+        boolean emailVerified = account.isEmailVerified();
+
+        log.info("email 체크 : {}", emailVerified);
+        if (!emailVerified) {
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+
+            return "redirect:/study/" + fixPath(path);
+        }
+
         Study study = studyRepository.findStudyWithMembersByPath(path);
 
         boolean checkBlockMembers = studyService.checkBlockMembers(study, account);
