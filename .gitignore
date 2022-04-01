@@ -38,9 +38,12 @@ out/
 .DS_Store
 
 # Project exclude paths
-/src/main/resources/static/node_modules/
+src\main\resources\static\node_modules
+src\main\resources\static\node
+#/src/main/resources/static/node_modules/
+#/node_modules/**
+
 theme_template/
-/node_modules/**
 
 .gradle
 /build/
@@ -70,6 +73,8 @@ nbdist/
 .nb-gradle/
 
 src/main/resources/application-dev.properties
+
+
 
 #build/generated/sources/annotationProcessor/java/main/com/community/
 #src/main/generated/com/community/
