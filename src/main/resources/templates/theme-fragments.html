@@ -195,26 +195,19 @@
     <script src="/assets/js/for-nightmode.js"></script>
     <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 
-    <script>
+    <script th:inline="javascript">
+
+        /*<![CDATA[*/
+        var jdenticon_value = [[${account.studentId}]];
+        /*]]>*/
 
         window.jdenticon_config = {
             replaceMode: "observe"
         };
         $(document).ready(function () {
             $('#loadingSpin').hide();
-            function addObserverIfDesiredNodeAvailable() {
-                var composeBox = document.querySelectorAll(".no")[2];
-                if (!composeBox) {
-                    // 0.5초 마다 true 값 나올 때까지 반복
-                    window.setTimeout(addObserverIfDesiredNodeAvailable, 500);
-                    return;
-                }
-                var config = {childList: true};
-                composeObserver.observe(composeBox, config);
-            }
-
-            addObserverIfDesiredNodeAvailable();
-
+            jdenticon.update(".is_avatar", jdenticon_value);
+            jdenticon.update(".jdenticon_fix", jdenticon_value);
             $(document).on('click', '#search_btn', function() {
                 if ($("select[name=searchType]").val() == "") {
                     swal("검색 구분을 입력해주세요.", "검색창 좌측에 있는 화살표를 눌러서 검색 구분을 선택해주세요.");
@@ -399,6 +392,7 @@
                                                 <div class="drop_avatar">
                                                     <svg th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:data-jdenticon-value="${alarm.fromAccount.studentId}"
+                                                         id="identicon"
                                                          alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                                     <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:src="${alarm.fromAccount.profileImage}"
@@ -464,6 +458,7 @@
                                                             <th:block th:if="${myRoom.getRoomHost().getNickname().equals(account.getNickname())}">
                                                                 <svg th:if="${#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
                                                                      th:data-jdenticon-value="${myRoom.getRoomAttender().studentId}"
+                                                                     class="jdenticon_fix"
                                                                      alt=""></svg>
                                                                 <img th:if="${!#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
                                                                      th:src="${myRoom.getRoomAttender()?.profileImage}"
@@ -472,6 +467,7 @@
                                                             <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
                                                                 <svg th:if="${#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
                                                                      th:data-jdenticon-value="${myRoom.getRoomHost().studentId}"
+                                                                     class="jdenticon_fix"
                                                                      alt=""></svg>
                                                                 <img th:if="${!#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
                                                                      th:src="${myRoom.getRoomHost()?.profileImage}"
@@ -543,7 +539,8 @@
 
                     <a href="#" sec:authorize="isAuthenticated()">
 
-                        <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${account.studentId}"
+                        <svg th:if="${#strings.isEmpty(account?.profileImage)}"
+                             th:data-jdenticon-value="${account.studentId}"
                              width="24" height="24" class="is_avatar"></svg>
                         <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
                              width="24" height="24" class="is_avatar"/>
@@ -552,7 +549,7 @@
 
                         <a href="#" th:href="@{'/profile/' + ${account.nickname}}" class="user">
                             <div class="user_avatar">
-                                <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar" style="object-fit: cover"
+                                <svg th:if="${#strings.isEmpty(account?.profileImage)}" class="user_avatar jdenticon_fix" style="object-fit: cover"
                                      th:data-jdenticon-value="${account.studentId}"></svg>
                                 <img th:if="${!#strings.isEmpty(account?.profileImage)}" class="user_avatar"
                                      th:src="${account.profileImage}"/>
