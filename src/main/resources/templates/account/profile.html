@@ -22,6 +22,7 @@
     <div class="main_content">
         <div class="mcontainer">
             <!-- Profile cover -->
+            <div th:replace="theme-fragments.html :: checked-email"></div>
             <div id="isUpdatedForm">
                 <div id="isUpdated"></div>
             </div>
@@ -61,7 +62,8 @@
 
                     <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
                         <!-- 쪽지 -->
-                        <a th:href="@{/settings/profile-settings}" id="update-profile"
+                        <a th:if="${isOwner}"
+                           th:href="@{/settings/profile-settings}" id="update-profile"
                            class="flex items-center justify-center h-8 px-3 rounded-md bg-green-600 text-white">
                             <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
                             <span style="margin-left: -2px"> 프로필 수정 </span>
@@ -90,15 +92,15 @@
 
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold" >학번</h6>
-                                                <span  th:if="${!#strings.isEmpty(account.studentId)}">
-                                                    <span th:text="${account.studentId}"></span>
+                                                <span  th:if="${!#strings.isEmpty(byAccount.studentId)}">
+                                                    <span th:text="${byAccount.studentId}"></span>
                                                 </span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold">학년</h6>
 
-                                                <p th:if="${!#strings.isEmpty(account.grade)}">
-                                                    <span th:text="${account.grade}"></span>
+                                                <p th:if="${!#strings.isEmpty(byAccount.grade)}">
+                                                    <span th:text="${byAccount.grade}"></span>
                                                 </p>
                                                 <p th:if="${#strings.isEmpty(account.grade)}">
                                                     <span>학년을 공개하지 않은 회원입니다.</span>
@@ -108,10 +110,10 @@
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold" >전공</h6>
 
-                                                <p class="mt-1" th:if="${!#strings.isEmpty(account.major)}">
-                                                    <span th:text="${account.major}"></span>
+                                                <p class="mt-1" th:if="${!#strings.isEmpty(byAccount.major)}">
+                                                    <span th:text="${byAccount.major}"></span>
                                                 </p>
-                                                <p class="mt-1" th:if="${#strings.isEmpty(account.major)}">
+                                                <p class="mt-1" th:if="${#strings.isEmpty(byAccount.major)}">
                                                     <span>전공을 정하지 않은 회원입니다.</span>
                                                 </p>
                                             </div>
@@ -119,24 +121,25 @@
 
                                             <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                                                 <h6 class="font-semibold">가입일</h6>
-                                                <p th:if="${isOwner || account.emailVerified}">
-                                                    <span th:if="${isOwner && !account.emailVerified}">
+                                                <p th:if="${isOwner || byAccount.emailVerified}">
+                                                    <span th:if="${isOwner && !byAccount.emailVerified}">
                                                         인증이 된 회원이 아닙니다.
                                                     </span>
-                                                    <span th:if="${!isOwner && !account.emailVerified}">
-                                                        <a href="#" th:href="@{'/checkemail?email=' + ${account.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
+                                                    <span th:if="${!isOwner && !byAccount.emailVerified}">
+                                                        <a href="#" th:href="@{'/checkemail?email=' + ${byAccount.email}}">이메일 인증을 해야 모든 기능을 사용 할 수 있습니다..</a>
                                                     </span>
-                                                    <span th:text="${#temporals.format(account.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
+                                                    <span th:text="${#temporals.format(byAccount.joinedAt, 'yyyy년 M월 d일 가입')}"></span>
                                                 </p>
                                             </div>
 
                                             <div class="col-lg-12 col-md-12 mb-4 mb-md-0 mt-2">
                                                 <h6 class="font-semibold">한 줄 소개</h6>
-                                                <p class="lead" th:if="${!#strings.isEmpty(account.bio)}" th:text="${account.bio}">bio</p>
-                                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && isOwner}">
+                                                <p class="lead" th:if="${!#strings.isEmpty(byAccount.bio)}"
+                                                   th:text="${byAccount.bio}">bio</p>
+                                                <p class="lead" th:if="${#strings.isEmpty(byAccount.bio) && isOwner}">
                                                     한 줄 소개를 추가하세요.
                                                 </p>
-                                                <p class="lead" th:if="${#strings.isEmpty(account.bio) && !isOwner}">
+                                                <p class="lead" th:if="${#strings.isEmpty(byAccount.bio) && !isOwner}">
                                                     본인 소개를 아직 적지 않은 회원입니다.
                                                 </p>
                                             </div>
@@ -171,7 +174,7 @@
                         </div>
 
                         <div class="widget card p-1">
-                            <h4 th:text="${account.nickname} + '님의 스터디'"
+                            <h4 th:text="${byAccount.nickname} + '님의 스터디'"
                                 class="text-lg font-semibold p-4"></h4>
 
                             <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${myStudyList})"></ul>

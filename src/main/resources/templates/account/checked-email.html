@@ -7,19 +7,19 @@
 
 <div class="container" style="margin-top: 150px">
     <div class="py-5 text-center" th:if="${error}">
-        <p class="text-5xl">멀티커뮤니티 이메일 확인</p>
+        <p class="text-5xl">unect 이메일 확인</p>
         <div class="alert alert-danger" role="alert">
             이메일 확인 링크가 정확하지 않습니다.
         </div>
     </div>
 
     <div class="py-5 text-center" th:if="${error == null}">
-        <p class="text-5xl">멀티커뮤니티 이메일 확인</p>
+        <p class="text-5xl">unect 이메일 확인</p>
         <h2><br>
            이메일을 확인했습니다. <span th:text="${numberOfUser}">N</span>번째 회원,
             <span th:text="${nickname}">이지훈</span>님 가입을 축하합니다.
         </h2>
-        <small class="text-info">이제부터 가입할 때 사용한 이메일 또는 닉네임과 패스트워드로 로그인 할 수 있습니다.</small>
+        <small class="text-info">이제부터 unect 커뮤니티의 모든 기능을 사용 할 수 있습니다.</small>
     </div>
 </div>
 

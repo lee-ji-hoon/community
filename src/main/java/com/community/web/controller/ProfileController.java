@@ -154,17 +154,13 @@ public class ProfileController {
     // 알림 설정 변경 요청
     @GetMapping(SETTINGS_ALARM_URL + "/update")
     @ResponseBody
-    public ResponseEntity updateNotifications(@CurrentUser Account account, RedirectAttributes attributes,
+    public String updateNotifications(@CurrentUser Account account, RedirectAttributes attributes,
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
                                               @RequestParam(required = false, value = "replyByMeetings") String replyByMeetings,
                                               @RequestParam(required = false, value = "replyByPost") String replyByPost,
                                               @RequestParam(required = false, value = "likes") String likes) {
-        log.info("스터디 생성 이메일 업데이트 : {}", studyCreatedByEmail);
-        log.info("스터디 생성 웹 업데이트 : {}", studyCreatedByWeb);
-        log.info("커뮤니티 댓글 웹 업데이트 : {}", replyByPost);
-        log.info("모임 댓글 웹 업데이트 : {}", replyByMeetings);
-        log.info("좋아요 웹 업데이트 : {}", likes);
+
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
@@ -174,9 +170,14 @@ public class ProfileController {
 
         accountRepository.save(account);
 
-        attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
+        return "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
+                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                "        <i class=\"icon-feather-x\"></i>\n" +
+                "    </button>\n" +
+                "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                "    <p class=\"text-white text-opacity-75\">알림이 설정이 변경됐습니다.</p>\n" +
+                "</div>";
 
-        return ResponseEntity.ok().build();
     }
 
     // 닉네임 변경 페이지

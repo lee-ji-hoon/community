@@ -55,38 +55,43 @@ public class BaseController {
     // @Controller 또는 @ControllerAdvice를 사용한 클래에스 모델 정보를 초기화할 때 사용한다.
     @ModelAttribute()
     public void globalChatNotify(Model model, @CurrentUser Account account) {
-        // 현재 계정이 참여중인 Room을 찾는 로직
-        List<Room> findMyRooms = new ArrayList<>();
-        List<Room> roomHostByAccount = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
-        List<Room> roomAttenderByAccount = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
+        log.info("account : {}", account);
+        if(account != null){
+            // 현재 계정이 참여중인 Room을 찾는 로직
+            List<Room> findMyRooms = new ArrayList<>();
+            List<Room> roomHostByAccount = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
+            List<Room> roomAttenderByAccount = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
 
-        // 해당 Room의 ChatList를 가져오는 로직
-        List<Chat> chatNotifyLists = new ArrayList<>();
-        findMyRooms.addAll(roomAttenderByAccount);
-        findMyRooms.addAll(roomHostByAccount);
+            // 해당 Room의 ChatList를 가져오는 로직
+            List<Chat> chatNotifyLists = new ArrayList<>();
+            findMyRooms.addAll(roomAttenderByAccount);
+            findMyRooms.addAll(roomHostByAccount);
 
-        for (Room findMyRoom : findMyRooms) {
-            List<Chat> readChkFalseChat = chatRepository.findByRoomAndReadChk(findMyRoom, false);
-            for (Chat chat : readChkFalseChat) {
-                if (!account.getNickname().equals(chat.getSender().getNickname())) {
-                    chatNotifyLists.add(chat);
+            for (Room findMyRoom : findMyRooms) {
+                List<Chat> readChkFalseChat = chatRepository.findByRoomAndReadChk(findMyRoom, false);
+                for (Chat chat : readChkFalseChat) {
+                    if (!account.getNickname().equals(chat.getSender().getNickname())) {
+                        chatNotifyLists.add(chat);
+                    }
                 }
             }
+            model.addAttribute("g_chatNotify", chatNotifyLists);
+            model.addAttribute("g_chatService", chatService);
+            model.addAttribute("g_myRoom", findMyRooms);
         }
-        model.addAttribute("g_chatNotify", chatNotifyLists);
-        model.addAttribute("g_chatService", chatService);
-        model.addAttribute("g_myRoom", findMyRooms);
     }
 
     @ModelAttribute()
     public void globalAlarmNotify(Model model, @CurrentUser Account account) {
         // 알림
-        log.info("baseController.java의 alarm 실해 ");
-        List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
-        long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
-        log.info("alarm 수 : {}", countByAccountAndNotChecked);
+        if(account != null) {
+            log.info("baseController.java의 alarm 실해 ");
+            List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+            long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
+            log.info("alarm 수 : {}", countByAccountAndNotChecked);
 
-        model.addAttribute("g_accountAlarmNotChecked", alarmList);
-        model.addAttribute("g_countByAccountAndNotChecked", countByAccountAndNotChecked);
+            model.addAttribute("g_accountAlarmNotChecked", alarmList);
+            model.addAttribute("g_countByAccountAndNotChecked", countByAccountAndNotChecked);
+        }
     }
 }
