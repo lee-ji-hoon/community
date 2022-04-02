@@ -1584,18 +1584,19 @@
 
 <div th:fragment="market-list(type)">
     <div th:each="sell : ${type}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-        <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}" class="w-40 h-40 relative mt-1 order-1">
-            <img th:src="@{'/assets/images/' + ${sell.marketId} +'.jpeg'}" alt="" class="rounded-md">
+        <a th:href="@{'/market/detail/'+${sell.marketId}}" class="w-40 h-40 relative mt-1 order-1">
+            <img th:src="${sell.getFilePath()}" alt="" class="rounded-md">
+<!--            <img th:src="${product.getFilePath()}"/>-->
 
         </a>
         <div class="flex-1 sm:order-2">
             <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
-            <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}">
+            <a th:href="@{'/market/detail/'+${sell.marketId}}">
                 <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
             </a>
             <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
             </div>
-            <a th:href="@{/market/{marketId}(marketId = ${sell.marketId})}"> 자세히 보기 </a>
+            <a th:href="@{'/market/detail/'+${sell.marketId}}"> 자세히 보기 </a>
         </div>
     </div>
 </div>
