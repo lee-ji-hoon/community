@@ -172,7 +172,7 @@
     <link href="/assets/images/favicon.png" rel="icon" type="image/png">
     <!-- Basic Page Needs
         ================================================== -->
-    <title>멀티커뮤니티</title>
+    <title>unect</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Socialite is - Professional A unique and beautiful collection of UI elements">
@@ -194,20 +194,20 @@
     <script src="/assets/js/bootstrap-select.min.js"></script>
     <script src="/assets/js/for-nightmode.js"></script>
     <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
-
+    <!--/*<![CDATA[*/
+    if([[${account.studentId}]] != null){
+    var jdenticon_value = [[${account.studentId}]];
+    }
+    /*]]>*/-->
     <script th:inline="javascript">
-
-        /*<![CDATA[*/
-        var jdenticon_value = [[${account.studentId}]];
-        /*]]>*/
 
         window.jdenticon_config = {
             replaceMode: "observe"
         };
         $(document).ready(function () {
             $('#loadingSpin').hide();
-            jdenticon.update(".is_avatar", jdenticon_value);
-            jdenticon.update(".jdenticon_fix", jdenticon_value);
+            /*jdenticon.update(".is_avatar", jdenticon_value);
+            jdenticon.update(".jdenticon_fix", jdenticon_value);*/
             $(document).on('click', '#search_btn', function() {
                 if ($("select[name=searchType]").val() == "") {
                     swal("검색 구분을 입력해주세요.", "검색창 좌측에 있는 화살표를 눌러서 검색 구분을 선택해주세요.");
