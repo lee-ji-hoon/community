@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="manager-fragments.html :: m_head">
+</head>
+<body class="text-blueGray-700 antialiased">
+<noscript>
+  You need to enable JavaScript to run this app.
+</noscript>
+<div id="root">
+  <nav th:replace="manager-fragments.html :: m_sidebar(currentSideMenu='maps')"></nav>
+  <div class="relative md:ml-64 bg-blueGray-50">
+    <nav th:replace="manager-fragments.html :: m_header"></nav>
+    <div th:replace="manager-fragments.html :: m_card_header">
+    </div>
+    <div class="px-4 md:px-10 mx-auto w-full -m-24">
+      <div class="flex flex-wrap">
+        <div class="w-full px-4">
+          <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+            <div id="map-canvas" class="relative w-full rounded h-600-px" data-lat="40.748817" data-lng="-73.985428">
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer th:replace="manager-fragments.html :: m_footer"></footer>
+    </div>
+  </div>
+</div>
+<script th:replace="manager-fragments.html :: m_script"></script>
+</body>
+</html>
