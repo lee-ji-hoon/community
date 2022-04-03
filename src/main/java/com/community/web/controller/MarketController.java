@@ -83,11 +83,15 @@ public class MarketController {
         return "market/market-detail";
     }
 
-    @GetMapping("/market/{marketId}/delete")
+    @GetMapping("/market/detail/{marketId}/delete")
     public String marketDelete(@CurrentUser Account account, Model model,
-                               @PathVariable long marketId, RedirectAttributes redirectAttributes) {
+                               @PathVariable long marketId, RedirectAttributes redirectAttributes,
+                               @RequestPart String file) {
+        log.info("삭제 할 이미지 file : {}", file);
         Market byMarketId = marketRepository.findByMarketId(marketId);
+
         if (account.getId().equals(byMarketId.getSeller().getId())) {
+            s3Service.deleteFile(file);
             marketRepository.delete(byMarketId);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             return "redirect:/market";

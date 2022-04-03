@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
@@ -68,5 +69,9 @@ public class S3Service {
         } catch (StringIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(String.format("잘못된 형식의 파일 ($s) 입니다", fileName));
         }
+    }
+
+    public void deleteFile(String fileName) {
+        s3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 }
