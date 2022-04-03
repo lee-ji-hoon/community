@@ -47,7 +47,8 @@ public class Market {
     @Enumerated(EnumType.STRING)
     private MarketItemStatus marketItemStatus;
 
-    private String itemImg;
+    @Column(columnDefinition = "TEXT")
+    private String filePath;
 
     private LocalDateTime itemUploadTime;
 }

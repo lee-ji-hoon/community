@@ -296,7 +296,7 @@
 
                                     <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
                                         <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                             th:data-jdenticon-value="${reply.getAccount().studentId}" style="width: 40px; height: 40px;"
+                                             th:data-jdenticon-value="${reply.getAccount().studentId}"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
                                         <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                              th:src="${reply.getAccount()?.profileImage}"

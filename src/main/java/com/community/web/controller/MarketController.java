@@ -4,6 +4,7 @@ import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.board.Reply;
+import com.community.service.S3Service;
 import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
@@ -18,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -34,6 +36,7 @@ public class MarketController {
     private final ModelMapper modelMapper;
     private final BoardService boardService;
     private final ReplyService replyService;
+    private final S3Service s3Service;
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
@@ -53,13 +56,47 @@ public class MarketController {
 
     @PostMapping("/market/new")
     public String marketProductForm(@CurrentUser Account account, Model model,
-                                    @Valid MarketForm marketForm) {
+                                    @Valid MarketForm marketForm,
+                                    @RequestPart MultipartFile file) throws IOException {
+        String marketImagePath = s3Service.upload(file);
 
-        Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account);
+        Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
+        model.addAttribute(account);
+
+        Long marketId = newItem.getMarketId();
+        return "redirect:/market/detail/" + marketId;
+    }
+
+    @GetMapping("/market/detail/{marketId}")
+    public String marketDetail(@CurrentUser Account account, Model model,
+                               @PathVariable long marketId) {
+
+        Market detail = marketRepository.findByMarketId(marketId);
+        List<Reply> replies = replyRepository.findAllByMarketOrderByUploadTimeDesc(detail);
 
         model.addAttribute(account);
-        Long marketId = newItem.getMarketId();
-        return "redirect:/market/" + marketId;
+        model.addAttribute("product", detail);
+        model.addAttribute("reply", replies);
+        model.addAttribute("service", boardService);
+        model.addAttribute(new MarketForm());
+
+        return "market/market-detail";
+    }
+
+    @GetMapping("/market/detail/{marketId}/delete")
+    public String marketDelete(@CurrentUser Account account, Model model,
+                               @PathVariable long marketId, RedirectAttributes redirectAttributes,
+                               @RequestPart String file) {
+        log.info("삭제 할 이미지 file : {}", file);
+        Market byMarketId = marketRepository.findByMarketId(marketId);
+
+        if (account.getId().equals(byMarketId.getSeller().getId())) {
+            s3Service.deleteFile(file);
+            marketRepository.delete(byMarketId);
+            redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
+            return "redirect:/market";
+        }
+        return "error-page";
     }
 
     @ResponseBody
@@ -93,34 +130,6 @@ public class MarketController {
         log.info("잘못된 게시물 수정 요청 : bid = " + byMarketId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
-    }
-
-    @GetMapping("/market/{marketId}")
-    public String marketDetail(@CurrentUser Account account, Model model,
-                               @PathVariable long marketId) {
-
-        Market detail = marketRepository.findByMarketId(marketId);
-        List<Reply> replies = replyRepository.findAllByMarketOrderByUploadTimeDesc(detail);
-
-        model.addAttribute(account);
-        model.addAttribute("product", detail);
-        model.addAttribute("reply", replies);
-        model.addAttribute("service", boardService);
-        model.addAttribute(new MarketForm());
-
-        return "market/market-detail";
-    }
-
-    @GetMapping("/market/{marketId}/delete")
-    public String marketDelete(@CurrentUser Account account, Model model,
-                               @PathVariable long marketId, RedirectAttributes redirectAttributes) {
-        Market byMarketId = marketRepository.findByMarketId(marketId);
-        if (account.getId().equals(byMarketId.getSeller().getId())) {
-            marketRepository.delete(byMarketId);
-            redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
-            return "redirect:/market";
-        }
-        return "error-page";
     }
 
     // 중고거래 댓글 추가 시작

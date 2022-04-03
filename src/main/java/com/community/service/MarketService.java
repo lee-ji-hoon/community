@@ -22,13 +22,14 @@ public class MarketService {
     private final MarketRepository marketRepository;
     private final ModelMapper modelMapper;
 
-    public Market createNewItem(Market market, Account account) {
+    public Market createNewItem(Market market, Account account, String marketImagePath) {
         market.setItemUploadTime(LocalDateTime.now());
         market.setMarketItemStatus(MarketItemStatus.판매중);
         market.setSeller(account);
+        market.setFilePath(marketImagePath);
+
         return marketRepository.save(market);
     }
-
 
     public void updateMarket(Market byMarketId, MarketForm marketForm) {
         modelMapper.map(marketForm, byMarketId);

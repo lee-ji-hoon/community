@@ -15,6 +15,6 @@ public class MarketForm {
 
     private String itemDetail;
 
-//    private String itemImg;
+    private String filePath;
 
 }
