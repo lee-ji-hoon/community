@@ -20,9 +20,9 @@ public class ManagerController {
         return "manager/settings";
     }
 
-    @GetMapping("/manager/tables")
+    @GetMapping("/manager/account")
     public String managerTables() {
-        return "manager/tables";
+        return "manager/account";
     }
 
     @GetMapping("/manager/maps")
