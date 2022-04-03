@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @NoArgsConstructor
+@Slf4j
 public class S3Service {
     private AmazonS3 s3Client;
 
@@ -34,6 +36,8 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    public static final String CLOUD_FRONT_DOMAIN_NAME = "https://d2c5shumcf1jv0.cloudfront.net";
+
     @PostConstruct
     public void setS3Client() {
         // 자격증명
@@ -47,14 +51,15 @@ public class S3Service {
 
     public String upload(MultipartFile file) throws IOException, IllegalArgumentException {
         String fileName = createFileName(file.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
+
+        /*ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
+        objectMetadata.setContentType(file.getContentType());*/
 
         // 업로드를 위해 사용되는 함수 (참고 https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/userguide/upload-objects.html)
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), objectMetadata)
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead)); // 외부에 공개되는 이미지이므로 read 권한 주기
-        return s3Client.getUrl(bucket, fileName).toString(); // 업로드 후 해당 URL DB에 저장할 수 있도록 컨트롤러에 저장
+        return fileName;
     }
 
     // 기존 확장자는 유지한채 유니크한 파일 이름 생성 로직
