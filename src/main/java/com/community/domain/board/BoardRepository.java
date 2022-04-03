@@ -21,8 +21,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
 
     /* 신고된 게시글 제외 쿼리 */
-    List<Board> findAllByWriterIdAndIsReportedOrderByUploadTime(long id, Boolean isReported);
-    List<Board> findAllByIsReportedOrderByUploadTimeDesc(Boolean isReported);
     List<Board> findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
     List<Board> findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
 
@@ -30,12 +28,15 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop5ByIsReportedOrderByPageViewDesc(Boolean isReported);
 
-
-    Boolean findByBidAndIsReported(long bid, Boolean isReported);
-
     Board findByBid(long id);
 
-    List<Board> findAllByWriterIdOrderByUploadTime(long id);
-
     void deleteAllByWriterId(long writerId);
+    /*
+    *
+    * 매니저 전용 쿼리
+    *
+    */
+    /* 신고된 게시글 쿼리 */
+    List<Board> findByIsReportedOrderByUploadTimeDesc(Boolean isReported);
+
 }
