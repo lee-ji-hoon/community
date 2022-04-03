@@ -514,7 +514,7 @@
                     var data = new Identicon(hash,{format:'svg'}).toString();
                     $(this).attr('src', "data:image/svg+xml;base64,"+data);
                 });
-            }, 200);
+            }, 400);
 
             delay(function (){
                 $(input).removeAttr("readonly");
