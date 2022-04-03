@@ -38,9 +38,10 @@
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
                                             <th:block th:if="${account == room.roomAttender}">
-                                                <svg th:if="${#strings.isEmpty(room.roomHost?.profileImage)}"
-                                                     th:data-jdenticon-value="${room.roomHost.studentId}" style="width: 40px; height: 40px;"
-                                                     alt=""></svg>
+                                                <img th:if="${#strings.isEmpty(room.roomHost?.profileImage)}"
+                                                     th:data-id="${room.roomHost.studentId}"
+                                                     class="identicon"
+                                                     alt=""/>
                                                 <img th:if="${!#strings.isEmpty(room.roomHost?.profileImage)}"
                                                      th:src="${room.roomHost?.profileImage}"
                                                      alt=""/>
@@ -51,9 +52,10 @@
                                                 </th:block>
                                             </th:block>
                                             <th:block th:if="${account == room.roomHost}">
-                                                <svg th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
-                                                     th:data-jdenticon-value="${room.roomAttender.studentId}" style="width: 40px; height: 40px;"
-                                                     alt=""></svg>
+                                                <img th:if="${#strings.isEmpty(room.roomAttender?.profileImage)}"
+                                                     th:data-id="${room.roomAttender.studentId}"
+                                                     class="identicon"
+                                                     alt=""/>
                                                 <img th:if="${!#strings.isEmpty(room.roomAttender?.profileImage)}"
                                                      th:src="${room.roomAttender?.profileImage}"
                                                      alt=""/>
@@ -118,9 +120,10 @@
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
                                                                     <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
-                                                                        <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                                             th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                                             alt=""></svg>
+                                                                        <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                                             th:data-id="${account.studentId}"
+                                                                             class="identicon"
+                                                                             alt=""/>
                                                                         <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                                              th:src="${account?.profileImage}"
                                                                              alt=""/>
@@ -139,9 +142,10 @@
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
                                                                     <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
-                                                                        <svg th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
-                                                                             th:data-jdenticon-value="${chat.sender.studentId}" style="width: 40px; height: 40px;"
-                                                                             alt=""></svg>
+                                                                        <img th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
+                                                                             th:data-id="${chat.sender.studentId}"
+                                                                             class="identicon"
+                                                                             alt="">
                                                                         <img th:if="${!#strings.isEmpty(chat.sender?.profileImage)}"
                                                                              th:src="${chat.sender?.profileImage}"
                                                                              alt=""/>

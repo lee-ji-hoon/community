@@ -66,8 +66,8 @@ public class MarketController {
     public String marketNewProduct(@CurrentUser Account account, Model model,
                                     @Valid MarketForm marketForm,
                                     @RequestPart MultipartFile file) throws IOException {
-        log.info("market image file : {}", file);
-        String marketImagePath = s3Service.upload(file);
+        String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
+        log.info("market image file : {}", marketImagePath);
 
         Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
         model.addAttribute(account);
