@@ -173,9 +173,9 @@
                                                         <th:block th:if="${replyService.boardReplyPresent(board)}">
                                                             <div class="-space-x-2 flex items-center ml-1">
                                                                 <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                                    <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                         th:data-jdenticon-value="${topReply.getAccount().studentId}" style="width: 28px; height: 28px;"
-                                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                         th:data-id="${topReply.getAccount().studentId}"
+                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar"/>
                                                                     <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:src="${topReply.getAccount()?.profileImage}"
                                                                          alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
@@ -210,9 +210,9 @@
                                                         <th:block th:if="${replyService.boardReplyPresent(board)}">
                                                             <div class="-space-x-2 flex items-center ml-1">
                                                                 <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                                    <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                         th:data-jdenticon-value="${topReply.getAccount().studentId}" style="width: 28px; height: 28px;"
-                                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                         th:data-id="${topReply.getAccount().studentId}"
+                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
                                                                     <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:src="${topReply.getAccount()?.profileImage}"
                                                                          alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
@@ -249,9 +249,9 @@
                                                         <th:block th:if="${replyService.boardReplyPresent(board)}">
                                                             <div class="-space-x-2 flex items-center ml-1">
                                                                 <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                                    <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                         th:data-jdenticon-value="${topReply.getAccount().studentId}" style="width: 28px; height: 28px;"
-                                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                         th:data-id="${topReply.getAccount().studentId}"
+                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
                                                                     <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:src="${topReply.getAccount()?.profileImage}"
                                                                          alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
@@ -287,9 +287,9 @@
                                                         <th:block th:if="${replyService.boardReplyPresent(board)}">
                                                             <div class="-space-x-2 flex items-center ml-1">
                                                                 <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                                    <svg th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                         th:data-jdenticon-value="${topReply.getAccount().studentId}" style="width: 28px; height: 28px;"
-                                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"></svg>
+                                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                                         th:data-id="${topReply.getAccount().studentId}" style="width: 28px; height: 28px;"
+                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
                                                                     <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:src="${topReply.getAccount()?.profileImage}"
                                                                          alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>

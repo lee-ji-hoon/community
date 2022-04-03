@@ -127,10 +127,9 @@
                         <div th:if="${study.isManager(#authentication.principal)}"class="card lg:mx-0 p-4" uk-toggle="target: #create-post-modal"
                              href="#create-post-modal">
                             <div class="flex space-x-3">
-                                <svg th:if="${#strings.isEmpty(account.profileImage)}"
-                                     th:data-jdenticon-value="${account.studentId}"
-                                     class="w-10 h-10 rounded-full">
-                                </svg>
+                                <img th:if="${#strings.isEmpty(account.profileImage)}"
+                                     th:data-id="${account.studentId}"
+                                     class="identicon w-10 h-10 rounded-full"/>
                                 <img th:if="${!#strings.isEmpty(account.profileImage)}"
                                      th:src="${account.profileImage}" alt=""
                                      class="w-10 h-10 rounded-full">
@@ -245,10 +244,9 @@
                                     <div class="flex justify-between items-center lg:p-4 p-2.5">
                                         <div class="flex flex-1 items-center space-x-4">
                                             <a href="#">
-                                                <svg th:if="${#strings.isEmpty(meeting.writer.profileImage)}"
-                                                     th:data-jdenticon-value="${meeting.writer.studentId}"
-                                                     class="border border-white rounded-full w-10 h-10">
-                                                </svg>
+                                                <img th:if="${#strings.isEmpty(meeting.writer.profileImage)}"
+                                                     th:data-id="${meeting.writer.studentId}"
+                                                     class="identicon border border-white rounded-full w-10 h-10">
                                                 <img th:if="${!#strings.isEmpty(meeting.writer.profileImage)}"
                                                      th:src="${meeting.writer.profileImage}" alt=""
                                                      class=" border border-white rounded-full w-10 h-10">
@@ -324,9 +322,9 @@
                                                 <div class="flex" th:each="reply : ${service.replyList(meeting)}">
                                                     <div class="w-10 h-10 rounded-full relative flex-shrink-0">
                                                         <a th:href="@{/profile/{nickname}(nickname = ${reply.getAccount().nickname})}">
-                                                            <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                                                 th:data-jdenticon-value="${reply.getAccount().studentId}"
-                                                                 alt="" class="absolute h-full rounded-full w-full"></svg>
+                                                            <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
+                                                                 th:data-id="${reply.getAccount().studentId}"
+                                                                 alt="" class="identicon absolute h-full rounded-full w-full"/>
                                                             <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                                                  th:src="${reply.getAccount()?.profileImage}"
                                                                  alt="" class="absolute h-full rounded-full w-full"/>
@@ -407,11 +405,9 @@
                                 <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold justify-items-center">
                                     <a th:each="managers : ${study.managers}" th:href="@{'/profile/' + ${managers.nickname}}" style="width:64px" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
-                                            <svg th:if="${#strings.isEmpty(managers.profileImage)}"
-                                                 th:data-jdenticon-value="${managers.studentId}"
-                                                 class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
-
-                                            </svg>
+                                            <img th:if="${#strings.isEmpty(managers.profileImage)}"
+                                                 th:data-id="${managers.studentId}"
+                                                 class="identicon border border-white rounded-full w-full h-full object-cover absolute is_avatar">
                                             <img th:if="${!#strings.isEmpty(managers.profileImage)}"
                                                  th:src="${managers.profileImage}" alt=""
                                                  class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
@@ -420,11 +416,9 @@
                                     </a>
                                     <a th:each="member : ${study.members}" th:href="@{'/profile/' + ${member.nickname}}" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
-                                            <svg th:if="${#strings.isEmpty(member.profileImage)}"
-                                                 th:data-jdenticon-value="${member.studentId}"
-                                                 class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
-
-                                            </svg>
+                                            <img th:if="${#strings.isEmpty(member.profileImage)}"
+                                                 th:data-id="${member.studentId}"
+                                                 class="identicon border border-white rounded-full w-full h-full object-cover absolute is_avatar">
                                             <img th:if="${!#strings.isEmpty(member.profileImage)}"
                                                  th:src="${member.profileImage}" alt=""
                                                  class="border border-white rounded-full w-full h-full object-cover absolute is_avatar">
