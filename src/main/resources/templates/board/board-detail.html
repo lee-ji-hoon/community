@@ -276,7 +276,7 @@
                                            value="1" th:value="${board.bid}" readonly>
                                     <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
                                            value="1" th:value="${account.id}" readonly>
-                                    <input type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
+                                    <input autocomplete="off" type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
                                     <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
                                         <a class="write_reply">
                                             <ion-icon name="return-down-back-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
@@ -464,6 +464,14 @@
                 };
             })();
 
+            var imageDelay = (function (){
+                var timer = 0;
+                return function (callback, ms) {
+                    clearTimeout(timer);
+                    timer = setTimeout(callback, ms);
+                };
+            })();
+
             // summernote
             $('#content').summernote({
                 placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
@@ -500,6 +508,14 @@
                         },
                     });
                 }
+                imageDelay(function (){
+                    $(".identicon").each(function() {
+                        var hash = md5($(this).data('id')).toString();
+                        var data = new Identicon(hash,{format:'svg'}).toString();
+                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                    });
+                }, 200);
+
                 delay(function (){
                     $(input).removeAttr("readonly");
                     $(input).attr("placeholder","댓글을 입력해주세요.");

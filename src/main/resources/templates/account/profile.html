@@ -37,8 +37,8 @@
                                  th:src="${account.profileImage}" />
                         </div>
                         <div class="profile_avatar_holder" th:if="${!isOwner}">
-                            <img th:if="${#strings.isEmpty(account.profileImage)}"
-                                 th:data-id="${account.studentId}"
+                            <img th:if="${#strings.isEmpty(byAccount.profileImage)}"
+                                 th:data-id="${byAccount.studentId}"
                                  class="identicon"/>
                             <img th:if="${!#strings.isEmpty(byAccount.profileImage)}"
                                  th:src="${byAccount.profileImage}" />
