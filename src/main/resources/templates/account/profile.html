@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="theme-fragments.html :: head"></head>
 
@@ -31,15 +31,13 @@
                     <div class="profile_avatar mt-16">
                         <div class="profile_avatar_holder" th:if="${isOwner}">
                             <svg th:if="${#strings.isEmpty(account.profileImage)}"
-                                 th:data-jdenticon-value="${account.studentId}"
-                                 style="width: 160px; height: 160px"></svg>
+                                 th:data-jdenticon-value="${account.studentId}"></svg>
                             <img th:if="${!#strings.isEmpty(account.profileImage)}"
                                  th:src="${account.profileImage}" />
                         </div>
                         <div class="profile_avatar_holder" th:if="${!isOwner}">
                             <svg th:if="${#strings.isEmpty(byAccount.profileImage)}"
-                                 th:data-jdenticon-value="${byAccount.studentId}"
-                                 style="width: 160px; height: 160px"></svg>
+                                 th:data-jdenticon-value="${byAccount.studentId}"></svg>
                             <img th:if="${!#strings.isEmpty(byAccount.profileImage)}"
                                  th:src="${byAccount.profileImage}" />
                         </div>
@@ -60,7 +58,7 @@
                         </ul>
                     </nav>
 
-                    <div class="flex items-center space-x-1.5 flex-shrink-0 pr-4 mb-2 justify-center order-1 relative">
+                    <div class="flex items-center space-x-1.5 flex-shrink-0 mb-2 justify-center order-1 relative">
                         <!-- 쪽지 -->
                         <a th:if="${isOwner}"
                            th:href="@{/settings/profile-settings}" id="update-profile"
