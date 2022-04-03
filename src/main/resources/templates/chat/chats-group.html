@@ -758,9 +758,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -780,9 +781,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-offline"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -802,9 +804,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-offline"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -824,9 +827,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -846,9 +850,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -868,9 +873,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-offline"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -890,9 +896,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-offline"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -912,9 +919,10 @@
                                     <a href="#">
                                         <div class="message-avatar">
                                             <i class="status-icon status-online"></i>
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -952,9 +960,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -972,9 +981,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -992,9 +1002,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -1012,9 +1023,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -1032,9 +1044,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -1052,9 +1065,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>
@@ -1072,9 +1086,10 @@
                                 <div class="message-bubble">
                                     <div class="message-bubble-inner">
                                         <div class="message-avatar">
-                                            <svg th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                 th:data-jdenticon-value="${account.studentId}" style="width: 40px; height: 40px;"
-                                                 alt=""></svg>
+                                            <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                 th:data-id="${account.studentId}"
+                                                 class="identicon"
+                                                 alt=""/>
                                             <img th:if="${!#strings.isEmpty(account?.profileImage)}"
                                                  th:src="${account?.profileImage}"
                                                  alt=""/>

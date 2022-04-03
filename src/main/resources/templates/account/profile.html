@@ -30,14 +30,16 @@
                 <div class="study_content" style="margin-top: -100px; padding-bottom: 15px;">
                     <div class="profile_avatar mt-16">
                         <div class="profile_avatar_holder" th:if="${isOwner}">
-                            <svg th:if="${#strings.isEmpty(account.profileImage)}"
-                                 th:data-jdenticon-value="${account.studentId}"></svg>
+                            <img th:if="${#strings.isEmpty(account.profileImage)}"
+                                 th:data-id="${account.studentId}"
+                                 class="identicon"/>
                             <img th:if="${!#strings.isEmpty(account.profileImage)}"
                                  th:src="${account.profileImage}" />
                         </div>
                         <div class="profile_avatar_holder" th:if="${!isOwner}">
-                            <svg th:if="${#strings.isEmpty(byAccount.profileImage)}"
-                                 th:data-jdenticon-value="${byAccount.studentId}"></svg>
+                            <img th:if="${#strings.isEmpty(account.profileImage)}"
+                                 th:data-id="${account.studentId}"
+                                 class="identicon"/>
                             <img th:if="${!#strings.isEmpty(byAccount.profileImage)}"
                                  th:src="${byAccount.profileImage}" />
                         </div>
