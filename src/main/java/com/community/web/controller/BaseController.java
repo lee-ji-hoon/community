@@ -55,7 +55,7 @@ public class BaseController {
     // @Controller 또는 @ControllerAdvice를 사용한 클래에스 모델 정보를 초기화할 때 사용한다.
     @ModelAttribute()
     public void globalChatNotify(Model model, @CurrentUser Account account) {
-        log.info("account : {}", account);
+        log.info("chat account : {}", account);
         if(account != null){
             // 현재 계정이 참여중인 Room을 찾는 로직
             List<Room> findMyRooms = new ArrayList<>();
@@ -85,7 +85,7 @@ public class BaseController {
     public void globalAlarmNotify(Model model, @CurrentUser Account account) {
         // 알림
         if(account != null) {
-            log.info("baseController.java의 alarm 실해 ");
+            log.info("baseController.java의 alarm 실패 ");
             List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
             long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
             log.info("alarm 수 : {}", countByAccountAndNotChecked);

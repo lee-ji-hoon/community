@@ -131,7 +131,7 @@
                                             <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
                                         </svg>
                                     </div>
-                                    <input type="file" name="file" id="input-image">
+                                    <input type="file" name="file" id="input-image" accept="image/png, image/jpeg">
                                 </div>
 
                                 <img style="width: 500px;" id="preview-image">
@@ -159,9 +159,21 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="application/javascript">
         function readImage(input) {
+
+
+
+            /*console.log(input.files.val());
+            let fileVal = input.files.val();
+            fileVal = fileVal.slice(fileVal.indexOf(".")+1).toLowerCase();
+            if(fileVal != "jpg" && fileVal != "png" && fileVal != "jpeg" && fileVal != "gif" && fileVal != "bmp"){
+                alert("이미지파일만 가능합니다.");
+            }*/
+
             // 인풋 태그에 파일이 있는 경우
             if(input.files && input.files[0]) {
                 // 이미지 파일인지 검사 (생략)
+
+
                 // FileReader 인스턴스 생성
                 const reader = new FileReader()
                 // 이미지가 로드가 된 경우
@@ -179,9 +191,19 @@
             readImage(e.target)
         })
 
+
+
+
         $(document).ready(function() {
+
+
             //여기 아래 부분
             $('#description').summernote({
+                toolbar: [
+                    ['font', ['bold', 'italic', 'underline', 'clear', 'codeblock']],
+                    ['mybutton', ['hello']],
+                    ['insert',['picture','link']],
+                ],
                 height: 300,                 // 에디터 높이
                 minHeight: null,             // 최소 높이
                 maxHeight: null,             // 최대 높이
