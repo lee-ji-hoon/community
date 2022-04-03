@@ -29,21 +29,24 @@ dependencies {
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	compileOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.modelmapper:modelmapper:3.0.0'
-	// postgres
-//	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23'
-//	runtimeOnly 'org.postgresql:postgresql'
 	// querydsl
 	implementation 'com.querydsl:querydsl-jpa'
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	// AWS S3
+	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
