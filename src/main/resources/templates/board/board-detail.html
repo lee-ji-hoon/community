@@ -88,10 +88,10 @@
                                     <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
                                         <svg th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
                                              th:data-jdenticon-value="${boardOwner.studentId}" style="width: 40px; height: 40px"
-                                             alt="" class="w-10 rounded-full is_avatar"></svg>
+                                             alt="" class="w-10 h-10 rounded-full is_avatar"></svg>
                                         <img th:if="${!#strings.isEmpty(boardOwner?.profileImage)}"
                                              th:src="${boardOwner?.profileImage}"
-                                             alt="" class="w-10 rounded-full is_avatar"/>
+                                             alt="" class="w-10 h-10 rounded-full is_avatar"/>
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
@@ -297,7 +297,7 @@
                                     <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
                                         <svg th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                              th:data-jdenticon-value="${reply.getAccount().studentId}"
-                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"></svg>
+                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar" width="45" height="45"></svg>
                                         <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                              th:src="${reply.getAccount()?.profileImage}"
                                              alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
