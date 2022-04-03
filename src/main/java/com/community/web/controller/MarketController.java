@@ -54,10 +54,19 @@ public class MarketController {
         return "market/market-list";
     }
 
+    @GetMapping("/market/new")
+    public String marketNewForm(@CurrentUser Account account, Model model){
+        model.addAttribute(account);
+        model.addAttribute(new MarketForm());
+
+        return "market/market-form";
+    }
+
     @PostMapping("/market/new")
-    public String marketProductForm(@CurrentUser Account account, Model model,
+    public String marketNewProduct(@CurrentUser Account account, Model model,
                                     @Valid MarketForm marketForm,
                                     @RequestPart MultipartFile file) throws IOException {
+        log.info("market image file : {}", file);
         String marketImagePath = s3Service.upload(file);
 
         Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
