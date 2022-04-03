@@ -14,352 +14,352 @@
     }
 </style>
 <body>
-    
 
 
-    <div id="wrapper">
 
-        <!-- Header -->
-        <header th:replace="theme-fragments.html :: header"></header>
+<div id="wrapper">
 
-        <!-- sidebar -->
-        <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
 
-        <!-- Main Contents -->
-        <div class="main_content">
-            <div class="mcontainer">
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
 
-                <div class="lg:flex lg:space-x-10">
-                      
-                    <div class="lg:w-3/4 space-y-5 mb-3">
-                        <div id="isUpdatedForm">
-                            <div id="isUpdated"></div>
-                        </div>
-                        <div th:if="${isReportedMessage}">
-                            <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
-                        </div>
-                        <div th:if="${errorMessage}">
-                            <div th:replace="theme-fragments.html :: red-notice(message=${errorMessage})"></div>
-                        </div>
-                        <div class="card">
-                            <div class="form_refresh">
-                                <div class="p-7">
-                                    <th:block th:if="${board.boardTitle=='자유'}">
-                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 자유게시글 </h5>
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+
+            <div class="lg:flex lg:space-x-10">
+
+                <div class="lg:w-3/4 space-y-5 mb-3">
+                    <div id="isUpdatedForm">
+                        <div id="isUpdated"></div>
+                    </div>
+                    <div th:if="${isReportedMessage}">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
+                    </div>
+                    <div th:if="${errorMessage}">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${errorMessage})"></div>
+                    </div>
+                    <div class="card">
+                        <div class="form_refresh">
+                            <div class="p-7">
+                                <th:block th:if="${board.boardTitle=='자유'}">
+                                    <h5 class="uppercase text-sm font-medium text-gray-400"> 자유게시글 </h5>
+                                </th:block>
+                                <th:block th:if="${board.boardTitle=='질문'}">
+                                    <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
                                     </th:block>
-                                    <th:block th:if="${board.boardTitle=='질문'}">
-                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'major'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 전공 질문 </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'college'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 학교 생활 질문 </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'qnaEtc'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 기타 질문 </h5>
-                                        </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'major'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 전공 질문 </h5>
                                     </th:block>
-                                    <th:block th:if="${board.boardTitle=='정보'}">
-                                        <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'web'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>WEB</b> DEVELOPMENT </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'java'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>JAVA</b> Programing </h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'media'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Image</b> Processing</h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'vrar'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Virtual</b> Reality</h5>
-                                        </th:block>
-                                        <th:block th:if="${board.subBoardTitle == 'infoEtc'}">
-                                            <h5 class="uppercase text-sm font-medium text-gray-400"> Etc </h5>
-                                        </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'college'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 학교 생활 질문 </h5>
                                     </th:block>
-                                    <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${board.title}">제목</h1>
-                                    <th:block th:if="${board.boardTitle=='정보'}">
-                                        <p th:text="${board.subTitle}"></p>
+                                    <th:block th:if="${board.subBoardTitle == 'qnaEtc'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 기타 질문 </h5>
                                     </th:block>
-                                    <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
-                                        <img th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
-                                             th:data-id="${boardOwner.studentId}"
-                                             alt="" class="identicon w-10 h-10 rounded-full is_avatar"/>
-                                        <img th:if="${!#strings.isEmpty(boardOwner?.profileImage)}"
-                                             th:src="${boardOwner?.profileImage}"
-                                             alt="" class="w-10 h-10 rounded-full is_avatar"/>
-                                        <div class="grid grid-cols-2 gap-4">
+                                </th:block>
+                                <th:block th:if="${board.boardTitle=='정보'}">
+                                    <th:block th:if="${board.subBoardTitle == null || board.subBoardTitle == ''}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> 카테고리 없음 </h5>
+                                    </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'web'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> <b>WEB</b> DEVELOPMENT </h5>
+                                    </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'java'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> <b>JAVA</b> Programing </h5>
+                                    </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'media'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Image</b> Processing</h5>
+                                    </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'vrar'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> <b>Virtual</b> Reality</h5>
+                                    </th:block>
+                                    <th:block th:if="${board.subBoardTitle == 'infoEtc'}">
+                                        <h5 class="uppercase text-sm font-medium text-gray-400"> Etc </h5>
+                                    </th:block>
+                                </th:block>
+                                <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${board.title}">제목</h1>
+                                <th:block th:if="${board.boardTitle=='정보'}">
+                                    <p th:text="${board.subTitle}"></p>
+                                </th:block>
+                                <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
+                                    <img th:if="${#strings.isEmpty(boardOwner?.profileImage)}"
+                                         th:data-id="${boardOwner.studentId}"
+                                         alt="" class="identicon w-10 h-10 rounded-full is_avatar"/>
+                                    <img th:if="${!#strings.isEmpty(boardOwner?.profileImage)}"
+                                         th:src="${boardOwner?.profileImage}"
+                                         alt="" class="w-10 h-10 rounded-full is_avatar"/>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
+                                            <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
+                                        </div>
+                                        <!-- Board 작성자면 뜨는 수정폼 -->
+                                        <th:block th:if="${boardOwner.id==account.id}">
                                             <div>
-                                                <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
-                                                <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
-                                            </div>
-                                            <!-- Board 작성자면 뜨는 수정폼 -->
-                                            <th:block th:if="${boardOwner.id==account.id}">
-                                                <div>
-                                                    <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
-                                                       data-tippy-placement="right" title="게시물 수정하기">
-                                                        <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
-                                                    </a>
-                                                    <!-- Craete video post modal -->
-                                                    <div id="create-post-modal" uk-modal>
-                                                        <div class="uk-modal-dialog">
-                                                            <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
-                                                                    type="button" uk-close>
-                                                                <i class="icon-feather-close"></i>
-                                                            </button>
+                                                <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
+                                                   data-tippy-placement="right" title="게시물 수정하기">
+                                                    <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
+                                                </a>
+                                                <!-- Craete video post modal -->
+                                                <div id="create-post-modal" uk-modal>
+                                                    <div class="uk-modal-dialog">
+                                                        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                                                type="button" uk-close>
+                                                            <i class="icon-feather-close"></i>
+                                                        </button>
 
-                                                            <div class="uk-modal-header bg-white">
-                                                                <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
-                                                            </div>
-                                                            <form class="needs-validation" id="board_form" onsubmit="return false">
-                                                                <div class="uk-modal-body" uk-overflow-auto>
-                                                                    <div class="space-y-4 g:w-8/12">
-                                                                        <div class="px-2 space-y-2 d-none">
-                                                                            <div class="font-semibold text-base"> 게시판 bid </div>
-                                                                            <input type="hidden" placeholder="bid를 입력해주세요." id="bid"
-                                                                                   th:value="${board.bid}" name="bid" readonly
-                                                                                   aria-describedby="writerHelp"
-                                                                                   class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
-                                                                        </div>
+                                                        <div class="uk-modal-header bg-white">
+                                                            <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
+                                                        </div>
+                                                        <form class="needs-validation" id="board_form" onsubmit="return false">
+                                                            <div class="uk-modal-body" uk-overflow-auto>
+                                                                <div class="space-y-4 g:w-8/12">
+                                                                    <div class="px-2 space-y-2 d-none">
+                                                                        <div class="font-semibold text-base"> 게시판 bid </div>
+                                                                        <input type="hidden" placeholder="bid를 입력해주세요." id="bid"
+                                                                               th:value="${board.bid}" name="bid" readonly
+                                                                               aria-describedby="writerHelp"
+                                                                               class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="selectBox"> 유형 선택 </label>
+                                                                        <select id="selectBox" name="boardTitle"  class="shadow-none with-border px-2">
+                                                                            <option data-icon="icon-material-outline-assignment" value="자유" th:selected="${board.boardTitle}=='자유'">자유</option>
+                                                                            <option data-icon="icon-material-outline-help-outline" value="질문" th:selected="${board.boardTitle}=='질문'">질문</option>
+                                                                            <option data-icon="icon-material-outline-assignment" value="정보" th:selected="${board.boardTitle}=='정보'">정보</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div id="subBoardSort">
                                                                         <div class="form-group">
-                                                                            <label for="selectBox"> 유형 선택 </label>
-                                                                            <select id="selectBox" name="boardTitle"  class="shadow-none with-border px-2">
-                                                                                <option data-icon="icon-material-outline-assignment" value="자유" th:selected="${board.boardTitle}=='자유'">자유</option>
-                                                                                <option data-icon="icon-material-outline-help-outline" value="질문" th:selected="${board.boardTitle}=='질문'">질문</option>
-                                                                                <option data-icon="icon-material-outline-assignment" value="정보" th:selected="${board.boardTitle}=='정보'">정보</option>
+                                                                            <label for="selectBoxSub"> 종류 선택 </label>
+                                                                            <select id="selectBoxSub" name="subBoardTitle"  class="shadow-none with-border form-control px-2">
+                                                                                <optgroup label="QnA" id="opgQnA">
+                                                                                    <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
+                                                                                    <option data-icon="icon-material-outline-help-outline" value="major" th:selected="${board.subBoardTitle}=='major'">전공 관련</option>
+                                                                                    <option data-icon="icon-material-outline-help-outline" value="college" th:selected="${board.subBoardTitle}=='college'">학교 관련</option>
+                                                                                    <option data-icon="icon-material-outline-movie" value="qnaEtc" th:selected="${board.subBoardTitle}=='qnaEtc'"> 기타 </option>
+                                                                                </optgroup>
+                                                                                <optgroup label="정보" id="opgInfo">
+                                                                                    <option data-icon="icon-material-outline-language" value="web" th:selected="${board.subBoardTitle}=='web'"> HTML</option>
+                                                                                    <option data-icon="icon-material-outline-code" value="java" th:selected="${board.subBoardTitle}=='java'"> JAVA</option>
+                                                                                    <option data-icon="icon-material-outline-movie" value="media" th:selected="${board.subBoardTitle}=='media'"> 영상</option>
+                                                                                    <option data-icon="icon-material-outline-movie" value="vrar" th:selected="${board.subBoardTitle}=='vrar'"> VR/AR</option>
+                                                                                    <option data-icon="icon-material-outline-movie" value="infoEtc" th:selected="${board.subBoardTitle}=='infoEtc'"> 기타 </option>
+                                                                                </optgroup>
                                                                             </select>
                                                                         </div>
-                                                                        <div id="subBoardSort">
-                                                                            <div class="form-group">
-                                                                                <label for="selectBoxSub"> 종류 선택 </label>
-                                                                                <select id="selectBoxSub" name="subBoardTitle"  class="shadow-none with-border form-control px-2">
-                                                                                    <optgroup label="QnA" id="opgQnA">
-                                                                                        <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
-                                                                                        <option data-icon="icon-material-outline-help-outline" value="major" th:selected="${board.subBoardTitle}=='major'">전공 관련</option>
-                                                                                        <option data-icon="icon-material-outline-help-outline" value="college" th:selected="${board.subBoardTitle}=='college'">학교 관련</option>
-                                                                                        <option data-icon="icon-material-outline-movie" value="qnaEtc" th:selected="${board.subBoardTitle}=='qnaEtc'"> 기타 </option>
-                                                                                    </optgroup>
-                                                                                    <optgroup label="정보" id="opgInfo">
-                                                                                        <option data-icon="icon-material-outline-language" value="web" th:selected="${board.subBoardTitle}=='web'"> HTML</option>
-                                                                                        <option data-icon="icon-material-outline-code" value="java" th:selected="${board.subBoardTitle}=='java'"> JAVA</option>
-                                                                                        <option data-icon="icon-material-outline-movie" value="media" th:selected="${board.subBoardTitle}=='media'"> 영상</option>
-                                                                                        <option data-icon="icon-material-outline-movie" value="vrar" th:selected="${board.subBoardTitle}=='vrar'"> VR/AR</option>
-                                                                                        <option data-icon="icon-material-outline-movie" value="infoEtc" th:selected="${board.subBoardTitle}=='infoEtc'"> 기타 </option>
-                                                                                    </optgroup>
-                                                                                </select>
-                                                                            </div>
+                                                                    </div>
+                                                                    <div class="font-semibold text-lg"> Details </div>
+                                                                    <!-- 제목 -->
+                                                                    <div class="form-group">
+                                                                        <div class="line">
+                                                                            <input class="line__input form-control" id="title" name="title" th:value="${board.title}"
+                                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                                                   aria-describedby="titleHelp" required autocomplete="off">
+                                                                            <span for="username" class="line__placeholder"> 제목 </span>
                                                                         </div>
-                                                                        <div class="font-semibold text-lg"> Details </div>
-                                                                        <!-- 제목 -->
-                                                                        <div class="form-group">
-                                                                            <div class="line">
-                                                                                <input class="line__input form-control" id="title" name="title" th:value="${board.title}"
-                                                                                       type="text" onkeyup="this.setAttribute('value', this.value);"
-                                                                                       aria-describedby="titleHelp" required autocomplete="off">
-                                                                                <span for="username" class="line__placeholder"> 제목 </span>
-                                                                            </div>
-                                                                            <small id="titleHelp" class="form-text text-muted">
-                                                                                제목은 5글자부터 최대 30글자까지 입력 가능합니다.
-                                                                            </small>
-                                                                            <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                                        <small id="titleHelp" class="form-text text-muted">
+                                                                            제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                                                        </small>
+                                                                        <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                                    </div>
+                                                                    <!-- 소제목 -->
+                                                                    <div id="postTitleSub" class="form-group">
+                                                                        <div class="line">
+                                                                            <input class="line__input form-group" id="subTitle" name="subTitle"
+                                                                                   th:value="${board.subTitle}"
+                                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                                                   aria-describedby="subTitleHelp" required autocomplete="off">
+                                                                            <span for="username" class="line__placeholder"> 소제목 </span>
                                                                         </div>
-                                                                        <!-- 소제목 -->
-                                                                        <div id="postTitleSub" class="form-group">
-                                                                            <div class="line">
-                                                                                <input class="line__input form-group" id="subTitle" name="subTitle"
-                                                                                       th:value="${board.subTitle}"
-                                                                                       type="text" onkeyup="this.setAttribute('value', this.value);"
-                                                                                       aria-describedby="subTitleHelp" required autocomplete="off">
-                                                                                <span for="username" class="line__placeholder"> 소제목 </span>
-                                                                            </div>
-                                                                            <small id="subTitleHelp" class="form-text text-muted">
-                                                                                예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
-                                                                            </small>
-                                                                        </div>
-                                                                        <!-- 본문 -->
-                                                                        <div class="form-group">
-                                                                            <div>
+                                                                        <small id="subTitleHelp" class="form-text text-muted">
+                                                                            예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
+                                                                        </small>
+                                                                    </div>
+                                                                    <!-- 본문 -->
+                                                                    <div class="form-group">
+                                                                        <div>
                                                                                 <textarea class="form-control"  id="content" name="content" th:utext="${board.content}"
                                                                                           type="text" aria-describedby="contentHelp" required></textarea>
-                                                                            </div>
-                                                                            <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
-                                                                            <small class="invalid-feedback">글을 입력해주세요.</small>
                                                                         </div>
+                                                                        <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
                                                                     </div>
                                                                 </div>
+                                                            </div>
 
-                                                                <div class="uk-modal-footer uk-text-right bg-white">
-                                                                    <th:block th:if="${board.reportCount > 0}">
-                                                                        <div class="items-center space-x-2 mt-2">
-                                                                            <div> <b class="text-red-500">신고된 게시글</b>은 수정 및 삭제할 수 없습니다. </div>
-                                                                        </div>
-                                                                    </th:block>
-                                                                    <th:block th:if="${board.reportCount == 0}">
-                                                                        <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
-                                                                        <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">수정하기</button>
-                                                                    </th:block>
-                                                                </div>
-                                                            </form>
+                                                            <div class="uk-modal-footer uk-text-right bg-white">
+                                                                <th:block th:if="${board.reportCount > 0}">
+                                                                    <div class="items-center space-x-2 mt-2">
+                                                                        <div> <b class="text-red-500">신고된 게시글</b>은 수정 및 삭제할 수 없습니다. </div>
+                                                                    </div>
+                                                                </th:block>
+                                                                <th:block th:if="${board.reportCount == 0}">
+                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
+                                                                    <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">수정하기</button>
+                                                                </th:block>
+                                                            </div>
+                                                        </form>
 
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <div id="utextDiv">
+                                    <div class="space-y-3 content" th:utext="${board.content}"></div>
+                                    <hr class="mt-4">
+                                    <div class="float-left pl-2 pt-7">
+                                        <div id="like_div" class="flex">
+                                            <div  class="flex-none w-5">
+                                                <div th:if="${likes.isEmpty()}">
+                                                    <form id="like_add">
+                                                        <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                                                        <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                                                        <div class="like-btn" uk-tooltip="Like">
+                                                            <a class="like_heart_click text-sm">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeAddBtn text-blue-500" fill="currentColor">
+                                                                    <path d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3 0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8 0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"/>
+                                                                </svg>
+                                                            </a>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </th:block>
-                                        </div>
-                                    </div>
-                                    <div id="utextDiv">
-                                        <div class="space-y-3 content" th:utext="${board.content}"></div>
-                                        <hr class="mt-4">
-                                        <div class="float-left pl-2 pt-7">
-                                            <div id="like_div" class="flex">
-                                                <div  class="flex-none w-5">
-                                                    <div th:if="${likes.isEmpty()}">
-                                                        <form id="like_add">
-                                                            <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
-                                                            <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
-                                                            <div class="like-btn" uk-tooltip="Like">
-                                                                <a class="like_heart_click text-sm">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeAddBtn text-blue-500" fill="currentColor">
-                                                                        <path d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3 0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8 0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"/>
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div th:if="${likes.isPresent()}">
-                                                        <form id="like_cancel">
-                                                            <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
-                                                            <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
-                                                            <div class="like-btn" uk-tooltip="Unlike">
-                                                                <a class="like_heart_click">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeDelBtn text-red-500" fill="currentColor">
-                                                                        <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${likeService.boardLikeSize(board)}"></span>
-                                                <th:block th:if="${board.writer != account}">
-                                                    <div class="text-red-500 flex-none" uk-tooltip="신고하기">
-                                                        <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
-                                                            <i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i>
-                                                            <span class="likes">신고</span>
-                                                        </a>
-                                                    </div>
-                                                </th:block>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div th:if="${isReportedReplyMessage}">
-                            <div th:replace="theme-fragments.html :: red-notice(message=${isReportedReplyMessage})"></div>
-                        </div>
-                        <div th:if="${reportCompleteMessage}">
-                            <div th:replace="theme-fragments.html :: blue-notice(message=${reportCompleteMessage})"></div>
-                        </div>
-                        <!-- 댓글 작성 폼 -->
-                        <div class="card p-6 relative">
-                            <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
-                            <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
-                                <form id="reply_form" onsubmit="return false">
-                                    <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
-                                           value="1" th:value="${board.bid}" readonly>
-                                    <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
-                                           value="1" th:value="${account.id}" readonly>
-                                    <input autocomplete="off" type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
-                                    <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
-                                        <a class="write_reply">
-                                            <ion-icon name="return-down-back-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
-                                        </a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div id="isDeletedForm">
-                            <div id="isDeleted"></div>
-                        </div>
-                        <div class="card p-6">
-                            <div class="reply_div">
-                                <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
-
-                                <div class="space-y-5">
-
-                                    <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
-                                        <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                             th:data-id="${reply.getAccount().studentId}"
-                                             alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
-                                        <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                             th:src="${reply.getAccount()?.profileImage}"
-                                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
-                                        <th:block th:if="${reply.getAccount().id == account.id}">
-                                            <div class="absolute right-16 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
-                                                <a>
-                                                    <span>수정</span>
-                                                </a>
-                                            </div>
-                                            <div class="absolute right-16 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
-                                                <a>
-                                                    <span>등록</span>
-                                                </a>
-                                            </div>
-                                            <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
-                                                <a>
-                                                    <span class="likes">삭제</span>
-                                                    <form onsubmit="return false" th:id="|replyDeleteForm${reply.rid}|" class="d-none">
-                                                        <input type="hidden" th:value="${reply.rid}" name="reply_delete_rid">
                                                     </form>
-                                                </a>
+                                                </div>
+                                                <div th:if="${likes.isPresent()}">
+                                                    <form id="like_cancel">
+                                                        <input type="hidden" id="like_boardId" name="like_boardId" th:value="${board.bid}"/>
+                                                        <input type="hidden" id="like_accountId" name="like_accountId" th:value="${account.id}"/>
+                                                        <div class="like-btn" uk-tooltip="Unlike">
+                                                            <a class="like_heart_click">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="likeDelBtn text-red-500" fill="currentColor">
+                                                                    <path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3 0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </th:block>
-                                        <th:block th:if="${reply.getAccount().id != account.id}">
-                                            <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 신고">
-                                                <a th:href="@{/reply/report/{replyId}(replyId = ${reply.rid})}">
-                                                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                                                    <span class="likes">신고</span>
-                                                </a>
-                                            </div>
-                                        </th:block>
-                                        <br>
-                                        <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
-                                        <div class="w-full">
-                                            <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
-                                            <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
-                                            <th:block th:if="${!reply.getIsReported}">
-                                                <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">
-                                                    <input type="hidden" th:value="${reply.rid}" name="reply_update_rid">
-
-                                                    <p class="mt-3 md:ml-0 -ml-16" th:text="${reply.content}" th:id="|orginalReply${reply.rid}|">내용</p>
-                                                    <input type="hidden" th:value="${reply.content}" name="reply_update_content" th:id="|replyUpdateInput${reply.rid}|">
-                                                </form>
-
-                                            </th:block>
-                                            <th:block th:if="${reply.getIsReported}">
-                                                <p class="mt-3 md:ml-0 -ml-16">신고된 댓글입니다.</p>
+                                            <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${likeService.boardLikeSize(board)}"></span>
+                                            <th:block th:if="${board.writer != account}">
+                                                <div class="text-red-500 flex-none" uk-tooltip="신고하기">
+                                                    <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
+                                                        <i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i>
+                                                        <span class="likes">신고</span>
+                                                    </a>
+                                                </div>
                                             </th:block>
                                         </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${isReportedReplyMessage}">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${isReportedReplyMessage})"></div>
+                    </div>
+                    <div th:if="${reportCompleteMessage}">
+                        <div th:replace="theme-fragments.html :: blue-notice(message=${reportCompleteMessage})"></div>
+                    </div>
+                    <!-- 댓글 작성 폼 -->
+                    <div class="card p-6 relative">
+                        <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
+                        <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
+                            <form id="reply_form" onsubmit="return false">
+                                <input type="hidden" id="r_board_id" name="r_board_id" class="form-control"
+                                       value="1" th:value="${board.bid}" readonly>
+                                <input type="hidden" id="r_account_id" name="r_account_id" class="form-control"
+                                       value="1" th:value="${account.id}" readonly>
+                                <input autocomplete="off" type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
+                                <div class="-m-0.5 absolute bottom-0 flex items-center right-3 text-xl">
+                                    <a class="write_reply">
+                                        <ion-icon name="return-down-back-outline" class="hover:bg-gray-200 p-1.5 rounded-full"></ion-icon>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="isDeletedForm">
+                        <div id="isDeleted"></div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="reply_div">
+                            <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
+
+                            <div class="space-y-5">
+
+                                <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
+                                    <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
+                                         th:data-id="${reply.getAccount().studentId}"
+                                         alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
+                                    <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
+                                         th:src="${reply.getAccount()?.profileImage}"
+                                         alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+                                    <th:block th:if="${reply.getAccount().id == account.id}">
+                                        <div class="absolute right-16 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">
+                                            <a>
+                                                <span>수정</span>
+                                            </a>
+                                        </div>
+                                        <div class="absolute right-16 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
+                                            <a>
+                                                <span>등록</span>
+                                            </a>
+                                        </div>
+                                        <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 삭제" th:onclick="|deleteReplyBtn.deleteReply(${reply.rid})|" th:id="|replyDeleteSubmit${reply.rid}|">
+                                            <a>
+                                                <span class="likes">삭제</span>
+                                                <form onsubmit="return false" th:id="|replyDeleteForm${reply.rid}|" class="d-none">
+                                                    <input type="hidden" th:value="${reply.rid}" name="reply_delete_rid">
+                                                </form>
+                                            </a>
+                                        </div>
+                                    </th:block>
+                                    <th:block th:if="${reply.getAccount().id != account.id}">
+                                        <div class="absolute right-5 top-0 text-red-500" uk-tooltip="댓글 신고">
+                                            <a th:href="@{/reply/report/{replyId}(replyId = ${reply.rid})}">
+                                                <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                                                <span class="likes">신고</span>
+                                            </a>
+                                        </div>
+                                    </th:block>
+                                    <br>
+                                    <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
+                                    <div class="w-full">
+                                        <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
+                                        <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
+                                        <th:block th:if="${!reply.getIsReported}">
+                                            <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">
+                                                <input type="hidden" th:value="${reply.rid}" name="reply_update_rid">
+
+                                                <p class="mt-3 md:ml-0 -ml-16" th:text="${reply.content}" th:id="|orginalReply${reply.rid}|">내용</p>
+                                                <input type="hidden" th:value="${reply.content}" name="reply_update_content" th:id="|replyUpdateInput${reply.rid}|">
+                                            </form>
+
+                                        </th:block>
+                                        <th:block th:if="${reply.getIsReported}">
+                                            <p class="mt-3 md:ml-0 -ml-16">신고된 댓글입니다.</p>
+                                        </th:block>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
-                    <div class="lg:w-1/4 w-full"> 
-   
-                        <div uk-sticky="offset:100" class="uk-sticky">
-  
-                            <h2 class="text-lg font-semibold mb-3"> 최근 올라온 글</h2>
-                            <ul>
+
+
+                </div>
+                <div class="lg:w-1/4 w-full">
+
+                    <div uk-sticky="offset:100" class="uk-sticky">
+
+                        <h2 class="text-lg font-semibold mb-3"> 최근 올라온 글</h2>
+                        <ul>
                             <li th:each="recent : ${recentlyBoards}">
                                 <a th:href="@{/board/detail/{boardId}(boardId = ${recent.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
                                     <h3 class="font-medium line-clamp-2" th:text="${recent.title}"></h3>
@@ -370,289 +370,289 @@
                                 </a>
                             </li>
                         </ul>
-                            <br>
-                          </div>
-
-
+                        <br>
                     </div>
+
 
                 </div>
 
-        
             </div>
+
+
         </div>
-        
     </div>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script type="application/javascript" th:inline="javascript">
-        // 수정 버튼 클릭 시
-        let updateBtn = {
-            replyUpdate: function (replyId) {
-                jQuery(`#orginalReply${replyId}`).hide();
-                jQuery(`#replyUpdateBtn${replyId}`).hide();
-                jQuery(`#replyUpdateSubmit${replyId}`).show();
-                $(`#replyUpdateInput${replyId}`).prop("type", "text");
-                $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
-            }
+
+</div>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script type="application/javascript" th:inline="javascript">
+    // 수정 버튼 클릭 시
+    let updateBtn = {
+        replyUpdate: function (replyId) {
+            jQuery(`#orginalReply${replyId}`).hide();
+            jQuery(`#replyUpdateBtn${replyId}`).hide();
+            jQuery(`#replyUpdateSubmit${replyId}`).show();
+            $(`#replyUpdateInput${replyId}`).prop("type", "text");
+            $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
         }
-        // 등록 버튼 클릭 시
-        let updateComplete = {
-            replyUpdateAjax: function (replyId) {
-                // 댓글 수정 ajax
+    }
+    // 등록 버튼 클릭 시
+    let updateComplete = {
+        replyUpdateAjax: function (replyId) {
+            // 댓글 수정 ajax
+            $.ajax({
+                url:'/reply/update',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $(`#replyUpdateForm${replyId}`).serialize(),
+                dataType : "json",
+                success : function (){
+                    $('.reply_div').load(location.href+' .reply_div');
+                    jQuery(`#orginalReply${replyId}`).show();
+                    jQuery(`#replyUpdateBtn${replyId}`).show();
+                    jQuery(`#replyUpdateSubmit${replyId}`).hide();
+                    $(`#replyUpdateInput${replyId}`).prop("type", "hidden");
+                },
+            });
+        }
+    }
+    // 댓글 삭제
+    let deleteReplyBtn = {
+        deleteReply: function (replyId) {
+            swal({
+                title: "댓글을 삭제하시겠습니까?",
+                text: "삭제된 댓글은 복구할 수 없습니다.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    window.addEventListener('keydown', function (e){
+                        if (e.keyCode == 13) {
+                            swal("엔터키는 사용할 수 없습니다.");
+                        }
+                    })
+                    if (willDelete) {
+                        $.ajax({
+                            url:'/reply/delete',
+                            type:'get',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            data : $(`#replyDeleteForm${replyId}`).serialize(),
+                            //dataType : "json",
+                            success : function (r_del_message){
+                                $('.reply_div').load(location.href+' .reply_div');
+                                $("#isDeletedForm").html('<div id="isDeleted"></div>');
+                                $("#isDeleted").replaceWith(r_del_message);
+                            },
+                        });
+                    } else {
+                        swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
+                    }
+                });
+        }
+    }
+
+    $(document).ready(function (){
+        let name = [[ ${board.bid} ]];
+        history.replaceState('data to be passed', 'Title of the page', '/board/detail/' + name);
+        // Delay 함수
+        var delay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        var imageDelay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        // summernote
+        $('#content').summernote({
+            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+            tabsize: 2,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+            ],
+            maxHeight: null,
+            minHeight: null,
+            lang : 'ko-KR',
+            height: 500,
+        });
+
+        // input에 있는 값을 가져옴
+        var keydown = true;
+        var input = document.getElementById("r_content");
+        input.addEventListener('keypress', function(key){
+            if (input.value == '' && key.key == 'Enter') {
+                swal("댓글을 입력해주세요.");
+            }
+            if(input.value != '' && key.key == 'Enter'){
                 $.ajax({
-                    url:'/reply/update',
+                    url:'/board/detail/reply',
                     type:'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $(`#replyUpdateForm${replyId}`).serialize(),
+                    data : $('#reply_form').serialize(),
                     dataType : "json",
                     success : function (){
                         $('.reply_div').load(location.href+' .reply_div');
-                        jQuery(`#orginalReply${replyId}`).show();
-                        jQuery(`#replyUpdateBtn${replyId}`).show();
-                        jQuery(`#replyUpdateSubmit${replyId}`).hide();
-                        $(`#replyUpdateInput${replyId}`).prop("type", "hidden");
+                        input.value ='';
+                        keydown = false;
+                        $(input).attr("readonly",true);
+                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                     },
                 });
             }
-        }
-        // 댓글 삭제
-        let deleteReplyBtn = {
-            deleteReply: function (replyId) {
-                swal({
-                    title: "댓글을 삭제하시겠습니까?",
-                    text: "삭제된 댓글은 복구할 수 없습니다.",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                    .then((willDelete) => {
-                        window.addEventListener('keydown', function (e){
-                            if (e.keyCode == 13) {
-                                swal("엔터키는 사용할 수 없습니다.");
-                            }
-                        })
-                        if (willDelete) {
-                            $.ajax({
-                                url:'/reply/delete',
-                                type:'get',
-                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                                data : $(`#replyDeleteForm${replyId}`).serialize(),
-                                //dataType : "json",
-                                success : function (r_del_message){
-                                    $('.reply_div').load(location.href+' .reply_div');
-                                    $("#isDeletedForm").html('<div id="isDeleted"></div>');
-                                    $("#isDeleted").replaceWith(r_del_message);
-                                },
-                            });
-                        } else {
-                            swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
-                        }
-                    });
-            }
-        }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 200);
 
-        $(document).ready(function (){
-            let name = [[ ${board.bid} ]];
-            history.replaceState('data to be passed', 'Title of the page', '/board/detail/' + name);
-            // Delay 함수
-            var delay = (function (){
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
-
-            var imageDelay = (function (){
-                var timer = 0;
-                return function (callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })();
-
-            // summernote
-            $('#content').summernote({
-                placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
-                tabsize: 2,
-                toolbar: [
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                ],
-                maxHeight: null,
-                minHeight: null,
-                lang : 'ko-KR',
-                height: 500,
-            });
-
-            // input에 있는 값을 가져옴
-            var keydown = true;
-            var input = document.getElementById("r_content");
-            input.addEventListener('keypress', function(key){
-                if (input.value == '' && key.key == 'Enter') {
-                    swal("댓글을 입력해주세요.");
-                }
-                if(input.value != '' && key.key == 'Enter'){
-                    $.ajax({
-                        url:'/board/detail/reply',
-                        type:'get',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data : $('#reply_form').serialize(),
-                        dataType : "json",
-                        success : function (){
-                            $('.reply_div').load(location.href+' .reply_div');
-                            input.value ='';
-                            keydown = false;
-                            $(input).attr("readonly",true);
-                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
-                        },
-                    });
-                }
-                imageDelay(function (){
-                    $(".identicon").each(function() {
-                        var hash = md5($(this).data('id')).toString();
-                        var data = new Identicon(hash,{format:'svg'}).toString();
-                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                    });
-                }, 200);
-
-                delay(function (){
-                    $(input).removeAttr("readonly");
-                    $(input).attr("placeholder","댓글을 입력해주세요.");
-                    keydown=true;
-                }, 5000);
-            });
-            $(document).on('click', '.like_heart_click', function() {
-                // .like_heart_click은 <a></a>태그의 class 이름
-                // 해당 태그를 클릭하면 진행되는 메소드
-                if($(this).children('svg').attr('class') == "likeAddBtn text-blue-500"){
-                    // this는 클릭한 태그 전역
-                    // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
-                    $.ajax({
-                        url:'/board/detail/like',
-                        type:'get',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data : $('#like_add').serialize(),
-                        dataType : "json",
-                        success : function (like_size){
-                            $("#like_result").html(like_size);
-                            $('#like_div').load(location.href+' #like_div');
-                        },
-                    });
-                }else if($(this).children('svg').attr('class') == "likeDelBtn text-red-500"){
-                    $.ajax({
-                        url:'/board/detail/like-cancel',
-                        type:'get',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data : $('#like_cancel').serialize(),
-                        dataType : "json",
-                        success : function (like_size){
-                            $("#like_result").html(like_size);
-                            $('#like_div').load(location.href+' #like_div');
-                        },
-                    });
-                }
-            });
-            $(document).on('click', '.write_reply', function() {
-                if (input.value == '') {
-                    swal("댓글을 입력해주세요.");
-                }
-                if (input.value != '') {
-                    $.ajax({
-                        url:'/board/detail/reply',
-                        type:'get',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data : $('#reply_form').serialize(),
-                        dataType : "json",
-                        success : function (){
-                            $('.reply_div').load(location.href+' .reply_div');
-                            input.value ='';
-                            keydown = false;
-                            $(input).attr("readonly",true);
-                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
-                        },
-                    });
-                }
-                delay(function (){
-                    $(input).removeAttr("readonly");
-                    $(input).attr("placeholder","댓글을 입력해주세요.");
-                    keydown=true;
-                }, 5000);
-            });
-
-            // 게시글 업데이트
-            $(document).on('click', '.board_form_send', function() {
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
+        });
+        $(document).on('click', '.like_heart_click', function() {
+            // .like_heart_click은 <a></a>태그의 class 이름
+            // 해당 태그를 클릭하면 진행되는 메소드
+            if($(this).children('svg').attr('class') == "likeAddBtn text-blue-500"){
+                // this는 클릭한 태그 전역
+                // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
                 $.ajax({
-                    url:'/board/detail/update',
+                    url:'/board/detail/like',
                     type:'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#board_form').serialize(),
-                    success : function (message){
-                        location.reload();
-                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                        $("#isUpdated").replaceWith(message);
+                    data : $('#like_add').serialize(),
+                    dataType : "json",
+                    success : function (like_size){
+                        $("#like_result").html(like_size);
+                        $('#like_div').load(location.href+' #like_div');
                     },
                 });
+            }else if($(this).children('svg').attr('class') == "likeDelBtn text-red-500"){
+                $.ajax({
+                    url:'/board/detail/like-cancel',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $('#like_cancel').serialize(),
+                    dataType : "json",
+                    success : function (like_size){
+                        $("#like_result").html(like_size);
+                        $('#like_div').load(location.href+' #like_div');
+                    },
+                });
+            }
+        });
+        $(document).on('click', '.write_reply', function() {
+            if (input.value == '') {
+                swal("댓글을 입력해주세요.");
+            }
+            if (input.value != '') {
+                $.ajax({
+                    url:'/board/detail/reply',
+                    type:'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data : $('#reply_form').serialize(),
+                    dataType : "json",
+                    success : function (){
+                        $('.reply_div').load(location.href+' .reply_div');
+                        input.value ='';
+                        keydown = false;
+                        $(input).attr("readonly",true);
+                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
+                    },
+                });
+            }
+            delay(function (){
+                $(input).removeAttr("readonly");
+                $(input).attr("placeholder","댓글을 입력해주세요.");
+                keydown=true;
+            }, 5000);
+        });
+
+        // 게시글 업데이트
+        $(document).on('click', '.board_form_send', function() {
+            $.ajax({
+                url:'/board/detail/update',
+                type:'get',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                data : $('#board_form').serialize(),
+                success : function (message){
+                    location.reload();
+                    $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                    $("#isUpdated").replaceWith(message);
+                },
             });
-            // 게시글 업데이트 관련
-            $('#postTitle').val('');
-            jQuery('#selectBox').change(function() {
-                var state = jQuery('#selectBox option:selected').val();
-                if (state == '자유') {
-                    // 작성 값 초기화 및 메뉴명 변경
-                    $("#forum_head").text('글 작성하기');
-                    $('#titleHelp').text("글의 주제를 나타내는 제목을 작성해주세요.");
-                    $('#subTitleHelp').text("");
-                    $('#contentHelp').text("정치 및 저격 등 수준 낮은 게시글은 예고 없이 삭제됩니다.");
+        });
+        // 게시글 업데이트 관련
+        $('#postTitle').val('');
+        jQuery('#selectBox').change(function() {
+            var state = jQuery('#selectBox option:selected').val();
+            if (state == '자유') {
+                // 작성 값 초기화 및 메뉴명 변경
+                $("#forum_head").text('글 작성하기');
+                $('#titleHelp').text("글의 주제를 나타내는 제목을 작성해주세요.");
+                $('#subTitleHelp').text("");
+                $('#contentHelp').text("정치 및 저격 등 수준 낮은 게시글은 예고 없이 삭제됩니다.");
 
-                    // 자유게시판일 경우 SubTitle 빈값
-                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                // 자유게시판일 경우 SubTitle 빈값
+                $("#selectBoxSub option:eq(0)").prop("selected", true);
 
-                    // Hide and Show
-                    jQuery('#subBoardSort').hide();
-                    jQuery('#postTitleSub').hide();
-                    //$('#selectBoxSub').selectpicker('refresh');
-                    //$('#board_form').load(window.location.href+' #board_form');
-                }
-                if (state == '질문') {
-                    // 작성 값 초기화 및 메뉴명 변경
-                    $("#forum_head").text('Q&A 작성하기');
-                    $('#titleHelp').text("무엇이 궁금한가요?");
-                    $('#subTitleHelp').text("");
-                    $('#contentHelp').text("궁금한 내용을 최대한 자세하게 작성해주세요.");
+                // Hide and Show
+                jQuery('#subBoardSort').hide();
+                jQuery('#postTitleSub').hide();
+                //$('#selectBoxSub').selectpicker('refresh');
+                //$('#board_form').load(window.location.href+' #board_form');
+            }
+            if (state == '질문') {
+                // 작성 값 초기화 및 메뉴명 변경
+                $("#forum_head").text('Q&A 작성하기');
+                $('#titleHelp').text("무엇이 궁금한가요?");
+                $('#subTitleHelp').text("");
+                $('#contentHelp').text("궁금한 내용을 최대한 자세하게 작성해주세요.");
 
-                    // 질문게시판일 경우 SubTitle 선택 selected
-                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                // 질문게시판일 경우 SubTitle 선택 selected
+                $("#selectBoxSub option:eq(0)").prop("selected", true);
 
-                    // Hide and Show
-                    jQuery('#opgQnA').show();
-                    jQuery('#opgInfo').hide();
-                    jQuery('#subBoardSort').show();
-                    jQuery('#postTitleSub').hide();
-                    //$('#selectBoxSub').selectpicker('refresh');
-                    //$('#board_form').load(window.location.href+' #board_form');
-                }
-                if (state == '정보') {
-                    // 작성 값 초기화 및 메뉴명 변경
-                    $("#forum_head").text('정보 작성하기');
-                    $('#titleHelp').text("공유하려는 정보의 주제를 작성해주세요.");
-                    $('#subTitleHelp').text("해당 글을 어필하는 소제목을 작성해주세요.");
-                    $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
+                // Hide and Show
+                jQuery('#opgQnA').show();
+                jQuery('#opgInfo').hide();
+                jQuery('#subBoardSort').show();
+                jQuery('#postTitleSub').hide();
+                //$('#selectBoxSub').selectpicker('refresh');
+                //$('#board_form').load(window.location.href+' #board_form');
+            }
+            if (state == '정보') {
+                // 작성 값 초기화 및 메뉴명 변경
+                $("#forum_head").text('정보 작성하기');
+                $('#titleHelp').text("공유하려는 정보의 주제를 작성해주세요.");
+                $('#subTitleHelp').text("해당 글을 어필하는 소제목을 작성해주세요.");
+                $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
 
-                    // 정보게시판일 경우 SubTitle 선택 selected
-                    $("#selectBoxSub option:eq(0)").prop("selected", true);
+                // 정보게시판일 경우 SubTitle 선택 selected
+                $("#selectBoxSub option:eq(0)").prop("selected", true);
 
-                    // Hide and Show
-                    jQuery('#opgQnA').hide();
-                    jQuery('#opgInfo').show();
-                    jQuery('#subBoardSort').show();
-                    jQuery('#postTitleSub').show();
-                    //$('#selectBoxSub').selectpicker('refresh');
-                    //$('#board_form').load(window.location.href+' #board_form');
-                }
-            });
-        })
-    </script>
+                // Hide and Show
+                jQuery('#opgQnA').hide();
+                jQuery('#opgInfo').show();
+                jQuery('#subBoardSort').show();
+                jQuery('#postTitleSub').show();
+                //$('#selectBoxSub').selectpicker('refresh');
+                //$('#board_form').load(window.location.href+' #board_form');
+            }
+        });
+    })
+</script>
 
 </body>
 </html>
