@@ -30,4 +30,8 @@ public class ManagerService {
     public List<Account> accountList() {
         return accountRepository.findAll();
     }
+
+    public void dailySettlement() {
+        /* 매일 23시 59분 59초에 저장되는 결산 Entity 생성 */
+    }
 }
