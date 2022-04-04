@@ -387,10 +387,10 @@
                                                 <div class="drop_avatar">
                                                     <img th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:data-id="${alarm.fromAccount.studentId}"
-                                                         alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
+                                                         alt="" class="identicon user_avatar"/>
                                                     <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:src="${alarm.fromAccount.profileImage}"
-                                                         alt="" class=" shadow w-12 h-12 is_avatar"/>
+                                                         alt="" class=" shadow user_avatar"/>
                                                 </div>
                                                 <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
                                                  <i class="icon-feather-thumbs-up"></i>
