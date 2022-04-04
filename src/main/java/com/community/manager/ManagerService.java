@@ -1,5 +1,6 @@
 package com.community.manager;
 
+import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
@@ -24,5 +25,9 @@ public class ManagerService {
 
     public List<Board> reportBoardLists() {
         return boardRepository.findByIsReportedOrderByUploadTimeDesc(true);
+    }
+
+    public List<Account> accountList() {
+        return accountRepository.findAll();
     }
 }
