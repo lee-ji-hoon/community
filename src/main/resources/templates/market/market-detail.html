@@ -191,10 +191,10 @@
                         </div>
                     </div>
 
+                    <div id="isDeletedForm">
+                        <div id="isDeleted"></div>
+                    </div>
                     <div class="card p-6">
-                        <th:block th:if="${r_del_complete_message}">
-                            <div th:replace="theme-fragments.html :: blue-notice(message=${r_del_complete_message})"></div>
-                        </th:block>
                         <div class="reply_div">
                             <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${reply.size()}"></a>)</h1>
 
@@ -456,14 +456,21 @@
 </div>
 
 <script type="application/javascript" th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     // 수정 버튼 클릭 시
     let updateBtn = {
         replyUpdate: function (replyId) {
-            console.log(`${replyId}`);
             jQuery(`#orginalReply${replyId}`).hide();
             jQuery(`#replyUpdateBtn${replyId}`).hide();
             jQuery(`#replyUpdateSubmit${replyId}`).show();
             $(`#replyUpdateInput${replyId}`).prop("type", "text");
+            $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
         }
     }
     // 등록 버튼 클릭 시
@@ -479,7 +486,6 @@
                 data : $(`#replyUpdateForm${replyId}`).serialize(),
                 dataType : "json",
                 success : function (){
-                    console.log("Reply Update Success");
                     $('.reply_div').load(location.href+' .reply_div');
                     jQuery(`#orginalReply${replyId}`).show();
                     jQuery(`#replyUpdateBtn${replyId}`).show();
@@ -490,6 +496,13 @@
                     console.log("Reply Update Fail" + error);
                 }
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         }
     }
     // 댓글 삭제
@@ -509,28 +522,30 @@
                         }
                     })
                     if (willDelete) {
-                        console.log("댓글 삭제");
                         $.ajax({
                             url:'/reply/delete',
                             type:'get',
                             contentType: "application/x-www-form-urlencoded; charset=utf-8",
                             data : $(`#replyDeleteForm${replyId}`).serialize(),
-                            dataType : "json",
-                            success : function (){
-                                console.log("Reply Delete Success");
+                            //dataType : "json",
+                            success : function (r_del_message){
                                 $('.reply_div').load(location.href+' .reply_div');
+                                $("#isDeletedForm").html('<div id="isDeleted"></div>');
+                                $("#isDeleted").replaceWith(r_del_message);
                             },
-                            error : function (request, status, error){
-                                console.log("Reply Delete Fail" + error);
-                            }
                         });
-                        swal("댓글이 삭제되었습니다.", {
-                            icon: "success",
-                        });
+                        imageDelay(function (){
+                            $(".identicon").each(function() {
+                                var hash = md5($(this).data('id')).toString();
+                                var data = new Identicon(hash,{format:'svg'}).toString();
+                                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                            });
+                        }, 400);
                     } else {
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }
                 });
+
         }
     }
     $(document).ready(function () {
@@ -581,6 +596,14 @@
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
+
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -612,6 +635,14 @@
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
+
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -636,11 +667,19 @@
                         $('.reply_div').load(location.href + ' .reply_div');
                         $('#reply_update_form').load(location.href + ' #reply_update_form');
                     },
+
                     error: function (request, status, error) {
                         console.log("Reply Update Fail" + error);
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         });
 
         $(document).on('click', '.board_form_send', function() {
