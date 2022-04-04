@@ -70,30 +70,30 @@
             <hr class="my-4 md:min-w-full"/>
             <!-- Heading -->
             <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                Admin Layout Pages </h6>
+                Admin Pages </h6>
             <!-- Navigation -->
             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-                <li class="items-center" th:classappend="${currentSideMenu == 'main'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
+                <li class="items-center" th:classappend="${currentSideMenu=='main'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
                     <a th:href="@{/manager/main}" class="text-xs uppercase py-3 font-bold block">
                         <i class="fas fa-tv mr-2 text-sm"></i>
                         Dashboard </a>
                 </li>
-                <li class="items-center" th:classappend="${currentSideMenu == 'board'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
+                <li class="items-center" th:classappend="${currentSideMenu=='board'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
                     <a th:href="@{/manager/board}" class="text-xs uppercase py-3 font-bold block">
                         <i class="fas fa-newspaper mr-2 text-sm"></i>
                         board </a>
                 </li>
-                <li class="items-center" th:classappend="${currentSideMenu == 'settings'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
+                <li class="items-center" th:classappend="${currentSideMenu=='settings'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
                     <a th:href="@{/manager/setting}" class="text-xs uppercase py-3 font-bold block">
                         <i class="fas fa-tools mr-2 text-sm"></i>
                         setting </a>
                 </li>
-                <li class="items-center" th:classappend="${currentSideMenu == 'account'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
+                <li class="items-center" th:classappend="${currentSideMenu=='account'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
                     <a th:href="@{/manager/account}" class="text-xs uppercase py-3 font-bold block">
                         <i class="fas fa-user-circle mr-2 text-sm"></i>
                         Account </a>
                 </li>
-                <li class="items-center" th:classappend="${currentSideMenu == 'maps'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
+                <li class="items-center" th:classappend="${currentSideMenu=='maps'}? 'text-lightBlue-600 hover:text-lightBlue-600'">
                     <a th:href="@{/manager/maps}" class="text-xs uppercase py-3 font-bold block">
                         <i class="fas fa-map-marked mr-2 text-sm"></i>
                         Maps </a>
@@ -103,90 +103,89 @@
             <hr class="my-4 md:min-w-full"/>
             <!-- Heading -->
             <!--<h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                Auth Layout Pages </h6>
-            &lt;!&ndash; Navigation &ndash;&gt;
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-                <li class="items-center">
-                    <a href="../auth/login.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-                        <i class="fas fa-fingerprint text-blueGray-300 mr-2 text-sm"></i>
-                        Login </a>
-                </li>
-                <li class="items-center">
-                    <a href="../auth/register.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-                        <i class="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>
-                        Register </a>
-                </li>
-            </ul>
-            &lt;!&ndash; Divider &ndash;&gt;
-            <hr class="my-4 md:min-w-full"/>
-            &lt;!&ndash; Heading &ndash;&gt;
-            <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                No Layout Pages </h6>
-            &lt;!&ndash; Navigation &ndash;&gt;
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-                <li class="items-center">
-                    <a href="../landing.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-                        <i class="fas fa-newspaper text-blueGray-300 mr-2 text-sm"></i>
-                        Landing Page </a>
-                </li>
-                <li class="items-center">
-                    <a href="../profile.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-                        <i class="fas fa-user-circle text-blueGray-300 mr-2 text-sm"></i>
-                        Profile Page </a>
-                </li>
-            </ul>
-            &lt;!&ndash; Divider &ndash;&gt;
-            <hr class="my-4 md:min-w-full"/>
-            &lt;!&ndash; Heading &ndash;&gt;
-            <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                Documentation </h6>
-            &lt;!&ndash; Navigation &ndash;&gt;
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/js/colors/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fas fa-paint-brush mr-2 text-blueGray-300 text-base"></i>
-                        Styles </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/js/alerts/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-css3-alt mr-2 text-blueGray-300 text-base"></i>
-                        CSS Components </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-angular mr-2 text-blueGray-300 text-base"></i>
-                        Angular </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-js-square mr-2 text-blueGray-300 text-base"></i>
-                        Javascript </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                        NextJS </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                        React </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fas fa-link mr-2 text-blueGray-300 text-base"></i>
-                        Svelte </a>
-                </li>
-                <li class="inline-flex">
-                    <a href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
-                        <i class="fab fa-vuejs mr-2 text-blueGray-300 text-base"></i>
-                        VueJS </a>
-                </li>
-            </ul>-->
+                    Auth Layout Pages </h6>
+                &lt;!&ndash; Navigation &ndash;&gt;
+                <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+                    <li class="items-center">
+                        <a href="../auth/login.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                            <i class="fas fa-fingerprint text-blueGray-300 mr-2 text-sm"></i>
+                            Login </a>
+                    </li>
+                    <li class="items-center">
+                        <a href="../auth/register.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                            <i class="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>
+                            Register </a>
+                    </li>
+                </ul>
+                &lt;!&ndash; Divider &ndash;&gt;
+                <hr class="my-4 md:min-w-full"/>
+                &lt;!&ndash; Heading &ndash;&gt;
+                <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    No Layout Pages </h6>
+                &lt;!&ndash; Navigation &ndash;&gt;
+                <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+                    <li class="items-center">
+                        <a href="../landing.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                            <i class="fas fa-newspaper text-blueGray-300 mr-2 text-sm"></i>
+                            Landing Page </a>
+                    </li>
+                    <li class="items-center">
+                        <a href="../profile.html" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
+                            <i class="fas fa-user-circle text-blueGray-300 mr-2 text-sm"></i>
+                            Profile Page </a>
+                    </li>
+                </ul>
+                &lt;!&ndash; Divider &ndash;&gt;
+                <hr class="my-4 md:min-w-full"/>
+                &lt;!&ndash; Heading &ndash;&gt;
+                <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                    Documentation </h6>
+                &lt;!&ndash; Navigation &ndash;&gt;
+                <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/js/colors/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fas fa-paint-brush mr-2 text-blueGray-300 text-base"></i>
+                            Styles </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/js/alerts/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-css3-alt mr-2 text-blueGray-300 text-base"></i>
+                            CSS Components </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-angular mr-2 text-blueGray-300 text-base"></i>
+                            Angular </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-js-square mr-2 text-blueGray-300 text-base"></i>
+                            Javascript </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-react mr-2 text-blueGray-300 text-base"></i>
+                            NextJS </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-react mr-2 text-blueGray-300 text-base"></i>
+                            React </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fas fa-link mr-2 text-blueGray-300 text-base"></i>
+                            Svelte </a>
+                    </li>
+                    <li class="inline-flex">
+                        <a href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus" target="_blank" class="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold">
+                            <i class="fab fa-vuejs mr-2 text-blueGray-300 text-base"></i>
+                            VueJS </a>
+                    </li>
+                </ul>-->
         </div>
     </div>
 </nav>
-
 <!-- 최상단 헤더 -->
 <nav th:fragment="m_header" class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4">
     <div class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
@@ -198,9 +197,22 @@
             </div>
         </form>
         <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
+            <!--<a href="#" th:href="@{'/profile/' + ${account.nickname}}" class="user">
+                <div class="user_avatar">
+
+                </div>
+                <div class="user_name">
+                    <div class="user_name">
+                        <div th:text="${account.nickname}">유저이름</div>
+                        <span th:text="${account.studentId}">유저 학번</span>
+                    </div>
+                </div>
+            </a>-->
             <a class="text-blueGray-500 block" href="#pablo" onclick="openDropdown(event,'user-dropdown')">
                 <div class="items-center flex">
-                    <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full"><img alt="..." class="w-full rounded-full align-middle border-none shadow-lg" src="../../assets/img/team-1-800x800.jpg"/></span>
+                    <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                        <img alt="..." class="w-full rounded-full align-middle border-none shadow-lg" src="../../assets/img/team-1-800x800.jpg"/>
+                    </span>
                 </div>
             </a>
             <div class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48" id="user-dropdown">
@@ -214,7 +226,6 @@
         </ul>
     </div>
 </nav>
-
 <!-- 카드 헤더 -->
 <div th:fragment="m_card_header" class="relative bg-lightBlue-500 md:pt-32 pb-32 pt-12">
     <div class="px-4 md:px-10 mx-auto w-full">
@@ -222,145 +233,98 @@
             <!-- Card stats -->
             <div class="flex flex-wrap">
                 <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-                    <div
-                            class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-                    >
+                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div class="flex-auto p-4">
                             <div class="flex flex-wrap">
-                                <div
-                                        class="relative w-full pr-4 max-w-full flex-grow flex-1"
-                                >
-                                    <h5
-                                            class="text-blueGray-400 uppercase font-bold text-xs"
-                                    >
-                                        Traffic
-                                    </h5>
+                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                                        Traffic </h5>
                                     <span class="font-semibold text-xl text-blueGray-700">
-                            350,897
-                          </span>
+									350,897 </span>
                                 </div>
                                 <div class="relative w-auto pl-4 flex-initial">
-                                    <div
-                                            class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500"
-                                    >
+                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
                                         <i class="far fa-chart-bar"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="text-sm text-blueGray-400 mt-4">
-                        <span class="text-emerald-500 mr-2">
-                          <i class="fas fa-arrow-up"></i> 3.48%
-                        </span>
+								<span class="text-emerald-500 mr-2">
+								<i class="fas fa-arrow-up"></i> 3.48% </span>
                                 <span class="whitespace-nowrap">
-                          Since last month
-                        </span>
+								Since last month </span>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-                    <div
-                            class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-                    >
+                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div class="flex-auto p-4">
                             <div class="flex flex-wrap">
-                                <div
-                                        class="relative w-full pr-4 max-w-full flex-grow flex-1"
-                                >
-                                    <h5
-                                            class="text-blueGray-400 uppercase font-bold text-xs"
-                                    >
-                                        New users
-                                    </h5>
+                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                                        New Posts & Study </h5>
                                     <span class="font-semibold text-xl text-blueGray-700">
-                            2,356
-                          </span>
+									2,356 </span>
                                 </div>
                                 <div class="relative w-auto pl-4 flex-initial">
-                                    <div
-                                            class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500"
-                                    >
+                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
                                         <i class="fas fa-chart-pie"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="text-sm text-blueGray-400 mt-4">
-                        <span class="text-red-500 mr-2">
-                          <i class="fas fa-arrow-down"></i> 3.48%
-                        </span>
+								<span class="text-red-500 mr-2">
+								<i class="fas fa-arrow-down"></i> 3.48% </span>
                                 <span class="whitespace-nowrap"> Since last week </span>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-                    <div
-                            class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-                    >
+                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div class="flex-auto p-4">
                             <div class="flex flex-wrap">
-                                <div
-                                        class="relative w-full pr-4 max-w-full flex-grow flex-1"
-                                >
-                                    <h5
-                                            class="text-blueGray-400 uppercase font-bold text-xs"
-                                    >
-                                        Sales
-                                    </h5>
-                                    <span class="font-semibold text-xl text-blueGray-700">
-                            924
-                          </span>
+                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                                        Members </h5>
+                                    <span class="font-semibold text-xl text-blueGray-700" th:text="${managerService.accountList().size()}"></span>
                                 </div>
                                 <div class="relative w-auto pl-4 flex-initial">
-                                    <div
-                                            class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500"
-                                    >
+                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
                                         <i class="fas fa-users"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="text-sm text-blueGray-400 mt-4">
-                        <span class="text-orange-500 mr-2">
-                          <i class="fas fa-arrow-down"></i> 1.10%
-                        </span>
+								<span class="text-orange-500 mr-2">
+								<i class="fas fa-arrow-down"></i> 1.10% </span>
                                 <span class="whitespace-nowrap"> Since yesterday </span>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-                    <div
-                            class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-                    >
+                    <div class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
                         <div class="flex-auto p-4">
                             <div class="flex flex-wrap">
-                                <div
-                                        class="relative w-full pr-4 max-w-full flex-grow flex-1"
-                                >
-                                    <h5
-                                            class="text-blueGray-400 uppercase font-bold text-xs"
-                                    >
-                                        Performance
-                                    </h5>
+                                <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+                                    <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+                                        Market Sales </h5>
                                     <span class="font-semibold text-xl text-blueGray-700">
-                            49,65%
-                          </span>
+									49,65% </span>
                                 </div>
                                 <div class="relative w-auto pl-4 flex-initial">
-                                    <div
-                                            class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-lightBlue-500"
-                                    >
+                                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-lightBlue-500">
                                         <i class="fas fa-percent"></i>
                                     </div>
                                 </div>
                             </div>
                             <p class="text-sm text-blueGray-400 mt-4">
-                        <span class="text-emerald-500 mr-2">
-                          <i class="fas fa-arrow-up"></i> 12%
-                        </span>
+								<span class="text-emerald-500 mr-2">
+								<i class="fas fa-arrow-up"></i> 12% </span>
                                 <span class="whitespace-nowrap">
-                          Since last month
-                        </span>
+								Since last month </span>
                             </p>
                         </div>
                     </div>
@@ -369,7 +333,6 @@
         </div>
     </div>
 </div>
-
 <!-- 푸터 -->
 <footer th:fragment="m_footer" class="block py-4">
     <div class="container mx-auto px-4">
@@ -405,7 +368,6 @@
         </div>
     </div>
 </footer>
-
 <!-- 기본 스크립트 -->
 <script th:fragment="m_script" type="text/javascript">
     /* Make dynamic date appear */
