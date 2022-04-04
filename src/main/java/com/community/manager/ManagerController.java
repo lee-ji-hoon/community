@@ -13,28 +13,45 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class ManagerController {
 
+    private final ManagerService managerService;
+
     @GetMapping("/manager/main")
-    public String managerMain(Model model) {
+    public String managerMain(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(managerService);
+        model.addAttribute(account);
         return "manager/m_main";
     }
 
     @GetMapping("/manager/board")
-    public String managerBoard(Model model) {
+    public String managerBoard(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(managerService);
+        model.addAttribute(account);
         return "manager/m_board";
     }
 
     @GetMapping("/manager/setting")
-    public String managerSetting(Model model) {
+    public String managerSetting(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(managerService);
+        model.addAttribute(account);
         return "manager/settings";
     }
 
     @GetMapping("/manager/account")
-    public String managerTables(Model model) {
+    public String managerTables(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(managerService);
+        model.addAttribute(account);
         return "manager/tables";
     }
 
     @GetMapping("/manager/maps")
-    public String managerMaps(Model model) {
+    public String managerMaps(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(managerService);
+        model.addAttribute(account);
         return "manager/maps";
     }
 }
