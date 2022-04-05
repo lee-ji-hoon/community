@@ -21,6 +21,7 @@
 
     <div class="main_content">
         <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
             <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'meeting')"></div>
 
             <div id="create-post-modal"  uk-modal>

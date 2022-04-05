@@ -74,7 +74,18 @@ public class BoardController {
 
     // 게시물 작성 후 detail 페이지로 Post
     @PostMapping("/board/detail")
-    public String detailView(@Valid BoardForm boardForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+    public String detailView(@Valid BoardForm boardForm, Errors errors, Model model,
+                             RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+        boolean emailVerified = account.isEmailVerified();
+
+        log.info("email 체크 : {}", emailVerified);
+        if (!emailVerified) {
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+
+            return "redirect:/board";
+        }
+
         if (errors.hasErrors()) {
             return "board/boards";
         }

@@ -31,6 +31,14 @@ public class MarketService {
         return marketRepository.save(market);
     }
 
+    public Market createNewItemNoImage(Market market, Account account) {
+        market.setItemUploadTime(LocalDateTime.now());
+        market.setMarketItemStatus(MarketItemStatus.판매중);
+        market.setSeller(account);
+
+        return marketRepository.save(market);
+    }
+
     public void updateMarket(Market byMarketId, MarketForm marketForm) {
         modelMapper.map(marketForm, byMarketId);
     }

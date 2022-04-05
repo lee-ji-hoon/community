@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -55,7 +56,17 @@ public class MarketController {
     }
 
     @GetMapping("/market/new")
-    public String marketNewForm(@CurrentUser Account account, Model model){
+    public String marketNewForm(@CurrentUser Account account, Model model, @Valid MarketForm marketForm, RedirectAttributes redirectAttributes){
+        boolean emailVerified = account.isEmailVerified();
+
+        log.info("email 체크 : {}", emailVerified);
+        if (!emailVerified) {
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+
+            return "redirect:/market/";
+        }
+
         model.addAttribute(account);
         model.addAttribute(new MarketForm());
 
@@ -64,16 +75,25 @@ public class MarketController {
 
     @PostMapping("/market/new")
     public String marketNewProduct(@CurrentUser Account account, Model model,
-                                    @Valid MarketForm marketForm,
-                                    @RequestPart MultipartFile file) throws IOException {
-        String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
-        log.info("market image file : {}", marketImagePath);
+                                    @Valid MarketForm marketForm, RedirectAttributes redirectAttributes,
+                                    @RequestPart MultipartFile file, @RequestParam("imageFile") String imageFile) throws IOException {
+        log.info("file = {}", file.getName());
+        log.info("imageFile = {}", imageFile);
+        Long marketId = null;
+        if (Objects.equals(imageFile, "checked")) {
+            String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
+            log.info("market image file : {}", marketImagePath);
+            Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
+            model.addAttribute(account);
+            marketId = newItem.getMarketId();
 
-        Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
-        model.addAttribute(account);
-
-        Long marketId = newItem.getMarketId();
+        } else {
+            Market newItem = marketService.createNewItemNoImage(modelMapper.map(marketForm, Market.class), account);
+            model.addAttribute(account);
+            marketId = newItem.getMarketId();
+        }
         return "redirect:/market/detail/" + marketId;
+
     }
 
     @GetMapping("/market/detail/{marketId}")
