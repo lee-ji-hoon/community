@@ -255,7 +255,8 @@
                     data : $(`#sendChatForm${roomId}`).serialize(),
                     success : function (){
                         $(`#chatContents${roomId}`)
-                            .load(location.href+` #chatContents${roomId}`);
+                            // .load(location.href+` #chatContents${roomId}`);
+                        location.reload();
                         $('.messages-inbox').load(location.href+' .messages-inbox');
                         $(`#chatInput${roomId}`)
                             .val('');
@@ -281,7 +282,7 @@
     }, true);
     $(document).ready(function() {
         $('.simplebar-placeholder').css({"max-width": "max-content"});
-        // $('.simplebar-mask').css({"margin-bottom": "12rem"});
+        $('.simplebar-mask').css({"margin-bottom": "6rem"});
     });
 
 </script>
