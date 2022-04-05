@@ -1526,7 +1526,8 @@
         <button th:each="tag: ${tagList.tags}"
                 class="bg-gray-100 font-weight-light text-monospace mr-1 mt-3 p-1" >
             <span>#</span>
-            <a th:href="@{/{tagTitle}(tagTitle=${tag.title})}" th:text="${tag.title}">Tag</a>
+            <a th:href="@{'/study/search/'+${tag.title}}"
+               th:text="${tag.title}">Tag</a>
         </button>
     </div>
 </div>
