@@ -66,8 +66,8 @@ public class MarketController {
 
     @PostMapping("/market/new")
     public String marketNewProduct(@CurrentUser Account account, Model model,
-                                   @Valid MarketForm marketForm,
-                                   @RequestPart MultipartFile file) throws IOException {
+                                    @Valid MarketForm marketForm,
+                                    @RequestPart MultipartFile file) throws IOException {
         String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(marketForm.getFilePath(), file);
         log.info("market image file : {}", marketImagePath);
 
