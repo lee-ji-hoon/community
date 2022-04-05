@@ -1,17 +1,13 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.tag.Tag;
+import com.community.domain.study.StudyRepository;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
 import com.community.web.dto.validator.SignUpFormValidator;
-import com.community.domain.board.BoardRepository;
-import com.community.service.BoardService;
 import com.community.domain.account.CurrentUser;
-import com.community.service.LikeService;
 import com.community.web.dto.ProfileForm;
 import com.community.service.AccountService;
-import com.community.domain.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @Slf4j
 @Controller
