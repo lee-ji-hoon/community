@@ -111,7 +111,7 @@
                                                     <th:block th:if="${chat.getChatId().equals(a.value.getChatId())}">
                                                         <!-- Time Sign -->
                                                         <div class="message-time-sign">
-                                                            <p th:text="${chat.sendTime}"></p>
+                                                            <p th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd')}"></p>
                                                         </div>
                                                     </th:block>
                                                     <th:block th:if="${chat.sender == account}">
