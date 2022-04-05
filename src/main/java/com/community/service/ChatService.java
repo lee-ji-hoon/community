@@ -110,7 +110,6 @@ public class ChatService {
             LocalDateTime chatDate = chat.getSendTime();
             String convertChatDate = chatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             groupBySendDateTime.put(convertChatDate, chat);
-            break;
         }
         return groupBySendDateTime;
     }
