@@ -62,6 +62,13 @@ public class BaseController {
             List<Room> roomHostByAccount = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
             List<Room> roomAttenderByAccount = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
 
+            // 채팅 알람에 띄워질 채팅방
+            List<Room> findTop4MyRooms = new ArrayList<>();
+            List<Room> roomHostTop2ByAccount = roomRepository.findTop2ByRoomHostOrderByLastSendTimeDesc(account);
+            List<Room> roomAttenderTop2ByAccount = roomRepository.findTop2ByRoomAttenderOrderByLastSendTimeDesc(account);
+            findTop4MyRooms.addAll(roomHostTop2ByAccount);
+            findTop4MyRooms.addAll(roomAttenderTop2ByAccount);
+
             // 해당 Room의 ChatList를 가져오는 로직
             List<Chat> chatNotifyLists = new ArrayList<>();
             findMyRooms.addAll(roomAttenderByAccount);
@@ -75,9 +82,10 @@ public class BaseController {
                     }
                 }
             }
+
             model.addAttribute("g_chatNotify", chatNotifyLists);
             model.addAttribute("g_chatService", chatService);
-            model.addAttribute("g_myRoom", findMyRooms);
+            model.addAttribute("g_myRoom", findTop4MyRooms);
         }
     }
 
@@ -86,7 +94,7 @@ public class BaseController {
         // 알림
         if(account != null) {
             log.info("baseController.java의 alarm 실패 ");
-            List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+            List<Alarm> alarmList = alarmRepository.findTop4ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
             long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
             log.info("alarm 수 : {}", countByAccountAndNotChecked);
 
