@@ -424,6 +424,13 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     let updateBtn = {
         replyUpdate: function (replyId) {
             jQuery(`#orginalReply${replyId}`).hide();
@@ -485,6 +492,13 @@
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }
                 });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
         }
     }
 
@@ -527,6 +541,13 @@
                     $('#content').summernote('reset');
                 },
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
         });
 
         // 댓글 작성 ajax
@@ -554,6 +575,13 @@
                     });
                 }
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -581,6 +609,13 @@
                     },
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
