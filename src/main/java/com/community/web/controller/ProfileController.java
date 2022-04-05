@@ -3,6 +3,7 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
+import com.community.service.S3Service;
 import com.community.web.dto.*;
 import com.community.service.TagService;
 import com.community.domain.tag.TagRepository;
@@ -21,9 +22,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,6 +64,7 @@ public class ProfileController {
     private final TagService tagService;
     private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
+    private final S3Service s3Service;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -107,15 +111,19 @@ public class ProfileController {
 
     // 프로필 이미지 변경 요청
     @PostMapping(SETTINGS_PROFILE_IMG_URL)
-    public String updateProfileImageForm(@CurrentUser Account account, ProfileForm profileForm,
-                                         Model model, Errors errors, RedirectAttributes redirectAttributes) {
+    public String updateProfileImageForm(@CurrentUser Account account, @Valid ProfileForm profileForm,
+                                         @RequestParam(required = false, value = "file") MultipartFile file,
+                                         Model model, Errors errors, RedirectAttributes redirectAttributes) throws IOException {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_PROFILE_IMG_VIEW_NAME;
         }
+        log.info("profileImage : {}", profileForm.getProfileImage());
+        log.info("file : {}",file);
+        String profile = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
 
-        log.info(profileForm.getProfileImage());
-        profileService.updateProfileImage(account, profileForm);
+        log.info("profileImage : {}", profile);
+        profileService.updateProfileImage(account, profile);
         redirectAttributes.addFlashAttribute("message", "프로필이미지를 수정했습니다.");
 
         return "redirect:" + SETTINGS_PROFILE_IMG_URL;
