@@ -62,7 +62,7 @@
                                                         <option data-icon="icon-material-outline-help-outline" value="행사">행사</option>
                                                     </select>
                                                     <small id="postSortHelp" class="form-text text-muted">
-                                                        타학과 행사는 공지로 올려주세요.
+                                                        학교 및 타학과 행사 또한 행사 카테고리로 올려주세요.
                                                     </small>
                                                 </div>
                                             </div>
@@ -198,7 +198,7 @@
                                 <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
                                     <div class="absolute w-full h-3/4 -bottom-6 bg-gradient-to-b from-transparent to-gray-800 z-10">
                                     </div>
-                                    <img th:src="@{/assets/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
+                                    <img th:src="@{/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
                                     <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
                                         <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
                                             진행중 </div>

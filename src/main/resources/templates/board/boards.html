@@ -69,7 +69,7 @@
                                                 <div id="subBoardSort">
                                                     <div class="form-group">
                                                         <label for="selectBoxSub"> 종류 선택 </label>
-                                                        <select id="selectBoxSub" name="selectBoxSub"  class="shadow-none with-border form-control px-2">
+                                                        <select id="selectBoxSub" name="selectBoxSub"  class="shadow-none with-border form-control px-2" th:field="*{subBoardTitle}">
                                                             <optgroup label="QnA" id="opgQnA">
                                                                 <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
                                                                 <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
