@@ -368,32 +368,12 @@
     <script th:replace="theme-fragments.html :: form-validation"></script>
     <script type="application/javascript">
         $( document ).ready( function() {
-            var HelloButton = function (context) {
-                var ui = $.summernote.ui;
-
-                // create button
-                var button = ui.button({
-                    contents: 'Code block',
-                    tooltip: 'hello',
-                    click: function () {
-
-                        $('#content').summernote('code', '<br><pre style="background-color: rgb(212 212 212);"><code class="html">Place your code here.</code></pre><br><br>');
-                    }
-                });
-
-                return button.render();   // return button as jquery object
-            }
             $('#content').summernote({
                 placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
                 tabsize: 2,
                 toolbar: [
-                    ['font', ['bold', 'italic', 'underline', 'clear', 'codeblock']],
-                    ['mybutton', ['hello']],
-                    ['insert',['picture','link']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
                 ],
-                buttons: {
-                    hello: HelloButton
-                },
                 maxHeight: null,
                 minHeight: null,
                 lang : 'ko-KR',
