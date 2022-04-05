@@ -469,14 +469,15 @@
                     } else {
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }
+                    $('.reply_div').load(location.href+' .reply_div');
+                    imageDelay(function (){
+                        $(".identicon").each(function() {
+                            var hash = md5($(this).data('id')).toString();
+                            var data = new Identicon(hash,{format:'svg'}).toString();
+                            $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                        });
+                    }, 1000);
                 });
-            imageDelay(function (){
-                $(".identicon").each(function() {
-                    var hash = md5($(this).data('id')).toString();
-                    var data = new Identicon(hash,{format:'svg'}).toString();
-                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                });
-            }, 1000);
         }
     }
 
