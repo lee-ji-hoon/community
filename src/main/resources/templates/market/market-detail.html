@@ -136,32 +136,45 @@
                                                     <div class="uk-modal-header">
                                                         <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>
                                                     </div>
-                                                    <form class="needs-validation" id="chat_form" onsubmit="return false">
-                                                        <div class="uk-modal-body" uk-overflow-auto>
-                                                            <div class="space-y-4 g:w-8/12">
-                                                                <div class="form-group d-none">
-                                                                    <div>
-                                                                        <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
-                                                                               th:value="${product.seller.id}" readonly/>
+                                                    <th:block th:if="${account.isEmailVerified()}">
+                                                        <form class="needs-validation" id="chat_form" onsubmit="return false">
+                                                            <div class="uk-modal-body" uk-overflow-auto>
+                                                                <div class="space-y-4 g:w-8/12">
+                                                                    <div class="form-group d-none">
+                                                                        <div>
+                                                                            <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
+                                                                                   th:value="${product.seller.id}" readonly/>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <!-- 본문 -->
-                                                                <div class="form-group">
-                                                                    <div>
+                                                                    <!-- 본문 -->
+                                                                    <div class="form-group">
+                                                                        <div>
                                                                     <textarea class="form-control bg-gray-100 p-3"  id="c_content" name="c_content" style="resize: none"
                                                                               type="text" aria-describedby="contentHelp" required></textarea>
+                                                                        </div>
+                                                                        <small id="contentHelp" class="form-text text-muted">쪽지</small>
+                                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
                                                                     </div>
-                                                                    <small id="contentHelp" class="form-text text-muted">쪽지</small>
-                                                                    <small class="invalid-feedback">글을 입력해주세요.</small>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="uk-modal-footer uk-text-right">
-                                                            <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">취소</button>
-                                                            <button class="bg-blue-600 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 chat_send uk-modal-close">보내기</button>
+                                                            <div class="uk-modal-footer uk-text-right">
+                                                                <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">취소</button>
+                                                                <button class="bg-blue-600 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 chat_send uk-modal-close">보내기</button>
+                                                            </div>
+                                                        </form>
+                                                    </th:block>
+                                                    <th:block th:if="${!account.isEmailVerified()}">
+                                                        <div class="uk-modal-body" uk-overflow-auto>
+                                                            <div class="space-y-4 g:w-8/12">
+                                                                <p>아직 이메일 인증을 하지 않은 회원입니다.</p>
+                                                                <p>이메일 인증 후 다시 시도해주세요.</p>
+                                                            </div>
                                                         </div>
-                                                    </form>
+                                                        <div class="uk-modal-footer uk-text-right">
+                                                            <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">닫기</button>
+                                                        </div>
+                                                    </th:block>
 
 
                                                 </div>
@@ -600,6 +613,13 @@
                         console.log("쪽지 실패" + error);
                     }
                 });
+                imageDelay(function (){
+                    $(".identicon").each(function() {
+                        var hash = md5($(this).data('id')).toString();
+                        var data = new Identicon(hash,{format:'svg'}).toString();
+                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                    });
+                }, 400);
             }
         });
     })
