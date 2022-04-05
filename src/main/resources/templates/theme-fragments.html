@@ -484,18 +484,22 @@
                                                                 <img th:if="${#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
                                                                      th:data-id="${myRoom.getRoomAttender().studentId}"
                                                                      class="identicon jdenticon_fix"
+                                                                     style="width: 45px; height: 45px;"
                                                                      alt=""/>
                                                                 <img th:if="${!#strings.isEmpty(myRoom.getRoomAttender()?.profileImage)}"
                                                                      th:src="${myRoom.getRoomAttender()?.profileImage}"
+                                                                     style="width: 45px; height: 45px;"
                                                                      alt=""/>
                                                             </th:block>
                                                             <th:block th:if="${myRoom.getRoomAttender().getNickname().equals(account.getNickname())}">
                                                                 <img th:if="${#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
                                                                      th:data-id="${myRoom.getRoomHost().studentId}"
                                                                      class="identicon jdenticon_fix"
+                                                                     style="width: 45px; height: 45px;"
                                                                      alt=""/>
                                                                 <img th:if="${!#strings.isEmpty(myRoom.getRoomHost()?.profileImage)}"
                                                                      th:src="${myRoom.getRoomHost()?.profileImage}"
+                                                                     style="width: 45px; height: 45px;"
                                                                      alt=""/>
                                                             </th:block>
                                                         </div>

@@ -121,10 +121,10 @@ public class CouncilController {
     @GetMapping("/council/detail/delete/{councilId}")
     public String deleteCouncil(@PathVariable Long councilId, @CurrentUser Account account) {
         Council council = councilRepository.findByCid(councilId);
-        if (council.getPostWriter().getId().equals(account.getId())) {
-            councilRepository.delete(council);
-            return "redirect:/council";
+        if (!council.getPostWriter().getId().equals(account.getId())) {
+            return "error-page";
         }
-        return "error-page";
+        councilRepository.delete(council);
+        return "redirect:/council";
     }
 }

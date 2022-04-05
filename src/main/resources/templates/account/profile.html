@@ -235,7 +235,7 @@
         </button>
 
         <div class="uk-modal-header">
-            <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>촘ㅅ
+            <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>
         </div>
         <th:block th:if="${byAccount.isEmailVerified()}">
             <form class="needs-validation" id="chat_form" onsubmit="return false">
@@ -281,13 +281,13 @@
     $(document).ready(function () {
         var c_textarea = $('#c_content');
         $(document).on('click', '.chat_send', function () {
-            if (c_textarea.val().length < 5) {
-                swal("5글자 이상의 내용을 입력해주세요.", {
+            if (c_textarea.val().length < 2) {
+                swal("2글자 이상의 내용을 입력해주세요.", {
                     icon: "warning",
                 });
                 c_textarea.val('');
             }
-            if (c_textarea.val().length >= 5) {
+            if (c_textarea.val().length >= 2) {
                 console.log("쪽지 보내기");
                 $.ajax({
                     url: '/chat/new',
