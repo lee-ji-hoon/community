@@ -17,8 +17,8 @@
 
     <!-- Main Contents -->
     <div class="main_content">
-        <div th:replace="theme-fragments.html :: checked-email"></div>
         <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
             <th:block th:if="${searchType}">
                 <div>
                     <h3 class="text-2xl font-semibold"><a th:text="${searchType}" class="font-bold"></a>내 <a th:text="${keyword}" class="font-bold"></a> 검색 결과</h3>
