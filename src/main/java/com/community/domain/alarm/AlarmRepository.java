@@ -13,7 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     Alarm findByAlarmId(Long alarm);
 
-    List<Alarm> findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
+    List<Alarm> findFirst5ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean checked);
 
     @Transactional
     void deleteByToAccountAndChecked(Account account, boolean checked);

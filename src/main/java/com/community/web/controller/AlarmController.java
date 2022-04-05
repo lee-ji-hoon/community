@@ -32,8 +32,8 @@ public class AlarmController {
 
     @GetMapping("/alarm/view")
     public String alarmView(@CurrentUser Account account, Model model) {
-        List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
-        List<Alarm> byChecked = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
+        List<Alarm> alarmList = alarmRepository.findFirst5ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+        List<Alarm> byChecked = alarmRepository.findFirst5ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
 
         long countByAccountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
         alarmType(model, alarmList, countByAccountAndChecked, alarmList.size());
