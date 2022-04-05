@@ -255,8 +255,7 @@
                     data : $(`#sendChatForm${roomId}`).serialize(),
                     success : function (){
                         $(`#chatContents${roomId}`)
-                            // .load(location.href+` #chatContents${roomId}`);
-                        location.reload();
+                            .load(location.href+` #chatContents${roomId}`);
                         $('.messages-inbox').load(location.href+' .messages-inbox');
                         $(`#chatInput${roomId}`)
                             .val('');
