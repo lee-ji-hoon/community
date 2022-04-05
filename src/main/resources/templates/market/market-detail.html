@@ -144,6 +144,8 @@
                                                                         <div>
                                                                             <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
                                                                                    th:value="${product.seller.id}" readonly/>
+                                                                            <!--<input type="hidden" id="c_market_id" name="market_id" class="form-control"
+                                                                                   value="1" th:value="${marketId}" readonly>-->
                                                                         </div>
                                                                     </div>
                                                                     <!-- 본문 -->
@@ -589,13 +591,13 @@
         });
         var c_textarea = $('#c_content');
         $(document).on('click', '.chat_send', function () {
-            if (c_textarea.val().length < 5) {
+            if (c_textarea.val().length < 2) {
                 swal("5글자 이상의 내용을 입력해주세요.", {
                     icon: "warning",
                 });
                 c_textarea.val('');
             }
-            if (c_textarea.val().length >= 5) {
+            if (c_textarea.val().length >= 2) {
                 console.log("쪽지 보내기");
                 $.ajax({
                     url: '/chat/new',

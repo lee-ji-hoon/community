@@ -241,13 +241,13 @@
     let chatSendFx = {
         chatSendAjax: function (roomId) {
             var chatInput = $(`#chatInput${roomId}`);
-            if(chatInput.val().length < 5){
-                swal("5글자 이상의 내용을 입력해주세요.", {
+            if(chatInput.val().length < 2){
+                swal("2글자 이상의 내용을 입력해주세요.", {
                     icon: "warning",
                 });
                 chatInput.val('');
             }
-            if(chatInput.val().length >= 5){
+            if(chatInput.val().length >= 2){
                 $.ajax({
                     url:'/chat/send',
                     type:'get',
