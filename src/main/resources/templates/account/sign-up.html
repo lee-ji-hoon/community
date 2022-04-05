@@ -19,7 +19,8 @@
                     <div class="form-group">
                         <label class="mb-0" for="username"><b>이름</b></label>
                         <input id="username" type="text" th:field="*{username}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$">
+                               placeholder="username" aria-describedby="usernameHelp" required pattern="^[ㄱ-ㅎ가-힣]{2,20}$"
+                               autocomplete="off">
                         <small id="usernameHelp" class="form-text text-muted">
                             이름을 입력해주세요
                         </small>
@@ -31,7 +32,8 @@
                     <div class="form-group">
                         <label class="mb-0" for="nickname">닉네임</label>
                         <input id="nickname" type="text" th:field="*{nickname}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$">
+                               placeholder="nickname" aria-describedby="nicknameHelp" required pattern="^[ㄱ-ㅎ가-힣a-z0-9_-]{3,20}$"
+                               autocomplete="off">
                         <small id="nicknameHelp" class="form-text text-muted ">
                             공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. <br>가입후에 변경할 수 있습니다.
                         </small>
@@ -42,7 +44,8 @@
                     <div class="form-group">
                         <label class="mb-0" for="email">이메일</label>
                         <input id="email" type="email" th:field="*{email}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               placeholder="Info@example.com" aria-describedby="emailHelp" pattern=".+@nsu\.ac\.kr" required>
+                               placeholder="Info@example.com" aria-describedby="emailHelp" pattern=".+@nsu\.ac\.kr" required
+                               autocomplete="off">
                         <small id="emailHelp" class="form-text text-muted">
                             학교 인증이 필요하므로 이메일@nsu.ac.kr로 적어주시기 바랍니다.
                         </small><br>
@@ -53,7 +56,8 @@
                     <div class="form-group">
                         <label class="mb-0" for="studentId">학번</label>
                         <input id="studentId" type="text" th:field="*{studentId}" class="form-control bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               placeholder="17-100459" aria-describedby="studentIdHelp" required pattern="\d{2}-\d{2,10}$">
+                               placeholder="17-100459" aria-describedby="studentIdHelp" required pattern="\d{2}-\d{2,10}$"
+                               autocomplete="off">
                         <small id="studentIdHelp" class="form-text text-muted">
                             예시) 17-100459 <br>
                             위의 예시처럼 작생해주시기 바랍니다.
@@ -65,7 +69,8 @@
                     <div class="form-group">
                         <label class="mb-0" for="password">패스워드</label>
                         <input id="password" type="password" th:field="*{password}" class="bg-gray-100 h-12 mt-2 px-3 rounded-md w-full"
-                               aria-describedby="passwordHelp" required minlength="8" maxlength="50">
+                               aria-describedby="passwordHelp" required minlength="8" maxlength="50"
+                               autocomplete="off">
                         <small id="passwordHelp" class="form-text text-muted">
                             8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
                         </small>
