@@ -1,3 +1,4 @@
+
 package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
@@ -16,6 +17,7 @@ import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -64,9 +66,9 @@ public class MarketController {
 
     @PostMapping("/market/new")
     public String marketNewProduct(@CurrentUser Account account, Model model,
-                                    @Valid MarketForm marketForm,
-                                    @RequestPart MultipartFile file) throws IOException {
-        String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
+                                   @Valid MarketForm marketForm,
+                                   @RequestPart MultipartFile file) throws IOException {
+        String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(marketForm.getFilePath(), file);
         log.info("market image file : {}", marketImagePath);
 
         Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
@@ -92,17 +94,15 @@ public class MarketController {
         return "market/market-detail";
     }
 
-    @GetMapping("/market/detail/{marketId}/delete")
+    @PostMapping("/market/detail/{marketId}/delete")
     public String marketDelete(@CurrentUser Account account, Model model,
                                @PathVariable long marketId, RedirectAttributes redirectAttributes) {
         Market byMarketId = marketRepository.findByMarketId(marketId);
-        log.info("삭제할 마켓 이미지 : {}", byMarketId.getFilePath());
 
         if (account.getId().equals(byMarketId.getSeller().getId())) {
             s3Service.deleteFile(byMarketId.getFilePath());
             marketRepository.delete(byMarketId);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
-
             model.addAttribute(account);
             return "redirect:/market";
         }
