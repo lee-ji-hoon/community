@@ -77,7 +77,7 @@ public class BaseController {
         // 알림
         if(account != null) {
             log.info("baseController.java의 alarm 실패 ");
-            List<Alarm> alarmList = alarmRepository.findFirst5ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+            List<Alarm> alarmList = alarmRepository.findFirst3ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
             long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
             log.info("alarm 수 : {}", countByAccountAndNotChecked);
 
