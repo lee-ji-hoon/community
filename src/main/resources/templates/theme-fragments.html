@@ -1611,7 +1611,7 @@
 <div th:fragment="market-list(type)">
     <div th:each="sell : ${type}" class="flex items-start flex-wrap p-7 sm:space-x-6">
         <a th:href="@{'/market/detail/'+${sell.marketId}}" class="w-40 h-40 relative mt-1 order-1">
-            <img th:src="${sell.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
+            <img th:if="${sell.getFilePath() != null}" th:src="${sell.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
 <!--            <img th:src="${product.getFilePath()}"/>-->
 
         </a>
