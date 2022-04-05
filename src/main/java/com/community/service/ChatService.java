@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -102,15 +99,16 @@ public class ChatService {
     public Map<String, Chat> dateCheckFunction(Room myRoom) {
         // Map<Chat, LocalDateTime>
         Map<Long, String> dateMap = new HashMap<>();
-        Map<Chat, LocalDateTime> groupBySendTime = new HashMap<>();
+        Map<Chat, LocalDateTime> groupBySendTime = new LinkedHashMap<>();
         // map의 chat id랑 List의 chat id랑 같으면 날짜 출력
         Map<String, Chat> groupBySendDateTime = new HashMap<>();
         List<Chat> chatList = myRoom.getChatList();
         for (Chat chat : chatList) {
             LocalDateTime chatDate = chat.getSendTime();
             String convertChatDate = chatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            groupBySendDateTime.put(convertChatDate, chat);
-            break;
+            if (!groupBySendDateTime.containsKey(convertChatDate)) {
+                groupBySendDateTime.put(convertChatDate, chat);
+            }
         }
         return groupBySendDateTime;
     }
