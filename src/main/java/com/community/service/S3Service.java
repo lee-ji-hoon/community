@@ -50,16 +50,8 @@ public class S3Service {
                 .build();
     }
 
-    public String upload(String currentFilePath, MultipartFile file) throws IOException, IllegalArgumentException {
+    public String upload(MultipartFile file) throws IOException, IllegalArgumentException {
         String fileName = createFileName(file.getOriginalFilename());
-
-        if (!"".equals(currentFilePath) && currentFilePath != null) {
-            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
-
-            if (isExistObject == true) {
-                s3Client.deleteObject(bucket, currentFilePath);
-            }
-        }
 
         /*ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
