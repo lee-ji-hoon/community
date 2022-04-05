@@ -82,8 +82,8 @@ public class ProfileService {
         byId.ifPresent(a -> a.getTags().remove(tag));
     }
 
-    public void updateProfileImage(Account account, ProfileForm profileForm) {
-        account.setProfileImage(profileForm.getProfileImage());
+    public void updateProfileImage(Account account, String profileImagePath) {
+        account.setProfileImage(profileImagePath);
         accountRepository.save(account);
     }
 
