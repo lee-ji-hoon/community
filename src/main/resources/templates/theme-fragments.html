@@ -199,7 +199,7 @@
         $(document).ready(function () {
             function isBrowserCheck(){
                 const agt = navigator.userAgent.toLowerCase();
-                if (agt.indexOf("chrome") != -1) return 'Chrome'
+                if (agt.indexOf("chrome") != -1 || agt.indexOf("crios") != -1) return 'Chrome'
                 if (agt.indexOf("opera") != -1) return 'Opera'
                 if (agt.indexOf("staroffice") != -1) return 'Star Office'
                 if (agt.indexOf("webtv") != -1) return 'WebTV'
@@ -208,7 +208,7 @@
                 if (agt.indexOf("netpositive") != -1) return 'NetPositive'
                 if (agt.indexOf("phoenix") != -1) return 'Phoenix'
                 if (agt.indexOf("firefox") != -1) return 'Firefox'
-                if (agt.indexOf("safari") != -1) return 'Safari'
+                if (agt.indexOf("safari") != -1) return 'Chrome'
                 if (agt.indexOf("skipstone") != -1) return 'SkipStone'
                 if (agt.indexOf("netscape") != -1) return 'Netscape'
                 if (agt.indexOf("mozilla/5.0") != -1) return 'Mozilla'
