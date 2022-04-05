@@ -442,6 +442,10 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <div th:if="${g_countByAccountAndNotChecked > 4}"
+                                             class="flex justify-center">
+                                            <span class="font-bold" th:text="${g_countByAccountAndNotChecked} - 3"></span> 개의 알림이 더 있습니다.
+                                        </div>
                                         <div class="flex justify-center">
                                             <a th:href="@{/alarm/view}"
                                                class="bg-white text-center font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white">

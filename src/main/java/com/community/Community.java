@@ -15,11 +15,8 @@ public class Community {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Community.class, args);
-
 		SpringApplication application = new SpringApplication(Community.class);
 		application.setLogStartupInfo(false);
-		application.run(args);
+		SpringApplication.run(Community.class, args);
 	}
-
 }
