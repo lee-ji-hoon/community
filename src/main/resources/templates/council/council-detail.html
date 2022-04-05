@@ -113,7 +113,7 @@
                             </div>
                             <div class="card p-4">
                                 <div class="">
-                                    <th:block th:if="${account.studentId=='11-111111' && council.eventEndDate > councilService.nowDate()}">
+                                    <th:block th:if="${account.studentId=='11-111111'}">
                                         <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                                                 <path fill-rule="evenodd"
@@ -279,28 +279,6 @@
                                             </div>
                                         </div>
                                     </th:block>
-                                    <th:block th:if="${account.studentId=='11-111111' && council.eventEndDate < councilService.nowDate()}">
-                                        <a href="#modal-example" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
-                                                <path fill-rule="evenodd"
-                                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                                                      clip-rule="evenodd"></path>
-                                            </svg>
-                                            <span class="md:block hidden"> 글 수정하기 </span>
-                                        </a>
-                                        <hr class="my-4">
-                                        <div id="modal-example" uk-modal>
-                                            <div class="uk-modal-dialog uk-modal-body">
-                                                <h2 class="uk-modal-title mb-4">수정 오류</h2>
-                                                <p>행사 기간이 지난 글은 행사 조작의 가능성이 있기 때문에 수정 및 삭제가 불가능합니다.<br>
-                                                    해당 글에 문제가 있거나, 꼭 지워야할 경우 관리자에게 문의해주세요.
-                                                </p>
-                                                <p class="uk-text-right">
-                                                    <button class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium uk-modal-close">확인</button>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </th:block>
                                     <th:block th:if="${council.postSort=='행사'}">
                                         <div class="py-2 flex items-center space-x-4">
                                             <!-- 신청 시작 전 -->
@@ -424,6 +402,13 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     let updateBtn = {
         replyUpdate: function (replyId) {
             jQuery(`#orginalReply${replyId}`).hide();
@@ -485,6 +470,13 @@
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }
                 });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
         }
     }
 
@@ -527,6 +519,13 @@
                     $('#content').summernote('reset');
                 },
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
         });
 
         // 댓글 작성 ajax
@@ -554,6 +553,13 @@
                     });
                 }
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -581,6 +587,13 @@
                     },
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 1000);
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
