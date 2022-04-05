@@ -208,7 +208,7 @@
                 if (agt.indexOf("netpositive") != -1) return 'NetPositive'
                 if (agt.indexOf("phoenix") != -1) return 'Phoenix'
                 if (agt.indexOf("firefox") != -1) return 'Firefox'
-                if (agt.indexOf("safari") != -1) return 'Chrome'
+                if (agt.indexOf("safari") != -1) return 'Safari'
                 if (agt.indexOf("skipstone") != -1) return 'SkipStone'
                 if (agt.indexOf("netscape") != -1) return 'Netscape'
                 if (agt.indexOf("mozilla/5.0") != -1) return 'Mozilla'
@@ -225,8 +225,8 @@
             }
             const browser = isBrowserCheck()
             console.log(browser)
-            if(browser !== 'Chrome'){
-                alert('크롬 브라우저 외에는 지원되지 않습니다.');
+            if(browser !== 'Chrome' || browser !== 'Safari'){
+                alert('크롬 브라우저 및 Safari 외에는 지원되지 않습니다.');
                 /*var openNewWindow = window.open("about:blank");
                 openNewWindow.location.href = "https://www.google.co.kr/intl/ko/chrome/";*/
                 location.href="https://www.google.co.kr/intl/ko/chrome/"
