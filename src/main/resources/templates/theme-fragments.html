@@ -199,7 +199,7 @@
         $(document).ready(function () {
             function isBrowserCheck(){
                 const agt = navigator.userAgent.toLowerCase();
-                if (agt.indexOf("chrome") != -1) return 'Chrome'
+                if (agt.indexOf("chrome") != -1 || agt.indexOf("crios") != -1) return 'Chrome'
                 if (agt.indexOf("opera") != -1) return 'Opera'
                 if (agt.indexOf("staroffice") != -1) return 'Star Office'
                 if (agt.indexOf("webtv") != -1) return 'WebTV'
@@ -225,8 +225,8 @@
             }
             const browser = isBrowserCheck()
             console.log(browser)
-            if(browser !== 'Chrome'){
-                alert('크롬 브라우저 외에는 지원되지 않습니다.');
+            if(browser !== 'Chrome' || browser !== 'Safari'){
+                alert('크롬 브라우저 및 Safari 외에는 지원되지 않습니다.');
                 /*var openNewWindow = window.open("about:blank");
                 openNewWindow.location.href = "https://www.google.co.kr/intl/ko/chrome/";*/
                 location.href="https://www.google.co.kr/intl/ko/chrome/"
