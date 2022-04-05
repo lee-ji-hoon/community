@@ -12,7 +12,8 @@
             <div class="lg:p-12 max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
 
                 <form class="needs-validation lg:p-10 p-6 space-y-3 relative bg-white shadow-xl rounded-md"
-                      th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate>
+                      th:action="@{/sign-up}" th:object="${signUpForm}" method="post" novalidate
+                      autocomplete="off">
                     <h1 class="lg:text-2xl text-xl font-semibold mb-6"> 회원가입 </h1>
 
                     <div class="form-group">
