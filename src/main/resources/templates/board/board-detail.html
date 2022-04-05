@@ -459,6 +459,9 @@
                                 $("#isDeleted").replaceWith(r_del_message);
                             },
                         });
+                        swal("댓글이 삭제되었습니다.", {
+                            icon: "success",
+                        });
                         imageDelay(function (){
                             $(".identicon").each(function() {
                                 var hash = md5($(this).data('id')).toString();
