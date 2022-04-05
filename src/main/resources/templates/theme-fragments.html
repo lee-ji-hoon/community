@@ -419,10 +419,10 @@
                                                 <div class="drop_avatar">
                                                     <img th:if="${#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:data-id="${alarm.fromAccount.studentId}"
-                                                         alt="" class="identicon user_avatar"/>
+                                                         alt="" class="identicon user_avatar" style="width: 45px; height: 45px;"/>
                                                     <img th:if="${!#strings.isEmpty(alarm.fromAccount.profileImage)}"
                                                          th:src="${alarm.fromAccount.profileImage}"
-                                                         alt="" class=" shadow user_avatar"/>
+                                                         alt="" class=" shadow user_avatar" style="width: 45px; height: 45px;"/>
                                                 </div>
                                                 <span th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}" class="drop_icon bg-gradient-primary">
                                                  <i class="icon-feather-thumbs-up"></i>
@@ -1447,22 +1447,22 @@
                                         <div th:if="${managerStat.count} < 2">
                                             <img th:if="${#strings.isEmpty(manager?.profileImage)}"
                                                  th:data-id="${manager.studentId}"
-                                                 class="identicon border-2 border-grey rounded-full w-7 is_avatar"
+                                                 class="identicon border-2 border-grey rounded-full w-7 h-7 is_avatar"
                                                  style="height: 28px"/>
                                             <img th:if="${!#strings.isEmpty(manager?.profileImage)}"
                                                  th:src="${manager?.profileImage}"
-                                                 class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                                                 class="border-2 border-grey rounded-full w-7 h-7 is_avatar"/>
                                         </div>
                                     </div>
                                     <div th:each="member : ${study.members}">
                                         <div th:if="${memberStat.count} < 3">
                                             <img th:if="${#strings.isEmpty(member?.profileImage)}"
                                                  th:data-id="${member.studentId}"
-                                                 class="identicon border-2 border-grey rounded-full w-7 is_avatar "
+                                                 class="identicon border-2 border-grey rounded-full w-7 h-7 is_avatar "
                                                  style="height: 28px"/>
                                             <img th:if="${!#strings.isEmpty(member?.profileImage)}"
                                                  th:src="${member?.profileImage}"
-                                                 class="border-2 border-grey rounded-full w-7 is_avatar"/>
+                                                 class="border-2 border-grey rounded-full w-7 h-7 is_avatar"/>
                                         </div>
                                         <div th:if="${memberStat.count} == 3">
                                             <div class="w-7 h-7 is_avatar rounded-full flex justify-center items-center bg-blue-100 text-blue-500 font-semibold"
