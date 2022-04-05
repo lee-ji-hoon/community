@@ -233,7 +233,7 @@
                     var data = new Identicon(hash,{format:'svg'}).toString();
                     $(this).attr('src', "data:image/svg+xml;base64,"+data);
                 });
-            }, 400);
+            }, 1000);
             exRoomNum = roomId;
             return exRoomNum;
         }
@@ -270,7 +270,7 @@
                         var data = new Identicon(hash,{format:'svg'}).toString();
                         $(this).attr('src', "data:image/svg+xml;base64,"+data);
                     });
-                }, 400);
+                }, 1000);
             }
         }
     }
