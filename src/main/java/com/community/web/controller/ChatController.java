@@ -108,18 +108,8 @@ public class ChatController {
     @RequestMapping(value = "/chat/new")
     public String sendChat(@RequestParam(value = "c_attender") Long c_attender,
                            @RequestParam(value = "c_content") String c_content,
-                           @RequestParam(value = "market_id") String market_id,
                            ChatForm chatForm, @CurrentUser Account account,
                            RedirectAttributes redirectAttributes, Model model) throws IOException {
-        boolean emailVerified = account.isEmailVerified();
-
-        log.info("email 체크 : {}", emailVerified);
-        if (!emailVerified) {
-            model.addAttribute(account);
-            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
-
-            return "redirect:/market/detail/" + market_id;
-        }
 
         Optional<Account> roomAttender = accountRepository.findById(c_attender);
         Optional<Account> roomHost = accountRepository.findById(account.getId());
