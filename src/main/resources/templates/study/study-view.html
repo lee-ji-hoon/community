@@ -15,6 +15,7 @@
 
     <div class="main_content">
         <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
             <div th:replace="theme-fragments.html :: study-menu (currentStudyMenu = 'view')"></div>
 
             <div class="md:flex  md:space-x-8">

@@ -23,6 +23,7 @@
               th:object="${studyForm}"
               method="post" name="studyForm" novalidate>
             <div class="mcontainer">
+                <div th:replace="theme-fragments.html :: checked-email"></div>
 
                 <!--  breadcrumb -->
                 <div class="breadcrumb-area py-0">
