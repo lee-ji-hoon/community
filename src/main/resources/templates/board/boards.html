@@ -175,10 +175,10 @@
                                                                 <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                                     <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:data-id="${topReply.getAccount().studentId}"
-                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar"/>
+                                                                         alt="" class="identicon border-2 border-white rounded-full w-7 h-7 is_avatar"/>
                                                                     <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                                          th:src="${topReply.getAccount()?.profileImage}"
-                                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                                         alt="" class="border-2 border-white rounded-full w-7 h-7 is_avatar"/>
                                                                 </div>
                                                             </div>
                                                         </th:block>

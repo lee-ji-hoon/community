@@ -13,6 +13,10 @@
                 <p class="lead" th:text="${email}">your@email.com</p>
             </div>
 
+            <div th:if="${message}">
+                <div th:replace="theme-fragments.html :: blue-notice(message = ${message})"></div>
+            </div>
+
             <div class="py-5 text-center" th:if="${error == null}">
                 <p class="lead">unect 가입</p>
 

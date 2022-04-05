@@ -64,7 +64,7 @@
                     </div>
                     <div class="card p-5" style="margin-bottom: 18.75px">
                         <h1 class="block text-lg font-bold"> 설명  </h1>
-                        <div class="line-clamp-3" th:utext="${study.fullDescription}">
+                        <div class="" th:utext="${study.fullDescription}">
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                             </ul>
                             <a href="#"
                                th:if="${study.isManager(#authentication.principal)}"
-                               th:href="@{'/study/' + ${study.path} + '/settings/tags'}" 가
+                               th:href="@{'/study/' + ${study.path} + '/settings/tags'}"
                                class="button gray mt-3 w-full"> 스터디 관심사 추가 </a>
                         </div>
                     </div>
