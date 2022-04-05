@@ -36,7 +36,7 @@ public class Market {
 
     private String marketType;
 
-    @OneToMany(mappedBy = "market")
+    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>();
 
     @Lob
