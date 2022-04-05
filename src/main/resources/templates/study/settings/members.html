@@ -38,9 +38,9 @@
                                 <li th:each="studyMembers : ${study.members}"
                                     class="flex py-4 first:pt-0 last:pb-0">
                                     <div class="col-6">
-                                        <svg th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
-                                             th:data-jdenticon-value="${studyMembers.studentId}"
-                                             class="h-10 w-10 rounded-full uk-position-absolute"></svg>
+                                        <img th:if="${#strings.isEmpty(studyMembers?.profileImage)}"
+                                             th:data-id="${studyMembers.studentId}"
+                                             class="identicon h-10 w-10 rounded-full uk-position-absolute">
                                         <img th:if="${!#strings.isEmpty(studyMembers?.profileImage)}"
                                              th:src="${studyMembers?.profileImage}"
                                              class="h-10 w-10 rounded-full uk-position-absolute"/>
@@ -79,9 +79,9 @@
                                 <li th:each="blockMembers : ${study.blockMembers}"
                                     class="flex py-4 first:pt-0 last:pb-0">
                                     <div class="col-6">
-                                        <svg th:if="${#strings.isEmpty(blockMembers?.profileImage)}"
-                                             th:data-jdenticon-value="${blockMembers.studentId}"
-                                             class="h-10 w-10 rounded-full uk-position-absolute"></svg>
+                                        <img th:if="${#strings.isEmpty(blockMembers?.profileImage)}"
+                                             th:data-id="${blockMembers.studentId}"
+                                             class="identicon h-10 w-10 rounded-full uk-position-absolute">
                                         <img th:if="${!#strings.isEmpty(blockMembers?.profileImage)}"
                                              th:src="${blockMembers?.profileImage}"
                                              class="h-10 w-10 rounded-full uk-position-absolute"/>
@@ -122,6 +122,14 @@
 <script th:replace="theme-fragments.html :: studyBanner"></script>
 
 <script th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
     let blockMembersBtn = {
         blockMembers: function (memberId) {
 
@@ -130,7 +138,7 @@
             /*]]>*/
 
             swal({
-                title: "알림 전송.",
+                title: "차단 해제.",
                 text: "해당 유저를 차단목록에서 해제하시겠습니까?.",
                 icon: "info",
                 buttons: true,
@@ -155,8 +163,15 @@
                                 $("#isUpdated").replaceWith(message);
                             },
                         });
+                        imageDelay(function (){
+                            $(".identicon").each(function() {
+                                var hash = md5($(this).data('id')).toString();
+                                var data = new Identicon(hash,{format:'svg'}).toString();
+                                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                            });
+                        }, 1000);
                     } else {
-                        swal("멤버 삭제에 실패했습니다. 다시 시도해주세요.")
+                        swal("차단해제 실패했습니다. 다시 시도해주세요.")
                     }
                 });
         }
@@ -169,7 +184,7 @@
             /*]]>*/
 
             swal({
-                title: "알림 전송.",
+                title: "퇴출.",
                 text: "한 번 퇴출한 인원은 다시 신청 할 수 없습니다.",
                 icon: "info",
                 buttons: true,
@@ -194,8 +209,15 @@
                                 $("#isUpdated").replaceWith(message);
                             },
                         });
+                        imageDelay(function (){
+                            $(".identicon").each(function() {
+                                var hash = md5($(this).data('id')).toString();
+                                var data = new Identicon(hash,{format:'svg'}).toString();
+                                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                            });
+                        }, 1000);
                     } else {
-                        swal("멤버 삭제에 실패했습니다. 다시 시도해주세요.")
+                        swal("멤버 퇴출에 실패했습니다. 다시 시도해주세요.")
                     }
                 });
             }

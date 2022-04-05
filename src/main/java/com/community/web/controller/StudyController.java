@@ -3,6 +3,7 @@ package com.community.web.controller;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.study.StudyRepository;
 import com.community.infra.alarm.MeetingCreatedPublish;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.infra.alarm.StudyCreatedPublish;
@@ -16,7 +17,6 @@ import com.community.domain.study.Study;
 import com.community.web.dto.MeetingsForm;
 import com.community.web.dto.StudyCalendarForm;
 import com.community.domain.study.MeetingsRepository;
-import com.community.domain.study.StudyRepository;
 import com.community.web.dto.validator.MeetingFormValidator;
 import com.community.web.dto.validator.StudyCalendarFormValidator;
 import com.community.domain.tag.Tag;
@@ -40,7 +40,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -68,10 +67,10 @@ public class StudyController {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TagRepository tagRepository;
-    private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
     private final MeetingsRepository meetingsRepository;
     private final ReplyRepository replyRepository;
+    private final StudyRepository studyRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
     private static final String STUDY_FORM_VIEW = "study/study-form";
