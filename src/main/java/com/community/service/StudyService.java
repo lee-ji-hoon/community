@@ -5,11 +5,11 @@ import com.community.domain.board.Reply;
 import com.community.domain.board.ReplyRepository;
 import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
+import com.community.domain.study.StudyRepository;
 import com.community.web.dto.MeetingsForm;
 import com.community.web.dto.StudyCalendarForm;
 import com.community.web.dto.StudyDescriptionForm;
 import com.community.domain.study.MeetingsRepository;
-import com.community.domain.study.StudyRepository;
 import com.community.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +18,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Service
