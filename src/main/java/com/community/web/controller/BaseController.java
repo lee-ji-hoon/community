@@ -1,7 +1,6 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.alarm.Alarm;
 import com.community.domain.alarm.AlarmRepository;
@@ -9,23 +8,15 @@ import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
 import com.community.domain.chat.Room;
 import com.community.domain.chat.RoomRepository;
-import com.community.service.AlarmService;
 import com.community.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.w3c.dom.events.EventException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 @Slf4j
@@ -62,13 +53,6 @@ public class BaseController {
             List<Room> roomHostByAccount = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
             List<Room> roomAttenderByAccount = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
 
-            // 채팅 알람에 띄워질 채팅방
-            List<Room> findTop4MyRooms = new ArrayList<>();
-            List<Room> roomHostTop2ByAccount = roomRepository.findTop2ByRoomHostOrderByLastSendTimeDesc(account);
-            List<Room> roomAttenderTop2ByAccount = roomRepository.findTop2ByRoomAttenderOrderByLastSendTimeDesc(account);
-            findTop4MyRooms.addAll(roomHostTop2ByAccount);
-            findTop4MyRooms.addAll(roomAttenderTop2ByAccount);
-
             // 해당 Room의 ChatList를 가져오는 로직
             List<Chat> chatNotifyLists = new ArrayList<>();
             findMyRooms.addAll(roomAttenderByAccount);
@@ -82,10 +66,9 @@ public class BaseController {
                     }
                 }
             }
-
             model.addAttribute("g_chatNotify", chatNotifyLists);
             model.addAttribute("g_chatService", chatService);
-            model.addAttribute("g_myRoom", findTop4MyRooms);
+            model.addAttribute("g_myRoom", findMyRooms);
         }
     }
 
@@ -94,7 +77,7 @@ public class BaseController {
         // 알림
         if(account != null) {
             log.info("baseController.java의 alarm 실패 ");
-            List<Alarm> alarmList = alarmRepository.findTop4ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+            List<Alarm> alarmList = alarmRepository.findFirst3ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
             long countByAccountAndNotChecked = alarmRepository.countByToAccountAndChecked(account, false);
             log.info("alarm 수 : {}", countByAccountAndNotChecked);
 
