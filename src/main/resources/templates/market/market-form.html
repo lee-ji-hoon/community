@@ -89,9 +89,6 @@
                                 <input id="price" th:placeholder=0
                                        th:field="*{price}" type="number" class="with-border w-full"
                                        aria-describedby="priceHelp">
-                                <small id="priceHelp" class="form-text text-muted">
-                                    상품의 설명은 250자 이내로 작성 가능합니다.
-                                </small>
                                 <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
                                 <p class="form-text text-danger" th:if="${#fields.hasErrors('price')}"
                                    th:errors="*{price}">itemDetail Error</p>
@@ -106,9 +103,6 @@
                                     <option value="3" th:value="사용감있음"> 사용감 있음 </option>
                                     <option value="3" th:value="사용감없음"> 사용감 없음 </option>
                                 </select>
-                                <small id="itemStatusHelp" class="form-text text-muted">
-                                    상품의 설명은 250자 이내로 작성 가능합니다.
-                                </small>
                                 <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
                                 <p class="form-text text-danger" th:if="${#fields.hasErrors('itemStatus')}"
                                    th:errors="*{itemStatus}">itemDetail Error</p>
