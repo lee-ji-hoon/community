@@ -85,7 +85,7 @@
                     <th:block th:each="chatRoom : ${myRooms}">
                         <div class="message-content chatting-room-div" th:id="|roomNum${chatRoom.roomId}|" hidden>
 
-                            <div class="messages-headline">
+                            <div class="messages-headline mt-12">
                                 <th:block th:if="${account == chatRoom.roomAttender}">
                                     <h4 th:text="${chatRoom.roomHost.nickname}">상대방 닉네임</h4>
                                 </th:block>
