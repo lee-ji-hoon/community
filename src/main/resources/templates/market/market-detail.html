@@ -81,7 +81,7 @@
                                                 </li>
                                                 <li>
                                                     <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
-                                                          method="get" id="market-delete" novalidate>
+                                                          method="POST" id="market-delete" novalidate>
                                                         <input type="hidden" th:value="${product.filePath}" name="file" id="file">
                                                         <button type="submit" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
                                                             <i class="uil-trash-alt mr-1"></i> 삭제
@@ -191,10 +191,10 @@
                         </div>
                     </div>
 
+                    <div id="isDeletedForm">
+                        <div id="isDeleted"></div>
+                    </div>
                     <div class="card p-6">
-                        <th:block th:if="${r_del_complete_message}">
-                            <div th:replace="theme-fragments.html :: blue-notice(message=${r_del_complete_message})"></div>
-                        </th:block>
                         <div class="reply_div">
                             <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${reply.size()}"></a>)</h1>
 
@@ -322,133 +322,6 @@
                     </div>
                 </div>
                 <div class="lg:w-72 w-full">
-
-                    <!--<a href="#birthdays" uk-toggle>
-                        <div class="bg-white mb-5 px-4 py-3 rounded-md shadow">
-                            <h3 class="text-line-through font-semibold mb-1"> Birthdays </h3>
-                            <div class="-mx-2 duration-300 flex hover:bg-gray-50 px-2 py-2 rounded-md">
-                                <img src="assets/images/icons/gift-icon.png" class="w-9 h-9 mr-3" alt="">
-                                <p class="line-clamp-2 leading-6"> <strong> Jessica Erica </strong> and <strong> two others </strong>
-                                    have a birthdays to day .
-                                </p>
-                            </div>
-                        </div>
-                    </a>-->
-
-                    <!--<h3 class="text-xl font-semibold"> Contacts </h3>
-
-                    <div class="" uk-sticky="offset:80">
-
-                        <nav class="responsive-nav border-b extanded mb-2 -mt-2">
-                            <ul uk-switcher="connect: #group-details; animation: uk-animation-fade">
-                                <li class="uk-active"><a class="active" href="#0">  Friends  <span> 310 </span> </a></li>
-                                <li><a href="#0">Groups</a></li>
-                            </ul>
-                        </nav>
-
-                        <div class="contact-list">
-
-                            <a href="#">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                                    <span class="user_status status_online"></span>
-                                </div>
-                                <div class="contact-username"> Dennis Han</div>
-                            </a>
-                            <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
-                                <div class="contact-list-box">
-                                    <div class="contact-avatar">
-                                        <img src="assets/images/avatars/avatar-2.jpg" alt="">
-                                        <span class="user_status status_online"></span>
-                                    </div>
-                                    <div class="contact-username">   Dennis Han</div>
-                                    <p>
-                                        <ion-icon name="people" class="text-lg mr-1"></ion-icon> Become friends with
-                                        <strong> Stella Johnson </strong> and <strong> 14 Others</strong>
-                                    </p>
-                                    <div class="contact-list-box-btns">
-                                        <button type="button" class="button primary flex-1 block mr-2">
-                                            <i class="uil-envelope mr-1"></i> Send message</button>
-                                        <button type="button"  href="#" class="button secondary button-icon mr-2">
-                                            <i class="uil-list-ul"> </i> </button>
-                                        <button type="button" a href="#" class="button secondary button-icon">
-                                            <i class="uil-ellipsis-h"> </i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <a href="#">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="">
-                                    <span class="user_status"></span>
-                                </div>
-                                <div class="contact-username"> Erica Jones</div>
-                            </a>
-                            <div uk-drop="pos: left-center ;animation: uk-animation-slide-left-small">
-                                <div class="contact-list-box">
-                                    <div class="contact-avatar">
-                                        <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                                        <span class="user_status"></span>
-                                    </div>
-                                    <div class="contact-username">  Erica Jones </div>
-                                    <p>
-                                        <ion-icon name="people" class="text-lg mr-1"></ion-icon> Become friends with
-                                        <strong> Stella Johnson </strong> and <strong> 14 Others</strong>
-                                    </p>
-                                    <div class="contact-list-box-btns">
-                                        <button type="button" class="button primary flex-1 block mr-2">
-                                            <i class="uil-envelope mr-1"></i> Send message</button>
-                                        <button type="button"  href="#" class="button secondary button-icon mr-2">
-                                            <i class="uil-list-ul"> </i> </button>
-                                        <button type="button" a href="#" class="button secondary button-icon">
-                                            <i class="uil-ellipsis-h"> </i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-5.jpg" alt="">
-                                    <span class="user_status status_online"></span>
-                                </div>
-                                <div class="contact-username">Stella Johnson</div>
-                            </a>
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-6.jpg" alt="">
-                                </div>
-                                <div class="contact-username"> Alex Dolgove</div>
-                            </a>
-
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-1.jpg" alt="">
-                                    <span class="user_status status_online"></span>
-                                </div>
-                                <div class="contact-username"> Dennis Han</div>
-                            </a>
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="">
-                                    <span class="user_status"></span>
-                                </div>
-                                <div class="contact-username"> Erica Jones</div>
-                            </a>
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-7.jpg" alt="">
-                                </div>
-                                <div class="contact-username">Stella Johnson</div>
-                            </a>
-                            <a href="timeline.html">
-                                <div class="contact-avatar">
-                                    <img src="assets/images/avatars/avatar-4.jpg" alt="">
-                                </div>
-                                <div class="contact-username"> Alex Dolgove</div>
-                            </a>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -456,14 +329,21 @@
 </div>
 
 <script type="application/javascript" th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     // 수정 버튼 클릭 시
     let updateBtn = {
         replyUpdate: function (replyId) {
-            console.log(`${replyId}`);
             jQuery(`#orginalReply${replyId}`).hide();
             jQuery(`#replyUpdateBtn${replyId}`).hide();
             jQuery(`#replyUpdateSubmit${replyId}`).show();
             $(`#replyUpdateInput${replyId}`).prop("type", "text");
+            $(`#replyUpdateInput${replyId}`).css("background-color", "rgb(229 231 235)");
         }
     }
     // 등록 버튼 클릭 시
@@ -479,7 +359,6 @@
                 data : $(`#replyUpdateForm${replyId}`).serialize(),
                 dataType : "json",
                 success : function (){
-                    console.log("Reply Update Success");
                     $('.reply_div').load(location.href+' .reply_div');
                     jQuery(`#orginalReply${replyId}`).show();
                     jQuery(`#replyUpdateBtn${replyId}`).show();
@@ -490,6 +369,13 @@
                     console.log("Reply Update Fail" + error);
                 }
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         }
     }
     // 댓글 삭제
@@ -509,28 +395,30 @@
                         }
                     })
                     if (willDelete) {
-                        console.log("댓글 삭제");
                         $.ajax({
                             url:'/reply/delete',
                             type:'get',
                             contentType: "application/x-www-form-urlencoded; charset=utf-8",
                             data : $(`#replyDeleteForm${replyId}`).serialize(),
-                            dataType : "json",
-                            success : function (){
-                                console.log("Reply Delete Success");
+                            //dataType : "json",
+                            success : function (r_del_message){
                                 $('.reply_div').load(location.href+' .reply_div');
+                                $("#isDeletedForm").html('<div id="isDeleted"></div>');
+                                $("#isDeleted").replaceWith(r_del_message);
                             },
-                            error : function (request, status, error){
-                                console.log("Reply Delete Fail" + error);
-                            }
                         });
-                        swal("댓글이 삭제되었습니다.", {
-                            icon: "success",
-                        });
+                        imageDelay(function (){
+                            $(".identicon").each(function() {
+                                var hash = md5($(this).data('id')).toString();
+                                var data = new Identicon(hash,{format:'svg'}).toString();
+                                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                            });
+                        }, 400);
                     } else {
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }
                 });
+
         }
     }
     $(document).ready(function () {
@@ -581,6 +469,14 @@
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
+
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -612,6 +508,14 @@
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
+
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -636,11 +540,19 @@
                         $('.reply_div').load(location.href + ' .reply_div');
                         $('#reply_update_form').load(location.href + ' #reply_update_form');
                     },
+
                     error: function (request, status, error) {
                         console.log("Reply Update Fail" + error);
                     }
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         });
 
         $(document).on('click', '.board_form_send', function() {

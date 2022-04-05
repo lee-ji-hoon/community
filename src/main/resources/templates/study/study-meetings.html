@@ -451,6 +451,13 @@
 <script src="/assets/js/summernote.min.js"></script>
 
 <script th:inline="javascript">
+    var imageDelay = (function (){
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
     // 댓글 작성 ajax
     let replyBtn={
         replyAjax: function (meetingsId) {
@@ -482,6 +489,13 @@
                     $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
                 });
             }
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
             delay(function (){
                 $(input).removeAttr("readonly");
                 $(input).attr("placeholder","댓글을 입력해주세요.");
@@ -510,6 +524,13 @@
                 error : function (request, status, error){
                 }
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         }
     }
     // 게시글 업데이트
@@ -528,6 +549,13 @@
                 error : function (request, status, error){
                 }
             });
+            imageDelay(function (){
+                $(".identicon").each(function() {
+                    var hash = md5($(this).data('id')).toString();
+                    var data = new Identicon(hash,{format:'svg'}).toString();
+                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                });
+            }, 400);
         }
     }
 
@@ -571,6 +599,13 @@
                         swal("댓글이 삭제되었습니다.", {
                             icon: "success",
                         });
+                        imageDelay(function (){
+                            $(".identicon").each(function() {
+                                var hash = md5($(this).data('id')).toString();
+                                var data = new Identicon(hash,{format:'svg'}).toString();
+                                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                            });
+                        }, 400);
                     } else {
                         swal("댓글이 삭제되지 않았습니다. 다시 시도해주세요.");
                     }

@@ -37,7 +37,7 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    public static final String CLOUD_FRONT_DOMAIN_NAME = "https://d2c5shumcf1jv0.cloudfront.net";
+    public static String CLOUD_FRONT_DOMAIN_NAME = "https://d2c5shumcf1jv0.cloudfront.net";
 
     @PostConstruct
     public void setS3Client() {
@@ -50,8 +50,16 @@ public class S3Service {
                 .build();
     }
 
-    public String upload(MultipartFile file) throws IOException, IllegalArgumentException {
+    public String upload(String currentFilePath, MultipartFile file) throws IOException, IllegalArgumentException {
         String fileName = createFileName(file.getOriginalFilename());
+
+        if (!"".equals(currentFilePath) && currentFilePath != null) {
+            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
+
+            if (isExistObject == true) {
+                s3Client.deleteObject(bucket, currentFilePath);
+            }
+        }
 
         /*ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
@@ -77,7 +85,7 @@ public class S3Service {
         }
     }
 
-    public void deleteFile(String fileName) {
-        s3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    public void deleteFile(String filePath) {
+        s3Client.deleteObject(bucket, filePath);
     }
 }

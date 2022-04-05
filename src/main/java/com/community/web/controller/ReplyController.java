@@ -122,8 +122,8 @@ public class ReplyController {
         log.info("삭제 요청 : " + reply_delete_rid);
         String r_del_message = "";
         Reply findReply = replyRepository.findByRid(reply_delete_rid);
-        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
-        String path = String.valueOf(board.getBid());
+//        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
+//        String path = String.valueOf(board.getBid());
 
         if (findReply.getIsReported() || findReply.getReportCount() > 0) {
             log.info("이미 신고된 댓글");
