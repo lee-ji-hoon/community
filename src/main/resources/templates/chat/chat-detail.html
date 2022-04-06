@@ -85,7 +85,7 @@
                     <th:block th:each="chatRoom : ${myRooms}">
                         <div class="message-content chatting-room-div" th:id="|roomNum${chatRoom.roomId}|" hidden>
 
-                            <div class="messages-headline">
+                            <div class="messages-headline mt-28 lg:mt-0 md:mt-0">
                                 <th:block th:if="${account == chatRoom.roomAttender}">
                                     <h4 th:text="${chatRoom.roomHost.nickname}">상대방 닉네임</h4>
                                 </th:block>
@@ -114,29 +114,30 @@
                                                             <p th:text="${#temporals.format(chat.sendTime, 'yyyy-MM-dd')}"></p>
                                                         </div>
                                                     </th:block>
-                                                    <th:block th:if="${chat.sender == account}">
-                                                        <div class="message-bubble me">
-                                                            <div class="message-bubble-inner">
-                                                                <div class="message-avatar">
-                                                                    <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
-                                                                        <img th:if="${#strings.isEmpty(account?.profileImage)}"
-                                                                             th:data-id="${account.studentId}"
-                                                                             class="identicon"
-                                                                             alt=""/>
-                                                                        <img th:if="${!#strings.isEmpty(account?.profileImage)}"
-                                                                             th:src="${account?.profileImage}"
-                                                                             alt=""/>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="message-text">
-                                                                    <p th:text="${chat.content}">내용</p>
-                                                                    <small class="float-right" th:text="${#temporals.format(chat.sendTime, 'HH:mm')}"></small>
-                                                                </div>
+                                                </th:block>
+                                                <th:block th:if="${chat.sender == account}">
+                                                    <div class="message-bubble me">
+                                                        <div class="message-bubble-inner">
+                                                            <div class="message-avatar">
+                                                                <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                    <img th:if="${#strings.isEmpty(account?.profileImage)}"
+                                                                         th:data-id="${account.studentId}"
+                                                                         class="identicon"
+                                                                         alt=""/>
+                                                                    <img th:if="${!#strings.isEmpty(account?.profileImage)}"
+                                                                         th:src="${account?.profileImage}"
+                                                                         alt=""/>
+                                                                </a>
                                                             </div>
-                                                            <div class="clearfix"></div>
+                                                            <div class="message-text">
+                                                                <p th:text="${chat.content}">내용</p>
+                                                                <small class="float-right" th:text="${#temporals.format(chat.getSendTime(), 'HH:mm')}"></small>
+                                                            </div>
                                                         </div>
-                                                    </th:block>
-                                                    <th:block th:if="${chat.sender != account}">
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </th:block>
+                                                <th:block th:if="${chat.sender != account}">
                                                         <div class="message-bubble">
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
@@ -158,7 +159,6 @@
                                                             <div class="clearfix"></div>
                                                         </div>
                                                     </th:block>
-                                                </th:block>
                                             </div>
                                         </div>
                                     </div>
