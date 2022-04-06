@@ -100,8 +100,8 @@
                                     <p th:utext="${product.itemDetail}"> 물건 설명</p>
 
                                     <img th:src="${product.getFilePath()}"/>
-
-                                    <div th:text="${product.price + '원'}"
+                                    <!--<td th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></td>-->
+                                    <div th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"
                                          class="top-3 absolute bg-gray-100 font-semibold px-3 py-1 right-3 rounded-full text text-sm">
                                         $56.99
                                     </div>
