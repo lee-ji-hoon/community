@@ -112,21 +112,32 @@ public class MarketController {
         return "market/market-detail";
     }
 
-    @GetMapping("/market/detail/{marketId}/delete")
+    @PostMapping("/market/detail/{marketId}/delete")
     public String marketDelete(@CurrentUser Account account, Model model,
                                @PathVariable long marketId, RedirectAttributes redirectAttributes) {
         Market byMarketId = marketRepository.findByMarketId(marketId);
-        log.info("삭제할 마켓 이미지 : {}", byMarketId.getFilePath());
 
         if (account.getId().equals(byMarketId.getSeller().getId())) {
-            s3Service.deleteFile(byMarketId.getFilePath());
-            marketRepository.delete(byMarketId);
-            redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
+            String filePath = byMarketId.getFilePath();
+            if (filePath != null) s3Service.deleteFile(filePath);
 
+            redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             model.addAttribute(account);
             return "redirect:/market";
         }
         return "error-page";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/market/status/update")
+    public void marketStatusUpdate(@RequestParam(value = "marketId") Long marketId,
+                                     @RequestParam(value = "marketType") String marketType) {
+        log.info("market status update");
+
+        Market byMarketId = marketRepository.findByMarketId(marketId);
+
+        marketService.updateMarketType(byMarketId, marketType);
+
     }
 
     @ResponseBody

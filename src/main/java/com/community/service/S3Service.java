@@ -78,6 +78,9 @@ public class S3Service {
     }
 
     public void deleteFile(String filePath) {
-        s3Client.deleteObject(bucket, filePath);
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, filePath);
+        log.info("deleteObject : {}", deleteObjectRequest.getKey());
+        log.info("bucket : {}, filePath : {}", bucket, filePath);
+        s3Client.deleteObject(new DeleteObjectRequest(bucket, deleteObjectRequest.getKey()));
     }
 }
