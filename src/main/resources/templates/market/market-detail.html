@@ -38,155 +38,159 @@
                     <div id="isUpdatedForm">
                         <div id="isUpdated"></div>
                     </div>
-                        <div class="form_refresh">
-                            <div class="card lg:mx-0 uk-animation-slide-bottom-small">
-                                <!-- post header-->
-                                <div class="flex justify-between items-center lg:p-4 p-2.5">
-                                    <div class="flex flex-1 items-center space-x-4">
-                                        <a href="#">
-                                            <img th:if="${#strings.isEmpty(product.seller.profileImage)}"
-                                                 th:data-id="${product.seller.studentId}"
-                                                 class="identicon border border-white rounded-full w-10 h-10"/>
-                                            <img th:if="${!#strings.isEmpty(product.seller.profileImage)}"
-                                                 th:src="${product.seller.profileImage}" alt=""
-                                                 class=" border border-white rounded-full w-10 h-10">
-                                        </a>
-                                        <div class="flex-1 font-semibold capitalize">
-                                            <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
-                                            <div th:text="${product.marketType}" class="text-sm"></div>
-                                            <span th:text="${#temporals.format(product.itemUploadTime,  'yyyy-MM-dd')}"></span>
-                                        </div>
-                                    </div>
-                                    <div th:if="${account.username.equals(product.seller.username)}">
-                                        <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
-                                        <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-                                             uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
-
-                                            <ul class="space-y-1">
-                                                <li>
-                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                                        판매 중
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                                        판매 완료
-                                                    </a>
-                                                </li>
-                                                <hr/>
-                                                <li>
-                                                    <a href="#offcanvas-create" uk-toggle
-                                                       class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
-                                                        <i class="uil-edit-alt mr-1"></i> 수정
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
-                                                          method="POST" id="market-delete" novalidate>
-                                                        <input type="hidden" th:value="${product.filePath}" name="file" id="file">
-                                                        <button type="submit" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                                                            <i class="uil-trash-alt mr-1"></i> 삭제
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-
-                                        </div>
+                    <div class="form_refresh">
+                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+                            <!-- post header-->
+                            <div class="flex justify-between items-center lg:p-4 p-2.5">
+                                <div class="flex flex-1 items-center space-x-4">
+                                    <a href="#">
+                                        <img th:if="${#strings.isEmpty(product.seller.profileImage)}"
+                                             th:data-id="${product.seller.studentId}"
+                                             class="identicon border border-white rounded-full w-10 h-10"/>
+                                        <img th:if="${!#strings.isEmpty(product.seller.profileImage)}"
+                                             th:src="${product.seller.profileImage}" alt=""
+                                             class=" border border-white rounded-full w-10 h-10">
+                                    </a>
+                                    <div class="flex-1 font-semibold capitalize">
+                                        <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
+                                        <div th:text="${product.marketType}" class="text-sm"></div>
+                                        <span th:text="${#temporals.format(product.itemUploadTime,  'yyyy-MM-dd')}"></span>
                                     </div>
                                 </div>
+                                <div th:if="${account.username.equals(product.seller.username)}">
+                                    <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
+                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
+                                         uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
 
-                                <div class="p-4 space-y-3 relative">
-                                    <div class="text-2xl font-semibold pt-2" th:text="${product.itemName}"> Product title</div>
-                                    <p th:utext="${product.itemDetail}"> 물건 설명</p>
-
-                                    <img th:src="${product.getFilePath()}"/>
-                                    <!--<td th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></td>-->
-                                    <div th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"
-                                         class="top-3 absolute bg-gray-100 font-semibold px-3 py-1 right-3 rounded-full text text-sm">
-                                        $56.99
-                                    </div>
-
-                                    <div class="flex space-x-3 items-center text-sm md:pt-3">
-                                        <div class="flex">물건 상태 :
-                                            <span th:text="${product.itemStatus}"
-                                                  class="font-semibold text-sm ml-1"> 상태</span>
-                                        </div>
-
-                                        <div class="flex">
-                                            <span class="font-semibold text-yellow-500 mr-2" th:text="${product.marketItemStatus}">판매 중</span>
-        <!--                                    <span class="font-semibold text-yellow-500 mr-2" th:text="${product.byeAndSell}">판매완료 </span>-->
-                                        </div>
-                                    </div>
-                                    <th:block th:if="${product.seller != account}">
-                                        <hr>
-
-                                        <div class="grid grid-cols-2 gap-4 mb-5">
-
-                                            <a href="#create-new-chat" uk-toggle class="bg-gray-200 flex flex-1 font-semibold h-10 items-center justify-center px-4 rounded-md">
-                                                쪽지
-                                            </a>
-                                            <!-- Craete video post modal -->
-                                            <div id="create-new-chat" uk-modal>
-                                                <div class="uk-modal-dialog">
-                                                    <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
-                                                            type="button" uk-close>
-                                                        <i class="icon-feather-close"></i>
+                                        <ul class="space-y-1">
+                                            <li>
+                                                <button
+                                                   onclick="marketTypeSell()"
+                                                   class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    판매 중
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    onclick="marketTypeEnd()"
+                                                    class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    판매 완료
+                                                </button>
+                                            </li>
+                                            <hr/>
+                                            <li>
+                                                <a href="#offcanvas-create" uk-toggle
+                                                   class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    <i class="uil-edit-alt mr-1"></i> 수정
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
+                                                      method="POST" id="market-delete" novalidate>
+                                                    <input type="hidden" th:value="${product.filePath}" name="file" id="file">
+                                                    <button type="submit" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                                                        <i class="uil-trash-alt mr-1"></i> 삭제
                                                     </button>
+                                                </form>
+                                            </li>
+                                        </ul>
 
-                                                    <div class="uk-modal-header">
-                                                        <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>
-                                                    </div>
-                                                    <th:block th:if="${account.isEmailVerified()}">
-                                                        <form class="needs-validation" id="chat_form" onsubmit="return false">
-                                                            <div class="uk-modal-body" uk-overflow-auto>
-                                                                <div class="space-y-4 g:w-8/12">
-                                                                    <div class="form-group d-none">
-                                                                        <div>
-                                                                            <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
-                                                                                   th:value="${product.seller.id}" readonly/>
-                                                                            <!--<input type="hidden" id="c_market_id" name="market_id" class="form-control"
-                                                                                   value="1" th:value="${marketId}" readonly>-->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- 본문 -->
-                                                                    <div class="form-group">
-                                                                        <div>
-                                                                    <textarea class="form-control bg-gray-100 p-3"  id="c_content" name="c_content" style="resize: none"
-                                                                              type="text" aria-describedby="contentHelp" required></textarea>
-                                                                        </div>
-                                                                        <small id="contentHelp" class="form-text text-muted">욕설이나 상대방을 비하하는 단어를 사용할 경우 경우 제재될 수 있습니다.</small>
-                                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                                            <div class="uk-modal-footer uk-text-right">
-                                                                <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">취소</button>
-                                                                <button class="bg-blue-600 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 chat_send uk-modal-close">보내기</button>
-                                                            </div>
-                                                        </form>
-                                                    </th:block>
-                                                    <th:block th:if="${!account.isEmailVerified()}">
+                            <div class="p-4 space-y-3 relative">
+                                <div class="text-2xl font-semibold pt-2" th:text="${product.itemName}"> Product title</div>
+                                <p th:utext="${product.itemDetail}"> 물건 설명</p>
+
+                                <img th:src="${product.getFilePath()}"/>
+                                <!--<td th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></td>-->
+                                <div th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"
+                                     class="top-3 absolute bg-gray-100 font-semibold px-3 py-1 right-3 rounded-full text text-sm">
+                                    $56.99
+                                </div>
+
+                                <div class="flex space-x-3 items-center text-sm md:pt-3">
+                                    <div class="flex">물건 상태 :
+                                        <span th:text="${product.itemStatus}"
+                                              class="font-semibold text-sm ml-1"> 상태</span>
+                                    </div>
+
+                                    <div class="flex">
+                                        <span class="font-semibold text-yellow-500 mr-2" th:text="${product.marketItemStatus}">판매 중</span>
+    <!--                                    <span class="font-semibold text-yellow-500 mr-2" th:text="${product.byeAndSell}">판매완료 </span>-->
+                                    </div>
+                                </div>
+                                <th:block th:if="${product.seller != account}">
+                                    <hr>
+
+                                    <div class="grid grid-cols-2 gap-4 mb-5">
+
+                                        <a href="#create-new-chat" uk-toggle class="bg-gray-200 flex flex-1 font-semibold h-10 items-center justify-center px-4 rounded-md">
+                                            쪽지
+                                        </a>
+                                        <!-- Craete video post modal -->
+                                        <div id="create-new-chat" uk-modal>
+                                            <div class="uk-modal-dialog">
+                                                <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                                        type="button" uk-close>
+                                                    <i class="icon-feather-close"></i>
+                                                </button>
+
+                                                <div class="uk-modal-header">
+                                                    <h3 class="text-lg font-semibold"> 쪽지 보내기 </h3>
+                                                </div>
+                                                <th:block th:if="${account.isEmailVerified()}">
+                                                    <form class="needs-validation" id="chat_form" onsubmit="return false">
                                                         <div class="uk-modal-body" uk-overflow-auto>
                                                             <div class="space-y-4 g:w-8/12">
-                                                                <p>아직 이메일 인증을 하지 않은 회원입니다.</p>
-                                                                <p>이메일 인증 후 다시 시도해주세요.</p>
+                                                                <div class="form-group d-none">
+                                                                    <div>
+                                                                        <input class="form-control bg-gray-100 p-3" type="text" id="c_attender" name="c_attender"
+                                                                               th:value="${product.seller.id}" readonly/>
+                                                                        <!--<input type="hidden" id="c_market_id" name="market_id" class="form-control"
+                                                                               value="1" th:value="${marketId}" readonly>-->
+                                                                    </div>
+                                                                </div>
+                                                                <!-- 본문 -->
+                                                                <div class="form-group">
+                                                                    <div>
+                                                                <textarea class="form-control bg-gray-100 p-3"  id="c_content" name="c_content" style="resize: none"
+                                                                          type="text" aria-describedby="contentHelp" required></textarea>
+                                                                    </div>
+                                                                    <small id="contentHelp" class="form-text text-muted">욕설이나 상대방을 비하하는 단어를 사용할 경우 경우 제재될 수 있습니다.</small>
+                                                                    <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                                </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="uk-modal-footer uk-text-right">
-                                                            <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">닫기</button>
+                                                            <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">취소</button>
+                                                            <button class="bg-blue-600 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 chat_send uk-modal-close">보내기</button>
                                                         </div>
-                                                    </th:block>
+                                                    </form>
+                                                </th:block>
+                                                <th:block th:if="${!account.isEmailVerified()}">
+                                                    <div class="uk-modal-body" uk-overflow-auto>
+                                                        <div class="space-y-4 g:w-8/12">
+                                                            <p>아직 이메일 인증을 하지 않은 회원입니다.</p>
+                                                            <p>이메일 인증 후 다시 시도해주세요.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="uk-modal-footer uk-text-right">
+                                                        <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white py-1 uk-modal-close">닫기</button>
+                                                    </div>
+                                                </th:block>
 
 
-                                                </div>
                                             </div>
-                                            <a href="timeline-page.html" class="bg-blue-600 flex flex-1 font-semibold h-10 items-center justify-center px-4 rounded-md text-white">
-                                                찜
-                                            </a>
                                         </div>
-                                    </th:block>
-                                </div>
+                                        <a href="timeline-page.html" class="bg-blue-600 flex flex-1 font-semibold h-10 items-center justify-center px-4 rounded-md text-white">
+                                            찜
+                                        </a>
+                                    </div>
+                                </th:block>
+                            </div>
                             <div class="card p-6 relative">
                                 <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
                                 <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
@@ -210,6 +214,7 @@
                     <div id="isDeletedForm">
                         <div id="isDeleted"></div>
                     </div>
+                    <!-- 댓글 -->
                     <div class="card p-6">
                         <div class="reply_div">
                             <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${reply.size()}"></a>)</h1>
@@ -271,6 +276,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 수정 -->
                     <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
                         <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
 
@@ -345,6 +352,59 @@
 </div>
 
 <script type="application/javascript" th:inline="javascript">
+    /*상품 상태 변경 시작*/
+    /*function marketTypeSell() {
+        /!*<![CDATA[*!/
+        var path = [[${product.marketId}]];
+        /!*]]>*!/
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매중으로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            console.log("willdelete");
+            $.ajax({
+                url: '/market/detail/' + path,
+                type: 'GET',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (message) {
+                    $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                    $("#isUpdated").replaceWith(message);
+                },
+            })
+        });
+    }
+
+    function marketTypeEnd() {
+        /!*<![CDATA[*!/
+        var path = [[${product.marketId}]];
+        /!*]]>*!/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path,
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }*/
+    /*상품 상태 변경 끝*/
+
     var imageDelay = (function (){
         var timer = 0;
         return function (callback, ms) {

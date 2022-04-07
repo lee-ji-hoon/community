@@ -42,4 +42,11 @@ public class MarketService {
     public void updateMarket(Market byMarketId, MarketForm marketForm) {
         modelMapper.map(marketForm, byMarketId);
     }
+
+    public void updateMarketType(Market market, String marketType) {
+        market.setMarketType(marketType);
+
+        marketRepository.save(market);
+
+    }
 }
