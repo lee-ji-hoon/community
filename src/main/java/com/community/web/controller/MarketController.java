@@ -16,6 +16,7 @@ import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,9 @@ public class MarketController {
     private final BoardService boardService;
     private final ReplyService replyService;
     private final S3Service s3Service;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
@@ -80,14 +84,20 @@ public class MarketController {
         log.info("file = {}", file.getName());
         log.info("imageFile = {}", imageFile);
         Long marketId = null;
-        if (Objects.equals(imageFile, "checked")) {
-            String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
+
+        if (Objects.equals(imageFile, "checked")) {  // 이미지가 존재
+            String uploadFile = s3Service.upload(file);
+            /*s3에 직접 접근*/
+//            String marketImagePath = "https://"+bucket+".s3.ap-northeast-2.amazonaws.com/"+uploadFile;
+
+            /*CloudFront에로 s3에 접근*/
+            String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/market-img/" + uploadFile;
             log.info("market image file : {}", marketImagePath);
-            Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath);
+            Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class), account, marketImagePath, uploadFile);
             model.addAttribute(account);
             marketId = newItem.getMarketId();
 
-        } else {
+        } else { // 이미지 없음
             Market newItem = marketService.createNewItemNoImage(modelMapper.map(marketForm, Market.class), account);
             model.addAttribute(account);
             marketId = newItem.getMarketId();
@@ -115,12 +125,13 @@ public class MarketController {
     @PostMapping("/market/detail/{marketId}/delete")
     public String marketDelete(@CurrentUser Account account, Model model,
                                @PathVariable long marketId, RedirectAttributes redirectAttributes) {
-        Market byMarketId = marketRepository.findByMarketId(marketId);
+        Market market = marketRepository.findByMarketId(marketId);
 
-        if (account.getId().equals(byMarketId.getSeller().getId())) {
-            String filePath = byMarketId.getFilePath();
-            if (filePath != null) s3Service.deleteFile(filePath);
+        if (account.getId().equals(market.getSeller().getId())) {
+            String fileName = market.getFileName();
+            if (fileName != null) s3Service.deleteFile(fileName);
 
+            marketService.deleteProduct(market);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             model.addAttribute(account);
             return "redirect:/market";

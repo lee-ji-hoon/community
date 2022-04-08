@@ -22,10 +22,11 @@ public class MarketService {
     private final MarketRepository marketRepository;
     private final ModelMapper modelMapper;
 
-    public Market createNewItem(Market market, Account account, String marketImagePath) {
+    public Market createNewItem(Market market, Account account, String marketImagePath, String uploadFile) {
         market.setItemUploadTime(LocalDateTime.now());
         market.setMarketItemStatus(MarketItemStatus.판매중);
         market.setSeller(account);
+        market.setFileName(uploadFile);
         market.setFilePath(marketImagePath);
 
         return marketRepository.save(market);
@@ -48,5 +49,9 @@ public class MarketService {
 
         marketRepository.save(market);
 
+    }
+
+    public void deleteProduct(Market market) {
+        marketRepository.deleteById(market.getMarketId());
     }
 }

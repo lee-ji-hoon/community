@@ -53,12 +53,12 @@ public class S3Service {
     public String upload(MultipartFile file) throws IOException, IllegalArgumentException {
         String fileName = createFileName(file.getOriginalFilename());
 
-        /*ObjectMetadata objectMetadata = new ObjectMetadata();
+        ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());*/
+        objectMetadata.setContentType(file.getContentType());
 
         // 업로드를 위해 사용되는 함수 (참고 https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/userguide/upload-objects.html)
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, "market-img/"+fileName, file.getInputStream(), objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead)); // 외부에 공개되는 이미지이므로 read 권한 주기
         return fileName;
     }
@@ -77,10 +77,18 @@ public class S3Service {
         }
     }
 
-    public void deleteFile(String filePath) {
-        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, filePath);
+    public void deleteFile(String fileName) {
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, fileName);
+        boolean isExistObject = s3Client.doesObjectExist(bucket, fileName);
+
         log.info("deleteObject : {}", deleteObjectRequest.getKey());
-        log.info("bucket : {}, filePath : {}", bucket, filePath);
-        s3Client.deleteObject(new DeleteObjectRequest(bucket, deleteObjectRequest.getKey()));
+        log.info("삭제 될 object : {}", deleteObjectRequest);
+        log.info("해당하는 파일 있는지 체크 값 : {}",isExistObject);
+        log.info("bucket : {} || fileName : {}", bucket, fileName);
+
+        if (isExistObject) {
+            log.info("삭제 실행");
+            s3Client.deleteObject(bucket, fileName);
+        }
     }
 }
