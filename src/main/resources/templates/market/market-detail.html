@@ -66,7 +66,7 @@
                                     <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
                                          uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
 
-                                        <ul class="space-y-1">
+                                        <ul th:if="${product.itemStatus}" class="space-y-1">
                                             <li>
                                                 <button
                                                    onclick="marketTypeSell()"
@@ -476,10 +476,10 @@
         readImage(e.target)
     })
     /*상품 상태 변경 시작*/
-    /*function marketTypeSell() {
-        /!*<![CDATA[*!/
+    function marketTypeSell() {
+        /*<![CDATA[*/
         var path = [[${product.marketId}]];
-        /!*]]>*!/
+        /*]]>*/
         swal({
             title: "상품 상태 변경.",
             text: "상품의 상태를 판매중으로 변경하시겠습니까?",
@@ -490,10 +490,11 @@
         .then((willDelete) => {
             console.log("willdelete");
             $.ajax({
-                url: '/market/detail/' + path,
+                url: '/market/detail/' + path + '/type/selling',
                 type: 'GET',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function (message) {
+                    location.reload();
                     $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                     $("#isUpdated").replaceWith(message);
                 },
@@ -502,9 +503,9 @@
     }
 
     function marketTypeEnd() {
-        /!*<![CDATA[*!/
+        /*<![CDATA[*/
         var path = [[${product.marketId}]];
-        /!*]]>*!/
+        /*]]>*/
 
         swal({
             title: "상품 상태 변경.",
@@ -516,16 +517,17 @@
             .then((willDelete) => {
                 console.log("willdelete");
                 $.ajax({
-                    url: '/market/detail/' + path,
+                    url: '/market/detail/' + path + '/type/sold-out',
                     type: 'GET',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function (message) {
+                        location.reload();
                         $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                         $("#isUpdated").replaceWith(message);
                     },
                 })
             });
-    }*/
+    }
     /*상품 상태 변경 끝*/
 
     var imageDelay = (function (){

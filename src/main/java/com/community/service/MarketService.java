@@ -4,7 +4,6 @@ import com.community.domain.account.Account;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketItemStatus;
 import com.community.domain.market.MarketRepository;
-import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -40,9 +39,18 @@ public class MarketService {
         return marketRepository.save(market);
     }
 
-    public void updateMarketType(Market market, String marketType) {
-        market.setMarketType(marketType);
-
+    public void updateMarketItemType(Market market, String marketType) {
+        log.info("marketType : {}", marketType);
+        switch (marketType){
+            case "selling" :
+                market.setMarketItemStatus(MarketItemStatus.판매중);
+                log.info("marketType 판매 중으로 변경");
+                break;
+            case "sold-out":
+                market.setMarketItemStatus(MarketItemStatus.판매완료);
+                log.info("marketType 판매 완료 변경");
+                break;
+        }
         marketRepository.save(market);
 
     }

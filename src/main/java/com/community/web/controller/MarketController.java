@@ -114,15 +114,6 @@ public class MarketController {
                              @Valid MarketForm marketForm,
                              @RequestPart MultipartFile file,
                              @RequestParam("imageFile") String imageFile) throws IOException {
-        log.info("market update 실행 ");
-
-        log.info("marketType : {}", marketForm.getMarketType());
-        log.info("itemName : {}", marketForm.getItemName());
-        log.info("price : {}", marketForm.getPrice());
-        log.info("itemDetail : {}", marketForm.getItemDetail());
-        log.info("imageFileChecked : {}", imageFile);
-        log.info("imageFile : {}", file);
-
         Market byMarketId = marketRepository.findByMarketId(marketId);
         if (account.getId().equals(byMarketId.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
             if (Objects.equals(imageFile, "checked")) {  // 새로운 이미지가 존재
@@ -173,15 +164,13 @@ public class MarketController {
         return "error-page";
     }
 
+
     @ResponseBody
-    @RequestMapping(value = "/market/status/update")
-    public void marketStatusUpdate(@RequestParam(value = "marketId") Long marketId,
-                                     @RequestParam(value = "marketType") String marketType) {
-        log.info("market status update");
+    @RequestMapping(value = "/market/detail/{marketId}/type/{status}")
+    public void marketStatusUpdate(@PathVariable long marketId, @PathVariable String status) throws IOException {
+        Market market = marketRepository.findByMarketId(marketId);
 
-        Market byMarketId = marketRepository.findByMarketId(marketId);
-
-        marketService.updateMarketType(byMarketId, marketType);
+        marketService.updateMarketItemType(market, status);
 
     }
 
