@@ -50,7 +50,7 @@ public class S3Service {
                 .build();
     }
 
-    public String upload(MultipartFile file) throws IOException, IllegalArgumentException {
+    public String upload(MultipartFile file, String folderPath) throws IOException, IllegalArgumentException {
         String fileName = createFileName(file.getOriginalFilename());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -58,7 +58,7 @@ public class S3Service {
         objectMetadata.setContentType(file.getContentType());
 
         // 업로드를 위해 사용되는 함수 (참고 https://docs.aws.amazon.com/ko_kr/AmazonS3/latest/userguide/upload-objects.html)
-        s3Client.putObject(new PutObjectRequest(bucket, "market-img/"+fileName, file.getInputStream(), objectMetadata)
+        s3Client.putObject(new PutObjectRequest(bucket, folderPath + fileName, file.getInputStream(), objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead)); // 외부에 공개되는 이미지이므로 read 권한 주기
         return fileName;
     }
