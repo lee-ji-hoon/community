@@ -111,19 +111,26 @@ public class ProfileController {
 
     // 프로필 이미지 변경 요청
     @PostMapping(SETTINGS_PROFILE_IMG_URL)
-    public String updateProfileImageForm(@CurrentUser Account account, @Valid ProfileForm profileForm,
+    public String updateProfileImageForm(@CurrentUser Account account,
                                          @RequestParam(required = false, value = "file") MultipartFile file,
                                          Model model, Errors errors, RedirectAttributes redirectAttributes) throws IOException {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_PROFILE_IMG_VIEW_NAME;
         }
-        log.info("profileImage : {}", profileForm.getProfileImage());
-        log.info("file : {}",file);
-        String profile = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + s3Service.upload(file);
+        String imageKey = account.getProfileImageKey();
+        // 원래 이미지 삭제
+        if (imageKey != null) {
+            log.info("profile 원래 이미지 삭제 : {}", imageKey);
+            s3Service.deleteFile(imageKey);
+        }
+        String folderPath = "profile-img/";
+
+        String profileImageKey = s3Service.upload(file, folderPath);
+        String profile = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + profileImageKey;
 
         log.info("profileImage : {}", profile);
-        profileService.updateProfileImage(account, profile);
+        profileService.updateProfileImage(account, profile, profileImageKey, folderPath);
         redirectAttributes.addFlashAttribute("message", "프로필이미지를 수정했습니다.");
 
         return "redirect:" + SETTINGS_PROFILE_IMG_URL;

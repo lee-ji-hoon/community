@@ -82,12 +82,8 @@ public class ProfileService {
         byId.ifPresent(a -> a.getTags().remove(tag));
     }
 
-    public void updateProfileImage(Account account, String profileImagePath) {
+    public void updateProfileImage(Account account, String profileImagePath, String profileImageKey, String uploadFolderPath) {
         account.setProfileImage(profileImagePath);
+        account.setProfileImageKey(uploadFolderPath+profileImageKey);
         accountRepository.save(account);
     }
-
-    /*public void updateBannerImage(Account account, byte[] profileBannerImage) {
-        account.setBannerImage(Arrays.toString(profileBannerImage));
-    }*/
-}
