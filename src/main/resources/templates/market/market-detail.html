@@ -6,6 +6,10 @@
     .updateSubmit{
         display: none;
     }
+
+    #deleteBtn:hover {
+        color: #EF4444;
+    }
 </style>
 <body>
 
@@ -86,10 +90,10 @@
                                             </li>
                                             <li>
                                                 <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
-                                                      method="POST" id="market-delete" novalidate>
+                                                      method="POST" id="market-delete" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-200 rounded-md dark:hover:bg-red-600" novalidate>
                                                     <input type="hidden" th:value="${product.filePath}" name="file" id="file">
-                                                    <button type="submit" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                                                        <i class="uil-trash-alt mr-1"></i> 삭제
+                                                    <button id="deleteBtn" type="submit" style="" >
+                                                        <i class="uil-trash-alt mr-1"></i>삭제
                                                     </button>
                                                 </form>
                                             </li>
@@ -278,7 +282,7 @@
                     </div>
 
                     <!-- 수정 -->
-                    <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
+                    <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true" style="margin-top: 0px">
                         <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
 
                             <button class="uk-offcanvas-close absolute" type="button" uk-close></button>
@@ -287,7 +291,7 @@
                             <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
                                 <h4> 수정   </h4>
                             </div>
-                            <form class="needs-validation space-y-4 g:w-8/12 board_form" id="board_form"
+                            <form class="needs-validation space-y-4 g:w-8/12 market_form" id="market_form"
                                    enctype="multipart/form-data" method="post"
                                   th:action="@{'/market/detail/' + ${product.marketId} + '/update'}"
                                   th:object="${marketForm}" novalidate>
@@ -336,11 +340,17 @@
 
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label for="price"> 가격 </label>
-                                            <input id="price" th:placeholder=0
-                                                   th:field="*{price}" type="number" class="with-border w-full" th:value="${product.price}"
-                                                   aria-describedby="priceHelp">
-                                            <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
+                                            <label for="price" th:value="${product.price}"> 가격 </label>
+                                            <input id="price"
+                                                   th:value="${product.price}"
+                                                   type="text" class="with-border w-full"
+                                                   aria-describedby="priceHelp"
+                                                   maxlength="10">
+                                            <input type="hidden" id="priceNum" th:field="*{price}">
+                                            <small id="priceHelp" class="form-text text-muted">
+                                                숫자만 입력 가능하며, 그외에는 입력할시 입력창이 초기화됩니다.
+                                            </small>
+                                            <small class="invalid-feedback">숫자만 입력이 가능합니다.</small>
                                             <p class="form-text text-danger" th:if="${#fields.hasErrors('price')}"
                                                th:errors="*{price}">itemDetail Error</p>
                                         </div>
@@ -354,7 +364,10 @@
                                                 <option value="사용감있음" th:selected="${product.itemStatus}=='사용감있음'" th:value="사용감있음"> 사용감 있음 </option>
                                                 <option value="사용감없음" th:selected="${product.itemStatus}=='사용감없음'" th:value="사용감없음"> 사용감 없음 </option>
                                             </select>
-                                            <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
+                                            <small id="itemStatusHelp" class="form-text text-muted">
+                                                본인이 판매할 물건의 상태 혹은 구매하고 싶은 물건의 상태를 골라주세요
+                                            </small>
+                                            <small class="invalid-feedback">상품 상태를 다시 확인해주세요.</small>
                                             <p class="form-text text-danger" th:if="${#fields.hasErrors('itemStatus')}"
                                                th:errors="*{itemStatus}">itemDetail Error</p>
                                         </div>
@@ -373,7 +386,7 @@
                                     </div>
                                 </div>
                                 <div class="p-5">
-                                    <button type="submit"
+                                    <button onclick="update_market()" type="submit"
                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                                         수정
                                     </button>
@@ -392,23 +405,42 @@
 </div>
 
 <script type="application/javascript" th:inline="javascript">
+    function update_market() {
+        let price = document.getElementById("price");
+        let priceNum = document.getElementById("priceNum");
 
-/*    function marketUpdate() {
-        console.log("market Update 실행");
-        console.log('/market/detail/'+ [[${product.marketId}]] +'/update')
-        $.ajax({
-            url:'/market/detail/'+ [[${product.marketId}]] +'/update',
-            type:'get',
-            enctype: 'multipart/form-data',	// 필수
-            data: {marketType: "marketType", itemName: "itemName", itemDetail: "itemDetail", price: "price", itemStatus: "itemStatus", imageFile: "imageFile" },		// 필수
-            processData: false,	// 필수
-            contentType: false,
-            // data : $('#board_form').serialize(),
-            success : function (){
-                location.reload();
-            },
-        });
-    }*/
+        priceNum.value = price.value;
+
+        $("#market_form").submit();
+    }
+
+    const input = document.querySelector('#price');      //[1]
+    input.addEventListener('keyup', function(e) {
+        let value = e.target.value;
+        value = Number(value.replaceAll(',', ''));
+        if(isNaN(value)) {         //NaN인지 판별
+            input.value = 0;
+        }else {                   //NaN이 아닌 경우
+            const formatValue = value.toLocaleString('ko-KR');
+            input.value = formatValue;
+        }
+    })
+        /*    function marketUpdate() {
+                console.log("market Update 실행");
+                console.log('/market/detail/'+ [[${product.marketId}]] +'/update')
+                $.ajax({
+                    url:'/market/detail/'+ [[${product.marketId}]] +'/update',
+                    type:'get',
+                    enctype: 'multipart/form-data',	// 필수
+                    data: {marketType: "marketType", itemName: "itemName", itemDetail: "itemDetail", price: "price", itemStatus: "itemStatus", imageFile: "imageFile" },		// 필수
+                    processData: false,	// 필수
+                    contentType: false,
+                    // data : $('#board_form').serialize(),
+                    success : function (){
+                        location.reload();
+                    },
+                });
+            }*/
 
     function readImage(input) {
 
