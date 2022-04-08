@@ -47,6 +47,8 @@ public class Market {
     @Enumerated(EnumType.STRING)
     private MarketItemStatus marketItemStatus;
 
+    private String fileName;
+
     @Column(columnDefinition = "TEXT")
     private String filePath;
 
