@@ -56,7 +56,7 @@ public class ProfileService {
     // 회원탈퇴
     public void withdraw(Account account, String checkPassword) throws Exception {
         Account deleteNickname = accountRepository.findByNickname(account.getNickname());
-        if(deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
+        if (deleteNickname.matchPassword(passwordEncoder, checkPassword)) {
             boardRepository.deleteAllByWriterId(account.getId());
             persistentLoginsRepository.deleteByUsername(account.getNickname());
             accountRepository.delete(deleteNickname);
@@ -84,6 +84,7 @@ public class ProfileService {
 
     public void updateProfileImage(Account account, String profileImagePath, String profileImageKey, String uploadFolderPath) {
         account.setProfileImage(profileImagePath);
-        account.setProfileImageKey(uploadFolderPath+profileImageKey);
+        account.setProfileImageKey(uploadFolderPath + profileImageKey);
         accountRepository.save(account);
     }
+}

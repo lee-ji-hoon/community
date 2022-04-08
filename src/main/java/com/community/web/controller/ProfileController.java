@@ -112,12 +112,8 @@ public class ProfileController {
     // 프로필 이미지 변경 요청
     @PostMapping(SETTINGS_PROFILE_IMG_URL)
     public String updateProfileImageForm(@CurrentUser Account account,
-                                         @RequestParam(required = false, value = "file") MultipartFile file,
-                                         Model model, Errors errors, RedirectAttributes redirectAttributes) throws IOException {
-        if (errors.hasErrors()) {
-            model.addAttribute(account);
-            return SETTINGS_PROFILE_IMG_VIEW_NAME;
-        }
+                                         @RequestPart(required = false, value = "file") MultipartFile file,
+                                            RedirectAttributes redirectAttributes) throws IOException {
         String imageKey = account.getProfileImageKey();
         // 원래 이미지 삭제
         if (imageKey != null) {
