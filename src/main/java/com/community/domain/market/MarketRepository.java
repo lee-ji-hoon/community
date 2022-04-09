@@ -2,11 +2,12 @@ package com.community.domain.market;
 
 import com.community.domain.account.Account;
 import com.community.domain.market.Market;
+import com.community.domain.study.StudyRepositoryExtension;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface MarketRepository extends JpaRepository<Market, Long> {
+public interface MarketRepository extends JpaRepository<Market, Long>, MarketRepositoryExtension {
 
     Market findByMarketId(Long id);
 

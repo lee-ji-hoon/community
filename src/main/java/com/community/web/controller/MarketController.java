@@ -17,6 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,10 +52,13 @@ public class MarketController {
     private final AccountRepository accountRepository;
 
     @GetMapping("/market")
-    public String marketListView(@CurrentUser Account account, Model model) {
+    public String marketListView(@CurrentUser Account account, Model model,
+                                 @PageableDefault(size = 9, sort = "itemUploadTime", direction = Sort.Direction.DESC) Pageable pageable) {
         model.addAttribute(account);
         model.addAttribute(new MarketForm());
-        model.addAttribute("sellingProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("판매"));
+        Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
+
+        model.addAttribute("sellingProduct", marketTypeSell);
         model.addAttribute("buyProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("구매"));
         model.addAttribute("shareProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("나눔"));
         model.addAttribute("myProduct", marketRepository.findAllBySeller(account));
