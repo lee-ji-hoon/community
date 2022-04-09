@@ -97,7 +97,7 @@ public class MarketController {
             String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + uploadFile;
 
             Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class),
-                                                                        account, marketImagePath, uploadFile, folderPath);
+                                                                        account, marketImagePath, uploadFile, folderPath, marketForm.getMarketType());
             model.addAttribute(account);
             marketId = newItem.getMarketId();
 
@@ -114,19 +114,22 @@ public class MarketController {
                              @Valid MarketForm marketForm,
                              @RequestPart MultipartFile file,
                              @RequestParam("imageFile") String imageFile) throws IOException {
-        Market byMarketId = marketRepository.findByMarketId(marketId);
-        if (account.getId().equals(byMarketId.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
+
+        log.info("market getMarketType update : {}", marketForm.getMarketType());
+        log.info("market getItemStatus update : {}", marketForm.getItemStatus());
+        Market market = marketRepository.findByMarketId(marketId);
+        if (account.getId().equals(market.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
             if (Objects.equals(imageFile, "checked")) {  // 새로운 이미지가 존재
-                s3Service.deleteFile(byMarketId.getFileName());
+                s3Service.deleteFile(market.getFileName());
                 String uploadFolder = "market-img/"; // 업로드 폴더
                 String uploadFile = s3Service.upload(file, uploadFolder); // 이미지 업로드
 
                 /*CloudFront에로 s3에 접근*/
                 String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + uploadFile;
 
-                marketService.updateMarketImage(byMarketId ,marketImagePath, uploadFile, uploadFolder);
+                marketService.updateMarketImage(market ,marketImagePath, uploadFile, uploadFolder);
             }
-            marketService.updateMarket(modelMapper.map(marketForm, Market.class), account);
+            marketService.updateMarket(marketForm, market, account);
         }
         return "redirect:/market/detail/" + marketId;
     }
