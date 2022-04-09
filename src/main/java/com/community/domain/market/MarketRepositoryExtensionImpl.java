@@ -21,7 +21,6 @@ public class MarketRepositoryExtensionImpl extends QuerydslRepositorySupport imp
 
         JPQLQuery<Market> query = from(market).where(market.published.isTrue()
                 .and(market.marketType.contains(marketType)))
-                .leftJoin(market.seller, QAccount.account).fetchJoin()
                 .distinct();
 
         JPQLQuery<Market> marketJPQLQuery = getQuerydsl().applyPagination(pageable, query);
