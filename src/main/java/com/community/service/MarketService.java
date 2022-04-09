@@ -7,6 +7,7 @@ import com.community.domain.market.MarketRepository;
 import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,6 @@ import java.time.LocalDateTime;
 public class MarketService {
 
     private final MarketRepository marketRepository;
-    private final ModelMapper modelMapper;
 
     public Market createNewItem(Market market, Account account, String marketImagePath, String uploadFile, String uploadFolder, String marketType) {
         switch (marketType) {
@@ -59,6 +59,7 @@ public class MarketService {
                 break;
             case "sold-out":
                 market.setMarketItemStatus(MarketItemStatus.판매완료);
+                market.setPublished(false);
                 log.info("marketType 판매 완료 변경");
                 break;
             case "purchase" :
@@ -67,6 +68,7 @@ public class MarketService {
                 break;
             case "purchase-end":
                 market.setMarketItemStatus(MarketItemStatus.구매완료);
+                market.setPublished(false);
                 log.info("marketType 구매 완료 변경");
                 break;
             case "share" :
@@ -75,6 +77,7 @@ public class MarketService {
                 break;
             case "share-end":
                 market.setMarketItemStatus(MarketItemStatus.나눔완료);
+                market.setPublished(false);
                 log.info("marketType 나눔 완료 변경");
                 break;
         }
