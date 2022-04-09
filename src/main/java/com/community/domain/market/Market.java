@@ -53,7 +53,7 @@ public class Market {
     // 실제 접근 주소
     private String filePath;
 
-    private boolean published;
+    private boolean published = true;
 
     private LocalDateTime itemUploadTime;
 }
