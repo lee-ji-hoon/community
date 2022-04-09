@@ -44,16 +44,14 @@ public class MarketController {
     private final ReplyService replyService;
     private final S3Service s3Service;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
     private final AccountRepository accountRepository;
 
     @GetMapping("/market")
     public String marketListView(@CurrentUser Account account, Model model,
-                                 @PageableDefault(size = 9, sort = "itemUploadTime", direction = Sort.Direction.DESC) Pageable pageable) {
+                                 @PageableDefault(size = 7, page = 0, sort = "itemUploadTime",
+                                                    direction = Sort.Direction.DESC) Pageable pageable) {
         model.addAttribute(account);
         model.addAttribute(new MarketForm());
         Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
