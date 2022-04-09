@@ -67,20 +67,52 @@
                                          uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
 
                                         <ul th:if="${product.itemStatus}" class="space-y-1">
-                                            <li>
+                                            <li th:if="${product.marketType.equals('판매')}">
                                                 <button
                                                    onclick="marketTypeSell()"
                                                    class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                                                     판매 중
                                                 </button>
                                             </li>
-                                            <li>
+                                            <li th:if="${product.marketType.equals('판매')}">
                                                 <button
                                                     onclick="marketTypeEnd()"
                                                     class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                                                     판매 완료
                                                 </button>
                                             </li>
+
+                                            <li th:if="${product.marketType.equals('구매')}">
+                                                <button
+                                                        onclick="marketTypePurchase()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    구매
+                                                </button>
+                                            </li>
+                                            <li th:if="${product.marketType.equals('구매')}">
+                                                <button
+                                                        onclick="marketTypePurchaseEnd()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    구매 완료
+                                                </button>
+                                            </li>
+
+                                            <li th:if="${product.marketType.equals('나눔')}">
+                                                <button
+                                                        onclick="marketShare()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    나눔
+                                                </button>
+                                            </li>
+                                            <li th:if="${product.marketType.equals('나눔')}">
+                                                <button
+                                                        onclick="marketShareEnd()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    나눔 완료
+                                                </button>
+                                            </li>
+
+
                                             <hr/>
                                             <li>
                                                 <a href="#offcanvas-create" uk-toggle
@@ -297,8 +329,13 @@
                                   th:object="${marketForm}" novalidate>
                                 <div class="p-6 space-y-3 flex-1">
                                     <div>
+                                        <!--<select id="itemStatus" name="itemStatus" class="selectpicker with-border"
+                                                th:filed="*{itemStatus}"
+                                                aria-describedby="itemStatusHelp">
+                                            <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>-->
                                         <label for="marketType"> 카테고리 </label>
-                                        <select id="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border" th:filed="*{marketType}" th:value="${product.marketType}">
+                                        <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
+                                                th:filed="*{marketType}">
                                             <option value="판매" th:selected="${product.marketType}=='판매'" th:value="판매"> 판매 </option>
                                             <option value="구매" th:selected="${product.marketType}=='구매'" th:value="구매"> 구매 </option>
                                             <option value="나눔" th:selected="${product.marketType}=='나눔'" th:value="나눔"> 나눔 </option>
@@ -358,7 +395,6 @@
                                             <label for="itemStatus"> 상품 상태 </label>
                                             <select id="itemStatus" name="itemStatus" class="selectpicker with-border"
                                                     th:filed="*{itemStatus}"
-                                                    th:value="${product.itemStatus}"
                                                     aria-describedby="itemStatusHelp">
                                                 <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>
                                                 <option value="사용감있음" th:selected="${product.itemStatus}=='사용감있음'" th:value="사용감있음"> 사용감 있음 </option>
@@ -409,7 +445,7 @@
         let price = document.getElementById("price");
         let priceNum = document.getElementById("priceNum");
 
-        priceNum.value = price.value;
+        priceNum.value = price.value.replaceAll(',', '');
 
         $("#market_form").submit();
     }
@@ -418,6 +454,7 @@
     input.addEventListener('keyup', function(e) {
         let value = e.target.value;
         value = Number(value.replaceAll(',', ''));
+        console.log(value);
         if(isNaN(value)) {         //NaN인지 판별
             input.value = 0;
         }else {                   //NaN이 아닌 경우
@@ -425,30 +462,30 @@
             input.value = formatValue;
         }
     })
-        /*    function marketUpdate() {
-                console.log("market Update 실행");
-                console.log('/market/detail/'+ [[${product.marketId}]] +'/update')
-                $.ajax({
-                    url:'/market/detail/'+ [[${product.marketId}]] +'/update',
-                    type:'get',
-                    enctype: 'multipart/form-data',	// 필수
-                    data: {marketType: "marketType", itemName: "itemName", itemDetail: "itemDetail", price: "price", itemStatus: "itemStatus", imageFile: "imageFile" },		// 필수
-                    processData: false,	// 필수
-                    contentType: false,
-                    // data : $('#board_form').serialize(),
-                    success : function (){
-                        location.reload();
-                    },
-                });
-            }*/
+    /*    function marketUpdate() {
+            console.log("market Update 실행");
+            console.log('/market/detail/'+ [[${product.marketId}]] +'/update')
+            $.ajax({
+                url:'/market/detail/'+ [[${product.marketId}]] +'/update',
+                type:'get',
+                enctype: 'multipart/form-data',	// 필수
+                data: {marketType: "marketType", itemName: "itemName", itemDetail: "itemDetail", price: "price", itemStatus: "itemStatus", imageFile: "imageFile" },		// 필수
+                processData: false,	// 필수
+                contentType: false,
+                // data : $('#board_form').serialize(),
+                success : function (){
+                    location.reload();
+                },
+            });
+        }*/
 
     function readImage(input) {
 
-        let maxSize = 5 * 1024 * 1024; //2MB
+        let maxSize = 2 * 1024 * 1024; // 2MB
         let size = input.files[0].size;
         console.log(size);
         if(size > maxSize){
-            alert("이미지 용량은 5MB 이내로 등록 가능합니다. ");
+            alert("이미지 용량은 2MB 이내로 등록 가능합니다. ");
             return;
         }
 
@@ -518,6 +555,112 @@
                 console.log("willdelete");
                 $.ajax({
                     url: '/market/detail/' + path + '/type/sold-out',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+
+    function marketTypePurchase() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매중으로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/purchase',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+
+    function marketTypePurchaseEnd() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/purchase-end',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+
+    function marketShare() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/share',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+    function marketShareEnd() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/share-end',
                     type: 'GET',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function (message) {
