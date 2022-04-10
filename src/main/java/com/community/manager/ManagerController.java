@@ -33,7 +33,6 @@ public class ManagerController {
 
     @GetMapping("/manager/setting")
     public String managerSetting(@CurrentUser Account account, Model model) {
-
         model.addAttribute(managerService);
         model.addAttribute(account);
         return "manager/settings";
