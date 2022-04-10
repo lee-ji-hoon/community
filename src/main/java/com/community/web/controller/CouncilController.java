@@ -54,6 +54,12 @@ public class CouncilController {
         return "council/councils";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/council/noticeGetMore")
+    public void councilNoticeGetMore() {
+
+    }
+
     @PostMapping("/council/detail")
     public String createNewPost(@Valid CouncilForm councilForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         if (errors.hasErrors()) {
