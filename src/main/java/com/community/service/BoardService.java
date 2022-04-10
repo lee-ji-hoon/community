@@ -104,8 +104,8 @@ public class BoardService {
         return boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(title, PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "idx")));
     }
 
-    public List<Board> mainBoardList(String boardTitle) {
-        return boardRepository.findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
+    public Page<Board> boardPage(String boardTitle, int page) {
+        return boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false, PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uploadTime")));
     }
 
     /* 페이지 조회수 증가 서비스 */

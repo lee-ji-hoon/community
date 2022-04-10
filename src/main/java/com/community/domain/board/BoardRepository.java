@@ -24,6 +24,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
     List<Board> findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
 
+    Page<Board> findByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported, Pageable pageable);
+
     List<Board> findTop4ByIsReportedOrderByUploadTimeDesc(Boolean isReported);
 
     List<Board> findTop5ByIsReportedOrderByPageViewDesc(Boolean isReported);
