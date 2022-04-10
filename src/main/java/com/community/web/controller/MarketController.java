@@ -57,6 +57,8 @@ public class MarketController {
         Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
 
         model.addAttribute("sellingProduct", marketTypeSell);
+        model.addAttribute("sortProperty", pageable.getSort().toString().contains("itemUploadTime") ? "itemUploadTime" : "seller");
+
         model.addAttribute("buyProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("구매"));
         model.addAttribute("shareProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("나눔"));
         model.addAttribute("myProduct", marketRepository.findAllBySeller(account));
@@ -150,7 +152,7 @@ public class MarketController {
         model.addAttribute("product", detail);
         model.addAttribute("reply", replies);
         model.addAttribute("service", boardService);
-        model.addAttribute(new MarketForm());
+        model.addAttribute(new MarketForm(detail));
 
         return "market/market-detail";
     }
