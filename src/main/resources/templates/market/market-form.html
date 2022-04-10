@@ -177,11 +177,11 @@
 
         function readImage(input) {
 
-            let maxSize = 2 * 1024 * 1024; // 2MB
+            let maxSize = 5 * 1024 * 1024; // 5MB
             let size = input.files[0].size;
             console.log(size);
             if(size > maxSize){
-                alert("이미지 용량은 2MB 이내로 등록 가능합니다. ");
+                alert("이미지 용량은 5MB 이내로 등록 가능합니다. ");
                 return;
             }
 

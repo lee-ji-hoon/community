@@ -219,7 +219,7 @@ public class StudyController {
 
     @ResponseBody
     @RequestMapping(value = "/study/meetings/update", method = RequestMethod.GET)
-    public String meetingUpdate(MeetingsForm meetingsForm, @CurrentUser Account account,
+    public String meetingUpdate(@Valid  MeetingsForm meetingsForm, @CurrentUser Account account,
                                 @RequestParam(required = false, value = "meetingId") String meetingId,
                                 @RequestParam(required = false, value = "updateTitle") String updateTitle,
                                 @RequestParam(required = false, value = "updateMethod") String updateMethod,
