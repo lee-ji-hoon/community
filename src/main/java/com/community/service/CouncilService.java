@@ -6,6 +6,9 @@ import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +53,10 @@ public class CouncilService {
 
     public List<Council> noticeSort(String sort) {
         return councilRepository.findTop4ByPostSortOrderByUploadTimeDesc(sort);
+    }
+
+    public Page<Council> noticePage(String sort, int page) {
+        return councilRepository.findByPostSortOrderByUploadTimeDesc(sort, PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "uploadTime")));
     }
 
     public LocalDate nowDate() {
