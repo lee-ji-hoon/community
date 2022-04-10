@@ -230,7 +230,7 @@
             </div>
             <br>
             <div class="mt-2">
-                <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${councilService.noticeSort('공지')}">
+                <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${noticePage}">
                     <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
                         <div class="flex-1 relative md:mt-0">
                             <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="text-xl font-semibold leading-6" th:text="${notice.postTitle}">가장 인기있는 게시물</a>
@@ -242,6 +242,23 @@
                         </div>
                     </div>
                 </div>
+                <th:block th:if="${totalPage != 0}">
+                    <nav aria-label="Page navigation">
+                        <ul class="inline-flex space-x-2">
+                            <!--<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
+                            </li>-->
+                            <li th:each="page : ${#numbers.sequence(0, totalPage -1)}">
+                                <button th:classappend="${pageStat.index == pageNo} ? 'text-white bg-indigo-600' : 'text-indigo-600'" class="w-10 h-10 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                    <a th:href="@{/council/(page=${pageStat.index})}" th:text="${pageStat.index + 1}"></a>
+                                </button>
+                            </li>
+                            <!--<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
+                            </li>-->
+                        </ul>
+                    </nav>
+                </th:block>
             </div>
 
         </div>
