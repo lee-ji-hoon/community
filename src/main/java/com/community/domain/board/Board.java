@@ -49,6 +49,12 @@ public class Board {
     @JoinColumn(name = "writer_id")
     private Account writer;
 
+    // bucket object 이름
+    private String fileName;
+
+    // 실제 접근 주소
+    private String filePath;
+
     private Integer pageView;
 
     private LocalDateTime uploadTime;

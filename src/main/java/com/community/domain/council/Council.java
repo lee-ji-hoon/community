@@ -39,6 +39,12 @@ public class Council {
     @JoinColumn(name = "postWriter")
     private Account postWriter;
 
+    // bucket object 이름
+    private String fileName;
+
+    // 실제 접근 주소
+    private String filePath;
+
     private Integer pageView;
 
     private LocalDate eventStartDate;
