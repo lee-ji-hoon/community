@@ -58,9 +58,6 @@ public class BoardService {
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
         Board board = boardRepository.findByBid(boardId);
-        if (board.getIsReported()) {
-            return boardRepository.save(board);
-        }
         board.setTitle(boardForm.getTitle());
         board.setSubBoardTitle(boardForm.getSubBoardTitle());
         board.setBoardTitle(boardForm.getBoardTitle());

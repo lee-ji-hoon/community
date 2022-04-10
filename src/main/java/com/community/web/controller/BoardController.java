@@ -138,11 +138,20 @@ public class BoardController {
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
-        model.addAttribute(new BoardForm());
+        model.addAttribute(new BoardForm(currentBoard));
 
         return "board/board-detail";
     }
 
+    @PostMapping("/board/update/{boardId}")
+    public String boardDetailUpdate(@PathVariable long boardId, @Valid BoardForm boardForm, Errors errors, Model model,
+                                    RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+        boardService.updateBoard(boardId, boardForm);
+        redirectAttributes.addFlashAttribute("isUpdatedMessage", "게시물이 수정되었습니다.");
+
+
+        return "redirect:/board/detail/{boardId}";
+    }
     // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
     @RequestMapping(value = "/board/detail/update")
