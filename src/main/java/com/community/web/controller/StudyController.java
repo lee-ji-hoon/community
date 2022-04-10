@@ -8,6 +8,7 @@ import com.community.infra.alarm.MeetingCreatedPublish;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.infra.alarm.StudyCreatedPublish;
 import com.community.domain.board.Reply;
+import com.community.service.S3Service;
 import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.ReplyService;
@@ -38,6 +39,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -47,6 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,6 +67,7 @@ public class StudyController {
     private final ObjectMapper objectMapper;
     private final TagService tagService;
     private final ReplyService replyService;
+    private final S3Service s3Service;
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TagRepository tagRepository;
@@ -147,8 +151,6 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(new StudyForm());
         return STUDY_FORM_VIEW;
-
-
     }
 
     // 스터디 추가
@@ -530,10 +532,23 @@ public class StudyController {
 
     @PostMapping(STUDY_SETTINGS + "banner")
     public String studyImageUpToDate(@CurrentUser Account account,
-                                     @PathVariable String path, String image, RedirectAttributes redirectAttributes) {
+                                     @RequestPart MultipartFile file,
+                                     @PathVariable String path, RedirectAttributes redirectAttributes) throws IOException {
+        log.info("file = {}", file.getName());
+
+        Study study = studyRepository.findByPath(path);
+        String studyImage = study.getImage();
+
+        s3Service.deleteFile(studyImage);
+
+        String folderPath = "study-img/";
+        String studyBannerKey = s3Service.upload(file, folderPath);
+        String studyBannerPath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + studyBannerKey;
+
+        log.info("studyBanner : {}", studyBannerPath);
 
         Study studyUpdate = studyService.getStudyUpdate(account, path);
-        studyService.getStudyImage(studyUpdate, image);
+        studyService.getStudyImage(studyUpdate, studyBannerKey, studyBannerPath);
 
         redirectAttributes.addFlashAttribute("message", "이미지가 수정됐습니다.");
 
