@@ -25,7 +25,7 @@
                     <div class="flex justify-between relative md:mb-4 mb-3">
                         <div class="flex-1">
                             <h2 class="text-2xl font-semibold"> 장터 </h2>
-                            <nav class="responsive-nav border-b md:m-0 -mx-4">
+                            <nav class="responsive-nav md:m-0 -mx-4">
                                 <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                     <li><a href="#" class="lg:px-2">팝니다 </a></li>
                                     <li><a href="#" class="lg:px-2"> 삽니다 </a></li>
@@ -69,6 +69,25 @@
 
                             <div class="row justify-content-center">
                                 <div class="col-sm-10">
+                                    <!--<th:block th:if="${totalPage != 0}">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="inline-flex space-x-2">
+                                                &lt;!&ndash;<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
+                                                </li>&ndash;&gt;
+                                                <li th:each="page : ${#numbers.sequence(0, totalPage -1)}">
+                                                    <a th:href="@{/council/(page=${pageStat.index})}">
+                                                        <button th:classappend="${pageStat.index == pageNo} ? 'text-white bg-indigo-600' : 'text-indigo-600'" class="w-10 h-10 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100" th:text="${pageStat.index + 1}"></button>
+                                                    </a>
+                                                </li>
+                                                &lt;!&ndash;<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
+                                                </li>&ndash;&gt;
+                                            </ul>
+                                        </nav>
+                                    </th:block>-->
+
+
                                     <nav>
                                         <ul class="pagination justify-content-center">
                                             <li class="page-item" th:classappend="${!sellingProduct.hasPrevious()}? disabled">
@@ -106,52 +125,6 @@
                     </div>
                 </div>
 
-                <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
-
-                    <div uk-sticky="media @m ; offset:80 ; bottom : true" class="lg:mt-0 mt-6">
-
-                        <h2 class="text-xl font-semibold mb-2"> 최근 본 목록 </h2>
-                        <ul class="-space-y-2">
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                        <br>
-
-                        <h4 class="text-lg font-semibold mb-3"> Tags </h4>
-
-                        <div class="flex flex-wrap gap-2">
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Computers</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Business</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> News</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Architecher</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Technolgy</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Music</a>
-                        </div>
-
-                    </div><div class="uk-sticky-placeholder" style="height: 556px; margin: 0px;"></div>
-                </div>
             </div>
         </div>
     </div>
