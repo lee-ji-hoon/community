@@ -47,8 +47,13 @@ public class Market {
     @Enumerated(EnumType.STRING)
     private MarketItemStatus marketItemStatus;
 
-    @Column(columnDefinition = "TEXT")
+    // bucket object 이름
+    private String fileName;
+
+    // 실제 접근 주소
     private String filePath;
+
+    private boolean published = true;
 
     private LocalDateTime itemUploadTime;
 }
