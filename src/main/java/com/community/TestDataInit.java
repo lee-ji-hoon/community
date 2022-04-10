@@ -6,7 +6,11 @@ import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
+import com.community.domain.market.Market;
+import com.community.domain.market.MarketItemStatus;
+import com.community.domain.market.MarketRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +26,7 @@ public class TestDataInit {
     private final CouncilRepository councilRepository;
     private final BoardRepository boardRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MarketRepository marketRepository;
 
     @PostConstruct
     public void init() {
@@ -103,5 +108,10 @@ public class TestDataInit {
             councilRepository.save(new Council(null, "공지", "2022-1학기 캡스톤 디자인(종합 설계) 운영 지침 및 과제 신청 안내", "전체 학년", "http://naver.me/G3K7QAeA", "1599-2000", COUNCIL_CONTENT_VALUE2, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));
             councilRepository.save(new Council(null, "공지", "22년1학기 국가장학금 신청", "전체 학년", "http://naver.me/G3K7QAeA", null, COUNCIL_CONTENT_VALUE3, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));*/
         }
+
+        /*for (int i = 0; i < 30; i++) {
+            String make = RandomString.make(5);
+            marketRepository.save(new Market(null, null, "새것", "name" + make, 1500, "판매", null, "상세내용" + make, MarketItemStatus.판매중, null, null, true, LocalDateTime.now()));
+        }*/
     }
 }
