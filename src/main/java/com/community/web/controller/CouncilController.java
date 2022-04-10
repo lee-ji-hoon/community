@@ -11,6 +11,7 @@ import com.community.domain.council.CouncilRepository;
 import com.community.service.CouncilService;
 import com.community.web.dto.CouncilForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -35,12 +36,28 @@ public class CouncilController {
     private final ReplyService replyService;
 
     @GetMapping("/council")
-    public String council(@CurrentUser Account account, Model model) {
+    public String council(@CurrentUser Account account, Model model,
+                          @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+        // 불러올 페이지의 데이터
+        Page<Council> noticePage = councilService.noticePage("공지", page);
+
+        // 총 페이지의 수
+        int totalPage = noticePage.getTotalPages();
+
+        model.addAttribute("noticePage", noticePage.getContent());
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("pageNo", page);
         model.addAttribute(account);
         model.addAttribute(new CouncilForm());
         model.addAttribute(councilService);
         model.addAttribute(boardService);
         return "council/councils";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/council/noticeGetMore")
+    public void councilNoticeGetMore() {
+
     }
 
     @PostMapping("/council/detail")

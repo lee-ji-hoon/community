@@ -20,6 +20,7 @@ import com.community.domain.report.BoardReportRepository;
 import com.community.domain.report.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -50,18 +51,20 @@ public class BoardController {
 
     //전체 게시물 조회
     @GetMapping("/board")
-    public String boardList(Model model, @CurrentUser Account account) {
+    public String boardList(Model model, @CurrentUser Account account,
+                            @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // Top5 게시물
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
 
+        Page<Board> freeBoardPage = boardService.boardPage("자유", page);
+
         model.addAttribute("board", top5Board);
         model.addAttribute("recentlyBoards", recentlyBoards);
-        model.addAttribute("service", boardService);
-        model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("account", account);
+        model.addAttribute("service", boardService);
         model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
         model.addAttribute("bt", "전체게시판");
@@ -135,11 +138,20 @@ public class BoardController {
 
         model.addAttribute(new ReplyForm());
         model.addAttribute(new BoardReportForm());
-        model.addAttribute(new BoardForm());
+        model.addAttribute(new BoardForm(currentBoard));
 
         return "board/board-detail";
     }
 
+    @PostMapping("/board/update/{boardId}")
+    public String boardDetailUpdate(@PathVariable long boardId, @Valid BoardForm boardForm, Errors errors, Model model,
+                                    RedirectAttributes redirectAttributes, @CurrentUser Account account) {
+        boardService.updateBoard(boardId, boardForm);
+        redirectAttributes.addFlashAttribute("isUpdatedMessage", "게시물이 수정되었습니다.");
+
+
+        return "redirect:/board/detail/{boardId}";
+    }
     // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
     @RequestMapping(value = "/board/detail/update")
