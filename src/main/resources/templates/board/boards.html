@@ -53,7 +53,7 @@
                                     </button>
 
                                     <div class="uk-modal-header bg-white">
-                                        <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
+                                        <h3 class="text-lg font-semibold" id="forum_head">글 작성하기 </h3>
                                     </div>
                                     <form class="needs-validation" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
                                         <div class="uk-modal-body" uk-overflow-auto>
@@ -69,7 +69,7 @@
                                                 <div id="subBoardSort">
                                                     <div class="form-group">
                                                         <label for="selectBoxSub"> 종류 선택 </label>
-                                                        <select id="selectBoxSub" name="selectBoxSub"  class="shadow-none with-border form-control px-2" th:field="*{subBoardTitle}">
+                                                        <select id="selectBoxSub" name="selectBoxSub" class="shadow-none with-border form-control px-2" th:field="*{subBoardTitle}">
                                                             <optgroup label="QnA" id="opgQnA">
                                                                 <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
                                                                 <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
@@ -90,13 +90,13 @@
                                                 <!-- 제목 -->
                                                 <div class="form-group">
                                                     <div class="line">
-                                                        <input class="line__input form-control" id="title" th:field="*{title}"
+                                                        <input class="line__input form-control" id="title" th:field="*{title}" max="30"
                                                                type="text" onkeyup="this.setAttribute('value', this.value);"
                                                                aria-describedby="titleHelp" required autocomplete="off">
                                                         <span for="username" class="line__placeholder"> 제목 </span>
                                                     </div>
                                                     <small id="titleHelp" class="form-text text-muted">
-                                                        제목은 5글자부터 최대 30글자까지 입력 가능합니다.
+                                                        제목은 2글자부터 최대 30글자까지 입력 가능합니다.
                                                     </small>
                                                     <small class="invalid-feedback">제목을 입력해주세요.</small>
                                                     <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
@@ -112,9 +112,10 @@
                                                     <small id="subTitleHelp" class="form-text text-muted">
                                                         예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
                                                     </small>
+                                                    <small class="form-text text-danger" th:if="${#fields.hasErrors('subTitle')}" th:errors="*{subTitle}">subTitle Error</small>
                                                 </div>
                                                 <!-- 본문 -->
-                                                <div class="form-group">
+                                                <div>
                                                     <div>
                                                         <textarea class="form-control"  id="content" th:field="*{content}"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>

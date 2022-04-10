@@ -147,22 +147,4 @@ public class ReplyController {
         replyRepository.delete(findReply);
         return r_del_message;
     }
-
-    /*@GetMapping("/board/detail/reply/delete/{rid}")
-    public String boardReplyDelete(@PathVariable Long rid,
-                                   RedirectAttributes redirectAttributes) {
-        String r_del_error_message = null;
-        Reply findReply = replyRepository.findByRid(rid);
-        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
-        String path = String.valueOf(board.getBid());
-
-        if (findReply.getIsReported() || findReply.getReportCount() > 0) {
-            r_del_error_message = "신고된 댓글은 삭제할 수 없습니다.";
-            return r_del_error_message;
-        }
-        redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
-        replyRepository.delete(findReply);
-        return "redirect:/board/detail/" + updatePath(path);
-    }*/
-
 }
