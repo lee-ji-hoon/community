@@ -87,8 +87,8 @@
                             <div>
                                 <label for="price"> 가격 </label>
                                 <input id="price" th:placeholder=0
-                                       th:field="*{price}" type="number" class="with-border w-full"
-                                       aria-describedby="priceHelp">
+                                       th:field="*{price}" type="text" value="" class="with-border w-full"
+                                       aria-describedby="priceHelp" maxlength="10">
                                 <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
                                 <p class="form-text text-danger" th:if="${#fields.hasErrors('price')}"
                                    th:errors="*{price}">itemDetail Error</p>
@@ -112,8 +112,8 @@
                 </div>
                 <div class="grid lg:grid-cols-4 sm:grid-cols-3 mt-12 gap-8">
                     <div>
-                        <h3 class="text-xl mb-2 font-semibold"> 상세 설명</h3>
-                        <p> 위의 내용을 포함해서 더 자세한 내용을 적어주세요.</p>
+                        <h3 class="text-xl mb-2 font-semibold"> 이미지 업로드</h3>
+                        <p> 대표 이미지를 설정해주세요.</p>
                     </div>
 
                     <div class="bg-white rounded-md lg:shadow-md shadow lg:col-span-3 sm:col-span-2 lg:mx-16">
@@ -135,7 +135,7 @@
                         </div>
                         <div class="bg-gray-10 p-3 flex justify-end space-x-1">
                             <button type="reset" class="p-2 px-4 rounded bg-red-600 text-white"> 취소 </button>
-                            <button type="submit" class="button bg-blue-600"> 등록 </button>
+                            <button onclick="submit_market_form()" type="submit" class="button bg-blue-600"> 등록 </button>
                         </div>
                     </div>
                 </div>
@@ -154,13 +154,34 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="application/javascript">
+        function submit_market_form() {
+            let price = document.getElementById("price");
+
+            price.value = price.value.replaceAll(',', '');
+
+            $("#market_form").submit();
+        }
+
+        const input = document.querySelector('#price');      //[1]
+        input.addEventListener('keyup', function(e) {
+            let value = e.target.value;
+            value = Number(value.replaceAll(',', ''));
+            console.log(value);
+            if(isNaN(value)) {         //NaN인지 판별
+                input.value = 0;
+            }else {                   //NaN이 아닌 경우
+                const formatValue = value.toLocaleString('ko-KR');
+                input.value = formatValue;
+            }
+        })
+
         function readImage(input) {
 
-            let maxSize = 5 * 1024 * 1024; //2MB
+            let maxSize = 2 * 1024 * 1024; // 2MB
             let size = input.files[0].size;
             console.log(size);
             if(size > maxSize){
-                alert("이미지 용량은 5MB 이내로 등록 가능합니다. ");
+                alert("이미지 용량은 2MB 이내로 등록 가능합니다. ");
                 return;
             }
 

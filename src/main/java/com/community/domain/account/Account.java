@@ -84,9 +84,9 @@ public class Account {
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Market> marketsList = new ArrayList<>();
 
-    @Lob
-    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
+
+    private String profileImageKey;
 
     // 임시 알림 설정
     private boolean studyCreatedByEmail = false;

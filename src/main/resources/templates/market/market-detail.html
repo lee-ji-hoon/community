@@ -6,6 +6,10 @@
     .updateSubmit{
         display: none;
     }
+
+    #deleteBtn:hover {
+        color: #EF4444;
+    }
 </style>
 <body>
 
@@ -35,8 +39,8 @@
             </div>
             <div class="lg:flex lg:space-x-10">
                 <div class="lg:w-3/4 lg:px-20 space-y-7">
-                    <div id="isUpdatedForm">
-                        <div id="isUpdated"></div>
+                    <div id="notice-alarm" class="notice-alarm" style="display: none">
+                        <div th:replace="theme-fragments.html :: blue-notice(message = '수정됐습니다.')"></div>
                     </div>
                     <div class="form_refresh">
                         <div class="card lg:mx-0 uk-animation-slide-bottom-small">
@@ -62,21 +66,53 @@
                                     <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
                                          uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
 
-                                        <ul class="space-y-1">
-                                            <li>
+                                        <ul th:if="${product.itemStatus}" class="space-y-1">
+                                            <li th:if="${product.marketType.equals('판매')}">
                                                 <button
                                                    onclick="marketTypeSell()"
                                                    class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                                                     판매 중
                                                 </button>
                                             </li>
-                                            <li>
+                                            <li th:if="${product.marketType.equals('판매')}">
                                                 <button
                                                     onclick="marketTypeEnd()"
                                                     class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
                                                     판매 완료
                                                 </button>
                                             </li>
+
+                                            <li th:if="${product.marketType.equals('구매')}">
+                                                <button
+                                                        onclick="marketTypePurchase()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    구매
+                                                </button>
+                                            </li>
+                                            <li th:if="${product.marketType.equals('구매')}">
+                                                <button
+                                                        onclick="marketTypePurchaseEnd()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    구매 완료
+                                                </button>
+                                            </li>
+
+                                            <li th:if="${product.marketType.equals('나눔')}">
+                                                <button
+                                                        onclick="marketShare()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    나눔
+                                                </button>
+                                            </li>
+                                            <li th:if="${product.marketType.equals('나눔')}">
+                                                <button
+                                                        onclick="marketShareEnd()"
+                                                        class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800">
+                                                    나눔 완료
+                                                </button>
+                                            </li>
+
+
                                             <hr/>
                                             <li>
                                                 <a href="#offcanvas-create" uk-toggle
@@ -86,10 +122,10 @@
                                             </li>
                                             <li>
                                                 <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
-                                                      method="POST" id="market-delete" novalidate>
+                                                      method="POST" id="market-delete" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-200 rounded-md dark:hover:bg-red-600" novalidate>
                                                     <input type="hidden" th:value="${product.filePath}" name="file" id="file">
-                                                    <button type="submit" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
-                                                        <i class="uil-trash-alt mr-1"></i> 삭제
+                                                    <button id="deleteBtn" type="submit" style="" >
+                                                        <i class="uil-trash-alt mr-1"></i>삭제
                                                     </button>
                                                 </form>
                                             </li>
@@ -278,7 +314,7 @@
                     </div>
 
                     <!-- 수정 -->
-                    <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
+                    <div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true" style="margin-top: 0px">
                         <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
 
                             <button class="uk-offcanvas-close absolute" type="button" uk-close></button>
@@ -287,40 +323,89 @@
                             <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
                                 <h4> 수정   </h4>
                             </div>
-                            <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
-                                  method="post" novalidate>
+                            <form class="needs-validation space-y-4 g:w-8/12 market_form" id="market_form"
+                                   enctype="multipart/form-data" method="post"
+                                  th:action="@{'/market/detail/' + ${product.marketId} + '/update'}"
+                                  th:object="${marketForm}" novalidate>
                                 <div class="p-6 space-y-3 flex-1">
                                     <div>
-                                        <label> 카테고리 </label>
-                                        <select name="" class="selectpicker with-border" th:value="${product.marketType}">
+                                        <!--<select id="itemStatus" name="itemStatus" class="selectpicker with-border"
+                                                th:filed="*{itemStatus}"
+                                                aria-describedby="itemStatusHelp">
+                                            <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>-->
+                                        <label for="marketType"> 카테고리 </label>
+                                        <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
+                                                th:filed="*{marketType}">
                                             <option value="판매" th:selected="${product.marketType}=='판매'" th:value="판매"> 판매 </option>
                                             <option value="구매" th:selected="${product.marketType}=='구매'" th:value="구매"> 구매 </option>
                                             <option value="나눔" th:selected="${product.marketType}=='나눔'" th:value="나눔"> 나눔 </option>
                                         </select>
-
+                                        <small id="marketTypeHelp" class="form-text text-muted">
+                                            어떤 방식의 상품을 등록할지 선택해주세요.
+                                        </small>
+                                        <small class="invalid-feedback">다시 선택해주세요.</small>
+                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('marketType')}"
+                                           th:errors="*{marketType}">marketType Error</p>
                                     </div>
                                     <div>
-                                        <label> 품명  </label>
-                                        <input type="text" th:value="${product.itemName}" class="with-border" placeholder="">
+                                        <label for="itemName"> 품명  </label>
+                                        <input id="itemName"type="text" name="itemName"
+                                               th:filed="*{itemName}"
+                                               th:value="${product.itemName}"
+                                               aria-describedby="itemNameHelp" required max="50"
+                                               class="with-border" placeholder="">
+                                        <small id="itemNameHelp" class="form-text text-muted">
+                                            50자 이내로 적어주세요.
+                                        </small>
+                                        <small class="invalid-feedback">물건의 품명을 다시 확인해주세요.</small>
+                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('itemName')}"
+                                           th:errors="*{itemName}">itemName Error</p>
                                     </div>
                                     <div>
-                                        <label> 설명  </label>
-                                        <textarea type="text" name="description" th:value="${product.itemDetail}" rows="2" class="with-border w-full p-4"
-                                                  id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
+                                        <label for="description"> 설명  </label>
+                                        <textarea id="description" type="text" name="itemDetail"
+                                                  th:filed="*{itemDetail}"
+                                                  th:value="${product.itemDetail}" th:utext="${product.itemDetail}" rows="2" class="with-border w-full p-4"
+                                                  placeholder="상품의 설명을 자세히 적어주세요." required max="250"></textarea>
+                                        <small id="itemDetailHelp" class="form-text text-muted">
+                                            상품의 설명은 250자 이내로 작성 가능합니다.
+                                        </small>
+                                        <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
+                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('itemDetail')}"
+                                           th:errors="*{itemDetail}">itemDetail Error</p>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label> 가격 </label>
-                                            <input placeholder="0" th:value="${product.price}" type="number" class="with-border w-full">
+                                            <label for="price" th:value="${product.price}"> 가격 </label>
+                                            <input id="price"
+                                                   th:value="${product.price}"
+                                                   type="text" class="with-border w-full"
+                                                   aria-describedby="priceHelp"
+                                                   maxlength="10">
+                                            <input type="hidden" id="priceNum" th:field="*{price}">
+                                            <small id="priceHelp" class="form-text text-muted">
+                                                숫자만 입력 가능하며, 그외에는 입력할시 입력창이 초기화됩니다.
+                                            </small>
+                                            <small class="invalid-feedback">숫자만 입력이 가능합니다.</small>
+                                            <p class="form-text text-danger" th:if="${#fields.hasErrors('price')}"
+                                               th:errors="*{price}">itemDetail Error</p>
                                         </div>
                                         <div>
-                                            <label> 상품 상태 </label>
-                                            <select name="" class="selectpicker with-border" th:value="${product.itemStatus}">
+                                            <label for="itemStatus"> 상품 상태 </label>
+                                            <select id="itemStatus" name="itemStatus" class="selectpicker with-border"
+                                                    th:filed="*{itemStatus}"
+                                                    aria-describedby="itemStatusHelp">
                                                 <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>
                                                 <option value="사용감있음" th:selected="${product.itemStatus}=='사용감있음'" th:value="사용감있음"> 사용감 있음 </option>
                                                 <option value="사용감없음" th:selected="${product.itemStatus}=='사용감없음'" th:value="사용감없음"> 사용감 없음 </option>
                                             </select>
+                                            <small id="itemStatusHelp" class="form-text text-muted">
+                                                본인이 판매할 물건의 상태 혹은 구매하고 싶은 물건의 상태를 골라주세요
+                                            </small>
+                                            <small class="invalid-feedback">상품 상태를 다시 확인해주세요.</small>
+                                            <p class="form-text text-danger" th:if="${#fields.hasErrors('itemStatus')}"
+                                               th:errors="*{itemStatus}">itemDetail Error</p>
                                         </div>
                                     </div>
                                     <div uk-form-custom class="w-full py-3">
@@ -330,17 +415,21 @@
                                                 <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
                                             </svg>
                                         </div>
-                                        <!--                    <input type="file" th:field="*{itemImg}">-->
+                                        <input class="my-5" type="file" name="file" id="input-image" accept="image/png, image/jpeg">
+
+                                        <img style="width: 500px;" id="preview-image" th:src="${product.filePath}">
+                                        <input type="hidden" name="imageFile" id="imageFile">
                                     </div>
                                 </div>
                                 <div class="p-5">
-                                    <button type="submit"
-                                            id = "board_form_send"
+                                    <button onclick="update_market()" type="submit"
                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                                         수정
                                     </button>
                                 </div>
                             </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -352,11 +441,82 @@
 </div>
 
 <script type="application/javascript" th:inline="javascript">
+    function update_market() {
+        let price = document.getElementById("price");
+        let priceNum = document.getElementById("priceNum");
+
+        priceNum.value = price.value.replaceAll(',', '');
+
+        $("#market_form").submit();
+    }
+
+    const input = document.querySelector('#price');      //[1]
+    input.addEventListener('keyup', function(e) {
+        let value = e.target.value;
+        value = Number(value.replaceAll(',', ''));
+        console.log(value);
+        if(isNaN(value)) {         //NaN인지 판별
+            input.value = 0;
+        }else {                   //NaN이 아닌 경우
+            const formatValue = value.toLocaleString('ko-KR');
+            input.value = formatValue;
+        }
+    })
+    /*    function marketUpdate() {
+            console.log("market Update 실행");
+            console.log('/market/detail/'+ [[${product.marketId}]] +'/update')
+            $.ajax({
+                url:'/market/detail/'+ [[${product.marketId}]] +'/update',
+                type:'get',
+                enctype: 'multipart/form-data',	// 필수
+                data: {marketType: "marketType", itemName: "itemName", itemDetail: "itemDetail", price: "price", itemStatus: "itemStatus", imageFile: "imageFile" },		// 필수
+                processData: false,	// 필수
+                contentType: false,
+                // data : $('#board_form').serialize(),
+                success : function (){
+                    location.reload();
+                },
+            });
+        }*/
+
+    function readImage(input) {
+
+        let maxSize = 2 * 1024 * 1024; // 2MB
+        let size = input.files[0].size;
+        console.log(size);
+        if(size > maxSize){
+            alert("이미지 용량은 2MB 이내로 등록 가능합니다. ");
+            return;
+        }
+
+        // 인풋 태그에 파일이 있는 경우
+        if(input.files && input.files[0]) {
+            // 이미지 파일인지 검사 (생략)
+            let imageFile = $("#imageFile");
+            imageFile.val("checked");
+            console.log(imageFile);
+
+            // FileReader 인스턴스 생성
+            const reader = new FileReader()
+            // 이미지가 로드가 된 경우
+            reader.onload = e => {
+                const previewImage = document.getElementById("preview-image")
+                previewImage.src = e.target.result
+            }
+            // reader가 이미지 읽도록 하기
+            reader.readAsDataURL(input.files[0])
+        }
+    }
+    // input file에 change 이벤트 부여
+    const inputImage = document.getElementById("input-image")
+    inputImage.addEventListener("change", e => {
+        readImage(e.target)
+    })
     /*상품 상태 변경 시작*/
-    /*function marketTypeSell() {
-        /!*<![CDATA[*!/
+    function marketTypeSell() {
+        /*<![CDATA[*/
         var path = [[${product.marketId}]];
-        /!*]]>*!/
+        /*]]>*/
         swal({
             title: "상품 상태 변경.",
             text: "상품의 상태를 판매중으로 변경하시겠습니까?",
@@ -367,10 +527,11 @@
         .then((willDelete) => {
             console.log("willdelete");
             $.ajax({
-                url: '/market/detail/' + path,
+                url: '/market/detail/' + path + '/type/selling',
                 type: 'GET',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function (message) {
+                    location.reload();
                     $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                     $("#isUpdated").replaceWith(message);
                 },
@@ -379,9 +540,9 @@
     }
 
     function marketTypeEnd() {
-        /!*<![CDATA[*!/
+        /*<![CDATA[*/
         var path = [[${product.marketId}]];
-        /!*]]>*!/
+        /*]]>*/
 
         swal({
             title: "상품 상태 변경.",
@@ -393,16 +554,123 @@
             .then((willDelete) => {
                 console.log("willdelete");
                 $.ajax({
-                    url: '/market/detail/' + path,
+                    url: '/market/detail/' + path + '/type/sold-out',
                     type: 'GET',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function (message) {
+                        location.reload();
                         $("#isUpdatedForm").html('<div id="isUpdated"></div>');
                         $("#isUpdated").replaceWith(message);
                     },
                 })
             });
-    }*/
+    }
+
+    function marketTypePurchase() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매중으로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/purchase',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+
+    function marketTypePurchaseEnd() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/purchase-end',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+
+    function marketShare() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/share',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
+    function marketShareEnd() {
+        /*<![CDATA[*/
+        var path = [[${product.marketId}]];
+        /*]]>*/
+
+        swal({
+            title: "상품 상태 변경.",
+            text: "상품의 상태를 판매완료로 변경하시겠습니까?",
+            icon: "info",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                console.log("willdelete");
+                $.ajax({
+                    url: '/market/detail/' + path + '/type/share-end',
+                    type: 'GET',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (message) {
+                        location.reload();
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(message);
+                    },
+                })
+            });
+    }
     /*상품 상태 변경 끝*/
 
     var imageDelay = (function (){
@@ -631,24 +899,7 @@
             }, 1000);
         });
 
-        $(document).on('click', '.board_form_send', function() {
-            console.log("market Update 실행");
-            $.ajax({
-                url:'/market/update',
-                type:'get',
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                data : $('#board_form').serialize(),
-                success : function (message){
-                    console.log("Board Update Success");
-                    $('.form_refresh').load(window.location.href+' .form_refresh');
-                    $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                    $("#isUpdated").replaceWith(message);
-                },
-                error : function (request, status, error){
-                    console.log("Board Update " + error);
-                }
-            });
-        });
+
         var c_textarea = $('#c_content');
         $(document).on('click', '.chat_send', function () {
             if (c_textarea.val().length < 2) {

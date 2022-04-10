@@ -87,12 +87,12 @@ public class AccountController {
     // 인증메일 재발송
     @GetMapping("/resend-confirm-email")
     public String resendConfirmEmail(@CurrentUser Account account, Model model, RedirectAttributes redirectAttributes) {
-        /*if (!account.canSendConfirmEmail()) {
+        if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
             model.addAttribute("email", account.getEmail());
             model.addAttribute(account);
             return "account/check-email";
-        }*/
+        }
 
         redirectAttributes.addFlashAttribute("message", "인증메일이 발송 됐습니다. 메일을 확인해주세요.");
         accountService.sendSignUpConfirmEmail(account);
@@ -160,7 +160,5 @@ public class AccountController {
         accountService.login(account);
         return "account/email-login-view";
 
-        // TODO
-        // 자동 로그인이 아닌 이메일로 임시 비밀번호 발급하는건 어떤지 생각하기
     }
 }
