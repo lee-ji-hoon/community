@@ -11,6 +11,7 @@ import com.community.domain.council.CouncilRepository;
 import com.community.service.CouncilService;
 import com.community.web.dto.CouncilForm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class CouncilController {
 
     private final CouncilRepository councilRepository;
@@ -44,7 +46,11 @@ public class CouncilController {
         // 총 페이지의 수
         int totalPage = noticePage.getTotalPages();
 
-        model.addAttribute("noticePage", noticePage.getContent());
+        // Page 타입을 그대로 가져옴
+        model.addAttribute("noticePage", noticePage);
+
+        // 페이지 버튼 최대 개수
+        model.addAttribute("maxPage", 5);
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("pageNo", page);
         model.addAttribute(account);
