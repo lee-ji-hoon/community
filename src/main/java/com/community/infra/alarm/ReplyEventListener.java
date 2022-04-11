@@ -73,6 +73,8 @@ public class ReplyEventListener {
     }
 
     private void sendWebByMarketReply(Reply reply, Market market, Account seller, Account fromAccount) {
+        log.info("market alarm 추가");
+
         Alarm alarm = new Alarm();
         alarm.setTitle(market.getItemName());
         alarm.setLink("/market/detail/"+market.getMarketId());
@@ -83,6 +85,7 @@ public class ReplyEventListener {
         alarm.setToAccount(seller);
         alarm.setFromAccount(fromAccount);
         alarm.setAlarmType(AlarmType.MARKET_REPLY);
+        alarmRepository.save(alarm);
     }
 
     private void sendWebByBoardReply(Reply reply, Board board, Account writer, Account fromAccount) {

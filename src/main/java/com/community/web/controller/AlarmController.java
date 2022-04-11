@@ -132,6 +132,7 @@ public class AlarmController {
         model.addAttribute("newStudyAlarms", newStudyAlarms);
         model.addAttribute("newMeetingAlarms", newMeetingAlarms);
         model.addAttribute("newMeetingsReplyAlarms", newMeetingsReplyAlarms);
+        model.addAttribute("newMarketReplyAlarms", newMarketReplyAlarms);
         model.addAttribute("newBoardReplyAlarms", newBoardReplyAlarms);
         model.addAttribute("newLikesAlarms", newLikesAlarms);
     }

@@ -1747,6 +1747,7 @@
                     <small class="text-left mb-0 text-lg font-semibold" th:text="${alarm.title}">title</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING_REPLY)}">모임 댓글</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.BOARD_REPLY)}">커뮤니티 댓글</small>
+                    <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MARKET_REPLY)}">장터 댓글</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.MEETING)}">모임 생성</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.STUDY)}">관심 스터디 생성</small>
                     <small class="fromNow text-muted" th:if="${alarm.alarmType.equals(alarm.alarmType.LIKES)}">좋아요</small>

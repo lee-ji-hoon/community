@@ -34,7 +34,7 @@
                             </li>
                             <li>
                                 <div class="form_refresh_reply">
-                                    <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size()}"></span></a>
+                                    <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size() + newMarketReplyAlarms.size()}"></span></a>
                                 </div>
                             </li>
                             <li>
@@ -68,8 +68,8 @@
                             <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
                             <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 커뮤니티 댓글 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
+                            <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newMarketReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newMarketReplyAlarms})"></div>
                         </div>
 
                         <!-- 좋아요 -->
