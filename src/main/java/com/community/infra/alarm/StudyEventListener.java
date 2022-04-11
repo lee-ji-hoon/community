@@ -14,6 +14,7 @@ import com.community.domain.study.Study;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@Async
 public class StudyEventListener {
 
     private final StudyRepository studyRepository;

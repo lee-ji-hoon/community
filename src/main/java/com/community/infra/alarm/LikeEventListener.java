@@ -21,6 +21,7 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@Async
 public class LikeEventListener {
 
     private final AlarmRepository alarmRepository;
