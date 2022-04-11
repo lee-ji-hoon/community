@@ -48,44 +48,39 @@ public class MarketController {
     private final ReplyRepository replyRepository;
     private final AccountRepository accountRepository;
 
-    @GetMapping("/market")
-    public String marketListView(@CurrentUser Account account, Model model,
+    @GetMapping("/market/{type}")
+    public String marketListView(@CurrentUser Account account, Model model, @PathVariable String type,
                                  @PageableDefault(size = 5, page = 0, sort = "itemUploadTime",
                                                     direction = Sort.Direction.ASC) Pageable pageable,
                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        switch (type) {
+            case "sell" : // 판매
+                Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
+                model.addAttribute("marketType", marketTypeSell);
+                break;
+            case "buy" : // 구매
+                Page<Market> marketTypeBuy = marketRepository.findByMarketType("구매", pageable);
+                model.addAttribute("marketType", marketTypeBuy);
+                break;
+            case "share" : // 나눔
+                Page<Market> marketTypeShare = marketRepository.findByMarketType("나눔", pageable);
+                model.addAttribute("marketType", marketTypeShare);
+                break;
+            case "myProduct" : // 내 물건
+                Page<Market> myProduct = marketRepository.findBySeller(account, pageable);
+                model.addAttribute("marketType", myProduct);
+                break;
+        }
+
         model.addAttribute(account);
-        model.addAttribute(new MarketForm());
-        Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
-        Page<Market> marketTypeBuy = marketRepository.findByMarketType("구매", pageable);
-        Page<Market> marketTypeShare = marketRepository.findByMarketType("나눔", pageable);
-        Page<Market> myProduct = marketRepository.findBySeller(account, pageable);
-        log.info("page : {}", page);
-        log.info("marketTypeSell: {}", marketTypeSell);
-
-        int totalPage = marketTypeSell.getTotalPages();
-
-        log.info("totalPages : {}", totalPage);
-
-        log.info("marketTypeSell : {}" ,marketTypeSell.getSize());
-        log.info("myProduct : {}" ,myProduct.getSize());
-        // 판매
-        model.addAttribute("sellingProduct", marketTypeSell);
-        model.addAttribute("maxPageBySell", 5);
+        model.addAttribute(type);
         model.addAttribute("pageNo", page);
-
-        // 구매
-        model.addAttribute("buyProduct", marketTypeBuy);
-
-        // 나눔
-        model.addAttribute("shareProduct", marketTypeShare);
-
-        // 내것
-        model.addAttribute("myProduct", myProduct);
 
         return "market/market-list";
     }
 
-    @GetMapping("/market/new")
+    @GetMapping("/market/register/new")
     public String marketNewForm(@CurrentUser Account account, Model model, @Valid MarketForm marketForm, RedirectAttributes redirectAttributes){
         boolean emailVerified = account.isEmailVerified();
 
@@ -103,7 +98,7 @@ public class MarketController {
         return "market/market-form";
     }
 
-    @PostMapping("/market/new")
+    @PostMapping("/market/register/new")
     public String marketNewProduct(@CurrentUser Account account, Model model,
                                     @Valid MarketForm marketForm,
                                     @RequestPart MultipartFile file,
