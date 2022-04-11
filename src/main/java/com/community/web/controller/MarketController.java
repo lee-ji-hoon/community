@@ -50,18 +50,37 @@ public class MarketController {
 
     @GetMapping("/market")
     public String marketListView(@CurrentUser Account account, Model model,
-                                 @PageableDefault(size = 7, page = 0, sort = "itemUploadTime",
-                                                    direction = Sort.Direction.DESC) Pageable pageable) {
+                                 @PageableDefault(size = 5, page = 0, sort = "itemUploadTime",
+                                                    direction = Sort.Direction.ASC) Pageable pageable,
+                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
         model.addAttribute(account);
         model.addAttribute(new MarketForm());
         Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
+        Page<Market> marketTypeBuy = marketRepository.findByMarketType("구매", pageable);
+        Page<Market> marketTypeShare = marketRepository.findByMarketType("나눔", pageable);
+        Page<Market> myProduct = marketRepository.findBySeller(account, pageable);
+        log.info("page : {}", page);
+        log.info("marketTypeSell: {}", marketTypeSell);
 
+        int totalPage = marketTypeSell.getTotalPages();
+
+        log.info("totalPages : {}", totalPage);
+
+        log.info("marketTypeSell : {}" ,marketTypeSell.getSize());
+        log.info("myProduct : {}" ,myProduct.getSize());
+        // 판매
         model.addAttribute("sellingProduct", marketTypeSell);
-        model.addAttribute("sortProperty", pageable.getSort().toString().contains("itemUploadTime") ? "itemUploadTime" : "seller");
+        model.addAttribute("maxPageBySell", 5);
+        model.addAttribute("pageNo", page);
 
-        model.addAttribute("buyProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("구매"));
-        model.addAttribute("shareProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("나눔"));
-        model.addAttribute("myProduct", marketRepository.findAllBySeller(account));
+        // 구매
+        model.addAttribute("buyProduct", marketTypeBuy);
+
+        // 나눔
+        model.addAttribute("shareProduct", marketTypeShare);
+
+        // 내것
+        model.addAttribute("myProduct", myProduct);
 
         return "market/market-list";
     }

@@ -44,74 +44,81 @@
                         </a>
                     </div>
 
-                    <div class="card divide-y divide-gray-100 sm:m-0 -mx-4">
+                    <div class="divide-y divide-gray-100 sm:m-0 -mx-4">
                         <div class="uk-switcher" id="timeline-tab">
                             <!-- 판매  -->
                             <!--<div th:replace="theme-fragments.html :: market-list(type = ${sellingProduct})">
                             </div>-->
-                        <div>
-                            <div th:each="sell : ${sellingProduct.getContent()}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                <a th:href="@{'/market/detail/'+${sell.marketId}}" class="w-40 h-40 relative mt-1 order-1">
-                                    <img th:if="${sell.getFilePath() != null}" th:src="${sell.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
-                                    <!--            <img th:src="${product.getFilePath()}"/>-->
+                            <div>
+                                <div th:each="sell : ${sellingProduct.getContent()}" class="flex items-start card flex-wrap p-2 my-5 sm:space-x-6">
+                                    <a th:href="@{'/market/detail/'+${sell.marketId}}" class="w-40 h-40 relative mt-1 order-1">
+                                        <img th:if="${sell.getFilePath() != null}" th:src="${sell.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
+                                        <!--            <img th:src="${product.getFilePath()}"/>-->
 
-                                </a>
-                                <div class="flex-1 sm:order-2">
-                                    <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
-                                    <a th:href="@{'/market/detail/'+${sell.marketId}}">
-                                        <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
                                     </a>
-                                    <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
+                                    <div class="flex-1 sm:order-2">
+                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
+                                        <a th:href="@{'/market/detail/'+${sell.marketId}}">
+                                            <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
+                                        </a>
+                                        <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
+                                        </div>
+                                        <a th:href="@{'/market/detail/'+${sell.marketId}}"> 자세히 보기 </a>
                                     </div>
-                                    <a th:href="@{'/market/detail/'+${sell.marketId}}"> 자세히 보기 </a>
                                 </div>
-                            </div>
 
-                            <div class="row justify-content-center">
-                                <div class="col-sm-10">
-                                    <!--<th:block th:if="${totalPage != 0}">
-                                        <nav aria-label="Page navigation">
-                                            <ul class="inline-flex space-x-2">
-                                                &lt;!&ndash;<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
-                                                </li>&ndash;&gt;
-                                                <li th:each="page : ${#numbers.sequence(0, totalPage -1)}">
-                                                    <a th:href="@{/council/(page=${pageStat.index})}">
-                                                        <button th:classappend="${pageStat.index == pageNo} ? 'text-white bg-indigo-600' : 'text-indigo-600'" class="w-10 h-10 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100" th:text="${pageStat.index + 1}"></button>
-                                                    </a>
-                                                </li>
-                                                &lt;!&ndash;<li><button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg></button>
-                                                </li>&ndash;&gt;
-                                            </ul>
-                                        </nav>
-                                    </th:block>-->
-
-
-                                    <nav>
-                                        <ul class="pagination justify-content-center">
-                                            <li class="page-item" th:classappend="${!sellingProduct.hasPrevious()}? disabled">
-                                                <a th:href="@{'/market'+ ',desc&page=' + ${sellingProduct.getNumber() - 1}}"
-                                                   class="page-link" tabindex="-1" aria-disabled="true">
-                                                    Previous
+                                <div th:if="${sellingProduct.totalPages != 0}">
+                                    <!--
+                                    * 최대 페이지를 5단위로 끊은 상태임 예) 1 ~ 5 / 6 ~ 10 / 11 ~ 15 ...
+                                    * start = 1, 6, 11을 구분하기 위한 로직 / Page의 index가 0으로 시작하기 때문에 +1을 해줌
+                                    * end = 1일 때 5가 마지막, 6일 때 10이 마지막, 가장 마지막의 첫 페이지면 가장 마지막을 지정해주는 로직
+                                    -->
+                                    <nav aria-label="Page navigation"
+                                         th:with="start=${(sellingProduct.number/maxPageBySell)*maxPageBySell + 1},
+                                            end=(${(sellingProduct.totalPages == 0) ? 1 : (start + (maxPageBySell - 1) < sellingProduct.totalPages ? start + (maxPageBySell - 1) : sellingProduct.totalPages)})">
+                                        <ul class="inline-flex space-x-2">
+                                            <!--
+                                            * < 꺽새 그려줌
+                                            -->
+                                            <li th:if="${start > 1}">
+                                                <a th:href="@{/market(page=${start - maxPageBySell +3})}">
+                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                            <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
                                                 </a>
                                             </li>
-                                            <li class="page-item" th:classappend="${i == sellingProduct.getNumber()}? active"
-                                                th:each="i: ${#numbers.sequence(0, sellingProduct.getTotalPages() - 1)}">
-                                                <a th:href="@{'/market' + ',desc&page=' + ${i}}"
-                                                   class="page-link" href="#" th:text="${i + 1}">1</a>
+                                            <!--
+                                            * 페이지를 뿌려주는 부분
+                                            -->
+                                            <li th:each="page : ${#numbers.sequence(start, end)}">
+                                                <a th:href="@{/market(page=${page - 1})}">
+                                                    <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                            class="w-10 h-10 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                            th:text="${page}"></button>
+                                                    <!--
+                                                    * classappend : 현재 번호가 controller에서 받은 pageNo랑 같다면 배경색을 추가해줌
+                                                    * th:text="${page}" : each문이 #numbers로 가져오기 때문에 page만 출력
+                                                    -->
+                                                </a>
                                             </li>
-                                            <li class="page-item" th:classappend="${!sellingProduct.hasNext()}? disabled">
-                                                <a th:href="@{'/market' + ${sellingProduct.getNumber() + 1}}"
-                                                   class="page-link">
-                                                    Next
+                                            <!--
+                                            * > 꺽새 그려줌
+                                            -->
+                                            <li th:if="${end < sellingProduct.totalPages}">
+                                                <a th:href="@{/market(page=${start + maxPageBySell - 1})}">
+                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
                                                 </a>
                                             </li>
                                         </ul>
                                     </nav>
                                 </div>
                             </div>
-                        </div>
                             <!-- 구매  -->
                             <div th:replace="theme-fragments.html :: market-list(type = ${buyProduct})">
                             </div>
@@ -124,84 +131,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
-
-</div>
-
-<div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
-    <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
-
-        <button class="uk-offcanvas-close absolute" type="button" uk-close></button>
-
-        <!-- notivication header -->
-        <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
-            <h4> 물건 등록   </h4>
-        </div>
-        <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
-              th:object="${marketForm}"
-              th:action="@{/market/new}"
-              method="post" enctype="multipart/form-data" novalidate>
-            <div class="p-6 space-y-3 flex-1">
-                <div>
-                    <label> 카테고리 </label>
-                    <select name="" class="selectpicker with-border" th:field="*{marketType}">
-                        <option value="2" selected th:value="판매"> 판매 </option>
-                        <option value="3" th:value="구매"> 구매 </option>
-                        <option value="3" th:value="나눔"> 나눔 </option>
-                    </select>
-
-                </div>
-                <div>
-                    <label> 품명  </label>
-                    <input type="text" th:field="*{itemName}" class="with-border" placeholder="">
-                </div>
-                <div>
-                    <label> 설명  </label>
-                    <textarea name="description" th:field="*{itemDetail}" rows="2" class="with-border w-full p-4"
-                              id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label> 가격 </label>
-                        <input placeholder="0" th:field="*{price}" type="number" class="with-border w-full">
-                    </div>
-                    <div>
-                        <label> 상품 상태 </label>
-                        <select name="" class="selectpicker with-border" th:field="*{itemStatus}">
-                            <option value="2" selected th:value="새것"> 새 것 </option>
-                            <option value="3" th:value="사용감있음"> 사용감 있음 </option>
-                            <option value="3" th:value="사용감없음"> 사용감 없음 </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="image-container">
-                    <div uk-form-custom class="w-full py-3">
-                        <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                                <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                                <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                            </svg>
-                        </div>
-                        <input type="file" name="file" id="input-image">
-                    </div>
-
-                    <img style="width: 500px;" id="preview-image">
-                </div>
-
-            </div>
-            <div class="p-5">
-                <button type="submit"
-                        id = "board_form_send"
-                        class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                    추가
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 
