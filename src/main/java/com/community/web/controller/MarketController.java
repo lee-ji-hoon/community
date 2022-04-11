@@ -183,7 +183,7 @@ public class MarketController {
             marketService.deleteProduct(market);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             model.addAttribute(account);
-            return "redirect:/market";
+            return "redirect:/market/sell";
         }
         return "error-page";
     }
