@@ -49,7 +49,7 @@
                     <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
                         <!-- 스터디 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 스터디 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
                             <h5 class="px-5 font-bold" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
@@ -57,15 +57,17 @@
 
                         <!-- 댓글 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 댓글 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 커뮤니티 댓글 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
+                            <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
                         </div>
 
                         <!-- 좋아요 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'좋아요 댓글 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'좋아요 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 좋아요알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newLikesAlarms})"></div>
                         </div>
 
