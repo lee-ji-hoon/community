@@ -936,8 +936,8 @@
 
 <script type="application/javascript" th:inline="javascript" th:fragment="ajax-csrf">
     $(function() {
-        var csrfToken = /*[[${_csrf.token}]]*/ null;
-        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
         $(document).ajaxSend(function (e, xhr, options) {
             xhr.setRequestHeader(csrfHeader, csrfToken);
         });
