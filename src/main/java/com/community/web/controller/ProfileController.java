@@ -169,12 +169,14 @@ public class ProfileController {
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
                                               @RequestParam(required = false, value = "replyByMeetings") String replyByMeetings,
+                                              @RequestParam(required = false, value = "replyByMarket") String replyByMarket,
                                               @RequestParam(required = false, value = "replyByPost") String replyByPost,
                                               @RequestParam(required = false, value = "likes") String likes) {
 
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
+        account.setReplyByMarket(replyByMarket != null);
         account.setReplyByPost(replyByMeetings != null);
         account.setReplyByMeetings(replyByPost != null);
         account.setLikesByPost(likes != null);

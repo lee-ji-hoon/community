@@ -775,7 +775,7 @@
             }
             if (input.value != '' && key.key == 'Enter') {
                 $.ajax({
-                    url: '/market/reply',
+                    url: '/market/detail/reply',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_form').serialize(),
@@ -814,7 +814,7 @@
             if (input.value != '') {
                 console.log("댓글 작성");
                 $.ajax({
-                    url: '/market/reply',
+                    url: '/market/detail/reply',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_form').serialize(),
@@ -854,7 +854,7 @@
             if (reply_input.value != '') {
                 console.log("댓글 수정");
                 $.ajax({
-                    url: '/market/reply/update',
+                    url: '/reply/update',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_update_form').serialize(),

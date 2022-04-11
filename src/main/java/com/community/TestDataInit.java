@@ -57,7 +57,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100000")) {
             accountRepository.save(new Account(null, "testerA@nsu.ac.kr", "testerA", "17-100000", "테스터A", passwordEncoder.encode("test1234!"),
                     true, "asdf", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    null, null, null, null, null, null, null, null, true, true, false,
+                    null, null, null, null, null, null, null, null, true, true, true, true,
                     true, true, true, null));
             /*boardRepository.save(new Board(null, "자유", "", "수강신청 다들 성공기원🙏", null,null,  null, false,0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusMinutes(20), null));
             boardRepository.save(new Board(null, "질문", "college", "수강신청은 어떻게 하나요?",null, null, null, false,0,"ㅈㄱㄴ", accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusSeconds(40), null));
@@ -67,7 +67,7 @@ public class TestDataInit {
         if (!accountRepository.existsByStudentId("17-100001")) {
             accountRepository.save(new Account(null, "testerB@nsu.ac.kr", "testerB", "17-100001", "테스터B", passwordEncoder.encode("test1234!"),
                     true, "asdfg", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
-                    null, null, null, null, null, null, null, null, true, true, false,
+                    null, null, null, null, null, null, null, null, true, true, true, true,
                     true, true, true, null));
             /*boardRepository.save(new Board(null, "자유", "", "수강신청 다들 성공기원🙏", null,null,  null, false,0,BOARD_CONTENT_VALUE, accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusMinutes(20), null));
             boardRepository.save(new Board(null, "질문", "college", "수강신청은 어떻게 하나요?",null, null, null, false,0,"ㅈㄱㄴ", accountRepository.findByEmail("test@naver.com"), 0, LocalDateTime.now().minusSeconds(40), null));
@@ -102,7 +102,7 @@ public class TestDataInit {
             accountRepository.save(new Account(null, "croce@nsu.ac.kr", "CROCE", "11-111111", "학생회", passwordEncoder.encode("mmult1234!"),
                     true, "asdf123", null, null, LocalDateTime.now().minusHours(1), LocalDateTime.now().minusHours(1),
                     "안녕하세요 27대 학생회 CROCE 입니다.", "", "대학생", "충청북도, 성환", null, null, null, null, true, true,
-                    true, true, true, true, null));
+                    true, true, true, true,  true, null));
             /*councilRepository.save(new Council(null, "행사", "💛친해지길 바라💛", "전체 학년", "http://naver.me/G3K7QAeA", "010-1234-1234", COUNCIL_CONTENT_VALUE, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));
             councilRepository.save(new Council(null, "행사", "🍦기말 간식행사🍦", "전체 학년", null, "010-1234-1234", COUNCIL_CONTENT_VALUE1, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2021, 12, 5), LocalDate.of(2021, 12, 5), LocalDate.of(2021, 11, 29), LocalDate.of(2021, 12, 02), LocalDateTime.now()));
             councilRepository.save(new Council(null, "공지", "2022-1학기 캡스톤 디자인(종합 설계) 운영 지침 및 과제 신청 안내", "전체 학년", "http://naver.me/G3K7QAeA", "1599-2000", COUNCIL_CONTENT_VALUE2, accountRepository.findByEmail("croce@naver.com"), 0, LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 23), LocalDate.of(2022, 3, 7), LocalDate.of(2022, 3, 14), LocalDateTime.now()));

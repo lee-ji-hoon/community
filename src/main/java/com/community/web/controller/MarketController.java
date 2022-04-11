@@ -188,7 +188,6 @@ public class MarketController {
         return "error-page";
     }
 
-
     @ResponseBody
     @RequestMapping(value = "/market/detail/{marketId}/type/{status}")
     public void marketStatusUpdate(@PathVariable long marketId, @PathVariable String status) throws IOException {
@@ -197,62 +196,4 @@ public class MarketController {
         marketService.updateMarketItemType(market, status);
 
     }
-
-
-
-    // 중고거래 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/market/reply")
-    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
-                              @RequestParam(value = "r_account_id") Long r_account_id,
-                              @RequestParam(value = "r_content") String r_content,
-                              ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_board_id + "r_board_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Market byMarketId = marketRepository.findByMarketId(r_board_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMarketReply(replyForm, account, byMarketId);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/market/reply/update")
-    public int addMarketReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
-                                    @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
-        log.info("rid : " + reply_update_rid);
-        log.info("content : " + reply_update_content);
-        replyService.updateReply(reply_update_rid, reply_update_content);
-
-        Reply reply = replyRepository.findByRid(reply_update_rid);
-        Market byMarketId = marketRepository.findByMarketId(reply.getMarket().getMarketId());
-        List<Reply> replies = replyRepository.findAllByMarket(byMarketId);
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    @GetMapping("/market/reply/delete/{rid}")
-    public String marketReplyDelete(@PathVariable Long rid,
-                                    RedirectAttributes redirectAttributes) {
-        Reply findReply = replyRepository.findByRid(rid);
-        Market byMarketId = marketRepository.findByMarketId(findReply.getMarket().getMarketId());
-
-        redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
-        replyRepository.delete(findReply);
-        return "redirect:/market/" + byMarketId.getMarketId();
-    }
-
-    // 중고거래 댓글 추가 끝
 }

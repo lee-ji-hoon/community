@@ -97,9 +97,12 @@ public class Account {
 
     private boolean replyByPost = true;
 
+    private boolean replyByMarket = true;
+
     private boolean likesByPost = true;
 
     private boolean replyCreateByWeb = true;
+
     // 알림 설정 끝
 
     // 태그
@@ -169,4 +172,5 @@ public class Account {
         }
         return msg;
     }
+
 }
