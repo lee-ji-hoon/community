@@ -27,10 +27,18 @@
                             <h2 class="text-2xl font-semibold"> 장터 </h2>
                             <nav class="responsive-nav md:m-0 -mx-4">
                                 <ul>
-                                    <li th:classappend="${type == 'sell'}? active"><a th:href="@{/market/sell}" class="lg:px-2">팝니다 </a></li>
-                                    <li th:classappend="${type == 'buy'}? active"><a th:href="@{/market/buy}" class="lg:px-2"> 삽니다 </a></li>
-                                    <li th:classappend="${type == 'share'}? active"><a th:href="@{/market/share}" class="lg:px-2"> 나눔 </a></li>
-                                    <li th:classappend="${type == 'myProduct'}? active"><a th:href="@{/market/myProduct}" class="lg:px-2"> 내 상품 </a></li>
+                                    <li th:classappend="${type == 'sell'}? active">
+                                        <a th:href="@{/market/sell}" class="lg:px-2">팝니다 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'buy'}? active">
+                                        <a th:href="@{/market/buy}" class="lg:px-2"> 삽니다 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'share'}? active">
+                                        <a th:href="@{/market/share}" class="lg:px-2"> 나눔 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'myProduct'}? active">
+                                        <a th:href="@{/market/myProduct}" class="lg:px-2"> 내 상품 </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
@@ -75,7 +83,7 @@
                                     * < 꺽새 그려줌
                                     -->
                                     <li th:if="${start > 1}">
-                                        <a th:href="@{/market/sell/(page=${start - 2})}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${start - 2})}">
                                             <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
                                                 <svg class="w-4 h-4 fill-current " viewBox="0 0 20 20">
                                                     <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -88,7 +96,7 @@
                                     * 페이지를 뿌려주는 부분
                                     -->
                                     <li th:each="page : ${#numbers.sequence(start, end)}">
-                                        <a th:href="@{/market/sell/(page=${page - 1})}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${page - 1})}">
                                             <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
                                                     class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
                                                     th:text="${page}"></button>
@@ -102,7 +110,7 @@
                                     * > 꺽새 그려줌
                                     -->
                                     <li th:if="${end < marketType.totalPages}">
-                                        <a th:href="@{/market/sell/(page=${start + 4})}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${start + 4})}">
                                             <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
                                                 <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                                     <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
