@@ -111,10 +111,12 @@ public class TestDataInit {
 
         /*for (int i = 0; i < 50; i++) {
             String make = RandomString.make(5);
-            marketRepository.save(new Market(null, null, "새것", "name" + make, 1500, "판매", null, "상세내용" + make, MarketItemStatus.판매중, null, null, true, LocalDateTime.now()));
-        }
+            marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "판매", null, "상세내용" + make, MarketItemStatus.판매중, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
+            marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "구매", null, "상세내용" + make, MarketItemStatus.판매중, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
+            marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "나눔", null, "상세내용" + make, MarketItemStatus.판매중, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
+        }*/
 
-        for (int i = 0; i < 50; i++) {
+        /*for (int i = 0; i < 50; i++) {
             String make = RandomString.make(5);
             councilRepository.save(new Council(null, "공지", make, "전체 학년", null, null, make, null, null, null, null, null, null, null, null, LocalDateTime.now()));
         }*/
