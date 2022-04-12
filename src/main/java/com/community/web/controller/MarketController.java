@@ -43,7 +43,7 @@ public class MarketController {
 
     @GetMapping("/market/{type}")
     public String marketListView(@CurrentUser Account account, Model model, @PathVariable String type,
-                                 @PageableDefault(size = 5, page = 0, sort = "itemUploadTime",
+                                 @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                                     direction = Sort.Direction.ASC) Pageable pageable,
                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
