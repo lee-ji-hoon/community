@@ -1,5 +1,6 @@
 package com.community.web.controller;
 
+import com.amazonaws.services.ec2.model.MarketType;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
@@ -20,8 +21,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -88,6 +93,9 @@ public class ProfileController {
     // 프로필 진입
     @GetMapping("/profile/{nickname}/{division}")
     public String viewProfile(@PathVariable String nickname, @PathVariable String division,
+                              @PageableDefault(size = 7, page = 0, sort = "uploadTime",
+                                      direction = Sort.Direction.ASC) Pageable pageable,
+                              @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                               Model model, @CurrentUser Account account) {
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
@@ -101,20 +109,58 @@ public class ProfileController {
         model.addAttribute("byAccount", byAccount);
 
         switch (division) {
+            case  "view" :
+                model.addAttribute("accountWithTagsById", accountWithTagsById);
+                break;
             case "study" :
                 model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
                 model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
-                model.addAttribute("accountWithTagsById", accountWithTagsById);
+                break;
+            case "community" :
+                // TODO 게시판 넣어야 함
+                break;
+            case "market" :
+                model.addAttribute("myProductCountBySell",
+                        marketRepository.countAllBySellerAndMarketType(account, "판매"));
+                model.addAttribute("myProductCountByBuy",
+                        marketRepository.countAllBySellerAndMarketType(account, "구매"));
+                model.addAttribute("myProductBySell",
+                        marketRepository.findBySellerAndMarketType(account, "판매", pageable));
+                model.addAttribute("myProductBySell",
+                        marketRepository.findBySellerAndMarketType(account, "구매", pageable));
+                break;
+        }
+        long sell = marketRepository.countAllBySellerAndMarketType(account, "판매");
+        log.info("판매 물건 수 : {}", sell);
+        return "profile/view";
+    }
+
+    @GetMapping("/profile/{nickname}/{division}/{marketType}")
+    public void viewProfileMarket(@PathVariable String nickname,
+                                  @PathVariable String division,
+                                  @PathVariable String marketType,
+                                  Model model, @CurrentUser Account account,
+                                  @PageableDefault(size = 7, page = 0, sort = "uploadTime",
+                                          direction = Sort.Direction.ASC) Pageable pageable,
+                                  @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+        switch (marketType) {
+            case "sell":
+                model.addAttribute("myProductBySell",
+                        marketRepository.findBySellerAndMarketType(account, "판매", pageable));
+                break;
+            case "buy":
+                model.addAttribute("myProductBySell",
+                        marketRepository.findBySellerAndMarketType(account, "구매", pageable));
                 break;
 
-            case "community":
+
         }
-        return "profile/view";
     }
 
     // 프로필 변경 페이지
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileForm(@CurrentUser Account account, Model model) {
+
         model.addAttribute(account);
         model.addAttribute(new ProfileForm(account));
 
