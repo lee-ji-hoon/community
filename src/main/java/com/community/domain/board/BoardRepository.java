@@ -1,5 +1,6 @@
 package com.community.domain.board;
 
+import com.community.domain.account.Account;
 import com.community.domain.board.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +11,13 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    // 페이징 기능 관련
 
+    // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
+
+    long countAllByWriterAndBoardTitle(Account account, String boardTitle);
+
+    Page<Board> findByWriterAndBoardTitleAndIsReported(Account account, String boardTitle, Boolean isReported, Pageable pageable);
 
     Page<Board> findAllByBoardTitleOrderByUploadTimeDesc(String title, Pageable pageable);
 
