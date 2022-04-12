@@ -242,7 +242,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${likeService.boardLikeSize(board)}"></span>
+                                            <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${board.likesList.size()}"></span>
                                             <th:block th:if="${board.writer != account}">
                                                 <div class="text-red-500 flex-none" uk-tooltip="신고하기">
                                                     <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
@@ -287,7 +287,7 @@
                     </div>
                     <div class="card p-6">
                         <div class="reply_div">
-                            <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${replyService.boardReplySize(board)}"></a>)</h1>
+                            <h1 class="block text-lg font-semibold mb-4">Comments (<a th:text="${board.replyList.size()}"></a>)</h1>
 
                             <div class="space-y-5">
 

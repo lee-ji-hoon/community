@@ -164,15 +164,15 @@
                                         <div class="flex items-center pt-2">
                                             <div class="flex items-center">
                                                 <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}"></a>
+                                                <a class="text-xs" th:text="${account.dateTime(board.uploadTime)}"></a>
                                             </div>
                                             <div class="flex items-center mx-4 align-middle">
                                                 <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${likeService.boardLikeSize(board)}"></a>
+                                                <a class="text-xs" th:text="${board.likesList.size()}"></a>
                                             </div>
                                             <div class="flex items-center">
                                                 <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${replyService.boardReplySize(board)}"></a>
+                                                <a class="text-xs" th:text="${board.replyList.size()}"></a>
                                                 <th:block th:if="${replyService.boardReplyPresent(board)}">
                                                     <div class="-space-x-2 flex items-center ml-1">
                                                         <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
@@ -250,10 +250,10 @@
                                             <h3 class="pl-2 float-left font-medium line-clamp-1" th:text="${board.title}"></h3>
                                             <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
                                                 <ion-icon name="time-outline"></ion-icon>
-                                                <div th:text="${service.boardDateTime(board.uploadTime)}"></div>
+                                                <div th:text="${account.dateTime(board.uploadTime)}"></div>
                                                 <div class="pb-1"> . </div>
                                                 <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                                                <div th:text="${replyService.boardReplySize(board)}"></div>
+                                                <div th:text="${board.replyList.size()}"></div>
                                             </div>
                                         </a>
                                     </li>
