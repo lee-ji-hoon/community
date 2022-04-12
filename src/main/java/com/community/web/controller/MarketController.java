@@ -2,13 +2,10 @@ package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.board.Reply;
 import com.community.service.S3Service;
-import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
-import com.community.service.ReplyService;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.MarketService;
@@ -16,7 +13,6 @@ import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,7 +27,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,12 +36,10 @@ public class MarketController {
     private final MarketService marketService;
     private final ModelMapper modelMapper;
     private final BoardService boardService;
-    private final ReplyService replyService;
     private final S3Service s3Service;
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
-    private final AccountRepository accountRepository;
 
     @GetMapping("/market/{type}")
     public String marketListView(@CurrentUser Account account, Model model, @PathVariable String type,
