@@ -53,30 +53,6 @@ public class BoardController {
     private final LikeService likeService;
     private final ReplyService replyService;
 
-    //전체 게시물 조회
-    @GetMapping("/board")
-    public String boardList(Model model, @CurrentUser Account account,
-                            @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
-        // 최근에 올라온 게시물
-        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
-
-        // Top5 게시물
-        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
-
-        Page<Board> freeBoardPage = boardService.boardPage("자유", page);
-
-        model.addAttribute("board", top5Board);
-        model.addAttribute("recentlyBoards", recentlyBoards);
-        model.addAttribute("account", account);
-        model.addAttribute("service", boardService);
-        model.addAttribute("likeService", likeService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute("bt", "전체게시판");
-        model.addAttribute(new SearchForm());
-        model.addAttribute(new BoardForm());
-        return "board/boards";
-    }
-
     @GetMapping("/board/{type}")
     public String boardTypeList(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
