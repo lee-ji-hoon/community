@@ -8,12 +8,9 @@ import com.community.domain.board.BoardRepository;
 import com.community.domain.market.MarketRepository;
 import com.community.domain.report.BoardReport;
 import com.community.domain.study.StudyRepository;
-import com.community.service.AccountService;
-import com.community.service.S3Service;
+import com.community.service.*;
 import com.community.web.dto.*;
-import com.community.service.TagService;
 import com.community.domain.tag.TagRepository;
-import com.community.service.ProfileService;
 import com.community.web.dto.validator.NicknameValidator;
 import com.community.web.dto.validator.PasswordFormValidator;
 import com.community.domain.tag.Tag;
@@ -118,46 +115,71 @@ public class ProfileController {
                 model.addAttribute("myStudyList",
                         studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
                 break;
-            case "community" :
-                // TODO 게시판 넣어야 함
-                break;
+            case "board" :
+                return "redirect:/profile/"+byAccount.getNickname()+"/board/free" ;
             case "market" :
                 return "redirect:/profile/"+byAccount.getNickname()+"/market/sell" ;
         }
         return "profile/view";
     }
 
-    @GetMapping("/profile/{nickname}/{division}/{marketType}")
-    public String viewProfileMarket(@PathVariable String nickname,
+    @GetMapping("/profile/{nickname}/{division}/{sortType}")
+    public String viewProfileSortDivision(@PathVariable String nickname,
                                   @PathVariable String division,
-                                  @PathVariable String marketType,
+                                  @PathVariable String sortType,
                                   Model model, @CurrentUser Account account,
-                                  @PageableDefault(size = 7, page = 0, sort = "uploadTime",
+                                  @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                           direction = Sort.Direction.ASC) Pageable pageable,
                                   @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
 
         Account byAccount = accountService.getAccount(nickname);
 
-        model.addAttribute("myProductCountBySell",
-                marketRepository.countAllBySellerAndMarketType(account, "판매"));
-        model.addAttribute("myProductCountByBuy",
-                marketRepository.countAllBySellerAndMarketType(account, "구매"));
+        switch (division) {
+            case "market" :
+                model.addAttribute("myProductCountBySell",
+                        marketRepository.countAllBySellerAndMarketType(account, "판매"));
+                model.addAttribute("myProductCountByBuy",
+                        marketRepository.countAllBySellerAndMarketType(account, "구매"));
+                switch (sortType) {
+                    case "sell":
+                        model.addAttribute("market",
+                                marketRepository.findBySellerAndMarketType(account, "판매", pageable));
+                        break;
+                    case "buy":
+                        model.addAttribute("market",
+                                marketRepository.findBySellerAndMarketType(account, "구매", pageable));
+                        break;
+                }
+            case "board" :
+                model.addAttribute("myBoardCountByFree",
+                        boardRepository.countAllByWriterAndBoardTitle(account, "자유"));
+                model.addAttribute("myBoardCountByForum",
+                        boardRepository.countAllByWriterAndBoardTitle(account, "정보"));
+                model.addAttribute("myBoardCountByQnA",
+                        boardRepository.countAllByWriterAndBoardTitle(account, "질문"));
+                model.addAttribute(replyService);
+                model.addAttribute(likeService);
+                switch (sortType) {
+                    case "free":
+                        model.addAttribute("board",
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "자유", false, pageable));
+                        break;
+                    case "forum":
+                        model.addAttribute("board",
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "정보", false, pageable));
+                        break;
+                    case "qna":
+                        model.addAttribute("board",
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "질문", false, pageable));
+                        break;
+                }
+        }
         model.addAttribute(account);
         model.addAttribute("isOwner", byAccount.equals(account));
         model.addAttribute("byAccount", byAccount);
-        model.addAttribute("marketType", marketType);
+        model.addAttribute("sortType", sortType);
         model.addAttribute("pageNo", page);
 
-        switch (marketType) {
-            case "sell":
-                model.addAttribute("market",
-                        marketRepository.findBySellerAndMarketType(account, "판매", pageable));
-                break;
-            case "buy":
-                model.addAttribute("market",
-                        marketRepository.findBySellerAndMarketType(account, "구매", pageable));
-                break;
-        }
         return "profile/view";
     }
 
