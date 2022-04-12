@@ -42,26 +42,26 @@ import java.util.stream.Collectors;
 public class ProfileController {
     private final ProfileService profileService;
 
-    private static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile-settings";
-    private static final String SETTINGS_PROFILE_URL = "profile/settings/profile-settings";
+    private static final String SETTINGS_PROFILE_VIEW_NAME = "profile/settings/profile-settings";
+    private static final String SETTINGS_PROFILE_URL = "/profile/settings/profile-settings";
 
-    private static final String SETTINGS_PROFILE_IMG_VIEW_NAME = "settings/profile-img";
-    private static final String SETTINGS_PROFILE_IMG_URL = "profile/settings/profile-img";
+    private static final String SETTINGS_PROFILE_IMG_VIEW_NAME = "profile/settings/profile-img";
+    private static final String SETTINGS_PROFILE_IMG_URL = "/profile/settings/profile-img";
 
-    private static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-    private static final String SETTINGS_PASSWORD_URL = "profile/settings/password";
+    private static final String SETTINGS_PASSWORD_VIEW_NAME = "profile/settings/password";
+    private static final String SETTINGS_PASSWORD_URL = "/profile/settings/password";
 
-    private static final String SETTINGS_ALARM_VIEW_NAME = "settings/alarm";
-    private static final String SETTINGS_ALARM_URL = "profile/settings/alarm";
+    private static final String SETTINGS_ALARM_VIEW_NAME = "profile/settings/alarm";
+    private static final String SETTINGS_ALARM_URL = "/profile/settings/alarm";
 
-    private static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
-    private static final String SETTINGS_ACCOUNT_URL = "profile/settings/account";
+    private static final String SETTINGS_ACCOUNT_VIEW_NAME = "profile/settings/account";
+    private static final String SETTINGS_ACCOUNT_URL = "/profile/settings/account";
 
-    private static final String SETTINGS_WITHDRAW_VIEW_NAME = "settings/withdraw";
-    private static final String SETTINGS_WITHDRAW_URL = "profile/settings/withdraw";
+    private static final String SETTINGS_WITHDRAW_VIEW_NAME = "profile/settings/withdraw";
+    private static final String SETTINGS_WITHDRAW_URL = "/profile/settings/withdraw";
 
-    private static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
-    private static final String SETTINGS_TAGS_URL = "profile/settings/tags";
+    private static final String SETTINGS_TAGS_VIEW_NAME = "profile/settings/tags";
+    private static final String SETTINGS_TAGS_URL = "/profile/settings/tags";
 
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
@@ -86,8 +86,9 @@ public class ProfileController {
     }
 
     // 프로필 진입
-    @GetMapping("/profile/{nickname}")
-    public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
+    @GetMapping("/profile/{nickname}/{division}")
+    public String viewProfile(@PathVariable String nickname, @PathVariable String division,
+                              Model model, @CurrentUser Account account) {
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
@@ -96,14 +97,20 @@ public class ProfileController {
 
         model.addAttribute(new ProfileForm(account));
         model.addAttribute(account);
-        model.addAttribute("byAccount", byAccount);
-        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
-        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
         model.addAttribute("isOwner", byAccount.equals(account));
-        model.addAttribute("accountWithTagsById", accountWithTagsById);
+        model.addAttribute("byAccount", byAccount);
+
+        switch (division) {
+            case "study" :
+                model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
+                model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
+                model.addAttribute("accountWithTagsById", accountWithTagsById);
+                break;
+
+            case "community":
+        }
         return "profile/view";
     }
-
 
     // 프로필 변경 페이지
     @GetMapping(SETTINGS_PROFILE_URL)
