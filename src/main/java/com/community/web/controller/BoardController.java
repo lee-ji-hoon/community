@@ -149,7 +149,7 @@ public class BoardController {
         model.addAttribute("likeService", likeService);
         model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
-        model.addAttribute("board", top5Board);
+        model.addAttribute("top5Board", top5Board);
         model.addAttribute("recentlyBoards", recentlyBoards);
 
         model.addAttribute(new ReplyForm());
