@@ -99,6 +99,15 @@ public class ReplyService {
         return 0;
     }
 
+    public int councilReplySize(Council council) {
+        boolean isTrue = replyRepository.existsAllByCouncil(council);
+        if (isTrue) {
+            List<Reply> replyList = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
+            return replyList.size();
+        }
+        return 0;
+    }
+
     public Boolean boardReplyPresent(Board board) {
         Boolean isTrue = null;
         List<Reply> replies = replyRepository.findAllByBoard(board);
