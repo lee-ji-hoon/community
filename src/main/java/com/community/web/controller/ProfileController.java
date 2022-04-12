@@ -103,58 +103,62 @@ public class ProfileController {
         Account byAccount = accountService.getAccount(nickname);
         Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
 
-        model.addAttribute(new ProfileForm(account));
         model.addAttribute(account);
         model.addAttribute("isOwner", byAccount.equals(account));
         model.addAttribute("byAccount", byAccount);
 
         switch (division) {
             case  "view" :
+                model.addAttribute(new ProfileForm(byAccount));
                 model.addAttribute("accountWithTagsById", accountWithTagsById);
                 break;
             case "study" :
-                model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
-                model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
+                model.addAttribute("enrolledStudyList",
+                        studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
+                model.addAttribute("myStudyList",
+                        studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
                 break;
             case "community" :
                 // TODO 게시판 넣어야 함
                 break;
             case "market" :
-                model.addAttribute("myProductCountBySell",
-                        marketRepository.countAllBySellerAndMarketType(account, "판매"));
-                model.addAttribute("myProductCountByBuy",
-                        marketRepository.countAllBySellerAndMarketType(account, "구매"));
-                model.addAttribute("myProductBySell",
-                        marketRepository.findBySellerAndMarketType(account, "판매", pageable));
-                model.addAttribute("myProductBySell",
-                        marketRepository.findBySellerAndMarketType(account, "구매", pageable));
-                break;
+                return "redirect:/profile/"+byAccount.getNickname()+"/market/sell" ;
         }
-        long sell = marketRepository.countAllBySellerAndMarketType(account, "판매");
-        log.info("판매 물건 수 : {}", sell);
         return "profile/view";
     }
 
     @GetMapping("/profile/{nickname}/{division}/{marketType}")
-    public void viewProfileMarket(@PathVariable String nickname,
+    public String viewProfileMarket(@PathVariable String nickname,
                                   @PathVariable String division,
                                   @PathVariable String marketType,
                                   Model model, @CurrentUser Account account,
                                   @PageableDefault(size = 7, page = 0, sort = "uploadTime",
                                           direction = Sort.Direction.ASC) Pageable pageable,
                                   @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        Account byAccount = accountService.getAccount(nickname);
+
+        model.addAttribute("myProductCountBySell",
+                marketRepository.countAllBySellerAndMarketType(account, "판매"));
+        model.addAttribute("myProductCountByBuy",
+                marketRepository.countAllBySellerAndMarketType(account, "구매"));
+        model.addAttribute(account);
+        model.addAttribute("isOwner", byAccount.equals(account));
+        model.addAttribute("byAccount", byAccount);
+        model.addAttribute("marketType", marketType);
+        model.addAttribute("pageNo", page);
+
         switch (marketType) {
             case "sell":
-                model.addAttribute("myProductBySell",
+                model.addAttribute("market",
                         marketRepository.findBySellerAndMarketType(account, "판매", pageable));
                 break;
             case "buy":
-                model.addAttribute("myProductBySell",
+                model.addAttribute("market",
                         marketRepository.findBySellerAndMarketType(account, "구매", pageable));
                 break;
-
-
         }
+        return "profile/view";
     }
 
     // 프로필 변경 페이지
