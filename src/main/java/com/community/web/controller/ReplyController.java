@@ -2,6 +2,8 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.market.Market;
+import com.community.domain.market.MarketRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
@@ -32,6 +34,7 @@ public class ReplyController {
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
+    private final MarketRepository marketRepository;
     private final CouncilRepository councilRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -71,6 +74,43 @@ public class ReplyController {
             }
 
             List<Reply> replies = replyRepository.findAll();
+            int reply_size = replies.size();
+            return reply_size;
+        }
+        List<Reply> replies = replyRepository.findAll();
+        int reply_size = replies.size();
+        return reply_size;
+    }
+
+    // 중고거래 댓글 추가 시작
+    @ResponseBody
+    @RequestMapping(value = "/market/detail/reply")
+    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
+                              @RequestParam(value = "r_account_id") Long r_account_id,
+                              @RequestParam(value = "r_content") String r_content,
+                              ReplyForm replyForm) throws IOException {
+        log.info("댓글 작성 호출");
+        log.info(r_board_id + "r_board_id");
+        log.info(r_account_id + "r_account_id");
+        log.info(r_content + "r_content");
+
+        replyForm.setContent(r_content);
+        Market byMarketId = marketRepository.findByMarketId(r_board_id);
+        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
+        if (currentAccount.isPresent()) {
+            String accountEmail = currentAccount.get().getEmail();
+            Account account = accountRepository.findByEmail(accountEmail);
+            Reply reply = replyService.saveMarketReply(replyForm, account, byMarketId);
+            List<Reply> replies = replyRepository.findAll();
+
+            Account writer = byMarketId.getSeller();
+            log.info("manager : {}",writer.getId());
+            log.info("account : {}",currentAccount.get().getId());
+
+            if(!writer.getId().equals(currentAccount.get().getId())) {
+                log.info("market 댓글 알림 이벤트 실행");
+                applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+            }
             int reply_size = replies.size();
             return reply_size;
         }

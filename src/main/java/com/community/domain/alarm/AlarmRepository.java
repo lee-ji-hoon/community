@@ -19,4 +19,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     void deleteByToAccountAndChecked(Account account, boolean checked);
 
     List<Alarm> findByToAccountAndChecked(Account account, boolean b);
+
+    List<Alarm> findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(Account account, boolean b);
 }

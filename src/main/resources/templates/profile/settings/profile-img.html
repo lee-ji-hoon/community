@@ -72,34 +72,17 @@
                                     확인
                                 </button>
                             </form>
-
-
-                            <!--<button id="cut-button"
-                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-green-700 bg-opacity-70 text-white space-x-1.5">
-                                자르기
-                            </button>
-                            <button id="confirm-button"
-                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-blue-700 bg-opacity-70 text-white space-x-1.5">
-                                확인
-                            </button>
-                            <button id="reset-button"
-                                    class="flex mt-1 p-2 items-center justify-center h-8 px-3 rounded-md bg-red-700 bg-opacity-70 text-white space-x-1.5">
-                                취소
-                            </button>-->
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
-    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
-    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+
     <script type="application/javascript">
         function readImage(input) {
 
-            let maxSize = 5 * 1024 * 1024; //2MB
+            let maxSize = 5 * 1024 * 1024; //5MB
             let size = input.files[0].size;
             console.log(size);
             if(size > maxSize){

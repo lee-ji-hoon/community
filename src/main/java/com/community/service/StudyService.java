@@ -52,13 +52,15 @@ public class StudyService {
     }
 
     public Study getStudyUpdate(Account account, String path) {
-        Study byPath = this.getPath(path);
 
-        return byPath;
+        return this.getPath(path);
     }
 
-    public void getStudyImage(Study study, String image) {
-        study.setImage(image);
+    public void getStudyImage(Study study, String studyBannerKey, String studyBannerPath) {
+        study.setImage(studyBannerPath);
+        study.setImageKey(studyBannerKey);
+
+        studyRepository.save(study);
     }
 
     public Study getStudyToUpdateStatus(Account account, String path) {
@@ -72,8 +74,6 @@ public class StudyService {
     public Study getStudyUpdateTag(Account account, String path) {
         Study accountWithTagsByPath = studyRepository.findAccountWithTagsByPath(path);
         Study byPath = studyRepository.findByPath(path);
-
-
 
         checkExistStudy(path, accountWithTagsByPath);
         checkManager(account, accountWithTagsByPath);

@@ -63,8 +63,8 @@
                             <hr>
 
                             <div>
-                                <h4>댓글 알림 </h4>
-                                <div>모임, 게시글 댓글들 중 어떤 것들을 받을지 선택해주세요 </div>
+                                <h4>댓글 및 좋아요 알림 </h4>
+                                <div>각 커뮤니티별 댓글과 좋아요들 중 받을 알림을 선택해주세요. </div>
                             </div>
                             <div class="switches-list -mt-8 is-large">
                                 <div class="switch-container">
@@ -76,18 +76,14 @@
                                     </label>
 
                                     <label class="switch">
-                                        <input type="checkbox" name="replyByPost"  id="replyByPost"
-                                               th:checked="${account.isReplyByMeetings == true}">
+                                        <input type="checkbox" name="replyByMarket"  id="replyByMarket"
+                                               th:checked="${account.isReplyByMarket == true}">
                                         <span class="switch-button" ></span>
-                                        커뮤니티 댓글 알림
+                                        장터 댓글 알림
                                     </label>
                                 </div>
                             </div>
 
-                            <div>
-                                <h4>기타 알림 </h4>
-                                <div>모임, 게시글 댓글들 중 어떤 것들을 받을지 선택해주세요 </div>
-                            </div>
                             <div class="switches-list -mt-8 is-large">
                                 <div class="switch-container">
                                     <label class="switch">
@@ -97,12 +93,12 @@
                                         좋아요 알림
                                     </label>
 
-                                    <!--<label class="switch">
+                                    <label class="switch">
                                         <input type="checkbox" name="replyByPost"  id="replyByPost"
                                                th:checked="${account.isReplyByMeetings == true}">
                                         <span class="switch-button" ></span>
-                                        커뮤니티 댓글 받기
-                                    </label>-->
+                                        커뮤니티 댓글 알림
+                                    </label>
                                 </div>
                             </div>
 

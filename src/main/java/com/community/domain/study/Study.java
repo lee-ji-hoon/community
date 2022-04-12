@@ -80,9 +80,9 @@ public class Study {
 
     private String studyPlaces;
 
-    @Lob
-    @Basic(fetch = FetchType.EAGER)
     private String image;
+
+    private String imageKey;
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();

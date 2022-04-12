@@ -7,11 +7,13 @@ import com.community.domain.alarm.AlarmRepository;
 import com.community.domain.alarm.AlarmType;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
+import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.Set;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@Async
 public class ReplyEventListener {
 
     private final AlarmRepository alarmRepository;
@@ -58,8 +61,33 @@ public class ReplyEventListener {
                 log.info("댓글 발송 account : {}", writer.getNickname());
                 sendWebByBoardReply(reply, board, writer, fromAccount);
             }
+        } else if (reply.getMarket() != null) {
+            Market market = reply.getMarket();
+            Account seller = market.getSeller();
+
+            if (seller.isReplyByMarket()) {
+                log.info("댓글 발송 market : {}", market.getMarketId());
+                log.info("댓글 발송 account : {}", seller.getNickname());
+                sendWebByMarketReply(reply, market, seller, fromAccount);
+            }
         }
 
+    }
+
+    private void sendWebByMarketReply(Reply reply, Market market, Account seller, Account fromAccount) {
+        log.info("market alarm 추가");
+
+        Alarm alarm = new Alarm();
+        alarm.setTitle(market.getItemName());
+        alarm.setLink("/market/detail/"+market.getMarketId());
+        alarm.setChecked(false);
+        alarm.setCreateAlarmTime(LocalDateTime.now());
+        alarm.setPath(String.valueOf(market.getMarketId()));
+        alarm.setMessage(reply.getContent());
+        alarm.setToAccount(seller);
+        alarm.setFromAccount(fromAccount);
+        alarm.setAlarmType(AlarmType.MARKET_REPLY);
+        alarmRepository.save(alarm);
     }
 
     private void sendWebByBoardReply(Reply reply, Board board, Account writer, Account fromAccount) {

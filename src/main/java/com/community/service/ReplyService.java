@@ -56,7 +56,7 @@ public class ReplyService {
         return reply;
     }
 
-    public void saveMarketReply(@Valid ReplyForm replyForm, Account account, Market market) {
+    public Reply saveMarketReply(@Valid ReplyForm replyForm, Account account, Market market) {
         Reply reply = Reply.builder()
                 .content(replyForm.getContent())
                 .account(account)
@@ -67,6 +67,8 @@ public class ReplyService {
                 .reportCount(0)
                 .build();
         replyRepository.save(reply);
+
+        return reply;
     }
 
     public void saveCouncilReply(@Valid ReplyForm replyForm, Account account, Council council) {

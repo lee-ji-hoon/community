@@ -3,6 +3,11 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
+import com.community.domain.board.BoardRepository;
+import com.community.domain.market.MarketRepository;
+import com.community.domain.report.BoardReport;
+import com.community.domain.study.StudyRepository;
+import com.community.service.AccountService;
 import com.community.service.S3Service;
 import com.community.web.dto.*;
 import com.community.service.TagService;
@@ -38,33 +43,37 @@ public class ProfileController {
     private final ProfileService profileService;
 
     private static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile-settings";
-    private static final String SETTINGS_PROFILE_URL = "/settings/profile-settings";
+    private static final String SETTINGS_PROFILE_URL = "profile/settings/profile-settings";
 
     private static final String SETTINGS_PROFILE_IMG_VIEW_NAME = "settings/profile-img";
-    private static final String SETTINGS_PROFILE_IMG_URL = "/settings/profile-img";
+    private static final String SETTINGS_PROFILE_IMG_URL = "profile/settings/profile-img";
 
     private static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-    private static final String SETTINGS_PASSWORD_URL = "/settings/password";
+    private static final String SETTINGS_PASSWORD_URL = "profile/settings/password";
 
     private static final String SETTINGS_ALARM_VIEW_NAME = "settings/alarm";
-    private static final String SETTINGS_ALARM_URL = "/settings/alarm";
+    private static final String SETTINGS_ALARM_URL = "profile/settings/alarm";
 
     private static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
-    private static final String SETTINGS_ACCOUNT_URL = "/settings/account";
+    private static final String SETTINGS_ACCOUNT_URL = "profile/settings/account";
 
     private static final String SETTINGS_WITHDRAW_VIEW_NAME = "settings/withdraw";
-    private static final String SETTINGS_WITHDRAW_URL = "/settings/withdraw";
+    private static final String SETTINGS_WITHDRAW_URL = "profile/settings/withdraw";
 
     private static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
-    private static final String SETTINGS_TAGS_URL = "/settings/tags";
+    private static final String SETTINGS_TAGS_URL = "profile/settings/tags";
 
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
+    private final StudyRepository studyRepository;
+    private final BoardRepository boardRepository;
+    private final MarketRepository marketRepository;
 
     private final TagService tagService;
     private final NicknameValidator nicknameValidator;
     private final ObjectMapper objectMapper;
     private final S3Service s3Service;
+    private final AccountService accountService;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -74,6 +83,25 @@ public class ProfileController {
     @InitBinder("accountForm")
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameValidator);
+    }
+
+    // 프로필 진입
+    @GetMapping("/profile/{nickname}")
+    public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
+        if (nickname == null) {
+            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
+        }
+        Account byAccount = accountService.getAccount(nickname);
+        Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
+
+        model.addAttribute(new ProfileForm(account));
+        model.addAttribute(account);
+        model.addAttribute("byAccount", byAccount);
+        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
+        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
+        model.addAttribute("isOwner", byAccount.equals(account));
+        model.addAttribute("accountWithTagsById", accountWithTagsById);
+        return "profile/view";
     }
 
 
@@ -169,12 +197,14 @@ public class ProfileController {
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
                                               @RequestParam(required = false, value = "studyCreatedByEmail") String studyCreatedByEmail,
                                               @RequestParam(required = false, value = "replyByMeetings") String replyByMeetings,
+                                              @RequestParam(required = false, value = "replyByMarket") String replyByMarket,
                                               @RequestParam(required = false, value = "replyByPost") String replyByPost,
                                               @RequestParam(required = false, value = "likes") String likes) {
 
 
         account.setStudyCreatedByWeb(studyCreatedByWeb != null);
         account.setStudyCreatedByEmail(studyCreatedByEmail != null);
+        account.setReplyByMarket(replyByMarket != null);
         account.setReplyByPost(replyByMeetings != null);
         account.setReplyByMeetings(replyByPost != null);
         account.setLikesByPost(likes != null);
