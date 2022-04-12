@@ -5,6 +5,7 @@ import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
+import com.community.domain.council.Council;
 import com.community.web.dto.BoardForm;
 import com.community.web.dto.ReplyForm;
 import com.community.web.dto.BoardReportForm;
@@ -21,6 +22,9 @@ import com.community.domain.report.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -73,6 +77,43 @@ public class BoardController {
         return "board/boards";
     }
 
+    @GetMapping("/board/{type}")
+    public String boardTypeList(@CurrentUser Account account, Model model,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                        direction = Sort.Direction.ASC) Pageable pageable,
+                                @PathVariable String type) {
+        // Top5 게시물
+        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+
+        switch (type) {
+            case "free" :
+                Page<Board> boardFree = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
+                model.addAttribute("boardType", boardFree);
+                break;
+            case "forum" :
+                Page<Board> boardForum= boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
+                model.addAttribute("boardType", boardForum);
+                break;
+            case "qna" :
+                Page<Board> boardQna = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
+                model.addAttribute("boardType", boardQna);
+                break;
+        }
+
+        model.addAttribute("pageNo", page);
+        model.addAttribute("board", top5Board);
+        model.addAttribute("service", boardService);
+        model.addAttribute("likeService", likeService);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute(new BoardForm());
+        model.addAttribute(type);
+        model.addAttribute(account);
+
+        return "board/boards";
+    }
+
+
     /* 게시물 작성 관련 */
 
     // 게시물 작성 후 detail 페이지로 Post
@@ -104,6 +145,7 @@ public class BoardController {
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
+        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
         model.addAttribute("account", account);
         Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
         if (hasBoardError) {
@@ -127,13 +169,11 @@ public class BoardController {
         model.addAttribute("board", detail);
         model.addAttribute("boardOwner", boardOwner);
         model.addAttribute("service", boardService);
-        model.addAttribute("accountRepo", accountRepository);
         model.addAttribute("likes", likes);
         model.addAttribute("likeService", likeService);
         model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
-        model.addAttribute("boardReport", boardReportRepository.existsByAccountAndBoard(account, detail));
-        model.addAttribute("replyRepo", replyReportRepository);
+        model.addAttribute("board", top5Board);
         model.addAttribute("recentlyBoards", recentlyBoards);
 
         model.addAttribute(new ReplyForm());
