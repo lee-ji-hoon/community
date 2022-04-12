@@ -4,6 +4,7 @@ import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
 import com.community.domain.board.ReplyRepository;
+import com.community.domain.market.Market;
 import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.council.Council;
@@ -13,6 +14,9 @@ import com.community.web.dto.CouncilForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -44,19 +48,44 @@ public class CouncilController {
         Page<Council> noticePage = councilService.noticePage("공지", page);
 
         // 총 페이지의 수
-        int totalPage = noticePage.getTotalPages();
 
         // Page 타입을 그대로 가져옴
         model.addAttribute("noticePage", noticePage);
 
         // 페이지 버튼 최대 개수
-        model.addAttribute("maxPage", 5);
-        model.addAttribute("totalPage", totalPage);
         model.addAttribute("pageNo", page);
         model.addAttribute(account);
         model.addAttribute(new CouncilForm());
         model.addAttribute(councilService);
         model.addAttribute(boardService);
+        return "council/councils";
+    }
+
+    @GetMapping("/council/{type}")
+    public String councilRecent(@CurrentUser Account account, Model model,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                        direction = Sort.Direction.ASC) Pageable pageable,
+                                @PathVariable String type) {
+        switch (type) {
+            case "notice" :
+                Page<Council> councilNotice = councilRepository.findByPostSortOrderByUploadTimeDesc("공지", pageable);
+                model.addAttribute("councilType", councilNotice);
+                break;
+            case "event" :
+                Page<Council> councilEvent = councilRepository.findByPostSortOrderByUploadTimeDesc("행사", pageable);
+                model.addAttribute("councilType", councilEvent);
+                break;
+        }
+
+        model.addAttribute("pageNo", page);
+        model.addAttribute(type);
+        model.addAttribute(account);
+        model.addAttribute(new CouncilForm());
+        model.addAttribute(councilService);
+        model.addAttribute(replyService);
+        model.addAttribute(boardService);
+
         return "council/councils";
     }
 
