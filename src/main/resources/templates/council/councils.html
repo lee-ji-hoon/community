@@ -180,117 +180,147 @@
                     </div>
                 </th:block>
             </div>
-            <br>
-            <div class="mb-4 flex items-center justify-between">
-                <div>
-                    <h2 class="text-xl font-semibold"> 학과 행사 </h2>
-                </div>
-            </div>
-            <div class="relative" uk-slider="finite: true">
-
-                <div class="uk-slider-container px-4 py-3">
-
-                    <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
-
-                        <li th:each="event : ${councilService.postSort('행사')}">
-                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
-                                <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                    <div class="absolute w-full h-3/4 -bottom-6 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                    </div>
-                                    <img th:src="@{/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
-                                    <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
-                                        <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
-                                            진행중 </div>
-                                    </th:block>
-                                    <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
-                                        <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
-                                            종료 </div>
-                                    </th:block>
-                                    <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                        <div class="text-xl" th:text="${event.postTitle}"> 제목 </div>
-                                        <div class="text-sm"><a th:text="${event.eventEndDate}"></a> 까지</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
-                       href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                    <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
-                       href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
-                </div>
-            </div>
-            <br>
-            <div class="my-4 flex items-center justify-between">
-                <div>
-                    <h2 class="text-xl font-semibold"> 학과 공지 </h2>
-                </div>
-            </div>
-            <br>
-            <div class="mt-2">
-                <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${noticePage}">
-                    <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
-                        <div class="flex-1 relative md:mt-0">
-                            <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="text-xl font-semibold leading-6" th:text="${notice.postTitle}">가장 인기있는 게시물</a>
-                            <div class="flex space-x-2 items-center text-sm mt-2">
-                                <div th:text="${boardService.boardDateTime(notice.uploadTime)}">공지등록일</div>
-                                <div>·</div>
-                                <div><a th:text="${notice.pageView}"></a>명 조회</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div th:if="${totalPage != 0}" class="justify-center flex">
-                    <!--
-                    * 최대 페이지를 5단위로 끊은 상태임 예) 1 ~ 5 / 6 ~ 10 / 11 ~ 15 ...
-                    * start = 1, 6, 11을 구분하기 위한 로직 / Page의 index가 0으로 시작하기 때문에 +1을 해줌
-                    * end = 1일 때 5가 마지막, 6일 때 10이 마지막, 가장 마지막의 첫 페이지면 가장 마지막을 지정해주는 로직
-                    -->
-                    <nav aria-label="Page navigation"
-                         th:with="start=${(noticePage.number/maxPage)*maxPage + 1},
-                                  end=(${(noticePage.totalPages == 0) ? 1 : (start + (maxPage - 1) < noticePage.totalPages ? start + (maxPage - 1) : noticePage.totalPages)})">
-                        <ul class="inline-flex space-x-2">
-                            <!--
-                            * < 꺽새 그려줌
-                            -->
-                            <li th:if="${start > 1}">
-                                <a th:href="@{/council(page=${start - maxPage + 3})}">
-                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                            <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                </a>
+            <div class="flex justify-between relative md:mb-4 mb-3">
+                <div class="flex-1">
+                    <nav class="responsive-nav md:m-0 -mx-4">
+                        <ul>
+                            <li th:classappend="${type == 'notice'}? active">
+                                <a th:href="@{/council/notice}" class="lg:px-2"> 공지 </a>
                             </li>
-                            <!--
-                            * 페이지를 뿌려주는 부분
-                            -->
-                            <li th:each="page : ${#numbers.sequence(start, end)}">
-                                <a th:href="@{/council(page=${page - 1})}">
-                                    <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'" class="w-10 h-10 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100" th:text="${page}"></button>
-                                    <!--
-                                    * classappend : 현재 번호가 controller에서 받은 pageNo랑 같다면 배경색을 추가해줌
-                                    * th:text="${page}" : each문이 #numbers로 가져오기 때문에 page만 출력
-                                    -->
-                                </a>
-                            </li>
-                            <!--
-                            * > 꺽새 그려줌
-                            -->
-                            <li th:if="${end < noticePage.totalPages}">
-                                <a th:href="@{/council(page=${start + maxPage - 1})}">
-                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                </a>
+                            <li th:classappend="${type == 'event'}? active">
+                                <a th:href="@{/council/event}" class="lg:px-2"> 행사 </a>
                             </li>
                         </ul>
                     </nav>
                 </div>
             </div>
+            <th:block th:if="${type == 'notice'}">
+                <br>
+                <div class="mt-2">
+                    <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${councilType}">
+                        <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
+                            <div class="flex-1 relative md:mt-0">
+                                <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="text-xl font-semibold leading-6" th:text="${notice.postTitle}">가장 인기있는 게시물</a>
+                                <div class="flex space-x-2 items-center text-xs mt-2">
+                                    <ion-icon name="time-outline"></ion-icon>
+                                    <div th:text="${boardService.boardDateTime(notice.uploadTime)}">공지등록일</div>
+                                    <div>·</div>
+                                    <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                                    <div th:text="${replyService.councilReplySize(notice)}"></div>
+                                    <div>·</div>
+                                    <div><a th:text="${notice.pageView}"></a>명 조회</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${councilType.totalPages != 0}" class="justify-center flex">
+                        <nav aria-label="Page navigation"
+                             th:with="start=${(councilType.number/5)*5 + 1},
+                                    end=(${(councilType.totalPages == 0) ? 1 :
+                                    (start + 4 < councilType.totalPages ? start + 4 : councilType.totalPages)})">
+                            <ul class="inline-flex space-x-2">
+                                <li th:if="${start > 1}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${start - 2})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:each="page : ${#numbers.sequence(start, end)}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${page - 1})}">
+                                        <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                th:text="${page}">
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:if="${end < councilType.totalPages}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${start + 4})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </th:block>
+            <th:block th:if="${type == 'event'}">
+                <div class="relative" uk-slider="finite: true">
+                    <div class="uk-slider-container px-4 py-3">
 
+                        <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
+                            <li th:each="event : ${councilType}">
+                                <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
+                                    <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
+                                        <div class="absolute w-full h-3/4 -bottom-6 bg-gradient-to-b from-transparent to-gray-800 z-10">
+                                        </div>
+                                        <img th:src="@{/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
+                                        <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                            <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                                진행중 </div>
+                                        </th:block>
+                                        <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                            <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                                종료 </div>
+                                        </th:block>
+                                        <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
+                                            <div class="text-xl" th:text="${event.postTitle}"> 제목 </div>
+                                            <div class="text-sm"><a th:text="${event.eventEndDate}"></a> 까지</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
+                           href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
+                        <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
+                           href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div th:if="${councilType.totalPages != 0}" class="justify-center flex">
+                        <nav aria-label="Page navigation"
+                             th:with="start=${(councilType.number/5)*5 + 1},
+                                    end=(${(councilType.totalPages == 0) ? 1 :
+                                    (start + 4 < councilType.totalPages ? start + 4 : councilType.totalPages)})">
+                            <ul class="inline-flex space-x-2">
+                                <li th:if="${start > 1}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${start - 2})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:each="page : ${#numbers.sequence(start, end)}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${page - 1})}">
+                                        <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                th:text="${page}">
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:if="${end < councilType.totalPages}">
+                                    <a th:href="@{'/council/' + ${type} + '/' (page=${start + 4})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </th:block>
         </div>
     </div>
 
