@@ -4,7 +4,7 @@
 
 - 팀명 : Spring
 - 프로젝트 : unect (university + connect)
-- 팀원 : 이지훈, 가준영 (SpringBoot, JPA)
+- 팀원 : 이지훈 (Springboot, JPA, QueryDsl), 가준영 (SpringBoot, JPA)
 
 [Notion](https://www.notion.so/c080919d0f1e48c68971c8e96b997072)
 
