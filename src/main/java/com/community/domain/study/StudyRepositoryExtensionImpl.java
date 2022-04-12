@@ -40,7 +40,8 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
     public Page<Study> findByMembersNotContaining(Account account, Pageable pageable) {
         QStudy qStudy = QStudy.study;
         JPQLQuery<Study> query = from(qStudy).where(study.limitMemberDate.after(LocalDate.now()))
-                        .distinct();
+                        .distinct()
+                        .limit(100);
 
         JPQLQuery<Study> studyJPQLQuery = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Study> studyQueryResults = studyJPQLQuery.fetchResults();
