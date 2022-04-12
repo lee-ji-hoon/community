@@ -53,17 +53,26 @@
 
                 <div class="flex justify-between lg:border-t border-gray-100 flex-col-reverse lg:flex-row pt-2">
                     <nav class="responsive-nav pl-3">
-                        <ul  uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                            <li><a href="#">소개</a></li>
-                            <li><a href="#">스터디</a></li>
-                            <li><a href="#">작성 게시글</a></li>
+                        <ul>
+                            <li th:classappend="${division == 'view'}? active">
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/view'}">소개</a>
+                            </li>
+                            <li th:classappend="${division == 'study'}? active">
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/study'}">스터디</a>
+                        </li>
+                            <li th:classappend="${division == 'community'}? active">
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/community'}">게시글</a>
+                            </li>
+                            <li th:classappend="${division == 'market'}? active">
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market'}">장터</a>
+                            </li>
                         </ul>
                     </nav>
 
                     <div class="flex items-center space-x-1.5 flex-shrink-0 mb-2 justify-center order-1 relative mx-2">
                         <!-- 쪽지 -->
                         <a th:if="${isOwner}"
-                           th:href="@{/settings/profile-settings}" id="update-profile"
+                           th:href="@{/profile/settings/profile-settings}" id="update-profile"
                            class="flex items-center justify-center h-8 px-3 rounded-md bg-green-600 text-white">
                             <ion-icon name="create-outline" class="text-xl hidden"></ion-icon>
                             <span style="margin-left: -2px"> 프로필 수정 </span>
@@ -76,9 +85,8 @@
                     </div>
                 </div>
             </div>
-            <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
-
-                <div class="md:flex md:space-x-6">
+            <div class="lg:mt-8 mt-4">
+                <div th:if="${division == 'view'}" class="md:flex md:space-x-6">
                     <!--소개-->
                     <div class="space-y-5 flex-shrink-0 md:w-7/12 mb-5">
                         <div class="card lg:mx-0 uk-animation-slide-bottom-small">
@@ -181,15 +189,13 @@
                             <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${enrolledStudyList})"></ul>
                         </div>
                     </div>
-
                 </div>
 
-                <!--스터디-->
-                <div class=" md:space-x-6">
+                <!--스터디 -->
+                <div th:if="${division == 'study'}" class="md:space-x-6">
                     <div class="space-y-5 flex-shrink-0">
-
                         <div class="card md:p-6 p-2 mx-auto">
-                            <nav class="responsive-nav border-b">
+                            <nav class="responsive-nav" style="height:75px;">
                                 <ul uk-switcher="connect: #timeline-tab-study; animation: uk-animation-fade">
                                     <li><a href="#" class="lg:px-2"> 멤버 <span th:text="${enrolledStudyList.size()}"></span></a></li>
                                     <li><a href="#" class="lg:px-2"> 매니저 <span th:text="${myStudyList.size()}"></span></a></li>
@@ -208,25 +214,110 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-                <!--게시글-->
-                <div class="md:flex md:space-x-6 lg:mx-16">
-                    <div class="space-y-5 flex-shrink-0 md:w-7/12">
-                        <div class="card lg:mx-0 uk-animation-slide-bottom-small">
+                <!--게시글 -->
+                <div th:if="${division == 'community'}" class="md:space-x-6">
+                    <div class="space-y-5 flex-shrink-0">
+                        <div class="card md:p-6 p-2 mx-auto">
+                            <nav class="responsive-nav" style="height:75px;">
+                                <ul uk-switcher="connect: #timeline-tab-community; animation: uk-animation-fade">
+                                    <li><a href="#" class="lg:px-2"> 자유 <span>2</span></a></li>
+                                    <li><a href="#" class="lg:px-2"> 정보 <span>3</span></a></li>
+                                    <li><a href="#" class="lg:px-2"> 질문 <span>5</span></a></li>
+                                </ul>
+                            </nav>
+                            <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab-community">
+                                <!-- 자유 -->
+                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
+                                    <div class="lg:pt-0 justify-between flex">
+                                        <a href="" class="text-lg font-semibold"> 제목 </a>
+                                        <div class="flex items-center">
+                                            <div class="flex items-center">
+                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">업로드 시간</a>
+                                            </div>
+                                            <div class="flex items-center mx-4 align-middle">
+                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">좋아요 수</a>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                                <a class="text-xs">댓글 수</a>
 
-                            <!-- post header-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 정보 -->
+                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
+                                    <div class="lg:pt-0 justify-between flex">
+                                        <a href="" class="text-lg font-semibold"> 제목 </a>
+                                        <div class="flex items-center">
+                                            <div class="flex items-center">
+                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">업로드 시간</a>
+                                            </div>
+                                            <div class="flex items-center mx-4 align-middle">
+                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">좋아요 수</a>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                                <a class="text-xs">댓글 수</a>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 정보 -->
+                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
+                                    <div class="lg:pt-0 justify-between flex">
+                                        <a href="" class="text-lg font-semibold"> 제목 </a>
+                                        <div class="flex items-center">
+                                            <div class="flex items-center">
+                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">업로드 시간</a>
+                                            </div>
+                                            <div class="flex items-center mx-4 align-middle">
+                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs">좋아요 수</a>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                                <a class="text-xs">댓글 수</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- 장터 -->
+                <div th:if="${division == 'market'}" class="md:space-x-6">
+                    <div class="space-y-5 flex-shrink-0">
+                        <div class="card md:p-6 p-2 mx-auto">
+                            <nav class="responsive-nav" style="height:75px;">
+                                <ul>
+                                    <li th:classappend="${marketType == 'sell'}? active">
+                                        <a href="#" class="lg:px-2"> 판매 <span th:text="${myProductCountBySell}"></span></a>
+                                    </li>
+                                    <li th:classappend="${marketType == 'buy'}? active">
+                                        <a href="#" class="lg:px-2"> 구매 <span th:text="${myProductCountByBuy}"></span></a>
+                                    </li>
+                                </ul>
+                            </nav>
 
-
+                            <div class="lg:mt-8 mt-4" id="">
+                            </div>
+                        </div>
+                    </div>
+                <div>
             </div>
         </div>
     </div>
-</div>
 <div id="create-new-chat" uk-modal>
     <div class="uk-modal-dialog">
         <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"

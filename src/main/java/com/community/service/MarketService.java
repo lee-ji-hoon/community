@@ -7,8 +7,6 @@ import com.community.domain.market.MarketRepository;
 import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +32,7 @@ public class MarketService {
                 market.setMarketItemStatus(MarketItemStatus.나눔);
                 break;
         }
-        market.setItemUploadTime(LocalDateTime.now());
+        market.setUploadTime(LocalDateTime.now());
         market.setSeller(account);
         market.setFileName(uploadFolder+uploadFile);
         market.setFilePath(marketImagePath);
@@ -43,7 +41,7 @@ public class MarketService {
     }
 
     public Market createNewItemNoImage(Market market, Account account) {
-        market.setItemUploadTime(LocalDateTime.now());
+        market.setUploadTime(LocalDateTime.now());
         market.setMarketItemStatus(MarketItemStatus.판매중);
         market.setSeller(account);
 

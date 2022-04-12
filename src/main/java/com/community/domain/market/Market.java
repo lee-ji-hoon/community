@@ -55,5 +55,5 @@ public class Market {
 
     private boolean published = true;
 
-    private LocalDateTime itemUploadTime;
+    private LocalDateTime uploadTime;
 }
