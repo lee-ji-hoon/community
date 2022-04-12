@@ -157,8 +157,6 @@ public class ProfileController {
                         boardRepository.countAllByWriterAndBoardTitle(account, "정보"));
                 model.addAttribute("myBoardCountByQnA",
                         boardRepository.countAllByWriterAndBoardTitle(account, "질문"));
-                model.addAttribute(replyService);
-                model.addAttribute(likeService);
                 switch (sortType) {
                     case "free":
                         model.addAttribute("board",
