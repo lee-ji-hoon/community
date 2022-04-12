@@ -59,7 +59,7 @@
                                     <div class="py-4 space-y-4 dark:border-gray-600">
                                         <div class="flex" th:each="reply : ${reply}">
                                             <div class="w-10 h-10 rounded-full relative flex-shrink-0">
-                                                <a th:href="@{/profile/{nickname}(nickname = ${reply.getAccount().nickname})}">
+                                                <a th:href="@{/profile/{nickname}/view(nickname = ${reply.getAccount().nickname})}">
                                                     <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                                          th:data-id="${reply.getAccount().studentId}"
                                                          alt="" class="identicon absolute h-full rounded-full w-full"/>

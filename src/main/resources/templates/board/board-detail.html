@@ -95,7 +95,7 @@
                                          alt="" class="w-10 h-10 rounded-full is_avatar"/>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
+                                            <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}/view(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
                                             <div class="text-xs" th:text="${service.boardDateTime(board.uploadTime)}">게시물 시간</div>
                                         </div>
                                         <!-- Board 작성자면 뜨는 수정폼 -->
@@ -329,7 +329,7 @@
                                     <br>
                                     <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
                                     <div class="w-full">
-                                        <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
+                                        <a th:href="@{/profile/{nickname}/view(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                         <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                         <th:block th:if="${!reply.getIsReported}">
                                             <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">
