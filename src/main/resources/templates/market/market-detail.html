@@ -58,7 +58,7 @@
                                     <div class="flex-1 font-semibold capitalize">
                                         <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
                                         <div th:text="${product.marketType}" class="text-sm"></div>
-                                        <span th:text="${#temporals.format(product.itemUploadTime,  'yyyy-MM-dd')}"></span>
+                                        <span th:text="${#temporals.format(product.getUploadTime,  'yyyy-MM-dd')}"></span>
                                     </div>
                                 </div>
                                 <div th:if="${account.username.equals(product.seller.username)}">

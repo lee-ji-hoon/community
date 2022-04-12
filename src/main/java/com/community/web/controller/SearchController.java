@@ -73,8 +73,8 @@ public class SearchController {
         }
         if (searchForm.getSearchType().equals("장터")) {
             List<Market> marketList = new ArrayList<>();
-            List<Market> searchContent = marketRepository.findByItemDetailContainingOrderByItemUploadTimeDesc(keyword);
-            List<Market> searchTitle = marketRepository.findByItemNameContainingOrderByItemUploadTimeDesc(keyword);
+            List<Market> searchContent = marketRepository.findByItemDetailContainingOrderByUploadTimeDesc(keyword);
+            List<Market> searchTitle = marketRepository.findByItemNameContainingOrderByUploadTimeDesc(keyword);
             marketList.addAll(searchContent);
             marketList.addAll(searchTitle);
 
