@@ -13,6 +13,7 @@ import com.community.domain.study.MeetingsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@Async
 public class MeetingEventListener {
 
     private final MeetingsRepository meetingsRepository;

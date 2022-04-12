@@ -15,7 +15,7 @@
     <div class="main_content">
         <form class="needs-validation col-sm-10"
               th:object="${marketForm}"
-              th:action="@{/market/new}"
+              th:action="@{/market/register/new}"
               method="post" name="marketForm" enctype="multipart/form-data" novalidate>
             <div class="mcontainer">
                 <div th:replace="theme-fragments.html :: checked-email"></div>

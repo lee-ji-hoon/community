@@ -2,13 +2,10 @@ package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.board.Reply;
 import com.community.service.S3Service;
-import com.community.web.dto.ReplyForm;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
-import com.community.service.ReplyService;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.MarketService;
@@ -16,7 +13,6 @@ import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,7 +27,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,32 +36,44 @@ public class MarketController {
     private final MarketService marketService;
     private final ModelMapper modelMapper;
     private final BoardService boardService;
-    private final ReplyService replyService;
     private final S3Service s3Service;
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
-    private final AccountRepository accountRepository;
 
-    @GetMapping("/market")
-    public String marketListView(@CurrentUser Account account, Model model,
-                                 @PageableDefault(size = 7, page = 0, sort = "itemUploadTime",
-                                                    direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping("/market/{type}")
+    public String marketListView(@CurrentUser Account account, Model model, @PathVariable String type,
+                                 @PageableDefault(size = 5, page = 0, sort = "itemUploadTime",
+                                                    direction = Sort.Direction.ASC) Pageable pageable,
+                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        switch (type) {
+            case "sell" : // 판매
+                Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
+                model.addAttribute("marketType", marketTypeSell);
+                break;
+            case "buy" : // 구매
+                Page<Market> marketTypeBuy = marketRepository.findByMarketType("구매", pageable);
+                model.addAttribute("marketType", marketTypeBuy);
+                break;
+            case "share" : // 나눔
+                Page<Market> marketTypeShare = marketRepository.findByMarketType("나눔", pageable);
+                model.addAttribute("marketType", marketTypeShare);
+                break;
+            case "myProduct" : // 내 물건
+                Page<Market> myProduct = marketRepository.findBySeller(account, pageable);
+                model.addAttribute("marketType", myProduct);
+                break;
+        }
+
         model.addAttribute(account);
-        model.addAttribute(new MarketForm());
-        Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
-
-        model.addAttribute("sellingProduct", marketTypeSell);
-        model.addAttribute("sortProperty", pageable.getSort().toString().contains("itemUploadTime") ? "itemUploadTime" : "seller");
-
-        model.addAttribute("buyProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("구매"));
-        model.addAttribute("shareProduct", marketRepository.findAllByMarketTypeOrderByItemUploadTimeDesc("나눔"));
-        model.addAttribute("myProduct", marketRepository.findAllBySeller(account));
+        model.addAttribute(type);
+        model.addAttribute("pageNo", page);
 
         return "market/market-list";
     }
 
-    @GetMapping("/market/new")
+    @GetMapping("/market/register/new")
     public String marketNewForm(@CurrentUser Account account, Model model, @Valid MarketForm marketForm, RedirectAttributes redirectAttributes){
         boolean emailVerified = account.isEmailVerified();
 
@@ -84,7 +91,7 @@ public class MarketController {
         return "market/market-form";
     }
 
-    @PostMapping("/market/new")
+    @PostMapping("/market/register/new")
     public String marketNewProduct(@CurrentUser Account account, Model model,
                                     @Valid MarketForm marketForm,
                                     @RequestPart MultipartFile file,
@@ -169,11 +176,10 @@ public class MarketController {
             marketService.deleteProduct(market);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             model.addAttribute(account);
-            return "redirect:/market";
+            return "redirect:/market/sell";
         }
         return "error-page";
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/market/detail/{marketId}/type/{status}")
@@ -183,62 +189,4 @@ public class MarketController {
         marketService.updateMarketItemType(market, status);
 
     }
-
-
-
-    // 중고거래 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/market/reply")
-    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
-                              @RequestParam(value = "r_account_id") Long r_account_id,
-                              @RequestParam(value = "r_content") String r_content,
-                              ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_board_id + "r_board_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Market byMarketId = marketRepository.findByMarketId(r_board_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveMarketReply(replyForm, account, byMarketId);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/market/reply/update")
-    public int addMarketReplyUpdate(@RequestParam(value = "reply_update_rid") Long reply_update_rid,
-                                    @RequestParam(value = "reply_update_content") String reply_update_content) throws IOException{
-        log.info("rid : " + reply_update_rid);
-        log.info("content : " + reply_update_content);
-        replyService.updateReply(reply_update_rid, reply_update_content);
-
-        Reply reply = replyRepository.findByRid(reply_update_rid);
-        Market byMarketId = marketRepository.findByMarketId(reply.getMarket().getMarketId());
-        List<Reply> replies = replyRepository.findAllByMarket(byMarketId);
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    @GetMapping("/market/reply/delete/{rid}")
-    public String marketReplyDelete(@PathVariable Long rid,
-                                    RedirectAttributes redirectAttributes) {
-        Reply findReply = replyRepository.findByRid(rid);
-        Market byMarketId = marketRepository.findByMarketId(findReply.getMarket().getMarketId());
-
-        redirectAttributes.addFlashAttribute("r_del_complete_message", "댓글이 삭제되었습니다.");
-        replyRepository.delete(findReply);
-        return "redirect:/market/" + byMarketId.getMarketId();
-    }
-
-    // 중고거래 댓글 추가 끝
 }

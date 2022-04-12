@@ -32,8 +32,8 @@ public class AlarmController {
 
     @GetMapping("/alarm/view")
     public String alarmView(@CurrentUser Account account, Model model) {
-        List<Alarm> alarmList = alarmRepository.findFirst3ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
-        List<Alarm> byChecked = alarmRepository.findFirst3ByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
+        List<Alarm> alarmList = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account, false);
+        List<Alarm> byChecked = alarmRepository.findByToAccountAndCheckedOrderByCreateAlarmTimeDesc(account,true);
 
         long countByAccountAndChecked = alarmRepository.countByToAccountAndChecked(account, true);
         alarmType(model, alarmList, countByAccountAndChecked, alarmList.size());
@@ -105,6 +105,7 @@ public class AlarmController {
         List<Alarm> newMeetingAlarms = new ArrayList<>();
         List<Alarm> newMeetingsReplyAlarms = new ArrayList<>();
         List<Alarm> newBoardReplyAlarms = new ArrayList<>();
+        List<Alarm> newMarketReplyAlarms = new ArrayList<>();
         List<Alarm> newLikesAlarms = new ArrayList<>();
 
         for (var alarm : alarmList) {
@@ -117,6 +118,8 @@ public class AlarmController {
                     newMeetingsReplyAlarms.add(alarm); break;
                 case BOARD_REPLY:
                     newBoardReplyAlarms.add(alarm); break;
+                case MARKET_REPLY:
+                    newMarketReplyAlarms.add(alarm); break;
                 case LIKES:
                     newLikesAlarms.add(alarm); break;
             }
@@ -129,6 +132,7 @@ public class AlarmController {
         model.addAttribute("newStudyAlarms", newStudyAlarms);
         model.addAttribute("newMeetingAlarms", newMeetingAlarms);
         model.addAttribute("newMeetingsReplyAlarms", newMeetingsReplyAlarms);
+        model.addAttribute("newMarketReplyAlarms", newMarketReplyAlarms);
         model.addAttribute("newBoardReplyAlarms", newBoardReplyAlarms);
         model.addAttribute("newLikesAlarms", newLikesAlarms);
     }

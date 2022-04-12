@@ -329,10 +329,6 @@
                                   th:object="${marketForm}" novalidate>
                                 <div class="p-6 space-y-3 flex-1">
                                     <div>
-                                        <!--<select id="itemStatus" name="itemStatus" class="selectpicker with-border"
-                                                th:filed="*{itemStatus}"
-                                                aria-describedby="itemStatusHelp">
-                                            <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>-->
                                         <label for="marketType"> 카테고리 </label>
                                         <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
                                                 th:filed="*{marketType}">
@@ -779,7 +775,7 @@
             }
             if (input.value != '' && key.key == 'Enter') {
                 $.ajax({
-                    url: '/market/reply',
+                    url: '/market/detail/reply',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_form').serialize(),
@@ -818,7 +814,7 @@
             if (input.value != '') {
                 console.log("댓글 작성");
                 $.ajax({
-                    url: '/market/reply',
+                    url: '/market/detail/reply',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_form').serialize(),
@@ -858,7 +854,7 @@
             if (reply_input.value != '') {
                 console.log("댓글 수정");
                 $.ajax({
-                    url: '/market/reply/update',
+                    url: '/reply/update',
                     type: 'get',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     data: $('#reply_update_form').serialize(),

@@ -2,7 +2,14 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="theme-fragments.html :: head"></head>
-
+<style>
+    .card{
+        height: 80px;
+    }
+    .fromNow{
+        line-height: 28px;
+    }
+</style>
 <body>
 <div id="wrapper">
 
@@ -11,12 +18,19 @@
 
     <!-- sidebar -->
     <div th:replace="theme-fragments.html :: side_bar"></div>
-
+    <button onclick="alarmChecked()"
+            class="flex items-center justify-center h-9 lg:px-5 px-2 mt-20 mr-2
+                    rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
+        <span> 모두 읽기 </span>
+    </button>
     <div class="main_content">
-        <div class="mcontainer">
+
+        <div class="mcontainer mt-10">
             <div th:replace="theme-fragments.html :: checked-email"></div>
 
-            <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4 ">
+            <div class="alarm-main-view">
+                <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4 ">
+
                 <div class="lg:w-1/3">
                     <nav class="responsive-nav setting-nav setting-menu">
                         <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
@@ -27,7 +41,7 @@
                             </li>
                             <li>
                                 <div class="form_refresh_reply">
-                                    <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size()}"></span></a>
+                                    <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size() + newMarketReplyAlarms.size()}"></span></a>
                                 </div>
                             </li>
                             <li>
@@ -49,7 +63,7 @@
                     <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
                         <!-- 스터디 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 스터디 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
                             <h5 class="px-5 font-bold" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
@@ -57,15 +71,17 @@
 
                         <!-- 댓글 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 댓글 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 커뮤니티 댓글 알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
+                            <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newMarketReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
+                            <div th:replace="theme-fragments :: alarm-list(type=${newMarketReplyAlarms})"></div>
                         </div>
 
                         <!-- 좋아요 -->
                         <div>
-                            <h5 class="px-5 font-bold" th:text="'좋아요 댓글 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 모임 알림</h5>
+                            <h5 class="px-5 font-bold" th:text="'좋아요 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 좋아요알림</h5>
                             <div th:replace="theme-fragments :: alarm-list(type=${newLikesAlarms})"></div>
                         </div>
 
@@ -89,11 +105,33 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script th:inline="javascript">
+    /*function alarmChecked() {
+        $.ajax({
+            url: '/alarm/allChecked',
+            type: 'GET',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (message) {
+                $('.refresh_alarm').load(location.href+' .refresh_alarm');
+                $('.refresh_alarm_count').load(location.href+' .refresh_alarm_count');
+
+                swal("모든 알림이 체크됐습니다.", {
+                    icon: "success",
+                });
+            },
+            error: function () {
+                swal("읽을 알람이 존재하지 않습니다.", {
+                    icon: "error",
+                });
+            }
+        })
+    }*/
+
     function alarmDelete() {
         var input = document.getElementById("alarm_delete");
 

@@ -25,16 +25,24 @@
                     <div class="flex justify-between relative md:mb-4 mb-3">
                         <div class="flex-1">
                             <h2 class="text-2xl font-semibold"> 장터 </h2>
-                            <nav class="responsive-nav border-b md:m-0 -mx-4">
-                                <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                                    <li><a href="#" class="lg:px-2">팝니다 </a></li>
-                                    <li><a href="#" class="lg:px-2"> 삽니다 </a></li>
-                                    <li><a href="#" class="lg:px-2"> 나눔 </a></li>
-                                    <li><a href="#" class="lg:px-2"> 내 상품 </a></li>
+                            <nav class="responsive-nav md:m-0 -mx-4">
+                                <ul>
+                                    <li th:classappend="${type == 'sell'}? active">
+                                        <a th:href="@{/market/sell}" class="lg:px-2">팝니다 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'buy'}? active">
+                                        <a th:href="@{/market/buy}" class="lg:px-2"> 삽니다 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'share'}? active">
+                                        <a th:href="@{/market/share}" class="lg:px-2"> 나눔 </a>
+                                    </li>
+                                    <li th:classappend="${type == 'myProduct'}? active">
+                                        <a th:href="@{/market/myProduct}" class="lg:px-2"> 내 상품 </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
-                        <a th:href="@{/market/new }" class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10">
+                        <a th:href="@{/market/register/new }" class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">
                                 <path fill-rule="evenodd"
                                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
@@ -44,244 +52,83 @@
                         </a>
                     </div>
 
-                    <div class="card divide-y divide-gray-100 sm:m-0 -mx-4">
-                        <div class="uk-switcher" id="timeline-tab">
-                            <!-- 판매  -->
-                            <!--<div th:replace="theme-fragments.html :: market-list(type = ${sellingProduct})">
-                            </div>-->
-                        <div>
-                            <div th:each="sell : ${sellingProduct.getContent()}" class="flex items-start flex-wrap p-7 sm:space-x-6">
-                                <a th:href="@{'/market/detail/'+${sell.marketId}}" class="w-40 h-40 relative mt-1 order-1">
-                                    <img th:if="${sell.getFilePath() != null}" th:src="${sell.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
-                                    <!--            <img th:src="${product.getFilePath()}"/>-->
-
+                   w <div class="divide-y divide-gray-100 sm:m-0 -mx-4">
+                        <div th:each="marketType : ${marketType.getContent()}" class="flex items-start card flex-wrap p-2 my-5 sm:space-x-6">
+                            <a th:href="@{'/market/detail/'+${marketType.marketId}}" class="w-40 h-40 relative mt-1 order-1">
+                                <img th:if="${marketType.getFilePath() != null}" th:src="${marketType.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
+                            </a>
+                            <div class="flex-1 sm:order-2">
+                                <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${marketType.marketType}">Phaseout </h4>
+                                <a th:href="@{'/market/detail/'+${marketType.marketId}}">
+                                    <h3 class="text-xl font-medium mb-4" th:text="${marketType.itemName}"> Technical Event Support Specialist </h3>
                                 </a>
-                                <div class="flex-1 sm:order-2">
-                                    <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${sell.marketType}">Phaseout </h4>
-                                    <a th:href="@{'/market/detail/'+${sell.marketId}}">
-                                        <h3 class="text-xl font-medium mb-4" th:text="${sell.itemName}"> Technical Event Support Specialist </h3>
-                                    </a>
-                                    <div class="line-clamp-3" id="more-text" th:utext="${sell.itemDetail}">
-                                    </div>
-                                    <a th:href="@{'/market/detail/'+${sell.marketId}}"> 자세히 보기 </a>
+                                <div class="line-clamp-3" id="more-text" th:utext="${marketType.itemDetail}">
                                 </div>
-                            </div>
-
-                            <div class="row justify-content-center">
-                                <div class="col-sm-10">
-                                    <nav>
-                                        <ul class="pagination justify-content-center">
-                                            <li class="page-item" th:classappend="${!sellingProduct.hasPrevious()}? disabled">
-                                                <a th:href="@{'/market'+ ',desc&page=' + ${sellingProduct.getNumber() - 1}}"
-                                                   class="page-link" tabindex="-1" aria-disabled="true">
-                                                    Previous
-                                                </a>
-                                            </li>
-                                            <li class="page-item" th:classappend="${i == sellingProduct.getNumber()}? active"
-                                                th:each="i: ${#numbers.sequence(0, sellingProduct.getTotalPages() - 1)}">
-                                                <a th:href="@{'/market' + ',desc&page=' + ${i}}"
-                                                   class="page-link" href="#" th:text="${i + 1}">1</a>
-                                            </li>
-                                            <li class="page-item" th:classappend="${!sellingProduct.hasNext()}? disabled">
-                                                <a th:href="@{'/market' + ${sellingProduct.getNumber() + 1}}"
-                                                   class="page-link">
-                                                    Next
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
+                                <a th:href="@{'/market/detail/'+${marketType.marketId}}"> 자세히 보기 </a>
                             </div>
                         </div>
-                            <!-- 구매  -->
-                            <div th:replace="theme-fragments.html :: market-list(type = ${buyProduct})">
-                            </div>
-                            <!-- 나눔  -->
-                            <div th:replace="theme-fragments.html :: market-list(type = ${shareProduct})">
-                            </div>
-                            <!-- 내거  -->
-                            <div th:replace="theme-fragments.html :: market-list(type = ${myProduct})">
-                            </div>
+
+                        <div th:if="${marketType.totalPages != 0}" class="justify-center flex">
+                            <!--
+                            * 최대 페이지를 5단위로 끊은 상태임 예) 1 ~ 5 / 6 ~ 10 / 11 ~ 15 ...
+                            * start = 1, 6, 11을 구분하기 위한 로직 / Page의 index가 0으로 시작하기 때문에 +1을 해줌
+                            * end = 1일 때 5가 마지막, 6일 때 10이 마지막, 가장 마지막의 첫 페이지면 가장 마지막을 지정해주는 로직
+                            -->
+                            <nav aria-label="Page navigation "
+                                 th:with="start=${(marketType.number/5)*5 + 1},
+                                    end=(${(marketType.totalPages == 0) ? 1 :
+                                    (start + 4 < marketType.totalPages ? start + 4 : marketType.totalPages)})">
+                                <ul class="inline-flex space-x-2">
+                                    <!--
+                                    * < 꺽새 그려줌
+                                    -->
+                                    <li th:if="${start > 1}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${start - 2})}">
+                                            <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current " viewBox="0 0 20 20">
+                                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                          clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <!--
+                                    * 페이지를 뿌려주는 부분
+                                    -->
+                                    <li th:each="page : ${#numbers.sequence(start, end)}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${page - 1})}">
+                                            <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                    class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                    th:text="${page}">
+                                            </button>
+                                            <!--
+                                            * classappend : 현재 번호가 controller에서 받은 pageNo랑 같다면 배경색을 추가해줌
+                                            * th:text="${page}" : each문이 #numbers로 가져오기 때문에 page만 출력
+                                            -->
+                                        </a>
+                                    </li>
+                                    <!--
+                                    * > 꺽새 그려줌
+                                    -->
+                                    <li th:if="${end < marketType.totalPages}">
+                                        <a th:href="@{'/market/' + ${type} + '/' (page=${start + 4})}">
+                                            <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                          clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
-                </div>
-
-                <div class="lg:w-1/4 w-full lg:mt-0 mt-7">
-
-                    <div uk-sticky="media @m ; offset:80 ; bottom : true" class="lg:mt-0 mt-6">
-
-                        <h2 class="text-xl font-semibold mb-2"> 최근 본 목록 </h2>
-                        <ul class="-space-y-2">
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="hover:bg-gray-100 rounded-md p-3 -mx-3 block">
-                                    <h3 class="font-medium line-clamp-2">제목</h3>
-                                    <div class="flex font-medium items-center mt-1 space-x-1.5 text-xs">
-                                        <div class="">작성자</div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                        <br>
-
-                        <h4 class="text-lg font-semibold mb-3"> Tags </h4>
-
-                        <div class="flex flex-wrap gap-2">
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Computers</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Business</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> News</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Architecher</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Technolgy</a>
-                            <a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full"> Music</a>
-                        </div>
-
-                    </div><div class="uk-sticky-placeholder" style="height: 556px; margin: 0px;"></div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
-<div id="offcanvas-create" uk-offcanvas="flip: true; overlay: true">
-    <div class="uk-offcanvas-bar lg:w-4/12 w-full dark:bg-gray-700 dark:text-gray-300 p-0 bg-white shadow-2xl">
-
-        <button class="uk-offcanvas-close absolute" type="button" uk-close></button>
-
-        <!-- notivication header -->
-        <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
-            <h4> 물건 등록   </h4>
-        </div>
-        <form class="needs-validation space-y-4 g:w-8/12" id="board_form"
-              th:object="${marketForm}"
-              th:action="@{/market/new}"
-              method="post" enctype="multipart/form-data" novalidate>
-            <div class="p-6 space-y-3 flex-1">
-                <div>
-                    <label> 카테고리 </label>
-                    <select name="" class="selectpicker with-border" th:field="*{marketType}">
-                        <option value="2" selected th:value="판매"> 판매 </option>
-                        <option value="3" th:value="구매"> 구매 </option>
-                        <option value="3" th:value="나눔"> 나눔 </option>
-                    </select>
-
-                </div>
-                <div>
-                    <label> 품명  </label>
-                    <input type="text" th:field="*{itemName}" class="with-border" placeholder="">
-                </div>
-                <div>
-                    <label> 설명  </label>
-                    <textarea name="description" th:field="*{itemDetail}" rows="2" class="with-border w-full p-4"
-                              id="description" placeholder="상품의 설명을 자세히 적어주세요."></textarea>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label> 가격 </label>
-                        <input placeholder="0" th:field="*{price}" type="number" class="with-border w-full">
-                    </div>
-                    <div>
-                        <label> 상품 상태 </label>
-                        <select name="" class="selectpicker with-border" th:field="*{itemStatus}">
-                            <option value="2" selected th:value="새것"> 새 것 </option>
-                            <option value="3" th:value="사용감있음"> 사용감 있음 </option>
-                            <option value="3" th:value="사용감없음"> 사용감 없음 </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="image-container">
-                    <div uk-form-custom class="w-full py-3">
-                        <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                                <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                                <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                            </svg>
-                        </div>
-                        <input type="file" name="file" id="input-image">
-                    </div>
-
-                    <img style="width: 500px;" id="preview-image">
-                </div>
-
-            </div>
-            <div class="p-5">
-                <button type="submit"
-                        id = "board_form_send"
-                        class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
-                    추가
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script th:replace="theme-fragments.html :: form-validation"></script>
-<!--<script th:replace="theme-fragments.html :: ajax-csrf"></script>-->
-
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css"rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="/assets/js/summernote-ko-KR.js"></script>
-<script src="/assets/css/summernote.min.css"></script>
-<script src="/assets/js/summernote.min.js"></script>
-
-<script type="application/javascript">
-    function readImage(input) {
-        // 인풋 태그에 파일이 있는 경우
-        if(input.files && input.files[0]) {
-            // 이미지 파일인지 검사 (생략)
-            // FileReader 인스턴스 생성
-            const reader = new FileReader()
-            // 이미지가 로드가 된 경우
-            reader.onload = e => {
-                const previewImage = document.getElementById("preview-image")
-                previewImage.src = e.target.result
-            }
-            // reader가 이미지 읽도록 하기
-            reader.readAsDataURL(input.files[0])
-        }
-    }
-    // input file에 change 이벤트 부여
-    const inputImage = document.getElementById("input-image")
-    inputImage.addEventListener("change", e => {
-        readImage(e.target)
-    })
-
-    $(document).ready(function() {
-        //여기 아래 부분
-
-        $('#description').summernote({
-            height: 300,                 // 에디터 높이
-            minHeight: null,             // 최소 높이
-            maxHeight: null,             // 최대 높이
-            focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-            lang: "ko-KR",					// 한글 설정
-            toolbar: [
-                ['font', ['bold', 'italic', 'underline', 'clear', 'codeblock']],
-                ['mybutton', ['hello']],
-                ['insert',['picture','link']],
-            ],
-            placeholder: '더 자세한 내용을 적어주세요. <br> 꼼꼼히 작성하면 물건을 더 빠르게 판매 할 수 있을거에요.  <br/> [판매/구매 내용 예시] <br/> 거래지역 : <br/> 물건 상태 : ' //placeholder 설정
-
-        });
-    });
-</script>
 </body>
 </html>
