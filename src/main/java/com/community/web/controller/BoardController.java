@@ -80,7 +80,6 @@ public class BoardController {
         model.addAttribute("pageNo", page);
         model.addAttribute("board", top5Board);
         model.addAttribute("service", boardService);
-        model.addAttribute("likeService", likeService);
         model.addAttribute("replyService", replyService);
         model.addAttribute(new BoardForm());
         model.addAttribute(type);
@@ -146,7 +145,6 @@ public class BoardController {
         model.addAttribute("boardOwner", boardOwner);
         model.addAttribute("service", boardService);
         model.addAttribute("likes", likes);
-        model.addAttribute("likeService", likeService);
         model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
         model.addAttribute("top5Board", top5Board);
