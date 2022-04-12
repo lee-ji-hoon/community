@@ -41,26 +41,6 @@ public class CouncilController {
     private final BoardService boardService;
     private final ReplyService replyService;
 
-    @GetMapping("/council")
-    public String council(@CurrentUser Account account, Model model,
-                          @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
-        // 불러올 페이지의 데이터
-        Page<Council> noticePage = councilService.noticePage("공지", page);
-
-        // 총 페이지의 수
-
-        // Page 타입을 그대로 가져옴
-        model.addAttribute("noticePage", noticePage);
-
-        // 페이지 버튼 최대 개수
-        model.addAttribute("pageNo", page);
-        model.addAttribute(account);
-        model.addAttribute(new CouncilForm());
-        model.addAttribute(councilService);
-        model.addAttribute(boardService);
-        return "council/councils";
-    }
-
     @GetMapping("/council/{type}")
     public String councilRecent(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
