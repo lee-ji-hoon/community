@@ -60,8 +60,8 @@
                             <li th:classappend="${division == 'study'}? active">
                                 <a th:href="@{'/profile/' + ${byAccount.nickname} + '/study'}">스터디</a>
                         </li>
-                            <li th:classappend="${division == 'community'}? active">
-                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/community'}">게시글</a>
+                            <li th:classappend="${division == 'board'}? active">
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board'}">게시글</a>
                             </li>
                             <li th:classappend="${division == 'market'}? active">
                                 <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market'}">장터</a>
@@ -217,94 +217,90 @@
                     </div>
                 </div>
                 <!--게시글 -->
-                <div th:if="${division == 'community'}" class="md:space-x-6">
+                <div th:if="${division == 'board'}" class="md:space-x-6">
                     <div class="space-y-5 flex-shrink-0">
                         <div class="card md:p-6 p-2 mx-auto">
                             <nav class="responsive-nav" style="height:75px;">
-                                <ul uk-switcher="connect: #timeline-tab-community; animation: uk-animation-fade">
-                                    <li><a href="#" class="lg:px-2"> 자유 <span>2</span></a></li>
-                                    <li><a href="#" class="lg:px-2"> 정보 <span>3</span></a></li>
-                                    <li><a href="#" class="lg:px-2"> 질문 <span>5</span></a></li>
+                                <ul>
+                                    <li th:classappend="${sortType == 'free'}? active">
+                                        <a th:href="@{'/profile/'+ ${byAccount.nickname} + '/board/free'}" class="lg:px-2"> 자유 <span th:text="${myBoardCountByFree}"></span></a>
+                                    </li>
+                                    <li th:classappend="${sortType == 'forum'}? active">
+                                        <a th:href="@{'/profile/'+ ${byAccount.nickname} + '/board/forum'}" class="lg:px-2"> 정보 <span th:text="${myBoardCountByForum}"></span></a>
+                                    </li>
+                                    <li th:classappend="${sortType == 'qna'}? active">
+                                        <a th:href="@{'/profile/'+ ${byAccount.nickname} + '/board/qna'}" class="lg:px-2"> 질문 <span th:text="${myBoardCountByQnA}"></span></a>
+                                    </li>
                                 </ul>
                             </nav>
-                            <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab-community">
-                                <!-- 자유 -->
-                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
-                                    <div class="lg:pt-0 justify-between flex">
-                                        <a href="" class="text-lg font-semibold"> 제목 </a>
+                            <div class="card divide-y divide-gray-100 px-4 mb-4 py-4 lg:mt-8 mt-4" th:each="board : ${board.getContent()}">
+                                <div class="lg:pt-0 justify-between flex">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="text-lg font-semibold" th:text="${board.title}"> 제목 </a>
+                                    <div class="flex items-center">
                                         <div class="flex items-center">
-                                            <div class="flex items-center">
-                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">업로드 시간</a>
-                                            </div>
-                                            <div class="flex items-center mx-4 align-middle">
-                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">좋아요 수</a>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs">댓글 수</a>
-
-                                            </div>
+                                            <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                            <a class="text-xs" th:text="${account.dateTime(board.uploadTime)}">업로드 시간</a>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- 정보 -->
-                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
-                                    <div class="lg:pt-0 justify-between flex">
-                                        <a href="" class="text-lg font-semibold"> 제목 </a>
-                                        <div class="flex items-center">
-                                            <div class="flex items-center">
-                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">업로드 시간</a>
-                                            </div>
-                                            <div class="flex items-center mx-4 align-middle">
-                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">좋아요 수</a>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs">댓글 수</a>
-
-                                            </div>
+                                        <div class="flex items-center mx-4 align-middle">
+                                            <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                            <a class="text-xs" th:text="${board.likesList.size()}">좋아요 수</a>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- 정보 -->
-                                <div class="card divide-y divide-gray-100 px-4 mb-4 py-4">
-                                    <div class="lg:pt-0 justify-between flex">
-                                        <a href="" class="text-lg font-semibold"> 제목 </a>
                                         <div class="flex items-center">
-                                            <div class="flex items-center">
-                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">업로드 시간</a>
-                                            </div>
-                                            <div class="flex items-center mx-4 align-middle">
-                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs">좋아요 수</a>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs">댓글 수</a>
-
-                                            </div>
+                                            <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                            <a class="text-xs" th:text="${board.replyList.size()}">댓글 수</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div th:if="${board.totalPages != 0}" class="justify-center flex">
+                                <nav aria-label="Page navigation "
+                                     th:with="start=${(board.number/5)*5 + 1}, end=(${(board.totalPages == 0) ? 1 : (start + 4 < board.totalPages ? start + 4 : board.totalPages)})">
+                                    <ul class="inline-flex space-x-2">
+                                        <li th:if="${start > 1}">
+                                            <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board/'+ ${sortType} + '/' (page=${start - 2})}">
+                                                <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current " viewBox="0 0 20 20">
+                                                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                                              clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li th:each="page : ${#numbers.sequence(start, end)}">
+                                            <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board/'+ ${sortType} + '/' (page=${page - 1})}">
+                                                <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                        class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                        th:text="${page}">
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li th:if="${end < board.totalPages}">
+                                            <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board/'+ ${sortType} + '/' (page=${start + 4})}">
+                                                <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                                              clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- 장터 -->
                 <div th:if="${division == 'market'}" class="md:space-x-6">
                     <div class="space-y-5 flex-shrink-0">
                         <div class="card md:p-6 p-2 mx-auto">
                             <nav class="responsive-nav" style="height:75px;">
                                 <ul>
-                                    <li th:classappend="${marketType == 'sell'}? active">
+                                    <li th:classappend="${sortType == 'sell'}? active">
                                         <a th:href="@{'/profile/'+ ${byAccount.nickname} + '/market/sell'}" class="lg:px-2"> 판매 <span th:text="${myProductCountBySell}"></span></a>
                                     </li>
-                                    <li th:classappend="${marketType == 'buy'}? active">
+                                    <li th:classappend="${sortType == 'buy'}? active">
                                         <a th:href="@{'/profile/'+ ${byAccount.nickname} + '/market/buy'}" class="lg:px-2"> 구매 <span th:text="${myProductCountByBuy}"></span></a>
                                     </li>
                                 </ul>
@@ -342,7 +338,7 @@
                                             * < 꺽새 그려줌
                                             -->
                                             <li th:if="${start > 1}">
-                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${marketType} + '/' (page=${start - 2})}">
+                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${sortType} + '/' (page=${start - 2})}">
                                                     <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
                                                         <svg class="w-4 h-4 fill-current " viewBox="0 0 20 20">
                                                             <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -355,7 +351,7 @@
                                             * 페이지를 뿌려주는 부분
                                             -->
                                             <li th:each="page : ${#numbers.sequence(start, end)}">
-                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${marketType} + '/' (page=${page - 1})}">
+                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${sortType} + '/' (page=${page - 1})}">
                                                     <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
                                                             class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
                                                             th:text="${page}">
@@ -370,7 +366,7 @@
                                             * > 꺽새 그려줌
                                             -->
                                             <li th:if="${end < market.totalPages}">
-                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${marketType} + '/' (page=${start + 4})}">
+                                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/'+ ${sortType} + '/' (page=${start + 4})}">
                                                     <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
                                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                                             <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
