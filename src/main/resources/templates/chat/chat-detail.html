@@ -119,7 +119,7 @@
                                                     <div class="message-bubble me">
                                                         <div class="message-bubble-inner">
                                                             <div class="message-avatar">
-                                                                <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                <a th:href="@{/profile/{nickname}/view(nickname=${chat.sender.nickname})}">
                                                                     <img th:if="${#strings.isEmpty(account?.profileImage)}"
                                                                          th:data-id="${account.studentId}"
                                                                          class="identicon"
@@ -141,7 +141,7 @@
                                                         <div class="message-bubble">
                                                             <div class="message-bubble-inner">
                                                                 <div class="message-avatar">
-                                                                    <a th:href="@{/profile/{nickname}(nickname=${chat.sender.nickname})}">
+                                                                    <a th:href="@{/profile/{nickname}/view(nickname=${chat.sender.nickname})}">
                                                                         <img th:if="${#strings.isEmpty(chat.sender?.profileImage)}"
                                                                              th:data-id="${chat.sender.studentId}"
                                                                              class="identicon"
