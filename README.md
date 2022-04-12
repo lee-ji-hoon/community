@@ -4,7 +4,7 @@
 
 - 팀명 : Spring
 - 프로젝트 : unect (university + connect)
-- 팀원 : 이지훈, 가준영 (SpringBoot, JPA)
+- 팀원 : 이지훈 (Springboot, JPA, QueryDsl), 가준영 (SpringBoot, JPA)
 
 [Notion](https://www.notion.so/c080919d0f1e48c68971c8e96b997072)
 
@@ -40,7 +40,7 @@
 - 웹 소캣통신 방법 공부하기 (알림, 쪽지 or 실시간 통신 기능 구현에 필요)
 <hr/>
 
-### 2차 기획안 발표 4/6(수)
+### 2차 프로토타입 발표 4/6(수)
 [[Google Slide](https://docs.google.com/presentation/d/1xiu76b_hTz6oaf7pMc94rmpDmaVeuDCq1kDCDMBgOZE/edit#slide=id.g11ac4265aca_1_0)]
 
 [[Notion](https://www.notion.so/15886ef901a64ed9b2c1b325609bc8bf)]
@@ -51,5 +51,9 @@
 
 #### 이후 방향
 - 자잘한 버그 수정 및 발표 상태 점검
+
+<hr/>
+
+### 3차 프로토타입 발표 4/27(수)
 
 
