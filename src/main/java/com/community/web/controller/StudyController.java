@@ -33,6 +33,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -105,13 +108,18 @@ public class StudyController {
     }
 
     @GetMapping("/study")
-    public String study(@CurrentUser Account account, Model model) throws JsonProcessingException {
+    public String study(@CurrentUser Account account, Model model,
+                        @PageableDefault(size = 8, page = 0, sort = "publishedDateTime",
+                                direction = Sort.Direction.ASC) Pageable pageable,
+                        @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
         model.addAttribute(account);
         Account accountWithTagsById = accountRepository.findAccountWithTagsById(account.getId());
         model.addAttribute("suggestStudyList", studyRepository.findByAccount(
                 accountWithTagsById.getTags()
         ));
-        model.addAttribute("studyListId", studyRepository.findFirst9ByMembersNotContainingOrderByPublishedDateTimeDesc(account));
+
+        model.addAttribute("pageNo", page);
+        model.addAttribute("studyList", studyRepository.findByMembersNotContaining(account, pageable));
         model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());

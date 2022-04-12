@@ -9,6 +9,8 @@ import com.community.domain.council.CouncilRepository;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketItemStatus;
 import com.community.domain.market.MarketRepository;
+import com.community.domain.study.Study;
+import com.community.domain.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +29,7 @@ public class TestDataInit {
     private final BoardRepository boardRepository;
     private final PasswordEncoder passwordEncoder;
     private final MarketRepository marketRepository;
+    private final StudyRepository studyRepository;
 
     @PostConstruct
     public void init() {
@@ -119,6 +122,15 @@ public class TestDataInit {
         /*for (int i = 0; i < 50; i++) {
             String make = RandomString.make(5);
             councilRepository.save(new Council(null, "공지", make, "전체 학년", null, null, make, null, null, null, null, null, null, null, null, LocalDateTime.now()));
+        }*/
+
+        /*for (int i = 0; i < 50; i++) {
+            String make = RandomString.make(5);
+            Study save = studyRepository.save(new Study(null, null, null, null, null, null,
+                    null, null, null, null, null, null,
+                    null, null, null, null,
+                    null, null, null,
+                    null, 5, 10));
         }*/
     }
 
