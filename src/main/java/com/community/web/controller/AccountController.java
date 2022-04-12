@@ -99,24 +99,7 @@ public class AccountController {
         return "redirect:/check-email";
     }
 
-    // 프로필 진입
-    @GetMapping("/profile/{nickname}")
-    public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
-        if (nickname == null) {
-            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
-        }
-        Account byAccount = accountService.getAccount(nickname);
-        Account accountWithTagsById = accountRepository.findAccountWithTagsById(byAccount.getId());
 
-        model.addAttribute(new ProfileForm(account));
-        model.addAttribute(account);
-        model.addAttribute("byAccount", byAccount);
-        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
-        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
-        model.addAttribute("isOwner", byAccount.equals(account));
-        model.addAttribute("accountWithTagsById", accountWithTagsById);
-        return "account/profile";
-    }
 
     // 이메일 로그인
     @GetMapping("/email-login")

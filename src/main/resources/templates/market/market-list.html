@@ -52,7 +52,7 @@
                         </a>
                     </div>
 
-                    <div class="divide-y divide-gray-100 sm:m-0 -mx-4">
+                   w <div class="divide-y divide-gray-100 sm:m-0 -mx-4">
                         <div th:each="marketType : ${marketType.getContent()}" class="flex items-start card flex-wrap p-2 my-5 sm:space-x-6">
                             <a th:href="@{'/market/detail/'+${marketType.marketId}}" class="w-40 h-40 relative mt-1 order-1">
                                 <img th:if="${marketType.getFilePath() != null}" th:src="${marketType.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
@@ -99,7 +99,8 @@
                                         <a th:href="@{'/market/' + ${type} + '/' (page=${page - 1})}">
                                             <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
                                                     class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
-                                                    th:text="${page}"></button>
+                                                    th:text="${page}">
+                                            </button>
                                             <!--
                                             * classappend : 현재 번호가 controller에서 받은 pageNo랑 같다면 배경색을 추가해줌
                                             * th:text="${page}" : each문이 #numbers로 가져오기 때문에 page만 출력
