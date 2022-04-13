@@ -71,7 +71,7 @@ public class MainController {
 
         List<Council> noticeLists = councilRepository.findTop4ByPostSortOrderByUploadTimeDesc("공지");
 
-        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        List<Board> top5Board = boardService.top5BoardLists();
 
         List<Study> enrollStudy = studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account);
 
