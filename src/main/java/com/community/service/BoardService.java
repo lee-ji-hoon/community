@@ -181,6 +181,9 @@ public class BoardService {
         }
 
         List<Board> findTop5Boards = new ArrayList<>(listMap.values());
+        Collections.sort(findTop5Boards, (b1, b2)
+                -> (Integer.parseInt(String.valueOf(b2.getReplyList().size())) + Integer.parseInt(String.valueOf(b2.getLikesList().size())) + Integer.parseInt(String.valueOf(b2.getPageView())))
+                - (Integer.parseInt(String.valueOf(b1.getReplyList().size())) + Integer.parseInt(String.valueOf(b1.getLikesList().size())) + Integer.parseInt(String.valueOf(b1.getPageView()))));
         if (findTop5Boards.size() > 5) {
             for (int i = 0; i <= findTop5Boards.size() - 5; i++) {
                 int maxSize = findTop5Boards.size();
