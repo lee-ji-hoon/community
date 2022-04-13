@@ -27,10 +27,11 @@ import java.util.Map;
 @Transactional
 public class ManagerService {
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final BoardRepository boardRepository;
-    private final BoardService boardService;
     private final StudyRepository studyRepository;
+
+    private final AccountService accountService;
+    private final BoardService boardService;
     private final StudyService studyService;
 
     public LocalDate todayDate() {
@@ -43,6 +44,16 @@ public class ManagerService {
 
     public List<Account> accountList() {
         return accountRepository.findAll();
+    }
+
+    public List<Board> top5Boards() {
+        return boardService.top5BoardLists();
+    }
+
+    public Double boardLikesPercent(Board board) {
+        double allMember = accountRepository.findAll().size();
+        double boardLikeSize = boardRepository.findByBid(board.getBid()).getLikesList().size();
+        return ((boardLikeSize / allMember) * 100);
     }
 
     public Map<LocalDate, Double> todayBoardAndStudyLists() {
