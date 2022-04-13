@@ -1,4 +1,4 @@
-package com.community.service;
+package com.community.infra.aws;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
