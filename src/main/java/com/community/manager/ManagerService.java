@@ -33,6 +33,10 @@ public class ManagerService {
     private final StudyRepository studyRepository;
     private final StudyService studyService;
 
+    public LocalDate todayDate() {
+        return LocalDate.now();
+    }
+
     public List<Board> reportBoardLists() {
         return boardRepository.findByIsReportedOrderByUploadTimeDesc(true);
     }
@@ -41,10 +45,10 @@ public class ManagerService {
         return accountRepository.findAll();
     }
 
-    public Map<LocalDate, Integer> todayBoardAndStudyLists() {
-        Map<LocalDate, Integer> dateMap = new HashMap<>();
-        Integer todaySumBoardAndStudy = null;
-        Integer yesterdaySumBoardAndStudy = null;
+    public Map<LocalDate, Double> todayBoardAndStudyLists() {
+        Map<LocalDate, Double> dateMap = new HashMap<>();
+        Double todaySumBoardAndStudy = null;
+        Double yesterdaySumBoardAndStudy = null;
         // 오늘 올라온 글 & 스터디
         List<Board> allBoard = boardRepository.findAll();
         List<Board> todayBoards= new ArrayList<>();
@@ -68,47 +72,12 @@ public class ManagerService {
                 yesterdayStudy.add(study);
             }
         }
-        todaySumBoardAndStudy += (todayBoards.size() + todayStudy.size());
-        yesterdaySumBoardAndStudy += (yesterdayBoards.size() + yesterdayStudy.size());
+        todaySumBoardAndStudy = (double) (todayBoards.size() + todayStudy.size());
+        log.info("todaySumBoardAndStudy={}", todaySumBoardAndStudy);
+        yesterdaySumBoardAndStudy = (double) (yesterdayBoards.size() + yesterdayStudy.size());
+        log.info("yesterdaySumBoardAndStudy={}", yesterdaySumBoardAndStudy);
         dateMap.put(LocalDate.now(), todaySumBoardAndStudy);
         dateMap.put(LocalDate.now().minusDays(1), yesterdaySumBoardAndStudy);
         return dateMap;
     }
-
-    /*public void selectDate(LocalDate localDate, String sort) {
-        if (sort.equals("account")) {
-            List<Account> accountList = accountRepository.findAll();
-            List<Account> todayAccountList = new ArrayList<>();
-            List<Account> yesterdayAccountList = new ArrayList<>();
-            for (Account account : accountList) {
-                if (account.getJoinedAt().toLocalDate().equals(LocalDate.now())) {
-                    todayAccountList.add(account);
-                }
-                if (account.getJoinedAt().toLocalDate().equals(LocalDate.now().minusDays(1))) {
-                    yesterdayAccountList.add(account);
-                }
-            }
-        }
-
-        if (sort.equals("board")) {
-
-        }
-
-        if (sort.equals("study")) {
-
-        }
-    }
-    public void daily(LocalDate localDate) {
-        List<Account> accountList = accountRepository.findAll();
-        List<Account> todayAccountList = new ArrayList<>();
-        List<Account> yesterdayAccountList = new ArrayList<>();
-        for (Account account : accountList) {
-            if (account.getJoinedAt().toLocalDate().equals(LocalDate.now())) {
-                todayAccountList.add(account);
-            }
-            if (account.getJoinedAt().toLocalDate().equals(LocalDate.now().minusDays(1))) {
-                yesterdayAccountList.add(account);
-            }
-        }
-    }*/
 }
