@@ -20,10 +20,7 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -165,6 +162,32 @@ public class BoardService {
         }
         errorBoard = false;
         return errorBoard;
+    }
+
+    public List<Board> top5BoardLists() {
+        List<Board> findView = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        List<Board> findLike = boardRepository.findTop5ByIsReportedOrderByLikesListDesc(false);
+        List<Board> findReply = boardRepository.findTop5ByIsReportedOrderByReplyListDesc(false);
+
+        Map<Long, Board> listMap = new HashMap<>(5);
+        for (Board board : findView) {
+            listMap.put(board.getBid(), board);
+        }
+        for (Board board : findLike) {
+            listMap.put(board.getBid(), board);
+        }
+        for (Board board : findReply) {
+            listMap.put(board.getBid(), board);
+        }
+
+        List<Board> findTop5Boards = new ArrayList<>(listMap.values());
+        Collections.sort(findTop5Boards, (b1, b2)
+                -> (b2.getReplyList().size() + b2.getLikesList().size() + b2.getPageView())
+                - (b1.getReplyList().size() + b1.getLikesList().size() + b1.getPageView()));
+        while (findTop5Boards.size() > 5) {
+            findTop5Boards.remove(findTop5Boards.size() - 1);
+        }
+        return findTop5Boards;
     }
 
 }

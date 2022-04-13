@@ -60,7 +60,7 @@ public class BoardController {
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
         // Top5 게시물
-        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        List<Board> top5Board = boardService.top5BoardLists();
 
         switch (type) {
             case "free" :
@@ -78,7 +78,7 @@ public class BoardController {
         }
 
         model.addAttribute("pageNo", page);
-        model.addAttribute("board", top5Board);
+        model.addAttribute("top5Board", top5Board);
         model.addAttribute("service", boardService);
         model.addAttribute("replyService", replyService);
         model.addAttribute(new BoardForm());
@@ -120,7 +120,7 @@ public class BoardController {
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
-        List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        List<Board> top5Board = boardService.top5BoardLists();
         model.addAttribute("account", account);
         Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
         if (hasBoardError) {
