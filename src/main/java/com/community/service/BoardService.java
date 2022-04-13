@@ -184,11 +184,8 @@ public class BoardService {
         Collections.sort(findTop5Boards, (b1, b2)
                 -> (b2.getReplyList().size() + b2.getLikesList().size() + b2.getPageView())
                 - (b1.getReplyList().size() + b1.getLikesList().size() + b1.getPageView()));
-        if (findTop5Boards.size() > 5) {
-            for (int i = 0; i <= findTop5Boards.size() - 5; i++) {
-                int maxSize = findTop5Boards.size();
-                findTop5Boards.remove(maxSize-1);
-            }
+        while (findTop5Boards.size() > 5) {
+            findTop5Boards.remove(findTop5Boards.size() - 1);
         }
         return findTop5Boards;
     }
