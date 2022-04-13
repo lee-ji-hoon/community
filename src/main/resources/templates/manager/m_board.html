@@ -52,7 +52,10 @@
                 <tbody>
                 <tr th:each="top5board : ${managerService.top5Boards()}">
                   <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left items-center">
-                    <span class="ml-3 font-bold text-blueGray-600"><a th:href="@{/board/detail/{boardId}(boardId = ${top5board.getBid()})}" th:text="${top5board.getTitle()}"></a></span>
+                    <span class="ml-3 font-bold text-blueGray-600">
+                      <a th:href="@{/board/detail/{boardId}(boardId = ${top5board.getBid()})}"
+                         th:text="${top5board.getTitle()}"></a>
+                    </span>
                   </th>
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4" th:text="${top5board.getPageView()}"></td>
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4" th:with="reportCount = ${top5board.getReportCount()}">
@@ -74,7 +77,9 @@
                       <img th:if="${!#strings.isEmpty(top5board.getWriter()?.profileImage)}"
                            th:src="${top5board.getWriter()?.profileImage}"
                            alt="" class="w-10 h-10 rounded-full is_avatar"/>
-                      <a class="ml-3 font-bold text-blueGray-600 align-middle" th:href="@{/profile/{nickname}/view(nickname=${top5board.getWriter().nickname})}" th:text="${top5board.getWriter().getNickname()}">
+                      <a class="ml-3 font-bold text-blueGray-600 align-middle"
+                         th:href="@{/profile/{nickname}/view(nickname=${top5board.getWriter().nickname})}"
+                         th:text="${top5board.getWriter().getNickname()}">
                       </a>
                     </div>
                   </td>
@@ -98,10 +103,12 @@
                       <i class="fas fa-ellipsis-v"></i>
                     </a>
                     <div class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48" id="table-light-1-dropdown">
-                      <a href="#pablo" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Action</a><a href="#pablo" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Another action</a><a href="#pablo" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Something else here</a>
+                      <a th:href="@{/profile/{nickname}/view(nickname=${top5board.getWriter().nickname})}" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">작성자 프로필</a>
+                      <a th:href="@{/board/detail/{boardId}(boardId = ${top5board.getBid()})}" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">게시물 보기</a>
                       <div class="h-0 my-2 border border-solid border-blueGray-100">
                       </div>
-                      <a href="#pablo" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Seprated link</a>
+                      <!--<a th:href="@{/profile/{nickname}/view(nickname=${top5board.getWriter().nickname})}" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-lightBlue-600">수정</a>-->
+                      <a th:href="@{/board/detail/{boardId}/delete(boardId=${top5board.getBid()})}" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-500">삭제</a>
                     </div>
                   </td>
                 </tr>
