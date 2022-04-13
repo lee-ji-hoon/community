@@ -10,7 +10,23 @@
     <link rel="stylesheet" href="../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"/>
     <link rel="stylesheet" href="../../assets/styles/tailwind.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" charset="utf-8"></script>
+
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/identicon.js/identicon.js"></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.7.0/js/md5.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/identicon.js/2.3.3/identicon.min.js"></script>
+
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $(".identicon").each(function() {
+                var hash = md5($(this).data('id')).toString();
+                var data = new Identicon(hash,{format:'svg'}).toString();
+                $(this).attr('src', "data:image/svg+xml;base64,"+data);
+            });
+        });
+    </script>
+
     <title>UNECT | MANAGER</title>
 </head>
 <body>
