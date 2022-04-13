@@ -15,6 +15,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
 
+
     long countAllByWriterAndBoardTitle(Account account, String boardTitle);
 
     Page<Board> findByWriterAndBoardTitleAndIsReported(Account account, String boardTitle, Boolean isReported, Pageable pageable);
@@ -33,7 +34,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop4ByIsReportedOrderByUploadTimeDesc(Boolean isReported);
 
+    /* 실시간 인기글 */
     List<Board> findTop5ByIsReportedOrderByPageViewDesc(Boolean isReported);
+    List<Board> findTop5ByIsReportedOrderByLikesListDesc(Boolean isReported);
+    List<Board> findTop5ByIsReportedOrderByReplyListDesc(Boolean isReported);
 
     Board findByBid(long id);
 
