@@ -164,35 +164,30 @@ public class BoardService {
         return errorBoard;
     }
 
-    public void top5BoardLists() {
+    public List<Board> top5BoardLists() {
         List<Board> findView = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
         List<Board> findLike = boardRepository.findTop5ByIsReportedOrderByLikesListDesc(false);
         List<Board> findReply = boardRepository.findTop5ByIsReportedOrderByReplyListDesc(false);
 
-        Map<Long, Board> listMap = new HashMap<>();
-
+        Map<Long, Board> listMap = new HashMap<>(5);
         for (Board board : findView) {
             listMap.put(board.getBid(), board);
-            log.info("Top View Board={}", board.getBid());
         }
-        System.out.println();
         for (Board board : findLike) {
             listMap.put(board.getBid(), board);
-            log.info("Top Like Board={}", board.getBid());
         }
-        System.out.println();
         for (Board board : findReply) {
             listMap.put(board.getBid(), board);
-            log.info("Top Reply Board={}", board.getBid());
         }
-        /*if (listMap.size() > 5) {
-            for (int i = 6; i < listMap.size(); i++) {
-            // index가 5이상인 애들 모두 제거
+
+        List<Board> findTop5Boards = new ArrayList<>(listMap.values());
+        if (findTop5Boards.size() > 5) {
+            for (int i = 0; i <= findTop5Boards.size() - 5; i++) {
+                int maxSize = findTop5Boards.size();
+                findTop5Boards.remove(maxSize-1);
             }
-        }*/
-        for (Long bid : listMap.keySet()) {
-            log.info("Top Posts={}", bid);
         }
+        return findTop5Boards;
     }
 
 }
