@@ -62,6 +62,8 @@ public class BoardController {
         // Top5 게시물
         List<Board> top5Board = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
 
+        boardService.top5BoardLists();
+
         switch (type) {
             case "free" :
                 Page<Board> boardFree = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);

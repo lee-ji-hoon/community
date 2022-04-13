@@ -20,10 +20,7 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -165,6 +162,37 @@ public class BoardService {
         }
         errorBoard = false;
         return errorBoard;
+    }
+
+    public void top5BoardLists() {
+        List<Board> findView = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
+        List<Board> findLike = boardRepository.findTop5ByIsReportedOrderByLikesListDesc(false);
+        List<Board> findReply = boardRepository.findTop5ByIsReportedOrderByReplyListDesc(false);
+
+        Map<Long, Board> listMap = new HashMap<>();
+
+        for (Board board : findView) {
+            listMap.put(board.getBid(), board);
+            log.info("Top View Board={}", board.getBid());
+        }
+        System.out.println();
+        for (Board board : findLike) {
+            listMap.put(board.getBid(), board);
+            log.info("Top Like Board={}", board.getBid());
+        }
+        System.out.println();
+        for (Board board : findReply) {
+            listMap.put(board.getBid(), board);
+            log.info("Top Reply Board={}", board.getBid());
+        }
+        /*if (listMap.size() > 5) {
+            for (int i = 6; i < listMap.size(); i++) {
+            // index가 5이상인 애들 모두 제거
+            }
+        }*/
+        for (Long bid : listMap.keySet()) {
+            log.info("Top Posts={}", bid);
+        }
     }
 
 }
