@@ -78,7 +78,7 @@ public class BoardController {
         }
 
         model.addAttribute("pageNo", page);
-        model.addAttribute("board", top5Board);
+        model.addAttribute("top5Board", top5Board);
         model.addAttribute("service", boardService);
         model.addAttribute("replyService", replyService);
         model.addAttribute(new BoardForm());
