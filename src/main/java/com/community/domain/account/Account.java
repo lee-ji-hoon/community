@@ -102,13 +102,15 @@ public class Account {
     private boolean likesByPost = true;
 
     private boolean replyCreateByWeb = true;
-
     // 알림 설정 끝
 
     // 태그
     @ManyToMany
     @Column(name = "account_tags")
     private Set<Tag> tags = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     // 이메일 체크 토큰 랜덤 생성 및 시간 체크
     public void generateEmailCheckToken() {
