@@ -24,7 +24,7 @@
                             <h2 class="text-2xl font-semibold"> 스터디</h2>
                             <div class="lg:mt-8 mt-4">
                                 <div th:replace="theme-fragments.html :: study-tag-list (tagList = ${studyTagListTitle})"></div>
-                                <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
+                                <div class="grid md:grid-cols-3 sm:grid-cols-3 grid-cols-3 gap-x-2 gap-y-4 mt-3">
                                     <div th:replace="theme-fragments.html :: profile-study-list
                                     (studyType=${studyList})"></div>
                                 </div>
