@@ -3,7 +3,7 @@ package com.community.web.controller;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
-import com.community.service.S3Service;
+import com.community.infra.aws.S3Service;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
 import com.community.domain.market.Market;

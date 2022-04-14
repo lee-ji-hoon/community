@@ -1,6 +1,7 @@
 package com.community.service;
 
 import com.community.domain.account.Account;
+import com.community.domain.account.AccountType;
 import com.community.infra.config.AppProperties;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
@@ -41,6 +42,7 @@ public class AccountService implements UserDetailsService {
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
+        newAccount.setAccountType(AccountType.USER);
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }

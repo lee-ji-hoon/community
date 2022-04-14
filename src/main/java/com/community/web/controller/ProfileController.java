@@ -1,13 +1,12 @@
 package com.community.web.controller;
 
-import com.amazonaws.services.ec2.model.MarketType;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.market.MarketRepository;
-import com.community.domain.report.BoardReport;
 import com.community.domain.study.StudyRepository;
+import com.community.infra.aws.S3Service;
 import com.community.service.*;
 import com.community.web.dto.*;
 import com.community.domain.tag.TagRepository;
@@ -23,7 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -307,7 +305,6 @@ public class ProfileController {
     }
 
     // 닉네임 변경 요청
-
     @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {
