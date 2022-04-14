@@ -59,8 +59,7 @@
                             </div>
                             <img style="width: 125px; height: 125px" class="border-2 border-grey rounded-full is_avatar mt-3 content-center self-center" id="preview-image">
 
-                            <form action="#"
-                                  th:action="@{/settings/profile-img}"
+                            <form th:action="@{/profile/settings/profile-img}"
                                   id="imageForm" method="post" enctype="multipart/form-data">
                                 <div class="custom-file mt-2">
                                     <input type="file" name="file" id="profile-image-file" accept="image/png, image/jpeg">
