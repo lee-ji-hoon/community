@@ -305,7 +305,6 @@ public class ProfileController {
     }
 
     // 닉네임 변경 요청
-
     @PostMapping(SETTINGS_ACCOUNT_URL)
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {
