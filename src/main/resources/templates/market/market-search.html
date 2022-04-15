@@ -83,15 +83,10 @@
                             -->
                             <li th:each="page : ${#numbers.sequence(start, end)}">
                                 <a th:href="@{'/market/search/detail?keyword=' + ${keyword} + '&sort=uploadTime,desc&page=' + ${page}}">
-<!--                                <a th:href="@{'/market/search/detail/' + ${keword} + '/' (page=${page - 1})}">-->
                                     <button th:classappend="${page == pageNo} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
                                             class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
                                             th:text="${page}">
                                     </button>
-                                    <!--
-                                    * classappend : 현재 번호가 controller에서 받은 pageNo랑 같다면 배경색을 추가해줌
-                                    * th:text="${page}" : each문이 #numbers로 가져오기 때문에 page만 출력
-                                    -->
                                 </a>
                             </li>
                             <!--

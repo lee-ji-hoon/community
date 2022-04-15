@@ -13,4 +13,6 @@ public interface MarketRepositoryExtension {
     Page<Market> findBySeller(Account account, Pageable pageable);
 
     Page<Market> findBySellerAndMarketType(Account account, String marketType, Pageable pageable);
+
+    Page<Market> findByKeyword(String keyword, Pageable pageable);
 }

@@ -77,6 +77,21 @@ public class MarketController {
         return "market/market-list";
     }
 
+    @GetMapping("/market/search/detail")
+    public String searchMarket(String keyword, Model model, @CurrentUser Account account,
+                               @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                       direction = Sort.Direction.ASC) Pageable pageable,
+                               @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+        Page<Market> searchMarketResult = marketRepository.findByKeyword(keyword, pageable);
+        model.addAttribute(account);
+        model.addAttribute("searchMarketResult", searchMarketResult);
+        model.addAttribute("pageNo", page);
+        model.addAttribute("keyword", keyword);
+
+        return "market/market-search";
+
+    }
+
     @GetMapping("/market/register/new")
     public String marketNewForm(@CurrentUser Account account, Model model, @Valid MarketForm marketForm, RedirectAttributes redirectAttributes){
         boolean emailVerified = account.isEmailVerified();
