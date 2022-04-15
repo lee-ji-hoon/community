@@ -5,6 +5,7 @@ import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
+import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.council.CouncilRepository;
 import com.community.domain.likes.Likes;
@@ -30,10 +31,14 @@ import java.util.Optional;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
+    private final BookmarkRepository bookmarkRepository;
 
     @GetMapping("/bookmarks")
     public String bookmarkMain(@CurrentUser Account account, Model model) {
 
+        List<Bookmark> userBookmarks = bookmarkRepository.findByAccount(account);
+
+        model.addAttribute("userBookmarks", userBookmarks);
         model.addAttribute(account);
         return "bookmark/bookmarks";
     }
