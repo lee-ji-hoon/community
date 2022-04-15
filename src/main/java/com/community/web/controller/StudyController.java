@@ -118,9 +118,12 @@ public class StudyController {
         ));
 
         model.addAttribute("pageNo", page);
-        model.addAttribute("studyList", studyRepository.findByMembersNotContaining(account, pageable));
-        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
-        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("studyList",
+                studyRepository.findByMembersNotContainingAndManagersNotContainingOrderByPublishedDateTimeDesc(account, account, pageable));
+        model.addAttribute("enrolledStudyList",
+                studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("myStudyList",
+                studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
         model.addAttribute("now", LocalDate.now());
         model.addAttribute("accountWithTagsById", accountWithTagsById);

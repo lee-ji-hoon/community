@@ -1,8 +1,9 @@
 package com.community.domain.study;
 
 import com.community.domain.account.Account;
-import com.community.domain.study.Study;
 import com.community.domain.tag.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,4 +49,6 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
     List<Study> findByFullDescriptionContaining(String keyword);
 
     List<Study> findByTagsContaining(Tag tag);
+
+    Page<Study> findByMembersNotContainingAndManagersNotContainingOrderByPublishedDateTimeDesc(Account members, Account managers, Pageable pageable);
 }

@@ -14,8 +14,6 @@ public interface StudyRepositoryExtension {
 
     List<Study> findByAccount(Set<Tag> tags);
 
-    Page<Study> findByMembersNotContaining(Account account, Pageable pageable);
-
     Page<Study> findByMembersContaining(Account account, Pageable pageable);
 
     Page<Study> findByManagersContaining(Account account, Pageable pageable);
