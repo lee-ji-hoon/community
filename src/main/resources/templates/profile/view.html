@@ -197,21 +197,17 @@
                         <div class="card md:p-6 p-2 mx-auto">
                             <nav class="responsive-nav" style="height:75px;">
                                 <ul uk-switcher="connect: #timeline-tab-study; animation: uk-animation-fade">
-                                    <li><a href="#" class="lg:px-2"> 멤버 <span th:text="${enrolledStudyList.size()}"></span></a></li>
-                                    <li><a href="#" class="lg:px-2"> 매니저 <span th:text="${myStudyList.size()}"></span></a></li>
+                                    <li><a href="#" class="lg:px-2"> 멤버 <span th:text="${enrolledStudyListSize}"></span></a></li>
+                                    <li><a href="#" class="lg:px-2"> 매니저 <span th:text="${myStudyListSize}"></span></a></li>
                                 </ul>
                             </nav>
                             <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab-study">
                                 <!-- 참여 중 -->
-                                <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
-                                    <div th:replace="theme-fragments.html :: profile-study-list
-                                    (studyType=${enrolledStudyList})"></div>
-                                </div>
+                                <div th:replace="theme-fragments.html :: profile-study-list
+                                (studyType=${enrolledStudyList})"></div>
                                 <!-- 매니저 -->
-                                <div class="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-x-2 gap-y-4 mt-3">
-                                    <div th:replace="theme-fragments.html :: profile-study-list
-                                    (studyType=${myStudyList})"></div>
-                                </div>
+                                <div th:replace="theme-fragments.html :: profile-study-list
+                                (studyType=${myStudyList})"></div>
                             </div>
                         </div>
                     </div>

@@ -26,14 +26,15 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
     @EntityGraph(value = "Study.withMembers", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithMembersByPath(String path);
 
-    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
-    List<Study> findByMembersNotContainingOrderByPublishedDateTimeDesc(Account account);
-
     @EntityGraph(value = "Study.withTagsAndManagers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByManagersContainingOrderByPublishedDateTimeDesc(Account account);
 
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByMembersContainingOrderByPublishedDateTimeDesc(Account account);
+
+    long countAllByMembersContaining(Account account);
+
+    long countAllByManagersContaining(Account account);
 
     @EntityGraph(value = "Study.withTagsAndMembers", type = EntityGraph.EntityGraphType.FETCH)
     List<Study> findByTagsContainingOrderByPublishedDateTimeDesc(Tag tag);
