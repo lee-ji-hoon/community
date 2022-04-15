@@ -5,6 +5,8 @@ import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
+import com.community.domain.bookmark.Bookmark;
+import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.council.Council;
 import com.community.web.dto.BoardForm;
 import com.community.web.dto.ReplyForm;
@@ -44,10 +46,11 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
-    private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
+    private final AccountRepository accountRepository;
     private final BoardReportRepository boardReportRepository;
     private final ReplyReportRepository replyReportRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     private final BoardService boardService;
     private final LikeService likeService;
@@ -128,23 +131,20 @@ public class BoardController {
         }
 
         boardService.viewUpdate(boardId, request, response);
-        Board detail = boardRepository.findByBid(boardId);
+        Board currentBoard = boardRepository.findByBid(boardId);
 
         // 최근에 올라온 게시물
         List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // 좋아요 및 댓글
-        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, detail);
-        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(detail);
+        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndBoard(account, currentBoard);
+        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(currentBoard);
 
-        // 게시물 작성자 account 불러오는 로직
-        Board currentBoard = boardRepository.findByBid(boardId);
-        Account boardOwner = currentBoard.getWriter();
-
-        model.addAttribute("board", detail);
-        model.addAttribute("boardOwner", boardOwner);
+        model.addAttribute("board", currentBoard);
         model.addAttribute("service", boardService);
         model.addAttribute("likes", likes);
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute("reply", replies);
         model.addAttribute("replyService", replyService);
         model.addAttribute("top5Board", top5Board);

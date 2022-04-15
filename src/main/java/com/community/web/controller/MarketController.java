@@ -3,6 +3,8 @@ package com.community.web.controller;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
+import com.community.domain.bookmark.Bookmark;
+import com.community.domain.bookmark.BookmarkRepository;
 import com.community.infra.aws.S3Service;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
@@ -27,6 +29,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,6 +43,7 @@ public class MarketController {
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @GetMapping("/market/{type}")
     public String marketListView(@CurrentUser Account account, Model model, @PathVariable String type,
@@ -155,6 +159,9 @@ public class MarketController {
         Market detail = marketRepository.findByMarketId(marketId);
         List<Reply> replies = replyRepository.findAllByMarketOrderByUploadTimeDesc(detail);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndMarket(account, detail);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute("product", detail);
         model.addAttribute("reply", replies);

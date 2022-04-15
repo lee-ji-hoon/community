@@ -4,6 +4,8 @@ import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
 import com.community.domain.board.ReplyRepository;
+import com.community.domain.bookmark.Bookmark;
+import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.market.Market;
 import com.community.service.BoardService;
 import com.community.service.ReplyService;
@@ -29,6 +31,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +39,7 @@ import java.util.List;
 public class CouncilController {
 
     private final CouncilRepository councilRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final ReplyRepository replyRepository;
     private final CouncilService councilService;
     private final BoardService boardService;
@@ -88,12 +92,14 @@ public class CouncilController {
     @GetMapping("/council/detail/{cid}")
     public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model,
                                 HttpServletRequest request, HttpServletResponse response) {
-        Council council = councilRepository.findByCid(cid);
+        Council currentCouncil = councilRepository.findByCid(cid);
 
         councilService.viewUpdate(cid, request, response);
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndCouncil(account, currentCouncil);
 
-        List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(council);
-        model.addAttribute(council);
+        List<Reply> replies = replyRepository.findAllByCouncilOrderByUploadTimeDesc(currentCouncil);
+        model.addAttribute(currentCouncil);
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(boardService);
         model.addAttribute(councilService);
