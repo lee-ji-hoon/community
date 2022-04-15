@@ -50,5 +50,6 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
 
     List<Study> findByTagsContaining(Tag tag);
 
+    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.FETCH)
     Page<Study> findByMembersNotContainingAndManagersNotContainingOrderByPublishedDateTimeDesc(Account members, Account managers, Pageable pageable);
 }

@@ -1384,14 +1384,17 @@
         let $confirmBtn = $("#confirm-button");
         let $preview = $("#preview-image");
         let $current = $("#current-study-image");
-        let $profile = $("#study-image-file");
+        let $studyImageInput = $("#study-image-file");
+        let $studyImageLabel = $("#study-image-file-label")
 
         $confirmBtn.hide();
         $preview.hide();
 
-        $($profile).change(function (e) {
-            $profile.hide();
+        $($studyImageInput).change(function (e) {
+            $studyImageInput.hide();
             $current.hide();
+            $studyImageLabel.hide();
+            $studyImageInput.hide();
             $confirmBtn.show();
             $preview.show();
         });
@@ -1437,17 +1440,46 @@
          id="preview-image">
 
     <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 lg:flex">
+        <div id="blk_div">
+            <div class="flex-none w-5 mr-2 mt-1" id="bookmark_div">
+                <div th:if="${bookmark.isEmpty()}">
+                    <form id="bookmarkAdd">
+                        <input type="hidden" id="postId" name="postId" th:value="${study.id}"/>
+                        <input type="hidden" id="postSort" name="postSort" value="study"/>
+                        <div uk-tooltip="북마크">
+                            <a class="bookmark_click">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkAddBtn" class="text-gray-500 font-bold" fill="currentColor">
+                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                <div th:if="${bookmark.isPresent()}">
+                    <form id="bookmarkCancel">
+                        <div uk-tooltip="북마크 해제">
+                            <input type="hidden" id="postId" name="postId" th:value="${study.id}"/>
+                            <input type="hidden" id="postSort" name="postSort" value="study"/>
+                            <a class="bookmark_click">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
+                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <form id="imageForm" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/banner'}"
               method="post" enctype="multipart/form-data" novalidate>
             <div class="custom-file" th:if="${study.isManager(#authentication.principal)}">
-                <label for="study-image-file"
+                <label for="study-image-file" id="study-image-file-label"
                        class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
                     <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
                     배너 이미지 수정
                 </label>
                 <input type="file" name="file" id="study-image-file" accept="image/png, image/jpeg">
             </div>
-
             <button type="submit"
                     id="confirm-button"
                     class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
