@@ -1240,7 +1240,7 @@
                     data : $('#bookmarkAdd').serialize(),
                     success : function (){
                         console.log("북마크 실행");
-                        $('#utextDiv').load(location.href+' #utextDiv');
+                        $('#blk_div').load(location.href+' #blk_div');
                     },
                 });
             }else if($(this).children('svg').attr('id') == "bookmarkDelBtn"){
@@ -1250,7 +1250,7 @@
                     data : $('#bookmarkCancel').serialize(),
                     success : function (){
                         console.log("북마크 취소");
-                        $('#utextDiv').load(location.href+' #utextDiv');
+                        $('#blk_div').load(location.href+' #blk_div');
                     },
                 });
             }

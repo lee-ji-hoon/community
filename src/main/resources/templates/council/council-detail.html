@@ -36,7 +36,7 @@
                                 <hr>
                                 <div th:utext="${council.postContent}">내용</div>
                                 <hr class="my-4">
-                                <div id="utextDiv" class="w-5">
+                                <div id="blk_div" class="w-5">
                                     <div th:if="${bookmark.isEmpty()}">
                                         <form id="bookmarkAdd">
                                             <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
