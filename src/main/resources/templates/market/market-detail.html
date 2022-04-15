@@ -227,6 +227,36 @@
                                     </div>
                                 </th:block>
                             </div>
+                            <hr class="mb-4">
+                            <div id="blk_div" class="pl-3 w-5">
+                                <div th:if="${bookmark.isEmpty()}">
+                                    <form id="bookmarkAdd">
+                                        <input type="hidden" id="postId" name="postId" th:value="${product.getMarketId()}"/>
+                                        <input type="hidden" id="postSort" name="postSort" value="market"/>
+                                        <div uk-tooltip="북마크">
+                                            <a class="bookmark_click">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkAddBtn" class="text-gray-500 font-bold" fill="currentColor">
+                                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div th:if="${bookmark.isPresent()}">
+                                    <form id="bookmarkCancel">
+                                        <div uk-tooltip="북마크 해제">
+                                            <input type="hidden" id="postId" name="postId" th:value="${product.getMarketId()}"/>
+                                            <input type="hidden" id="postSort" name="postSort" value="market"/>
+                                            <a class="bookmark_click">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
+                                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr class="mt-4">
                             <div class="card p-6 relative">
                                 <h3 class="mb-5 mt-2 font-semibold text-xl"> 댓글 작성하기 </h3>
                                 <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
@@ -435,7 +465,7 @@
         </div>
     </div>
 </div>
-
+<div th:replace="theme-fragments :: bookmarkAjax"></div>
 <script type="application/javascript" th:inline="javascript">
     function update_market() {
         let price = document.getElementById("price");
