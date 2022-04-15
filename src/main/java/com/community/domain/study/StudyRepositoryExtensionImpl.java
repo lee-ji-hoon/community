@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +34,6 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
                         .distinct()
                         .limit(9);
         return studyJPQLQuery.fetch();
-
     }
 
     @Override
@@ -43,6 +43,31 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
                         .distinct()
                         .limit(100);
 
+        JPQLQuery<Study> studyJPQLQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<Study> studyQueryResults = studyJPQLQuery.fetchResults();
+
+        return new PageImpl<>(studyQueryResults.getResults(), pageable, studyQueryResults.getTotal());
+    }
+
+    @Override
+    public Page<Study> findByMembersContaining(Account account, Pageable pageable) {
+        QStudy qStudy = QStudy.study;
+        JPQLQuery<Study> query = from(qStudy)
+                .where(qStudy.members.any().in(account)
+                .or(qStudy.members.any().in(account)))
+                .distinct();
+        JPQLQuery<Study> studyJPQLQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<Study> studyQueryResults = studyJPQLQuery.fetchResults();
+
+        return new PageImpl<>(studyQueryResults.getResults(), pageable, studyQueryResults.getTotal());
+    }
+
+    @Override
+    public Page<Study> findByManagersContaining(Account account, Pageable pageable) {
+        QStudy qStudy = QStudy.study;
+        JPQLQuery<Study> query = from(qStudy)
+                .where(qStudy.managers.any().in(account))
+                .distinct();
         JPQLQuery<Study> studyJPQLQuery = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Study> studyQueryResults = studyJPQLQuery.fetchResults();
 
