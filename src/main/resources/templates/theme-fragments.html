@@ -1227,6 +1227,37 @@
     </script>
 </div>
 
+<div th:fragment="bookmarkAjax">
+    <script>
+        $(document).on('click', '.bookmark_click', function() {
+            // 해당 태그를 클릭하면 진행되는 메소드
+            if($(this).children('svg').attr('id') == "bookmarkAddBtn"){
+                // this는 클릭한 태그 전역
+                // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
+                $.ajax({
+                    url:'/bookmark/add',
+                    type:'get',
+                    data : $('#bookmarkAdd').serialize(),
+                    success : function (){
+                        console.log("북마크 실행");
+                        $('#utextDiv').load(location.href+' #utextDiv');
+                    },
+                });
+            }else if($(this).children('svg').attr('id') == "bookmarkDelBtn"){
+                $.ajax({
+                    url:'/bookmark/delete',
+                    type:'get',
+                    data : $('#bookmarkCancel').serialize(),
+                    success : function (){
+                        console.log("북마크 취소");
+                        $('#utextDiv').load(location.href+' #utextDiv');
+                    },
+                });
+            }
+        });
+    </script>
+</div>
+
 <script th:fragment="studyBanner" type="application/javascript">
     function readImage(input) {
 
