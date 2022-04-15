@@ -108,7 +108,7 @@ public class StudyController {
 
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model,
-                        @PageableDefault(size = 8, page = 0, sort = "publishedDateTime",
+                        @PageableDefault(size = 9, page = 0, sort = "publishedDateTime",
                                 direction = Sort.Direction.ASC) Pageable pageable,
                         @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
         model.addAttribute(account);
@@ -118,9 +118,12 @@ public class StudyController {
         ));
 
         model.addAttribute("pageNo", page);
-        model.addAttribute("studyList", studyRepository.findByMembersNotContaining(account, pageable));
-        model.addAttribute("enrolledStudyList", studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
-        model.addAttribute("myStudyList", studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("studyList",
+                studyRepository.findByMembersNotContainingAndManagersNotContainingOrderByPublishedDateTimeDesc(account, account, pageable));
+        model.addAttribute("enrolledStudyList",
+                studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account));
+        model.addAttribute("myStudyList",
+                studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
         model.addAttribute("now", LocalDate.now());
         model.addAttribute("accountWithTagsById", accountWithTagsById);

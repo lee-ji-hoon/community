@@ -33,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -88,7 +89,7 @@ public class ProfileController {
     // 프로필 진입
     @GetMapping("/profile/{nickname}/{division}")
     public String viewProfile(@PathVariable String nickname, @PathVariable String division,
-                              @PageableDefault(size = 7, page = 0, sort = "uploadTime",
+                              @PageableDefault(size = 12, page = 0, sort = "publishedDateTime",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                               Model model, @CurrentUser Account account) {
@@ -109,9 +110,13 @@ public class ProfileController {
                 break;
             case "study" :
                 model.addAttribute("enrolledStudyList",
-                        studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(byAccount));
+                        studyRepository.findByMembersContaining(byAccount, pageable));
                 model.addAttribute("myStudyList",
-                        studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(byAccount));
+                        studyRepository.findByManagersContaining(byAccount, pageable));
+                model.addAttribute("enrolledStudyListSize",
+                        studyRepository.countAllByMembersContaining(byAccount));
+                model.addAttribute("myStudyListSize",
+                        studyRepository.countAllByManagersContaining(byAccount));
                 break;
             case "board" :
                 return "redirect:/profile/"+byAccount.getNickname()+"/board/free" ;
