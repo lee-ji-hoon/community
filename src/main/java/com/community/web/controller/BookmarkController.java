@@ -15,6 +15,8 @@ import com.community.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +31,13 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    // 좋아요 관련 내용
+    @GetMapping("/bookmarks")
+    public String bookmarkMain(@CurrentUser Account account, Model model) {
+
+        model.addAttribute(account);
+        return "bookmark/bookmarks";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/bookmark/add")
     public void addBookmarkAjax(@CurrentUser Account account,
