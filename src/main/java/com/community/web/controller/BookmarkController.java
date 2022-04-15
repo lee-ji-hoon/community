@@ -32,9 +32,25 @@ public class BookmarkController {
     // 좋아요 관련 내용
     @ResponseBody
     @RequestMapping(value = "/bookmark/add")
-    public void addLikeLink(@CurrentUser Account account,
-                            @RequestParam("id") Long id,
-                            @RequestParam("sort") String sort) {
-        bookmarkService.addBookmark(account, sort, id);
+    public void addBookmarkAjax(@CurrentUser Account account,
+                            @RequestParam("postId") Long postId,
+                            @RequestParam("postSort") String postSort) {
+        log.info("postId={}", postId);
+        log.info("postSort={}", postSort);
+        // postId = 각 게시물의 아이디를 가져옴
+        // postSort = board, council, market, study를 가져옴
+        bookmarkService.addBookmark(account, postSort, postId);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/bookmark/delete")
+    public void deleteBookmarkAjax(@CurrentUser Account account,
+                            @RequestParam("postId") Long postId,
+                            @RequestParam("postSort") String postSort) {
+        log.info("postId={}", postId);
+        log.info("postSort={}", postSort);
+        // postId = 각 게시물의 아이디를 가져옴
+        // postSort = board, council, market, study를 가져옴
+        bookmarkService.deleteBookmark(account, postSort, postId);
     }
 }

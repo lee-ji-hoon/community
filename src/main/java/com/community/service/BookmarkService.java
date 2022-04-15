@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.community.domain.bookmark.QBookmark.bookmark;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -32,30 +34,56 @@ public class BookmarkService {
     private final MarketRepository marketRepository;
     private final CouncilRepository councilRepository;
 
-    public void addBookmark(Account account, String sort, Long id) {
+    public void addBookmark(Account account, String postSort, Long postId) {
         Bookmark bookmark = Bookmark.builder()
                 .account(account)
                 .build();
-        switch (sort) {
+        switch (postSort) {
             case "board":
-                Board board = boardRepository.findByBid(id);
+                Board board = boardRepository.findByBid(postId);
                 bookmark.setBoard(board);
                 bookmarkRepository.save(bookmark);
                 break;
             case "council":
-                Council council = councilRepository.findByCid(id);
+                Council council = councilRepository.findByCid(postId);
                 bookmark.setCouncil(council);
                 bookmarkRepository.save(bookmark);
                 break;
             case "market":
-                Market market = marketRepository.findByMarketId(id);
+                Market market = marketRepository.findByMarketId(postId);
                 bookmark.setMarket(market);
                 bookmarkRepository.save(bookmark);
                 break;
             case "study":
-                Optional<Study> study = studyRepository.findById(id);
+                Optional<Study> study = studyRepository.findById(postId);
                 bookmark.setStudy(study.get());
                 bookmarkRepository.save(bookmark);
+                break;
+        }
+    }
+
+    public void deleteBookmark(Account account, String postSort, Long postId) {
+        Optional<Bookmark> currentBookmark;
+        switch (postSort) {
+            case "board":
+                Board currentBoard = boardRepository.findByBid(postId);
+                currentBookmark = bookmarkRepository.findByAccountAndBoard(account, currentBoard);
+                bookmarkRepository.delete(currentBookmark.get());
+                break;
+            case "council":
+                Council council = councilRepository.findByCid(postId);
+                currentBookmark = bookmarkRepository.findByAccountAndCouncil(account, council);
+                bookmarkRepository.delete(currentBookmark.get());
+                break;
+            case "market":
+                Market market = marketRepository.findByMarketId(postId);
+                currentBookmark = bookmarkRepository.findByAccountAndMarket(account, market);
+                bookmarkRepository.delete(currentBookmark.get());
+                break;
+            case "study":
+                Optional<Study> study = studyRepository.findById(postId);
+                currentBookmark = bookmarkRepository.findByAccountAndStudy(account, study.get());
+                bookmarkRepository.delete(currentBookmark.get());
                 break;
         }
     }
