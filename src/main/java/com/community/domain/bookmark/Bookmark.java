@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "bookmarkId")
+@EqualsAndHashCode(of = "bookmark_id")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,7 +35,7 @@ public class Bookmark {
     private Council council;
 
     @ManyToOne(targetEntity = Market.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "council_id")
+    @JoinColumn(name = "market_id")
     private Market market;
 
     @ManyToOne(targetEntity = Study.class, fetch = FetchType.LAZY)
