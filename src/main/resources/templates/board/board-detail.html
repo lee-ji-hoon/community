@@ -209,10 +209,10 @@
                                         </th:block>
                                     </div>
                                 </div>
-                                <div id="blk_div">
-                                    <div class="space-y-3 content" th:utext="${board.content}"></div>
-                                    <hr class="mt-4">
-                                    <div class="float-left pl-2 pt-7">
+                                <div id="blk_div" class="mb-4">
+                                    <div class="space-y-3 content" id="utextDiv" th:utext="${board.content}"></div>
+                                    <hr class="my-4">
+                                    <div class="float-left">
                                         <div id="like_div" class="flex">
                                             <div class="flex-none w-5">
                                                 <div th:if="${likes.isEmpty()}">

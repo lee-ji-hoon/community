@@ -1,6 +1,7 @@
 package com.community.domain.board;
 
 import com.community.domain.account.Account;
+import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
 import lombok.*;
 
@@ -36,6 +37,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     private Boolean isReported;
 
