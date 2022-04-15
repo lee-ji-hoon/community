@@ -12,9 +12,6 @@
 </style>
 <body>
 
-
-
-
 <div id="wrapper">
 
     <!-- Header -->
@@ -38,6 +35,35 @@
                                 <h3 class="font-semibold text-xl text-center" th:text="${council.postTitle}"> 제목 </h3>
                                 <hr>
                                 <div th:utext="${council.postContent}">내용</div>
+                                <hr class="my-4">
+                                <div id="utextDiv" class="w-5">
+                                    <div th:if="${bookmark.isEmpty()}">
+                                        <form id="bookmarkAdd">
+                                            <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
+                                            <input type="hidden" id="postSort" name="postSort" value="council"/>
+                                            <div uk-tooltip="북마크">
+                                                <a class="bookmark_click">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkAddBtn" class="text-gray-500 font-bold" fill="currentColor">
+                                                        <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div th:if="${bookmark.isPresent()}">
+                                        <form id="bookmarkCancel">
+                                            <div uk-tooltip="북마크 해제">
+                                                <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
+                                                <input type="hidden" id="postSort" name="postSort" value="council"/>
+                                                <a class="bookmark_click">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
+                                                        <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <hr class="my-4">
                             <div>
@@ -399,6 +425,7 @@
 
 
 </div>
+<div th:replace="theme-fragments :: bookmarkAjax"></div>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
