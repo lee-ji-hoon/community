@@ -21,17 +21,7 @@ public class MarketService {
     private final MarketRepository marketRepository;
 
     public Market createNewItem(Market market, Account account, String marketImagePath, String uploadFile, String uploadFolder, String marketType) {
-        switch (marketType) {
-            case "판매" :
-                market.setMarketItemStatus(MarketItemStatus.판매중);
-                break;
-            case "구매":
-                market.setMarketItemStatus(MarketItemStatus.구매);
-                break;
-            case "나눔":
-                market.setMarketItemStatus(MarketItemStatus.나눔);
-                break;
-        }
+        newMarketSetType(market, marketType);
         market.setUploadTime(LocalDateTime.now());
         market.setSeller(account);
         market.setFileName(uploadFolder+uploadFile);
@@ -40,41 +30,55 @@ public class MarketService {
         return marketRepository.save(market);
     }
 
-    public Market createNewItemNoImage(Market market, Account account) {
+    public Market createNewItemNoImage(Market market, Account account, String marketType) {
+        newMarketSetType(market, marketType);
         market.setUploadTime(LocalDateTime.now());
-        market.setMarketItemStatus(MarketItemStatus.판매중);
         market.setSeller(account);
 
         return marketRepository.save(market);
+    }
+
+    private void newMarketSetType(Market market, String marketType) {
+        switch (marketType) {
+            case "판매" :
+                market.setMarketItemStatus(MarketItemStatus.SELLING);
+                break;
+            case "구매":
+                market.setMarketItemStatus(MarketItemStatus.PURCHASE);
+                break;
+            case "나눔":
+                market.setMarketItemStatus(MarketItemStatus.SHARE);
+                break;
+        }
     }
 
     public void updateMarketItemType(Market market, String marketType) {
         log.info("marketType : {}", marketType);
         switch (marketType){
             case "selling" :
-                market.setMarketItemStatus(MarketItemStatus.판매중);
+                market.setMarketItemStatus(MarketItemStatus.SELLING);
                 log.info("marketType 판매 중으로 변경");
                 break;
             case "sold-out":
-                market.setMarketItemStatus(MarketItemStatus.판매완료);
+                market.setMarketItemStatus(MarketItemStatus.SOLDOUT);
                 market.setPublished(false);
                 log.info("marketType 판매 완료 변경");
                 break;
             case "purchase" :
-                market.setMarketItemStatus(MarketItemStatus.구매);
+                market.setMarketItemStatus(MarketItemStatus.PURCHASE);
                 log.info("marketType 구매중으로 변경");
                 break;
             case "purchase-end":
-                market.setMarketItemStatus(MarketItemStatus.구매완료);
+                market.setMarketItemStatus(MarketItemStatus.COMPLETEPURCHASE);
                 market.setPublished(false);
                 log.info("marketType 구매 완료 변경");
                 break;
             case "share" :
-                market.setMarketItemStatus(MarketItemStatus.나눔);
+                market.setMarketItemStatus(MarketItemStatus.SHARE);
                 log.info("marketType 나눔 중으로 변경");
                 break;
             case "share-end":
-                market.setMarketItemStatus(MarketItemStatus.나눔완료);
+                market.setMarketItemStatus(MarketItemStatus.COMPLETESHARE);
                 market.setPublished(false);
                 log.info("marketType 나눔 완료 변경");
                 break;

@@ -120,7 +120,7 @@ public class MarketController {
             marketId = newItem.getMarketId();
 
         } else { // 이미지 없음
-            Market newItem = marketService.createNewItemNoImage(modelMapper.map(marketForm, Market.class), account);
+            Market newItem = marketService.createNewItemNoImage(modelMapper.map(marketForm, Market.class), account, marketForm.getMarketType());
             model.addAttribute(account);
             marketId = newItem.getMarketId();
         }
