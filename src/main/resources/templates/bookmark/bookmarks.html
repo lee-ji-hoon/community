@@ -43,10 +43,10 @@
                                 </div>
                                 <div class="card-body">
                                     <div th:if="${bookmark.getMarket() != null}">
-                                        <th:block th:if="${market.getMarketItemStatus().equals('판매중')}">
+                                        <th:block th:if="${market.marketItemStatus.SELLING}">
                                             <div class="text-xs uppercase text-blue-500 font-semibold"> 판매중 </div>
                                         </th:block>
-                                        <th:block th:if="${market.getMarketItemStatus().equals('판매완료')}">
+                                        <th:block th:if="${market.marketItemStatus.SOLDOUT}">
                                             <div class="text-xs uppercase text-red-500 font-semibold"> 판매완료 </div>
                                         </th:block>
                                     </div>
