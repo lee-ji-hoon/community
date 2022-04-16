@@ -1539,7 +1539,8 @@
                 </label>
                 <input type="file" name="file" id="study-image-file" accept="image/png, image/jpeg">
             </div>
-            <button type="submit"
+            <button th:if="${study.isManager(#authentication.principal)}"
+                    type="submit"
                     id="confirm-button"
                     class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
                 확인
