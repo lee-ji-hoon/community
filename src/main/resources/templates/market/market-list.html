@@ -63,7 +63,11 @@
                                 <div class="box">
                                     <div class="container-1">
                                         <span class="icon"><i class="fa fa-search"></i></span>
-                                        <input type="search" name="keyword" id="search" placeholder="원하는 상품을 검색해보세요." />
+
+                                        <input th:if="${type == 'sell'}" type="search" name="keyword" id="search" placeholder="판매 상품 검색" />
+                                        <input th:if="${type == 'buy'}" type="search" name="keyword" id="search" placeholder="구매 상품 검색" />
+                                        <input th:if="${type == 'share'}" type="search" name="keyword" id="search" placeholder="나눔 상품 검색" />
+                                        <input th:if="${type == 'myProduct'}" type="search" name="keyword" id="search" placeholder="내 상품 검색" />
                                     </div>
                                 </div>
                             </form>
