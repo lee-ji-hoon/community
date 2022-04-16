@@ -45,9 +45,9 @@
                                 <label for="marketType"> 카테고리 </label>
                                 <select id="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
                                         th:field="*{marketType}">
-                                    <option value="2" selected th:value="판매"> 판매 </option>
-                                    <option value="3" th:value="구매"> 구매 </option>
-                                    <option value="3" th:value="나눔"> 나눔 </option>
+                                    <option value="2" selected th:value="sell"> 판매 </option>
+                                    <option value="3" th:value="buy"> 구매 </option>
+                                    <option value="3" th:value="share"> 나눔 </option>
                                 </select>
                                 <small id="marketTypeHelp" class="form-text text-muted">
                                     어떤 방식의 상품을 등록할지 선택해주세요.

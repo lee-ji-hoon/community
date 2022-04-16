@@ -58,7 +58,7 @@
                             </a>
                         </div>
                         <div>
-                            <form th:action="@{/market/search/detail}" class="form-inline" method="get"
+                            <form th:action="@{'/market/'+ ${type} +'/search'}" class="form-inline" method="get"
                                   style=" float: right; position: relative; margin-top: 40px">
                                 <div class="box">
                                     <div class="container-1">
@@ -71,7 +71,10 @@
 
                     </div>
 
-                    <div th:replace="theme-fragments.html :: market-paging(marketType = ${marketType}, type = ${type})"></div>
+                    <div th:replace="theme-fragments.html :: market-paging(
+                        marketType = ${marketType},
+                        link = '/market/' + ${type} + '/' )">
+                    </div>
                 </div>
             </div>
         </div>
