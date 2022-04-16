@@ -26,6 +26,8 @@ public class Graduation {
     @Enumerated(EnumType.STRING)
     private GraduationType graduationType;
 
+    private String teamMember;
+
     private LocalDateTime uploadTime;
 
     // 이미지 접근 이름

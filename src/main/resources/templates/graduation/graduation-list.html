@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='graduation')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="flex justify-between relative md:mb-4 mb-3">
+                <div class="flex-1">
+                    <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
+                        <div>
+                            <h2 class="text-2xl font-semibold"> 졸업작품</h2>
+                            <p class="font-medium text-gray-500 leading-6"> 지금까지 멀티미디어를 졸업한 학생들의 작품들입니다. </p>
+                        </div>
+
+                        <div>
+                            <a th:href="@{/graduation-form}"
+                               class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="md:block hidden"> 스터디 추가 </span>
+                            </a>
+                        </div>
+                    </div>
+                    <!--스터디 뿌리기-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
