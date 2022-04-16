@@ -60,10 +60,11 @@ public class MarketRepositoryExtensionImpl extends QuerydslRepositorySupport imp
     }
 
     @Override
-    public Page<Market> findByKeyword(String keyword, Pageable pageable) {
+    public Page<Market> findByKeywordAndType(String keyword, String type, Pageable pageable) {
         QMarket market = QMarket.market;
 
         JPQLQuery<Market> query = from(market).where(market.published.isTrue()
+                        .and(market.marketType.contains(type))
                         .and(market.itemName.containsIgnoreCase(keyword))
                         .or(market.itemDetail.containsIgnoreCase(keyword)))
                         .distinct();

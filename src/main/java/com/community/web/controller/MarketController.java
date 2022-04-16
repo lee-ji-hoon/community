@@ -53,15 +53,15 @@ public class MarketController {
 
         switch (type) {
             case "sell" : // 판매
-                Page<Market> marketTypeSell = marketRepository.findByMarketType("판매", pageable);
+                Page<Market> marketTypeSell = marketRepository.findByMarketType("sell", pageable);
                 model.addAttribute("marketType", marketTypeSell);
                 break;
             case "buy" : // 구매
-                Page<Market> marketTypeBuy = marketRepository.findByMarketType("구매", pageable);
+                Page<Market> marketTypeBuy = marketRepository.findByMarketType("buy", pageable);
                 model.addAttribute("marketType", marketTypeBuy);
                 break;
             case "share" : // 나눔
-                Page<Market> marketTypeShare = marketRepository.findByMarketType("나눔", pageable);
+                Page<Market> marketTypeShare = marketRepository.findByMarketType("share", pageable);
                 model.addAttribute("marketType", marketTypeShare);
                 break;
             case "myProduct" : // 내 물건
@@ -77,12 +77,19 @@ public class MarketController {
         return "market/market-list";
     }
 
-    @GetMapping("/market/search/detail")
-    public String searchMarket(String keyword, Model model, @CurrentUser Account account,
+    @GetMapping("/market/{type}/search")
+    public String searchMarket(String keyword, Model model, @PathVariable String type,
+                               @CurrentUser Account account,
                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                        direction = Sort.Direction.ASC) Pageable pageable,
                                @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
-        Page<Market> searchMarketResult = marketRepository.findByKeyword(keyword, pageable);
+
+        Page<Market> searchMarketResult = marketRepository.findByKeywordAndType(keyword, type, pageable);
+
+        for (Market market : searchMarketResult) {
+            log.info("market 페이지 : {}", market);
+        }
+
         model.addAttribute(account);
         model.addAttribute("searchMarketResult", searchMarketResult);
         model.addAttribute("pageNo", page);
