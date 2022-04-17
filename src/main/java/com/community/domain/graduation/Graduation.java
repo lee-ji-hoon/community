@@ -23,6 +23,8 @@ public class Graduation {
 
     private String description;
 
+    private String path;
+
     @Enumerated(EnumType.STRING)
     private GraduationType graduationType;
 
