@@ -38,12 +38,11 @@ public class LikeApiController {
     // 좋아요 관련 내용
     @ResponseBody
     @RequestMapping(value = "/like/add")
-    public int addLikeLink(@RequestParam("like_postId") Long like_postId,
+    public void addLikeLink(@RequestParam("like_postId") Long like_postId,
                            @RequestParam("like_postSort") String like_postSort,
                            @CurrentUser Account account){
         log.info("좋아요 호출");
         Likes likes = likeService.addLike(account, like_postSort, like_postId);
-        List<Likes> likesList;
         switch (like_postSort) {
             case "board":
                 Board currentBoard = boardRepository.findByBid(like_postId);
@@ -51,8 +50,7 @@ public class LikeApiController {
                     log.info("board 좋아요 알림 이벤트 실행");
                     applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));
                 }
-                likesList = likeRepository.findAllByBoard(currentBoard);
-                return likesList.size();
+                break;
 
             case "council":
                 Council currentCouncil = councilRepository.findByCid(like_postId);
@@ -60,27 +58,17 @@ public class LikeApiController {
                     log.info("council 좋아요 알림 이벤트 실행");
                     applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));
                 }
-                likesList = likeRepository.findAllByCouncil(currentCouncil);
-                return likesList.size();
+                break;
         }
-        return 0;
     }
 
     @ResponseBody
     @RequestMapping(value = "/like/delete")
-    public int removeLikeLink(@RequestParam("like_postId") Long like_postId,
+    public void removeLikeLink(@RequestParam("like_postId") Long like_postId,
                               @RequestParam("like_postSort") String like_postSort,
                               @CurrentUser Account account){
         log.info("좋아요 취소 호출");
         likeService.deleteLike(account, like_postSort, like_postId);
-        switch (like_postSort) {
-            case "board":
-                Board currentBoard = boardRepository.findByBid(like_postId);
-                return likeRepository.findAllByBoard(currentBoard).size();
-            case "council":
-                Council currentCouncil = councilRepository.findByCid(like_postId);
-                return likeRepository.findAllByCouncil(currentCouncil).size();
-        }
-        return 0;
+
     }
 }
