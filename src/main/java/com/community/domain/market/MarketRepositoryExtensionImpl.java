@@ -58,4 +58,20 @@ public class MarketRepositoryExtensionImpl extends QuerydslRepositorySupport imp
 
         return new PageImpl<>(marketQueryResults.getResults(), pageable, marketQueryResults.getTotal());
     }
+
+    @Override
+    public Page<Market> findByKeywordAndType(String keyword, String type, Pageable pageable) {
+        QMarket market = QMarket.market;
+
+        JPQLQuery<Market> query = from(market).where(market.published.isTrue()
+                        .and(market.marketType.contains(type))
+                        .and(market.itemName.containsIgnoreCase(keyword))
+                        .or(market.itemDetail.containsIgnoreCase(keyword)))
+                        .distinct();
+
+        JPQLQuery<Market> marketJPQLQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<Market> marketQueryResults = marketJPQLQuery.fetchResults();
+
+        return new PageImpl<>(marketQueryResults.getResults(), pageable, marketQueryResults.getTotal());
+    }
 }
