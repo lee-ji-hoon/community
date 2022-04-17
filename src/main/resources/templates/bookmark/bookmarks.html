@@ -212,16 +212,24 @@
                                         <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">스터디</div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="text-xs uppercase text-blue-500 font-semibold">Uk brands</div>
+                                        <!--<div th:if="${board.getBoardTitle().equals('자유')}">
+                                            <div class="text-xs uppercase text-blue-500 font-semibold">자유</div>
+                                        </div>
+                                        <div th:if="${board.getBoardTitle().equals('정보')}">
+                                            <div class="text-xs uppercase text-purple-500 font-semibold">정보</div>
+                                        </div>
+                                        <div th:if="${board.getBoardTitle().equals('질문')}">
+                                            <div class="text-xs uppercase text-yellow-500 font-semibold">질문</div>
+                                        </div>-->
                                         <a th:href="@{/study/{path}(path = ${study.getPath()})}" class="box-title  mb-1" th:text="${study.getTitle()}"></a>
                                         <div class="text-sm font-medium mt-1">
                                             작성자
                                         </div>
 
                                         <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
-                                            <div> 15 intersted</div>
+                                            <div><ion-icon name="bookmark-outline" class="mr-2"></ion-icon><span th:text="${study.getBookmarkList().size()}"></span></div>
                                             <div>·</div>
-                                            <div> 2 going </div>
+                                            <div><ion-icon name="people-outline" class="mr-2"></ion-icon><span th:text="${study.memberCount}"></span></div>
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
