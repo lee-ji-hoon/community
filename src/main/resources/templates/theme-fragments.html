@@ -1406,6 +1406,49 @@
         });
     </script>
 </div>
+<div th:fragment="bookmarkListDeleteAjax">
+    <script>
+        // 댓글 삭제
+        let deleteBookmarkBtn = {
+            deleteBookmark: function (postId, postSort) {
+                swal({
+                    title: "북마크를 제거하시겠습니까?",
+                    text: "삭제된 북마크 내역은 복구할 수 없습니다.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        window.addEventListener('keydown', function (e){
+                            if (e.keyCode == 13) {
+                                swal("엔터키는 사용할 수 없습니다.");
+                            }
+                        })
+                        if (willDelete) {
+                            $.ajax({
+                                url:'/bookmark/delete',
+                                type:'get',
+                                data : (postSort === 'market') ? $(`#bookmarkCancelMarket${postId}`).serialize() :
+                                    (postSort === 'board') ? $(`#bookmarkCancelBoard${postId}`).serialize() :
+                                        (postSort === 'study') ? $(`#bookmarkCancelStudy${postId}`).serialize() :
+                                            (postSort === 'council') ? $(`#bookmarkCancelCouncil${postId}`).serialize() : 0,
+                                success : function (){
+                                    console.log("북마크 취소");
+                                    $('#blk_div').load(location.href+' #blk_div');
+                                },
+                            });
+                            swal("북마크가 삭제되었습니다.", {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("북마크가 삭제되지 않았습니다. 다시 시도해주세요.");
+                        }
+                    });
+            }
+        }
+    </script>
+</div>
+
 <div th:fragment="likeAjax">
     <script>
         $(document).on('click', '.like_heart_click', function() {

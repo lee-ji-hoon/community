@@ -74,11 +74,11 @@
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
-                                            <form id="bookmarkCancel">
+                                            <form th:id="|bookmarkCancelMarket${market.marketId}|">
                                                 <input type="hidden" id="postId" name="postId" th:value="${market.getMarketId()}"/>
                                                 <input type="hidden" id="postSort" name="postSort" value="market"/>
                                             </form>
-                                            <a href="#"
+                                            <a href="#" th:onclick="|deleteBookmarkBtn.deleteBookmark(${market.marketId}, 'market')|"
                                                class="bookmark_click bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" id="bookmarkDelBtn"
                                                      class="w-5 mr-1.5">
@@ -127,11 +127,11 @@
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
-                                            <form id="bookmarkCancel">
+                                            <form th:id="|bookmarkCancelBoard${board.bid}|">
                                                 <input type="hidden" id="postId" name="postId" th:value="${board.bid}"/>
                                                 <input type="hidden" id="postSort" name="postSort" value="board"/>
                                             </form>
-                                            <a href="#"
+                                            <a href="#" th:onclick="|deleteBookmarkBtn.deleteBookmark(${board.bid}, 'board')|"
                                                class="bookmark_click bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" id="bookmarkDelBtn"
                                                      class="w-5 mr-1.5">
@@ -179,11 +179,11 @@
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
-                                            <form id="bookmarkCancel">
+                                            <form th:id="|bookmarkCancelCouncil${council.cid}|">
                                                 <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
                                                 <input type="hidden" id="postSort" name="postSort" value="council"/>
                                             </form>
-                                            <a href="#"
+                                            <a href="#" th:onclick="|deleteBookmarkBtn.deleteBookmark(${council.cid}, 'council')|"
                                                class="bookmark_click bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" id="bookmarkDelBtn"
                                                      class="w-5 mr-1.5">
@@ -213,13 +213,13 @@
                                     </div>
                                     <div class="card-body">
                                         <!--<div th:if="${board.getBoardTitle().equals('자유')}">
-                                            <div class="text-xs uppercase text-blue-500 font-semibold">자유</div>
+                                            <div class="text-xs uppercase text-blue-500 font-semibold">모집중</div>
                                         </div>
                                         <div th:if="${board.getBoardTitle().equals('정보')}">
-                                            <div class="text-xs uppercase text-purple-500 font-semibold">정보</div>
+                                            <div class="text-xs uppercase text-purple-500 font-semibold">모집종료</div>
                                         </div>
                                         <div th:if="${board.getBoardTitle().equals('질문')}">
-                                            <div class="text-xs uppercase text-yellow-500 font-semibold">질문</div>
+                                            <div class="text-xs uppercase text-yellow-500 font-semibold">스터디 종료</div>
                                         </div>-->
                                         <a th:href="@{/study/{path}(path = ${study.getPath()})}" class="box-title  mb-1" th:text="${study.getTitle()}"></a>
                                         <div class="text-sm font-medium mt-1">
@@ -233,11 +233,11 @@
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
-                                            <form id="bookmarkCancel">
+                                            <form th:id="|bookmarkCancelStudy${study.id}|">
                                                 <input type="hidden" id="postId" name="postId" th:value="${study.getId()}"/>
                                                 <input type="hidden" id="postSort" name="postSort" value="study"/>
                                             </form>
-                                            <a href="#"
+                                            <a href="#" th:onclick="|deleteBookmarkBtn.deleteBookmark(${study.id}, 'study')|"
                                                class="bookmark_click bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" id="bookmarkDelBtn"
                                                      class="w-5 mr-1.5">
@@ -397,7 +397,7 @@
 
 </div>
 
-<div th:replace="theme-fragments :: bookmarkAjax"></div>
+<div th:replace="theme-fragments :: bookmarkListDeleteAjax"></div>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script type="application/javascript">
