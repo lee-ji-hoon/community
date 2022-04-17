@@ -2,6 +2,7 @@ package com.community.domain.market;
 
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
+import com.community.domain.bookmark.Bookmark;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -38,6 +39,9 @@ public class Market {
 
     @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @Lob
     @Type(type = "text")

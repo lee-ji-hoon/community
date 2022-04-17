@@ -2,6 +2,9 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.account.CurrentUser;
+import com.community.domain.council.Council;
+import com.community.domain.council.CouncilRepository;
 import com.community.infra.alarm.LikeCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
@@ -29,64 +32,43 @@ public class LikeApiController {
     private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
+    private final CouncilRepository councilRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     // 좋아요 관련 내용
     @ResponseBody
-    @RequestMapping(value = "/board/detail/like")
-    public int addLikeLink(@RequestParam("like_boardId") Long like_boardId,
-                           @RequestParam("like_accountId") Long like_accountId){
+    @RequestMapping(value = "/like/add")
+    public void addLikeLink(@RequestParam("like_postId") Long like_postId,
+                           @RequestParam("like_postSort") String like_postSort,
+                           @CurrentUser Account account){
         log.info("좋아요 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            Account writer = board.getWriter();
-            Likes likes = addLike(account, like_boardId);
+        Likes likes = likeService.addLike(account, like_postSort, like_postId);
+        switch (like_postSort) {
+            case "board":
+                Board currentBoard = boardRepository.findByBid(like_postId);
+                if(!currentBoard.getWriter().getId().equals(account.getId())) {
+                    log.info("board 좋아요 알림 이벤트 실행");
+                    applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));
+                }
+                break;
 
-            if(!writer.getId().equals(findAccount.get().getId())) {
-                log.info("board 좋아요 알림 이벤트 실행");
-                applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));
-            }
+            case "council":
+                Council currentCouncil = councilRepository.findByCid(like_postId);
+                if(!currentCouncil.getPostWriter().getId().equals(account.getId())) {
+                    log.info("council 좋아요 알림 이벤트 실행");
+                    applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));
+                }
+                break;
         }
-        List<Likes> likes = likeRepository.findAllByBoard(board);
-        int like_size = likes.size();
-
-        return like_size;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/board/detail/like-cancel")
-    public int removeLikeLink(@RequestParam("like_boardId") Long like_boardId, @RequestParam("like_accountId") Long like_accountId){
+    @RequestMapping(value = "/like/delete")
+    public void removeLikeLink(@RequestParam("like_postId") Long like_postId,
+                              @RequestParam("like_postSort") String like_postSort,
+                              @CurrentUser Account account){
         log.info("좋아요 취소 호출");
-        Board board = boardRepository.findByBid(like_boardId);
-        Optional<Account> findAccount = accountRepository.findById(like_accountId);
-        if (findAccount.isPresent()) {
-            String accountEmail = findAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            boolean existLike = likeRepository.existsByAccountAndBoard(account, board);
-            if (existLike) {
-                Likes likes = likeRepository.findByBoardAndAccount(board, account);
-                log.info("likeId = " + likes);
-                likeRepository.delete(likes);
-                List<Likes> likesList = likeRepository.findAllByBoard(board);
-                int likesSize = likesList.size();
-                return likesSize;
-            }
-        }
-        List<Likes> likesList = likeRepository.findAllByBoard(board);
-        int like_size = likesList.size();
-        return like_size;
-    }
+        likeService.deleteLike(account, like_postSort, like_postId);
 
-    public Likes addLike(Account account, Long boardId) {
-        Likes likes = likeService.addLike(account, boardId);
-        if (likes != null) {
-            new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return likes;
     }
 }

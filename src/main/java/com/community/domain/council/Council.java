@@ -3,6 +3,7 @@ package com.community.domain.council;
 import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
 import com.community.domain.bookmark.Bookmark;
+import com.community.domain.likes.Likes;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,6 +43,9 @@ public class Council {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "postWriter")
     private Account postWriter;
+
+    @OneToMany(mappedBy = "council", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "council", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>();
