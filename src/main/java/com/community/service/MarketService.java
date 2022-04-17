@@ -21,7 +21,7 @@ public class MarketService {
     private final MarketRepository marketRepository;
 
     public Market createNewItem(Market market, Account account, String marketImagePath, String uploadFile, String uploadFolder, String marketType) {
-        newMarketSetType(market, marketType);
+        marketSetType(market, marketType);
         market.setUploadTime(LocalDateTime.now());
         market.setSeller(account);
         market.setFileName(uploadFolder+uploadFile);
@@ -31,22 +31,22 @@ public class MarketService {
     }
 
     public Market createNewItemNoImage(Market market, Account account, String marketType) {
-        newMarketSetType(market, marketType);
+        marketSetType(market, marketType);
         market.setUploadTime(LocalDateTime.now());
         market.setSeller(account);
 
         return marketRepository.save(market);
     }
 
-    private void newMarketSetType(Market market, String marketType) {
+    private void marketSetType(Market market, String marketType) {
         switch (marketType) {
-            case "판매" :
+            case "sell" :
                 market.setMarketItemStatus(MarketItemStatus.SELLING);
                 break;
-            case "구매":
+            case "buy":
                 market.setMarketItemStatus(MarketItemStatus.PURCHASE);
                 break;
-            case "나눔":
+            case "share":
                 market.setMarketItemStatus(MarketItemStatus.SHARE);
                 break;
         }
@@ -98,7 +98,9 @@ public class MarketService {
         marketRepository.save(market);
     }
 
-    public void updateMarket(MarketForm marketForm, Market market, Account account) {
+    public void updateMarket(MarketForm marketForm, Market market, Account account, String marketType) {
+        marketSetType(market, marketType);
+
         market.setPrice(marketForm.getPrice());
         market.setItemDetail(marketForm.getItemDetail());
         market.setItemName(marketForm.getItemName());

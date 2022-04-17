@@ -57,7 +57,9 @@
                                     </a>
                                     <div class="flex-1 font-semibold capitalize">
                                         <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
-                                        <div th:text="${product.marketType}" class="text-sm"></div>
+                                        <div th:if="${product.marketType == 'sell'}" class="text-sm">판매</div>
+                                        <div th:if="${product.marketType == 'buy'}" class="text-sm">구매</div>
+                                        <div th:if="${product.marketType == 'share'}" class="text-sm">나눔</div>
                                         <span th:text="${#temporals.format(product.getUploadTime,  'yyyy-MM-dd')}"></span>
                                     </div>
                                 </div>
@@ -153,8 +155,18 @@
                                     </div>
 
                                     <div class="flex">
-                                        <span class="font-semibold text-yellow-500 mr-2" th:text="${product.marketItemStatus}">판매 중</span>
-    <!--                                    <span class="font-semibold text-yellow-500 mr-2" th:text="${product.byeAndSell}">판매완료 </span>-->
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.SELLING)}"
+                                              class="font-semibold text-yellow-500 mr-2">판매중</span>
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.SHARE)}"
+                                              class="font-semibold text-yellow-500 mr-2">나눔진행중</span>
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.PURCHASE)}"
+                                              class="font-semibold text-yellow-500 mr-2">구매진행중</span>
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.SOLDOUT)}"
+                                              class="font-semibold text-yellow-500 mr-2">판매완료</span>
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.COMPLETEPURCHASE)}"
+                                              class="font-semibold text-yellow-500 mr-2">구매완료</span>
+                                        <span th:if="${product.marketItemStatus.equals(product.marketItemStatus.COMPLETESHARE)}"
+                                              class="font-semibold text-yellow-500 mr-2">나눔완료</span>
                                     </div>
                                 </div>
                                 <th:block th:if="${product.seller != account}">
@@ -228,8 +240,8 @@
                                 </th:block>
                             </div>
                             <hr class="mb-4">
-                            <div id="blk_div" class="pl-3 w-5">
-                                <div th:if="${bookmark.isEmpty()}">
+                            <div id="blk_div">
+                                <div class="ml-3" th:if="${bookmark.isEmpty()}">
                                     <form id="bookmarkAdd">
                                         <input type="hidden" id="postId" name="postId" th:value="${product.getMarketId()}"/>
                                         <input type="hidden" id="postSort" name="postSort" value="market"/>
@@ -242,11 +254,11 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div th:if="${bookmark.isPresent()}">
+                                <div class="ml-3" th:if="${bookmark.isPresent()}">
                                     <form id="bookmarkCancel">
+                                        <input type="hidden" id="postId" name="postId" th:value="${product.getMarketId()}"/>
+                                        <input type="hidden" id="postSort" name="postSort" value="market"/>
                                         <div uk-tooltip="북마크 해제">
-                                            <input type="hidden" id="postId" name="postId" th:value="${product.getMarketId()}"/>
-                                            <input type="hidden" id="postSort" name="postSort" value="market"/>
                                             <a class="bookmark_click">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
                                                     <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
@@ -362,9 +374,9 @@
                                         <label for="marketType"> 카테고리 </label>
                                         <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
                                                 th:filed="*{marketType}">
-                                            <option value="판매" th:selected="${product.marketType}=='판매'" th:value="판매"> 판매 </option>
-                                            <option value="구매" th:selected="${product.marketType}=='구매'" th:value="구매"> 구매 </option>
-                                            <option value="나눔" th:selected="${product.marketType}=='나눔'" th:value="나눔"> 나눔 </option>
+                                            <option value="판매" th:selected="${product.marketType}=='sell'" th:value="sell"> 판매 </option>
+                                            <option value="구매" th:selected="${product.marketType}=='buy'" th:value="buy"> 구매 </option>
+                                            <option value="나눔" th:selected="${product.marketType}=='share'" th:value="share"> 나눔 </option>
                                         </select>
                                         <small id="marketTypeHelp" class="form-text text-muted">
                                             어떤 방식의 상품을 등록할지 선택해주세요.
