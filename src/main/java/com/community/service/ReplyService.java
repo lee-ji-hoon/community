@@ -3,6 +3,8 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
+import com.community.domain.council.CouncilRepository;
+import com.community.domain.market.MarketRepository;
 import com.community.web.dto.ReplyForm;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.ReplyRepository;
@@ -26,6 +28,34 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
     private final BoardRepository boardRepository;
+    private final CouncilRepository councilRepository;
+    private final MarketRepository marketRepository;
+
+    public Reply addReply(Account account, String postSort, Long postId, String content) {
+        Reply reply = Reply.builder()
+                .account(account)
+                .content(content)
+                .isReported(false)
+                .reportCount(0)
+                .uploadTime(LocalDateTime.now())
+                .build();
+
+        switch (postSort) {
+            case "market":
+                Market currentMarket = marketRepository.findByMarketId(postId);
+                reply.setMarket(currentMarket);
+                break;
+            case "board":
+                Board currentBoard = boardRepository.findByBid(postId);
+                reply.setBoard(currentBoard);
+                break;
+            case "council":
+                Council currentCouncil = councilRepository.findByCid(postId);
+                reply.setCouncil(currentCouncil);
+                break;
+        }
+        return replyRepository.save(reply);
+    }
 
     public Reply saveReply(@Valid ReplyForm replyForm, Account account, Board board) {
         Reply reply = Reply.builder()
