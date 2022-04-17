@@ -1,6 +1,7 @@
 package com.community.domain.graduation;
 
 import com.community.domain.account.Account;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.LocalDateTime;
@@ -25,12 +26,13 @@ public class Graduation {
 
     private String path;
 
-    @Enumerated(EnumType.STRING)
-    private GraduationType graduationType;
+    private String graduationType;
 
     private String teamMember;
 
     private LocalDateTime uploadTime;
+
+    private int graduationDate;
 
     // 이미지 접근 이름
     private String imageName;
@@ -40,6 +42,6 @@ public class Graduation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
-    private Account toAccount;
+    private Account account;
 
 }

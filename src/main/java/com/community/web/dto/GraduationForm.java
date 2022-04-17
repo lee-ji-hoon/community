@@ -1,12 +1,10 @@
 package com.community.web.dto;
 
-import com.community.domain.graduation.GraduationType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Data
 public class GraduationForm {
@@ -15,13 +13,16 @@ public class GraduationForm {
     @Length(max = 50)
     private String title;
 
+    private int graduationDate;
+
     @NotBlank
     private String description;
+
+    private String path;
 
     private String teamName;
 
     private String teamMember;
 
-    @Enumerated(EnumType.STRING)
-    private GraduationType graduationType;
+    private String graduationType;
 }

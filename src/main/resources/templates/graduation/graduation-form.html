@@ -15,8 +15,9 @@
     <!-- Main Contents -->
     <div class="main_content">
         <form class="needs-validation col-sm-10"
-              th:action="@{/graduation-form}"
+              th:action="@{/graduation-new}"
               th:object="${graduationForm}"
+              method="post"
               novalidate>
             <div class="mcontainer">
                 <div class="breadcrumb-area py-0">
@@ -84,22 +85,50 @@
                             </div>
 
                             <div class="col-span-2">
-                                <label for="graduationType"> 스터디 방식</label>
+                                <label for="path" class="font-bold"> 졸업작품 링크(주소)</label>
+                                <input id="path" type="text" th:field="*{path}"
+                                       class="shadow-none with-border form-control"
+                                       placeholder="프로젝트 접근 주소(링크)를 작성해주세요." aria-describedby="pathHelp"
+                                       required max="100">
+                                <small id="pathHelp" class="form-text text-muted">
+                                    팀 멤버들을 적어주세요.
+                                </small>
+                                <small class="invalid-feedback">주소를 다시 작성해주세요. </small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('path')}"
+                                   th:errors="*{path}">path Error</p>
+                            </div>
+
+                            <div class="">
+                                <label for="graduationType" class="font-bold"> 졸업작품 전시 종류</label>
 
                                 <select th:field="*{graduationType}" id="graduationType" name="relationship"
                                         class="selectpicker form-control"
                                         aria-describedby="graduationTypeHelp" required>
-                                    <option class="" th:value="${WEB}" selected>웹</option>
-                                    <option class="" th:value="${MOBILE}">모바일</option>
-                                    <option class="" th:value="${VIDEO}">영상</option>
-                                    <option class="" th:value="${VR_AR}">VR/AR</option>
+                                    <option class="" th:value="${'WEB'}" selected>웹</option>
+                                    <option class="" th:value="${'MOBILE'}">모바일</option>
+                                    <option class="" th:value="${'VIDEO'}">영상</option>
+                                    <option class="" th:value="${'VR_AR'}">VR/AR</option>
                                 </select>
                                 <small id="studyMethodHelp" class="form-text text-muted">
-                                    스터디 방식을 선택해주세요. 중복 선택 가능합니다.
+                                    웹 / 모바일 / 영상 / VR/AR 중에 선택해주세요.
                                 </small>
-                                <small class="invalid-feedback">졸업작품 .</small>
+                                <small class="invalid-feedback">졸업작품 종목을 다시 선택해주세요.</small>
                                 <p class="form-text text-danger" th:if="${#fields.hasErrors('graduationType')}"
                                    th:errors="*{graduationType}">studyMethod Error</p>
+                            </div>
+                            <div>
+                                <label for="graduationDate" class="font-bold">졸업작품 연도</label>
+                                <select th:field="*{graduationDate}" id="graduationDate" name="relationship"
+                                        class="selectpicker form-control"
+                                        aria-describedby="graduationDateHelp" required>
+                                    <option th:each="date : ${#numbers.sequence(10, 30)}" th:value="${date}" th:text="'20'+${date}+'년'"></option>
+                                </select>
+                                <small id="graduationDateHelp" class="form-text text-muted">
+                                    졸업작품을 전시한 연도를 선택해주세요.
+                                </small>
+                                <small class="invalid-feedback"> 연도를 다시 확인해주세요..</small>
+                                <p class="form-text text-danger" th:if="${#fields.hasErrors('graduationDate')}"
+                                   th:errors="*{graduationDate}">graduationDate Error</p>
                             </div>
 
                             <div class="col-span-2">
@@ -115,6 +144,11 @@
                                 <p class="form-text text-danger" th:if="${#fields.hasErrors('description')}"
                                    th:errors="*{description}">description Error</p>
                             </div>
+
+                        </div>
+                        <div class="bg-gray-10 p-3 flex justify-end space-x-1">
+                            <button type="reset" class="p-2 px-4 rounded bg-red-600 text-white"> 취소 </button>
+                            <button type="submit" class="button bg-blue-600"> 저장 </button>
                         </div>
                     </div>
 
