@@ -2,6 +2,7 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.account.CurrentUser;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
@@ -44,105 +45,36 @@ public class ReplyController {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 
-    // 댓글 관련 내용
     @ResponseBody
-    @RequestMapping(value = "/board/detail/reply")
-    public int addBoardReplyLink(@RequestParam(value = "r_board_id") Long r_board_id,
-                           @RequestParam(value = "r_account_id") Long r_account_id,
-                           @RequestParam(value = "r_content") String r_content,
-                           ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_board_id + "r_board_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Board currentBoard = boardRepository.findByBid(r_board_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            Reply reply = replyService.saveReply(replyForm, account, currentBoard);
-
-            Account writer = currentBoard.getWriter();
-            log.info("manager : {}",writer.getId());
-            log.info("account : {}",currentAccount.get().getId());
-
-            if(!writer.getId().equals(currentAccount.get().getId())) {
-                log.info("board 댓글 알림 이벤트 실행");
-                applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
-            }
-
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
+    @RequestMapping(value = "/reply/add")
+    public void addReplyAjax(@RequestParam(value = "r_postId") Long r_postId,
+                             @RequestParam(value = "r_postSort") String r_postSort,
+                             @RequestParam(value = "r_content") String r_content,
+                             @CurrentUser Account account) {
+        Reply reply = replyService.addReply(account, r_postSort, r_postId, r_content);
+        switch (r_postSort) {
+            case "board":
+                Board currentBoard = boardRepository.findByBid(r_postId);
+                if(!currentBoard.getWriter().getId().equals(account.getId())) {
+                    log.info("board 댓글 알림 이벤트 실행");
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+                }
+                break;
+            case "council":
+                Council currentCouncil = councilRepository.findByCid(r_postId);
+                if(!currentCouncil.getPostWriter().getId().equals(account.getId())) {
+                    log.info("board 댓글 알림 이벤트 실행");
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+                }
+                break;
+            case "market":
+                Market currentMarket = marketRepository.findByMarketId(r_postId);
+                if(!currentMarket.getSeller().getId().equals(account.getId())) {
+                    log.info("board 댓글 알림 이벤트 실행");
+                    applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
+                }
+                break;
         }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    // 중고거래 댓글 추가 시작
-    @ResponseBody
-    @RequestMapping(value = "/market/detail/reply")
-    public int addMarketReply(@RequestParam(value = "r_board_id") Long r_board_id,
-                              @RequestParam(value = "r_account_id") Long r_account_id,
-                              @RequestParam(value = "r_content") String r_content,
-                              ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_board_id + "r_board_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-
-        replyForm.setContent(r_content);
-        Market byMarketId = marketRepository.findByMarketId(r_board_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            Reply reply = replyService.saveMarketReply(replyForm, account, byMarketId);
-            List<Reply> replies = replyRepository.findAll();
-
-            Account writer = byMarketId.getSeller();
-            log.info("manager : {}",writer.getId());
-            log.info("account : {}",currentAccount.get().getId());
-
-            if(!writer.getId().equals(currentAccount.get().getId())) {
-                log.info("market 댓글 알림 이벤트 실행");
-                applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));
-            }
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/council/detail/reply")
-    public int addCouncilReplyLink(@RequestParam(value = "r_council_id") Long r_council_id,
-                           @RequestParam(value = "r_account_id") Long r_account_id,
-                           @RequestParam(value = "r_content") String r_content,
-                           ReplyForm replyForm) throws IOException {
-        log.info("댓글 작성 호출");
-        log.info(r_council_id + "r_council_id");
-        log.info(r_account_id + "r_account_id");
-        log.info(r_content + "r_content");
-        replyForm.setContent(r_content);
-        Council currentPost = councilRepository.findByCid(r_council_id);
-        Optional<Account> currentAccount = accountRepository.findById(r_account_id);
-        if (currentAccount.isPresent()) {
-            String accountEmail = currentAccount.get().getEmail();
-            Account account = accountRepository.findByEmail(accountEmail);
-            replyService.saveCouncilReply(replyForm, account, currentPost);
-            List<Reply> replies = replyRepository.findAll();
-            int reply_size = replies.size();
-            return reply_size;
-        }
-        List<Reply> replies = replyRepository.findAll();
-        int reply_size = replies.size();
-        return reply_size;
     }
 
     @ResponseBody
