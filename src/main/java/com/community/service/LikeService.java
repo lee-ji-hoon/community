@@ -46,21 +46,18 @@ public class LikeService {
     }
 
     public void deleteLike(Account account, String postSort, Long postId) {
+        Likes likes;
         switch (postSort) {
             case "board":
                 Board currentBoard = boardRepository.findByBid(postId);
-                // 중복 좋아요 방지
-                if(isNotAlreadyBoardLike(account, currentBoard)) {
-                    Likes likes = likeRepository.findByBoardAndAccount(currentBoard, account);
-                    likeRepository.delete(likes);
-                }
+                likes = likeRepository.findByBoardAndAccount(currentBoard, account);
+                likeRepository.delete(likes);
+                break;
             case "council":
                 Council currentCouncil = councilRepository.findByCid(postId);
-                // 중복 좋아요 방지
-                if(isNotAlreadyCouncilLike(account, currentCouncil)) {
-                    Likes likes = likeRepository.findByCouncilAndAccount(currentCouncil, account);
-                    likeRepository.delete(likes);
-                }
+                likes = likeRepository.findByCouncilAndAccount(currentCouncil, account);
+                likeRepository.delete(likes);
+                break;
         }
     }
 
