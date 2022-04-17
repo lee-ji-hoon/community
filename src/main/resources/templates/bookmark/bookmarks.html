@@ -43,23 +43,33 @@
                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5">장터</div>
                                     </div>
                                     <div class="card-body">
-                                        <div th:if="${bookmark.getMarket() != null}">
-                                            <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.SELLING)}">
-                                                <div class="text-xs uppercase text-blue-500 font-semibold"> 판매중 </div>
-                                            </th:block>
-                                            <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.SOLDOUT)}">
-                                                <div class="text-xs uppercase text-red-500 font-semibold"> 판매완료 </div>
-                                            </th:block>
-                                        </div>
+                                        <!--<th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.SELLING)}">
+                                            <div class="text-xs uppercase text-blue-500 font-semibold"> 판매중 </div>
+                                        </th:block>
+                                        <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.SHARE)}">
+                                            <div class="text-xs uppercase text-blue-500 font-semibold"> 나눔 </div>
+                                        </th:block>
+                                        <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.PURCHASE)}">
+                                            <div class="text-xs uppercase text-blue-500 font-semibold"> 구매 </div>
+                                        </th:block>
+                                        <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.SOLDOUT)}">
+                                            <div class="text-xs uppercase text-red-500 font-semibold"> 판매완료 </div>
+                                        </th:block>
+                                        <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.COMPLETESHARE)}">
+                                            <div class="text-xs uppercase text-red-500 font-semibold"> 나눔완료 </div>
+                                        </th:block>
+                                        <th:block th:if="${market.marketItemStatus.equals(market.marketItemStatus.COMPLETEPURCHASE)}">
+                                            <div class="text-xs uppercase text-red-500 font-semibold"> 구매완료 </div>
+                                        </th:block>-->
                                         <a th:href="@{/market/detail/{marketId}(marketId = ${market.getMarketId()})}" class="box-title mb-1" th:text="${market.getItemName()}">제목</a>
                                         <div class="text-sm font-medium mt-1">
                                             <a th:href="@{/profile/{nickname}/view(nickname = ${market.getSeller().getNickname()})}" th:text="${market.getSeller().getNickname()}"></a>
                                         </div>
 
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div> 15 intersted</div>
+                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
+                                            <div><ion-icon name="bookmark-outline" class="mr-2"></ion-icon><span th:text="${market.getBookmarkList().size()}"></span></div>
                                             <div>·</div>
-                                            <div><ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon><span th:text="${market.getReplyList().size()}"></span></div>
+                                            <div><ion-icon name="chatbubble-ellipses-outline" class="mr-2"></ion-icon><span th:text="${market.getReplyList().size()}"></span></div>
                                         </div>
 
                                         <div class="flex mt-2 space-x-2 text-sm">
@@ -109,8 +119,8 @@
                                             <a th:href="@{/profile/{nickname}/view(nickname = ${board.getWriter().getNickname()})}" th:text="${board.getWriter().getNickname()}"></a>
                                         </div>
 
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div><ion-icon name="heart-outline" class="mr-2"></ion-icon><span class="text-xs" th:text="${board.getLikesList().size()}"></span></div>
+                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
+                                            <div><ion-icon name="heart-outline" class="mr-2"></ion-icon><span th:text="${board.getLikesList().size()}"></span></div>
                                             <div>·</div>
                                             <div><ion-icon name="chatbubble-ellipses-outline" class="mr-2"></ion-icon><span th:text="${board.getReplyList().size()}"></span></div>
                                         </div>
@@ -161,8 +171,8 @@
                                             <a th:href="@{/profile/{nickname}/view(nickname = ${council.getPostWriter().getNickname()})}" th:text="${council.getPostWriter().getNickname()}"></a>
                                         </div>
 
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
-                                            <div> 15 intersted</div>
+                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
+                                            <div><ion-icon name="heart-outline" class="mr-2"></ion-icon><span th:text="${council.getLikesList().size()}"></span></div>
                                             <div>·</div>
                                             <div><ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon><span th:text="${council.getReplyList().size()}"></span></div>
                                         </div>
@@ -202,10 +212,12 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="text-xs uppercase text-blue-500 font-semibold">Uk brands</div>
-                                        <a href="timeline-event.html" class="box-title  mb-1"> Safety and Flight </a>
-                                        <div class="text-sm font-medium mt-1">London</div>
+                                        <a th:href="@{/study/{path}(path = ${study.getPath()})}" class="box-title  mb-1" th:text="${study.getTitle()}"></a>
+                                        <div class="text-sm font-medium mt-1">
+                                            작성자
+                                        </div>
 
-                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize">
+                                        <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
                                             <div> 15 intersted</div>
                                             <div>·</div>
                                             <div> 2 going </div>
