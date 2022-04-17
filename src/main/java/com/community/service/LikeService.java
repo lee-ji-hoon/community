@@ -32,17 +32,17 @@ public class LikeService {
                 // 중복 좋아요 방지
                 if(isNotAlreadyBoardLike(account, currentBoard)) {
                     likes.setBoard(currentBoard);
-                    return likeRepository.save(likes);
+                    break;
                 }
             case "council":
                 Council currentCouncil = councilRepository.findByCid(postId);
                 // 중복 좋아요 방지
                 if(isNotAlreadyCouncilLike(account, currentCouncil)) {
                     likes.setCouncil(currentCouncil);
-                    return likeRepository.save(likes);
+                    break;
                 }
         }
-        return likes;
+        return likeRepository.save(likes);
     }
 
     public void deleteLike(Account account, String postSort, Long postId) {
