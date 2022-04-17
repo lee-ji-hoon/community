@@ -2,6 +2,7 @@ package com.community.domain.study;
 
 import com.community.domain.account.UserAccount;
 import com.community.domain.account.Account;
+import com.community.domain.bookmark.Bookmark;
 import com.community.domain.tag.Tag;
 import lombok.*;
 
@@ -89,6 +90,9 @@ public class Study {
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Meetings> meetingsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     private LocalDate limitStudyDate;
 
