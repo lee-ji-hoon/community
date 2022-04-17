@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='market')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="breadcrumb-area py-0">
+                <div class="breadcrumb">
+                    <ul class="m-0">
+                        <li>
+                            <a th:href="@{/market/sell}">장터</a>
+                        </li>
+                        <li>
+                            <a style="font-weight: bold" href="#">검색 </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+            <div class="my-5" th:if="${message}">
+                <div th:replace="theme-fragments.html :: blue-notice(message = ${message})"></div>
+            </div>
+
+            <div class="lg:flex justify-center lg:space-x-10">
+                <p th:if="${searchMarketResult.getTotalElements() == 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 물건이 없습니다.
+                </p>
+
+                <p th:if="${searchMarketResult.getTotalElements() > 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 물건이
+                    <strong class="text-xl font-semibold"
+                            th:text="${searchMarketResult.getTotalElements()}"></strong> 개 있습니다.
+                </p>
+            </div>
+
+            <div th:replace="theme-fragments.html :: market-paging(
+                        marketType = ${searchMarketResult},
+                        link = '/market/' + ${type} +'/search?keyword=' + ${keyword} + '&sort=uploadTime,desc' )">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

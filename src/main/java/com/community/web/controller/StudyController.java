@@ -3,6 +3,8 @@ package com.community.web.controller;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.bookmark.Bookmark;
+import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.study.StudyRepository;
 import com.community.infra.alarm.MeetingCreatedPublish;
 import com.community.infra.alarm.ReplyCreatePublish;
@@ -77,6 +79,7 @@ public class StudyController {
     private final MeetingsRepository meetingsRepository;
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     private static final String STUDY_FORM_URL = "/study-form";
     private static final String STUDY_FORM_VIEW = "study/study-form";
@@ -131,6 +134,21 @@ public class StudyController {
         return "study/study-list";
     }
 
+    // 스터디 이동
+    @GetMapping(STUDY_PATH_URL)
+    public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
+
+        Study bypath = studyService.getPath(path);
+
+        model.addAttribute(account);
+        model.addAttribute(bypath);
+
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, bypath);
+        model.addAttribute("bookmark", existBookmark);
+
+        return "study/study-view";
+    }
+
     @GetMapping("/study/search/{tagTitle}")
     public String viewStudyWithTagTitle(@CurrentUser Account account, @PathVariable String tagTitle, Model model) {
 
@@ -176,7 +194,6 @@ public class StudyController {
 
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
-    // 스터디 뷰 이동
 
     // 모임 페이지
     @GetMapping(STUDY_PATH_URL + "/meetings")
@@ -184,6 +201,9 @@ public class StudyController {
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         List<Meetings> meetingsList = meetingsRepository.findAllByStudyOrderByUploadTimeDesc(studyUpdate);
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
 
         model.addAttribute("meetingsList", meetingsList);
         model.addAttribute("service", studyService);
@@ -317,16 +337,7 @@ public class StudyController {
     }
     // 모임 댓글 추가 끝
 
-    @GetMapping(STUDY_PATH_URL)
-    public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
 
-        Study bypath = studyService.getPath(path);
-
-        model.addAttribute(account);
-        model.addAttribute(bypath);
-
-        return "study/study-view";
-    }
 
     // 스터디 참여
     @GetMapping(STUDY_PATH_VIEW + "/join")
@@ -374,6 +385,9 @@ public class StudyController {
     public String studyDescriptionForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(modelMapper.map(studyUpdate, StudyDescriptionForm.class));
@@ -404,6 +418,9 @@ public class StudyController {
     public String studyCalendarForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
         model.addAttribute(modelMapper.map(studyUpdate, StudyCalendarForm.class));
@@ -433,6 +450,9 @@ public class StudyController {
     public String studyMembersView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
 
@@ -486,6 +506,9 @@ public class StudyController {
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
 
@@ -569,6 +592,9 @@ public class StudyController {
     @GetMapping(STUDY_SETTINGS + "tags")
     public String studyTagsForm(@CurrentUser Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
 
@@ -615,6 +641,9 @@ public class StudyController {
     public String studyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
+        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
+
+        model.addAttribute("bookmark", existBookmark);
         model.addAttribute(account);
         model.addAttribute(studyUpdate);
 

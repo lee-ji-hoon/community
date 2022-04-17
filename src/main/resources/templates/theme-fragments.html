@@ -5,6 +5,65 @@
 <!-- csrf 토큰 오류 해결 방법 -->
 <!--<meta name="_csrf" th:content="${_csrf.token}">
 <meta name="_csrf_header" th:content="${_csrf.headerName}">-->
+<style th:fragment="search_form">
+    .container-1{
+        width: 250px;
+        vertical-align: middle;
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .container-1 input#search::-webkit-input-placeholder {
+        color: #65737e;
+    }
+
+    .container-1 input#search:-moz-placeholder { /* Firefox 18- */
+        color: #65737e;
+    }
+
+    .container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
+        color: #65737e;
+    }
+
+    .container-1 input#search:-ms-input-placeholder {
+        color: #65737e;
+    }
+
+    .container-1 .icon{
+        position: absolute;
+        top: 50%;
+        margin-left: 17px;
+        margin-top: 17px;
+        z-index: 1;
+        color: #4f5b66;
+    }
+
+    .container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
+        outline:none;
+        background: #ffffff;
+    }
+
+    .container-1 input#search{
+        width: 250px;
+        height: 50px;
+        background: #d3d3d3;
+        border: none;
+        font-size: 10pt;
+        float: left;
+        color: #262626;
+        padding-left: 45px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+
+
+        -webkit-transition: background .55s ease;
+        -moz-transition: background .55s ease;
+        -ms-transition: background .55s ease;
+        -o-transition: background .55s ease;
+        transition: background .55s ease;
+    }
+</style>
 <head th:fragment="head">
     <style>
         #loadingSpin {
@@ -1384,14 +1443,17 @@
         let $confirmBtn = $("#confirm-button");
         let $preview = $("#preview-image");
         let $current = $("#current-study-image");
-        let $profile = $("#study-image-file");
+        let $studyImageInput = $("#study-image-file");
+        let $studyImageLabel = $("#study-image-file-label")
 
         $confirmBtn.hide();
         $preview.hide();
 
-        $($profile).change(function (e) {
-            $profile.hide();
+        $($studyImageInput).change(function (e) {
+            $studyImageInput.hide();
             $current.hide();
+            $studyImageLabel.hide();
+            $studyImageInput.hide();
             $confirmBtn.show();
             $preview.show();
         });
@@ -1437,18 +1499,48 @@
          id="preview-image">
 
     <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 lg:flex">
+        <div id="blk_div">
+            <div class="flex-none w-5 mr-2 mt-1" id="bookmark_div">
+                <div th:if="${bookmark.isEmpty()}">
+                    <form id="bookmarkAdd">
+                        <input type="hidden" id="postId" name="postId" th:value="${study.id}"/>
+                        <input type="hidden" id="postSort" name="postSort" value="study"/>
+                        <div uk-tooltip="북마크">
+                            <a class="bookmark_click">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkAddBtn" class="text-gray-500 font-bold" fill="currentColor">
+                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                <div th:if="${bookmark.isPresent()}">
+                    <form id="bookmarkCancel">
+                        <div uk-tooltip="북마크 해제">
+                            <input type="hidden" id="postId" name="postId" th:value="${study.id}"/>
+                            <input type="hidden" id="postSort" name="postSort" value="study"/>
+                            <a class="bookmark_click">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
+                                    <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <form id="imageForm" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/banner'}"
               method="post" enctype="multipart/form-data" novalidate>
             <div class="custom-file" th:if="${study.isManager(#authentication.principal)}">
-                <label for="study-image-file"
+                <label for="study-image-file" id="study-image-file-label"
                        class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
                     <ion-icon name="create-outline" class="text-xl mr-1"></ion-icon>
                     배너 이미지 수정
                 </label>
                 <input type="file" name="file" id="study-image-file" accept="image/png, image/jpeg">
             </div>
-
-            <button type="submit"
+            <button th:if="${study.isManager(#authentication.principal)}"
+                    type="submit"
                     id="confirm-button"
                     class="flex items-center justify-center h-8 px-3 rounded-md bg-blue-600 bg-opacity-70 text-white space-x-1.5">
                 확인
@@ -1983,5 +2075,76 @@
         </div>
     </li>
 </ul>
+
+<div th:fragment="market-paging(marketType, link)">
+    <div class="divide-y divide-gray-100 sm:m-0 -mx-4">
+        <div th:each="market : ${marketType.getContent()}"
+             class="flex items-start card flex-wrap p-2 my-5 sm:space-x-6">
+            <a th:href="@{'/market/detail/'+${market.marketId}}" class="w-40 h-40 relative mt-1 order-1">
+                <img th:if="${market.getFilePath() != null}" th:src="${market.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
+            </a>
+            <div class="flex-1 sm:order-2">
+                <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'sell'}">판매 </h4>
+                <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'buy'}">구매 </h4>
+                <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'share'}">나눔 </h4>
+                <a th:href="@{'/market/detail/'+${market.marketId}}">
+                    <h3 class="text-xl font-medium mb-4" th:text="${market.itemName}"> Technical Event Support Specialist </h3>
+                </a>
+                <div class="line-clamp-3" id="more-text" th:utext="${market.itemDetail}">
+                </div>
+                <a th:href="@{'/market/detail/'+${market.marketId}}"> 자세히 보기 </a>
+            </div>
+        </div>
+
+        <div th:if="${marketType.totalPages != 0}">
+            <nav aria-label="Page navigation "
+                 th:with="start=${(marketType.number/5)*5 + 1},
+                                        end=(${(marketType.totalPages == 0) ? 1 :
+                                        (start + 4 < marketType.totalPages ? start + 4 : marketType.totalPages)})">
+
+                <ul class="space-x-2 justify-center flex mt-5">
+
+                    <!--
+                    * < 꺽새 그려줌
+                    -->
+                    <li th:if="${start > 1}">
+                        <a th:href="@{${link}(page=${start - 2})}">
+                            <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                <svg class="w-4 h-4 fill-current " viewBox="0 0 20 20">
+                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                          clip-rule="evenodd" fill-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </a>
+                    </li>
+                    <!--
+                    * 페이지를 뿌려주는 부분
+                    -->
+                    <li th:each="page : ${#numbers.sequence(start, end)}">
+                        <a th:href="@{${link}(page=${page - 1})}">
+                            <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                    class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                    th:text="${page}">
+                            </button>
+                        </a>
+                    </li>
+                    <!--
+                    * > 꺽새 그려줌
+                    -->
+                    <li th:if="${end < marketType.totalPages}">
+                        <a th:href="@{${link}(page=${start + 4})}">
+                            <button class="font-bold flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                          clip-rule="evenodd" fill-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
 
 </html>
