@@ -2318,7 +2318,7 @@
             <a th:href="@{'/market/detail/'+${market.marketId}}" class="w-40 h-40 relative mt-1 order-1">
                 <img th:if="${market.getFilePath() != null}" th:src="${market.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
             </a>
-            <div class="flex-1 sm:order-2">
+            <div class="flex-1 sm:order-2 mt-4">
                 <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'sell'}">판매 </h4>
                 <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'buy'}">구매 </h4>
                 <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'share'}">나눔 </h4>
