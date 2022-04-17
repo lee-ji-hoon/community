@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='graduation')"></div>
+
+
+</div>
+</body>
+</html>

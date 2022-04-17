@@ -130,8 +130,6 @@ public class MarketController {
             String folderPath = "market-img/";
 
             String uploadFile = s3Service.upload(file, folderPath);
-            /*s3에 직접 접근*/
-            /*String marketImagePath = "https://"+bucket+".s3.ap-northeast-2.amazonaws.com/"+uploadFile;*/
 
             /*CloudFront에로 s3에 접근*/
             String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + uploadFile;
@@ -169,7 +167,7 @@ public class MarketController {
 
                 marketService.updateMarketImage(market ,marketImagePath, uploadFile, uploadFolder);
             }
-            marketService.updateMarket(marketForm, market, account);
+            marketService.updateMarket(marketForm, market, account, marketForm.getMarketType());
         }
         return "redirect:/market/detail/" + marketId;
     }
