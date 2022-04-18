@@ -7,8 +7,6 @@ import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
 import com.community.domain.chat.Room;
 import com.community.domain.chat.RoomRepository;
-import com.community.domain.market.MarketRepository;
-import com.community.service.BoardService;
 import com.community.service.ChatService;
 import com.community.web.dto.ChatForm;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,22 +65,32 @@ public class ChatController {
     @ResponseBody
     @RequestMapping(value = "/chat/allReadChk")
     public ResponseEntity allReadCheck(@CurrentUser Account account) {
-        List<Room> myRoom = new ArrayList<>();
+        List<Room> myRooms = new ArrayList<>();
         List<Room> roomAttender = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
         List<Room> roomHost = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
-        myRoom.addAll(roomHost);
-        myRoom.addAll(roomAttender);
-        for (Room room : myRoom) {
-            Chat roomChat = chatRepository.findTop1ByRoomAndReadChkOrderBySendTimeDesc(room, false);
-            if (roomChat.getSender().getNickname().equals(account.getNickname())) {
-                return ResponseEntity.badRequest().build();
+        myRooms.addAll(roomHost);
+        myRooms.addAll(roomAttender);
+        log.info("roomSize={}", myRooms.size());
+        if (myRooms.size() == 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        for (Room room : myRooms) {
+            Optional<Chat> roomChat = chatRepository.findTop1ByRoomAndReadChkOrderBySendTimeDesc(room, false);
+            if(!roomChat.get().getSender().getNickname().equals(account.getNickname())) {
+                log.info("roomNotChkLog={}", room.getRoomId());
+                List<Chat> unReadChat = chatRepository.findByRoomAndReadChk(room, false);
+                for (Chat chat : unReadChat) {
+                    chat.setReadChk(true);
+                    chatRepository.save(chat);
+                }
+                return ResponseEntity.ok().build();
             }
         }
-        for (Room room : myRoom) {
-            List<Chat> unReadChat = chatRepository.findByRoomAndReadChk(room, false);
-            for (Chat chat : unReadChat) {
-                chat.setReadChk(true);
-                chatRepository.save(chat);
+        for (Room room : myRooms) {
+            Optional<Chat> roomChat = chatRepository.findTop1ByRoomAndReadChkOrderBySendTimeDesc(room, false);
+            if (roomChat.get().getSender().getNickname().equals(account.getNickname())) {
+                log.info("roomChkLog={}", room.getRoomId());
+                return ResponseEntity.badRequest().build();
             }
         }
         return ResponseEntity.ok().build();

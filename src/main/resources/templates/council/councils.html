@@ -2,6 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="theme-fragments.html :: head"></head>
+<style th:replace="theme-fragments.html :: search_form"></style>
 <style>
     #eventDatePick{
         display: none;
@@ -28,8 +29,18 @@
             <div class="flex justify-between relative md:mb-4 mb-3">
                 <div class="flex-1">
                     <h2 class="text-2xl font-semibold"> 제 27대 학생회 CROCE </h2>
+                    <nav class="responsive-nav md:m-0 -mx-4">
+                        <ul>
+                            <li th:classappend="${type == 'notice'}? active">
+                                <a th:href="@{/council/notice}" class="lg:px-2"> 공지 </a>
+                            </li>
+                            <li th:classappend="${type == 'event'}? active">
+                                <a th:href="@{/council/event}" class="lg:px-2"> 행사 </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
-                <th:block th:if="${account.studentId=='11-111111'}">
+                <div th:if="${account.studentId=='11-111111'}">
                     <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                             <path fill-rule="evenodd"
@@ -178,20 +189,19 @@
 
                         </div>
                     </div>
-                </th:block>
-            </div>
-            <div class="flex justify-between relative md:mb-4 mb-3">
-                <div class="flex-1">
-                    <nav class="responsive-nav md:m-0 -mx-4">
-                        <ul>
-                            <li th:classappend="${type == 'notice'}? active">
-                                <a th:href="@{/council/notice}" class="lg:px-2"> 공지 </a>
-                            </li>
-                            <li th:classappend="${type == 'event'}? active">
-                                <a th:href="@{/council/event}" class="lg:px-2"> 행사 </a>
-                            </li>
-                        </ul>
-                    </nav>
+                </div>
+                <div>
+                    <form th:action="@{'/council/'+ ${type} +'/search'}" class="form-inline" method="get"
+                          style=" float: right; position: relative; margin-top: 40px">
+                        <div class="box">
+                            <div class="container-1">
+                                <span class="icon"><i class="fa fa-search"></i></span>
+
+                                <input th:if="${type == 'notice'}" type="search" name="keyword" id="search" placeholder="공지사항 검색" />
+                                <input th:if="${type == 'event'}" type="search" name="keyword" id="search" placeholder="행사 검색" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <th:block th:if="${type == 'notice'}">

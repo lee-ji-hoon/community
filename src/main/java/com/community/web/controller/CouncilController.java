@@ -48,6 +48,27 @@ public class CouncilController {
     private final BoardService boardService;
     private final ReplyService replyService;
 
+    @GetMapping("/council/{type}/search")
+    public String councilSearch(String keyword, @CurrentUser Account account, Model model,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                        direction = Sort.Direction.ASC) Pageable pageable,
+                                @PathVariable String type) {
+
+        Page<Council> searchCouncilResult = councilRepository.findByPostSortAndPostTitleContainingOrPostContentContainingOrderByUploadTimeDesc(type, keyword, keyword, pageable);
+
+        model.addAttribute("searchCouncilResult", searchCouncilResult);
+        model.addAttribute("pageNo", page);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute("councilService", councilService);
+        model.addAttribute(type);
+        model.addAttribute(account);
+
+        return "council/council-search";
+
+    }
+
     @GetMapping("/council/{type}")
     public String councilRecent(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
