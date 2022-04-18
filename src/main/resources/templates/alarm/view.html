@@ -18,93 +18,103 @@
 
     <!-- sidebar -->
     <div th:replace="theme-fragments.html :: side_bar"></div>
-    <button onclick="alarmChecked()"
-            class="flex items-center justify-center h-9 lg:px-5 px-2 mt-20 mr-2
-                    rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
-        <span> 모두 읽기 </span>
-    </button>
+
     <div class="main_content">
 
-        <div class="mcontainer mt-10">
+        <div class="mcontainer">
+
+
             <div th:replace="theme-fragments.html :: checked-email"></div>
 
             <div class="alarm-main-view">
-                <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4 ">
-
-                <div class="lg:w-1/3">
-                    <nav class="responsive-nav setting-nav setting-menu">
-                        <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
-                            <li>
-                                <div class="form_refresh_study">
-                                    <a href="#" class="hover:bg-gray-100">스터디 <span th:text="${newMeetingAlarms.size() + newStudyAlarms.size()}"></span></a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form_refresh_reply">
-                                    <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size() + newMarketReplyAlarms.size()}"></span></a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form_refresh_like">
-                                    <a href="#" class="hover:bg-gray-100">좋아요<span th:text="${newLikesAlarms.size()}"></span></a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form_refresh_checked">
-                                    <a href="#" class="hover:bg-gray-100 ">읽은 알림 <span th:text="${byChecked.size()}"></span>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
+                <div class="flex justify-content-between">
+                    <div></div>
+                    <div>
+                        <button onclick="alarmChecked()"
+                                class="h-9 lg:px-5 px-2
+                                       rounded-md bg-blue-600 text-white space-x-1.5 mb-3">
+                            <span> 모두 읽기 </span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="lg:w-2/3">
-                    <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
-                        <!-- 스터디 -->
-                        <div>
-                            <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 스터디 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
-                        </div>
+                <div class="bg-white lg:divide-x lg:flex lg:shadow-md rounded-md shadow lg:rounded-xl overflow-hidden lg:m-0 -mx-4 ">
 
-                        <!-- 댓글 -->
-                        <div>
-                            <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 댓글 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 커뮤니티 댓글 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
-                            <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newMarketReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newMarketReplyAlarms})"></div>
-                        </div>
+                    <div class="lg:w-1/3">
+                        <nav class="responsive-nav setting-nav setting-menu">
+                            <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
+                                <li>
+                                    <div class="form_refresh_study">
+                                        <a href="#" class="hover:bg-gray-100">스터디 <span th:text="${newMeetingAlarms.size() + newStudyAlarms.size()}"></span></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form_refresh_reply">
+                                        <a href="#" class="hover:bg-gray-100">댓글 <span th:text="${newMeetingsReplyAlarms.size() + newBoardReplyAlarms.size() + newMarketReplyAlarms.size()}"></span></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form_refresh_like">
+                                        <a href="#" class="hover:bg-gray-100">좋아요<span th:text="${newLikesAlarms.size()}"></span></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="form_refresh_checked">
+                                        <a href="#" class="hover:bg-gray-100 ">읽은 알림 <span th:text="${byChecked.size()}"></span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
 
-                        <!-- 좋아요 -->
-                        <div>
-                            <h5 class="px-5 font-bold" th:text="'좋아요 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 좋아요알림</h5>
-                            <div th:replace="theme-fragments :: alarm-list(type=${newLikesAlarms})"></div>
-                        </div>
+                    <div class="lg:w-2/3">
 
-                        <!-- 읽은 알림 -->
-                        <div>
-                            <div id="isUpdatedForm">
-                                <div id="isUpdated"></div>
+                        <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
+                            <!-- 스터디 -->
+                            <div>
+                                <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 스터디 알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
+                                <h5 class="px-5 font-bold" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
                             </div>
-                            <div class="form_refresh">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="px-5 font-bold" th:text="'읽은 알림 ('+ ${byChecked.size()}+')'">새로운 모임 알림</h5>
-                                    <span class="btn text-sm bg-red-600 mx-5 text-white"
-                                            onclick="alarmDelete()">읽은 알림 삭제</span>
-                                    <form onsubmit="return false" class="d-none" id="alarm_reply_delete">
-                                        <input type="hidden" th:value="${byChecked.size()}" id=alarm_delete name="alarm_delete" readonly>
-                                    </form>
+
+                            <!-- 댓글 -->
+                            <div>
+                                <h5 class="px-5 font-bold" th:text="'모임 댓글 알림 ('+ ${newMeetingsReplyAlarms.size()}+')'">새로운 모임 댓글 알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newMeetingsReplyAlarms})"></div>
+                                <h5 class="px-5 font-bold" th:text="'커뮤니티 댓글 알림 ('+ ${newBoardReplyAlarms.size()}+')'">새로운 커뮤니티 댓글 알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newBoardReplyAlarms})"></div>
+                                <h5 class="px-5 font-bold" th:text="'장터 댓글 알림 ('+ ${newMarketReplyAlarms.size()}+')'">새로운 장터 댓글 알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newMarketReplyAlarms})"></div>
+                            </div>
+
+                            <!-- 좋아요 -->
+                            <div>
+                                <h5 class="px-5 font-bold" th:text="'좋아요 알림 ('+ ${newLikesAlarms.size()}+')'">새로운 좋아요알림</h5>
+                                <div th:replace="theme-fragments :: alarm-list(type=${newLikesAlarms})"></div>
+                            </div>
+
+                            <!-- 읽은 알림 -->
+                            <div>
+                                <div id="isUpdatedForm">
+                                    <div id="isUpdated"></div>
                                 </div>
-                                <div th:replace="theme-fragments :: alarm-list(type=${byChecked})"></div>
+                                <div class="form_refresh">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="px-5 font-bold" th:text="'읽은 알림 ('+ ${byChecked.size()}+')'">새로운 모임 알림</h5>
+                                        <span class="btn text-sm bg-red-600 mx-5 text-white"
+                                                onclick="alarmDelete()">읽은 알림 삭제</span>
+                                        <form onsubmit="return false" class="d-none" id="alarm_reply_delete">
+                                            <input type="hidden" th:value="${byChecked.size()}" id=alarm_delete name="alarm_delete" readonly>
+                                        </form>
+                                    </div>
+                                    <div th:replace="theme-fragments :: alarm-list(type=${byChecked})"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
