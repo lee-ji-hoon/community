@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="breadcrumb-area py-0">
+                <div class="breadcrumb">
+                    <ul class="m-0">
+                        <li>
+                            <a th:href="@{/board/free}">커뮤니티</a>
+                        </li>
+                        <li>
+                            <a style="font-weight: bold" href="#">검색 </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+            <div class="my-5" th:if="${message}">
+                <div th:replace="theme-fragments.html :: blue-notice(message = ${message})"></div>
+            </div>
+
+            <div class="lg:flex justify-center lg:space-x-10">
+                <p th:if="${searchBoardResult.getTotalElements() == 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 게시글이 없습니다.
+                </p>
+
+                <p th:if="${searchBoardResult.getTotalElements() > 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 게시글이
+                    <strong class="text-xl font-semibold"
+                            th:text="${searchBoardResult.getTotalElements()}"></strong> 개 있습니다.
+                </p>
+            </div>
+
+            <div>
+                <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${searchBoardResult}">
+                    <div class="lg:flex lg:space-x-6 py-3">
+                        <div class="flex-1 lg:pt-0">
+                            <th:block th:if="${board.boardTitle=='자유'}">
+                                <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
+                            </th:block>
+                            <th:block th:if="${board.boardTitle=='정보'}">
+                                <div class="float-left bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
+                            </th:block>
+                            <th:block th:if="${board.boardTitle=='질문'}">
+                                <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
+                            </th:block>
+                            <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
+                            <div class="flex items-center pt-2">
+                                <div class="flex items-center">
+                                    <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                    <a class="text-xs" th:text="${account.dateTime(board.uploadTime)}"></a>
+                                </div>
+                                <div class="flex items-center mx-4 align-middle">
+                                    <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                    <a class="text-xs" th:text="${board.likesList.size()}"></a>
+                                </div>
+                                <div class="flex items-center">
+                                    <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                    <a class="text-xs" th:text="${board.replyList.size()}"></a>
+                                    <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                        <div class="-space-x-2 flex items-center ml-1">
+                                            <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                     th:data-id="${topReply.getAccount().studentId}"
+                                                     alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
+                                                <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                     th:src="${topReply.getAccount()?.profileImage}"
+                                                     alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                            </div>
+                                        </div>
+                                    </th:block>
+
+                                </div>
+                                <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <div th:if="${searchBoardResult.totalPages != 0}" class="justify-center flex">
+                        <nav aria-label="Page navigation"
+                             th:with="start=${(searchBoardResult.number/5)*5 + 1},
+                                         end=(${(searchBoardResult.totalPages == 0) ? 1 : (start + 4 < searchBoardResult.totalPages ? start + 4 : searchBoardResult.totalPages)})">
+                            <ul class="inline-flex space-x-2">
+                                <li th:if="${start > 1}">
+                                    <a th:href="@{'/board/' + ${type} +'/search?keyword=' + ${keyword} (page=${start - 2})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:each="page : ${#numbers.sequence(start, end)}">
+                                    <a th:href="@{'/board/' + ${type} +'/search?keyword=' + ${keyword} (page=${page - 1})}">
+                                        <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                th:text="${page}">
+                                        </button>
+                                    </a>
+                                </li>
+                                <li th:if="${end < searchBoardResult.totalPages}">
+                                    <a th:href="@{'/board/' + ${type} + '/search?keyword=' + ${keyword} (page=${start + 4})}">
+                                        <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

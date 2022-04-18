@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='council')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div class="breadcrumb-area py-0">
+                <div class="breadcrumb">
+                    <ul class="m-0">
+                        <li>
+                            <a th:href="@{/council/notice}">학생회</a>
+                        </li>
+                        <li>
+                            <a style="font-weight: bold" href="#">검색 </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+            <div class="my-5" th:if="${message}">
+                <div th:replace="theme-fragments.html :: blue-notice(message = ${message})"></div>
+            </div>
+
+            <div class="lg:flex justify-center lg:space-x-10">
+                <p th:if="${searchCouncilResult.getTotalElements() == 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 게시글이 없습니다.
+                </p>
+
+                <p th:if="${searchCouncilResult.getTotalElements() > 0}">
+                    <strong class="text-2xl font-semibold"
+                            th:text="${keyword}"></strong> 에 해당하는 게시글이
+                    <strong class="text-xl font-semibold"
+                            th:text="${searchCouncilResult.getTotalElements()}"></strong> 개 있습니다.
+                </p>
+            </div>
+
+            <div>
+                <th:block th:if="${type == 'notice'}">
+                    <br>
+                    <div class="mt-2">
+                        <div class="divide-y -mt-3 card px-5 py-2 mb-7" th:each="notice : ${searchCouncilResult}">
+                            <div class="flex sm:flex-row flex-col sm:space-x-4 py-4 relative w-full">
+                                <div class="flex-1 relative md:mt-0">
+                                    <a th:href="@{/council/detail/{cid}(cid = ${notice.cid})}" class="text-xl font-semibold leading-6" th:text="${notice.postTitle}">가장 인기있는 게시물</a>
+                                    <div class="flex space-x-2 items-center text-xs mt-2">
+                                        <ion-icon name="time-outline"></ion-icon>
+                                        <div th:text="${account.dateTime(notice.uploadTime)}">공지등록일</div>
+                                        <div>·</div>
+                                        <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                                        <div th:text="${replyService.councilReplySize(notice)}"></div>
+                                        <div>·</div>
+                                        <div><a th:text="${notice.pageView}"></a>명 조회</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${searchCouncilResult.totalPages != 0}" class="justify-center flex">
+                            <nav aria-label="Page navigation"
+                                 th:with="start=${(searchCouncilResult.number/5)*5 + 1},
+                                    end=(${(searchCouncilResult.totalPages == 0) ? 1 :
+                                    (start + 4 < searchCouncilResult.totalPages ? start + 4 : searchCouncilResult.totalPages)})">
+                                <ul class="inline-flex space-x-2">
+                                    <li th:if="${start > 1}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${start - 2})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:each="page : ${#numbers.sequence(start, end)}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${page - 1})}">
+                                            <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                    class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                    th:text="${page}">
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:if="${end < searchCouncilResult.totalPages}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${start + 4})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${type == 'event'}">
+                    <div class="relative" uk-slider="finite: true">
+                        <div class="uk-slider-container px-4 py-3">
+
+                            <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
+                                <li th:each="event : ${searchCouncilResult}">
+                                    <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
+                                        <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
+                                            <div class="absolute w-full h-3/4 -bottom-6 bg-gradient-to-b from-transparent to-gray-800 z-10">
+                                            </div>
+                                            <img th:src="@{/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
+                                            <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                                <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                                    진행중 </div>
+                                            </th:block>
+                                            <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                                <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                                    종료 </div>
+                                            </th:block>
+                                            <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
+                                                <div class="text-xl" th:text="${event.postTitle}"> 제목 </div>
+                                                <div class="text-sm"><a th:text="${event.eventEndDate}"></a> 까지</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
+                               href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
+                            <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
+                               href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <div th:if="${searchCouncilResult.totalPages != 0}" class="justify-center flex">
+                            <nav aria-label="Page navigation"
+                                 th:with="start=${(searchCouncilResult.number/5)*5 + 1},
+                                    end=(${(searchCouncilResult.totalPages == 0) ? 1 :
+                                    (start + 4 < searchCouncilResult.totalPages ? start + 4 : searchCouncilResult.totalPages)})">
+                                <ul class="inline-flex space-x-2">
+                                    <li th:if="${start > 1}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${start - 2})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:each="page : ${#numbers.sequence(start, end)}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${page - 1})}">
+                                            <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                    class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                    th:text="${page}">
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:if="${end < searchCouncilResult.totalPages}">
+                                        <a th:href="@{'/council/' + ${type} +'/search?keyword=' + ${keyword} (page=${start + 4})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
