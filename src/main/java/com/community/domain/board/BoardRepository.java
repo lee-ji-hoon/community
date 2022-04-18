@@ -15,6 +15,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
 
+    Page<Board> findByBoardTitleAndContentContainingOrTitleContainingAndIsReportedOrderByUploadTimeDesc(String type, String keyword1, String keyword2, Boolean isReported, Pageable pageable);
 
     long countAllByWriterAndBoardTitle(Account account, String boardTitle);
 

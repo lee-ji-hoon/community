@@ -56,6 +56,28 @@ public class BoardController {
     private final LikeService likeService;
     private final ReplyService replyService;
 
+    @GetMapping("/board/{type}/search")
+    public String boardSearch(String keyword, @CurrentUser Account account, Model model,
+                              @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                              @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                      direction = Sort.Direction.ASC) Pageable pageable,
+                              @PathVariable String type) {
+
+        Page<Board> searchBoardResult = boardRepository.findByBoardTitleAndContentContainingOrTitleContainingAndIsReportedOrderByUploadTimeDesc(type, keyword, keyword, false, pageable);
+        for (Board board : searchBoardResult) {
+            log.info("boardTitle={}", board.getTitle());
+        }
+        model.addAttribute("searchBoardResult", searchBoardResult);
+        model.addAttribute("pageNo", page);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute(type);
+        model.addAttribute(account);
+
+        return "board/board-search";
+
+    }
+
     @GetMapping("/board/{type}")
     public String boardTypeList(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
@@ -90,7 +112,6 @@ public class BoardController {
 
         return "board/boards";
     }
-
 
     /* 게시물 작성 관련 */
 
@@ -212,10 +233,5 @@ public class BoardController {
         }
         redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
         return "redirect:/board/detail/{boardId}";
-    }
-
-    // TODO Summernote 사진 업로드 구현해야함.
-    public void uploadFile() {
-
     }
 }
