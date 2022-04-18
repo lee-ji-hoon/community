@@ -15,10 +15,10 @@
     <!-- Main Contents -->
     <div class="main_content">
         <form class="needs-validation col-sm-10"
-              th:action="@{/graduation-new}"
-              th:object="${graduationForm}"
-              method="post"
-              novalidate>
+              name="dataForm" id="dataForm"
+              onsubmit="return registerAction()"
+              novalidate enctype="multipart/form-data">
+
             <div class="mcontainer">
                 <div class="breadcrumb-area py-0">
                     <div class="breadcrumb">
@@ -44,7 +44,7 @@
                         <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                             <div class="col-span-2">
                                 <label for="title" class="font-bold"> 졸업작품 프로젝트명</label>
-                                <input id="title" type="text" th:field="*{title}"
+                                <input id="title" type="text" name="title"
                                        class="shadow-none with-border form-control"
                                        placeholder="예) unect" aria-describedby="titleHelp"
                                        required max="20">
@@ -52,13 +52,11 @@
                                     20자 이내로 졸업작품 프로젝트명을 적어주세요.
                                 </small>
                                 <small class="invalid-feedback">팀 프로젝트명을 다시 확인해주세요.</small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('title')}"
-                                   th:errors="*{title}">title Error</p>
                             </div>
 
                             <div class="col-span-2">
                                 <label for="teamName" class="font-bold"> 팀 이름</label>
-                                <input id="teamName" type="text" th:field="*{teamName}"
+                                <input id="teamName" type="text" name="teamName"
                                        class="shadow-none with-border form-control"
                                        placeholder="예) 봄" aria-describedby="teamNameHelp"
                                        required max="20">
@@ -66,13 +64,11 @@
                                     20자 이내로 졸업작품팀 이름을 작성해주세요.
                                 </small>
                                 <small class="invalid-feedback">팀 이름을 다시 작성해주세요. </small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('teamName')}"
-                                   th:errors="*{teamName}">teamName Error</p>
                             </div>
 
                             <div class="col-span-2">
                                 <label for="teamMember" class="font-bold"> 팀 멤버</label>
-                                <input id="teamMember" type="text" th:field="*{teamMember}"
+                                <input id="teamMember" type="text" name="teamMember"
                                        class="shadow-none with-border form-control"
                                        placeholder="프로젝트 팀 멤버를 작성해주세요." aria-describedby="teamMemberHelp"
                                        required max="20">
@@ -80,13 +76,11 @@
                                     팀 멤버들을 적어주세요.
                                 </small>
                                 <small class="invalid-feedback">팀 멤버를 다시 확인해주세요. </small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('teamMember')}"
-                                   th:errors="*{teamMember}">teamMember Error</p>
                             </div>
 
                             <div class="col-span-2">
                                 <label for="path" class="font-bold"> 졸업작품 링크(주소)</label>
-                                <input id="path" type="text" th:field="*{path}"
+                                <input id="path" type="text" name="path"
                                        class="shadow-none with-border form-control"
                                        placeholder="프로젝트 접근 주소(링크)를 작성해주세요." aria-describedby="pathHelp"
                                        required max="100">
@@ -94,31 +88,27 @@
                                     팀 멤버들을 적어주세요.
                                 </small>
                                 <small class="invalid-feedback">주소를 다시 작성해주세요. </small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('path')}"
-                                   th:errors="*{path}">path Error</p>
                             </div>
 
-                            <div class="">
+                            <div>
                                 <label for="graduationType" class="font-bold"> 졸업작품 전시 종류</label>
 
-                                <select th:field="*{graduationType}" id="graduationType" name="relationship"
+                                <select id="graduationType" name="graduationType"
                                         class="selectpicker form-control"
                                         aria-describedby="graduationTypeHelp" required>
-                                    <option class="" th:value="${'WEB'}" selected>웹</option>
-                                    <option class="" th:value="${'MOBILE'}">모바일</option>
-                                    <option class="" th:value="${'VIDEO'}">영상</option>
-                                    <option class="" th:value="${'VR_AR'}">VR/AR</option>
+                                    <option class="" value="WEB" selected>웹</option>
+                                    <option class="" value="MOBILE">모바일</option>
+                                    <option class="" value="VIDEO">영상</option>
+                                    <option class="" value="VR_AR">VR/AR</option>
                                 </select>
                                 <small id="studyMethodHelp" class="form-text text-muted">
                                     웹 / 모바일 / 영상 / VR/AR 중에 선택해주세요.
                                 </small>
                                 <small class="invalid-feedback">졸업작품 종목을 다시 선택해주세요.</small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('graduationType')}"
-                                   th:errors="*{graduationType}">studyMethod Error</p>
                             </div>
                             <div>
                                 <label for="graduationDate" class="font-bold">졸업작품 연도</label>
-                                <select th:field="*{graduationDate}" id="graduationDate" name="relationship"
+                                <select id="graduationDate" name="graduationDate"
                                         class="selectpicker form-control"
                                         aria-describedby="graduationDateHelp" required>
                                     <option th:each="date : ${#numbers.sequence(10, 30)}" th:value="${date}" th:text="'20'+${date}+'년'"></option>
@@ -127,13 +117,11 @@
                                     졸업작품을 전시한 연도를 선택해주세요.
                                 </small>
                                 <small class="invalid-feedback"> 연도를 다시 확인해주세요..</small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('graduationDate')}"
-                                   th:errors="*{graduationDate}">graduationDate Error</p>
                             </div>
 
                             <div class="col-span-2">
                                 <label for="description" class="font-bold"> 프로젝트 설명</label>
-                                <textarea id="description" type="textarea" th:field="*{description}"
+                                <textarea id="description" type="textarea" name="description"
                                           class="shadow-none with-border p-3 form-control"
                                           placeholder="졸업작품을 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp"
                                           required>
@@ -141,14 +129,26 @@
 
                                 <small id="descriptionHelp" class="form-text text-muted"></small>
                                 <small class="invalid-feedback">설명을 다시 작성해주세요. </small>
-                                <p class="form-text text-danger" th:if="${#fields.hasErrors('description')}"
-                                   th:errors="*{description}">description Error</p>
+                            </div>
+
+
+                            <div class="col-span-2">
+                                <button id="btn-upload" type="button" style="border: 1px solid #ddd; outline: none;">파일 추가</button>
+                                <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+
+                                <span style="font-size:10px; color: gray;">※첨부파일은 최대 10개까지 등록이 가능합니다.</span>
+                                <div class="data_file_txt" id="data_file_txt" style="margin:40px;">
+                                    <span>첨부 파일</span>
+                                    <br />
+                                    <div id="articlefileChange">
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
                         <div class="bg-gray-10 p-3 flex justify-end space-x-1">
                             <button type="reset" class="p-2 px-4 rounded bg-red-600 text-white"> 취소 </button>
-                            <button type="submit" class="button bg-blue-600"> 저장 </button>
+                            <button class="button bg-blue-600"> 저장 </button>
                         </div>
                     </div>
 
@@ -160,11 +160,14 @@
 
 <script th:replace="theme-fragments.html :: form-validation"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="/assets/js/summernote-ko-KR.js"></script>
 <script src="/assets/css/summernote.min.css"></script>
 <script src="/assets/js/summernote.min.js"></script>
+
+
 
 <script type="application/javascript">
     $(document).ready(function() {
@@ -179,7 +182,118 @@
                 ['font', ['bold', 'italic', 'underline', 'clear']],
             ],
         });
+
+        // input file 파일 첨부시 fileCheck 함수 실행
+        $("#input_file").on("change", fileCheck);
     });
+
+    $(function () {
+        $('#btn-upload').click(function (e) {
+            e.preventDefault();
+            $('#input_file').click();
+        });
+    });
+
+    // 파일 현재 필드 숫자 totalCount랑 비교값
+    let fileCount = 0;
+    // 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+    const totalCount = 10;
+    // 파일 고유넘버
+    let fileNum = 0;
+    // 첨부파일 배열
+    const content_files = new Array();
+    // 이미지
+    let imageFileDict = {};
+
+
+    function fileCheck(e) {
+        var files = e.target.files;
+
+        // 파일 배열 담기
+        var filesArr = Array.prototype.slice.call(files);
+
+        // 파일 개수 확인 및 제한
+        if (fileCount + filesArr.length > totalCount) {
+            $.alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
+            return;
+        } else {
+            fileCount = fileCount + filesArr.length;
+        }
+
+        // 각각의 파일 배열담기 및 기타
+        filesArr.forEach(function (f) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                imageFileDict[fileNum] = files;
+
+                content_files.push(f);
+
+                $('#articlefileChange').append(
+                    '<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+                    + '<font style="font-size:12px">' + f.name + '</font>'
+                    + '<button> x </button>'
+                    + `<img src="${e.target.result}" data-file=${f.name} className="article-image" width="125" height="125"/>`
+                    + '</div>'
+
+                );
+                fileNum ++;
+            };
+            reader.readAsDataURL(f);
+        });
+        console.log(content_files);
+        //초기화 한다.
+        $("#input_file").val("");
+    }
+
+    // 파일 부분 삭제 함수
+    function fileDelete(fileNum){
+        var no = fileNum.replace(/[^0-9]/g, "");
+        content_files[no].is_delete = true;
+        $('#' + fileNum).remove();
+        fileCount --;
+        console.log(content_files);
+    }
+
+    function registerAction() {
+
+        const form = $("form")[0];
+        const formData = new FormData(form);
+        formData.append("title", $('#title').val());
+        formData.append("teamName", $('#teamName').val());
+        formData.append("teamMember", $('#teamMember').val());
+        formData.append("path", $('#path').val());
+        formData.append("graduationType", $('#graduationType').val());
+        formData.append("graduationDate", $("#graduationDate").val())
+        formData.append("description", $('#description').val());
+
+        for (let x = 0; x < content_files.length; x++) {
+            // 삭제 안한것만 담아 준다.
+            if (!content_files[x].is_delete) {
+                formData.append("article_file", content_files[x]);
+            }
+        }
+        /*
+        * 파일업로드 multiple ajax처리
+        */
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "/graduation-new",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (path) {
+                location.href = "/graduation/" + path;
+            },
+            error: function (xhr, status, error) {
+                console.log("실패",status);
+            }
+        });
+        return false;
+    }
+
+
+
 </script>
 </body>
 </html>
