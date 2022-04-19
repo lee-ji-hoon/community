@@ -15,8 +15,8 @@
     <!-- Main Contents -->
     <div class="main_content">
         <form class="needs-validation col-sm-10"
-              name="dataForm" id="dataForm"
-              onsubmit="return registerAction()"
+              name="graduationForm" id="graduationForm"
+              onsubmit="return false"
               novalidate enctype="multipart/form-data">
 
             <div class="mcontainer">
@@ -68,13 +68,19 @@
 
                             <div class="col-span-2">
                                 <label for="teamMember" class="font-bold"> 팀 멤버</label>
-                                <input id="teamMember" type="text" name="teamMember"
-                                       class="shadow-none with-border form-control"
-                                       placeholder="프로젝트 팀 멤버를 작성해주세요." aria-describedby="teamMemberHelp"
-                                       required max="20">
-                                <small id="teamMemberHelp" class="form-text text-muted">
-                                    팀 멤버들을 적어주세요.
-                                </small>
+                                <div class="keywords-container">
+                                    <div class="keyword-input-container shadow-none">
+                                        <input id="teamMember" name="teamMember" type="text" class="keyword-input with-border"
+                                               placeholder="본인 포함 프로젝트 팀 인원을 추가해주세요." aria-describedby="teamMemberHelp"
+                                               maxlength="5"/>
+                                        <button type="button" class="keyword-input-button ripple-effect">
+                                            <i class="icon-feather-plus"></i></button>
+                                    </div>
+                                    <div class="keywords-list">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
                                 <small class="invalid-feedback">팀 멤버를 다시 확인해주세요. </small>
                             </div>
 
@@ -85,7 +91,7 @@
                                        placeholder="프로젝트 접근 주소(링크)를 작성해주세요." aria-describedby="pathHelp"
                                        required max="100">
                                 <small id="pathHelp" class="form-text text-muted">
-                                    팀 멤버들을 적어주세요.
+                                    졸업작품 링크나 주소를 적어주세요
                                 </small>
                                 <small class="invalid-feedback">주소를 다시 작성해주세요. </small>
                             </div>
@@ -131,24 +137,30 @@
                                 <small class="invalid-feedback">설명을 다시 작성해주세요. </small>
                             </div>
 
+                            <div class="col-span-2">
+                                <div uk-form-custom class="w-full py-3">
+                                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                        </svg>
+                                    </div>
+                                    <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                </div>
+
+                                <span class="text-gray-500 text-xs">※첨부파일은 최대 5개까지 등록이 가능합니다.</span>
+                            </div>
 
                             <div class="col-span-2">
-                                <button id="btn-upload" type="button" style="border: 1px solid #ddd; outline: none;">파일 추가</button>
-                                <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
-
-                                <span style="font-size:10px; color: gray;">※첨부파일은 최대 10개까지 등록이 가능합니다.</span>
-                                <div class="data_file_txt" id="data_file_txt" style="margin:40px;">
-                                    <span>첨부 파일</span>
-                                    <br />
-                                    <div id="articlefileChange">
-                                    </div>
+                                <br />
+                                <div class="grid sm:grid-cols-5 grid-cols-2" id="articlefileChange">
                                 </div>
                             </div>
 
                         </div>
                         <div class="bg-gray-10 p-3 flex justify-end space-x-1">
                             <button type="reset" class="p-2 px-4 rounded bg-red-600 text-white"> 취소 </button>
-                            <button class="button bg-blue-600"> 저장 </button>
+                            <button type="submit" onclick="registerAction()" class="button bg-blue-600" > 저장 </button>
                         </div>
                     </div>
 
@@ -170,6 +182,8 @@
 
 
 <script type="application/javascript">
+    let memberArray = [];
+
     $(document).ready(function() {
         //여기 아래 부분
         $('#description').summernote({
@@ -183,8 +197,76 @@
             ],
         });
 
+        $(".keywords-container").each(function() {
+            // 키워드 시작
+            const keywordInput = $(this).find(".keyword-input");
+            const keywordsList = $(this).find(".keywords-list");
+            // 태그 추가
+            function addKeyword() {
+                var $newKeyword = $("" +
+                    "<span class='keyword'>" +
+                    "<span class='keyword-remove'></span>" +
+                    `<span class='keyword-text' value=${keywordInput.val()}>${keywordInput.val()}</span>` +
+                    "</span>");
+                keywordsList.append($newKeyword).trigger('resizeContainer');
+                memberArray.push(keywordInput.val());
+                keywordInput.val("");
+            }
+
+            // 태그 추가 엔터
+            keywordInput.on('keyup', function(e){
+                if((e.keyCode == 13) && (keywordInput.val()!=="")){
+                    addKeyword();
+                }
+            });
+
+            // 태그 추가 버튼
+            $('.keyword-input-button').on('click', function(){
+                if((keywordInput.val()!=="")){
+                    addKeyword();
+                }
+            });
+
+            // 태그 지우기
+            $(document).on("click",".keyword-remove", function(){
+                $(this).parent().addClass('keyword-removed');
+
+                function removeFromMarkup(){
+                    let value = $(".keyword-removed").remove().text();
+                    memberArray = memberArray.filter(function(item) {
+                        return item !== value;
+                    });
+                }
+                setTimeout(removeFromMarkup, 500);
+                keywordsList.css({'height':'auto'}).height();
+            });
+
+            keywordsList.on('resizeContainer', function(){
+                var heightnow = $(this).height();
+                var heightfull = $(this).css({'max-height':'auto', 'height':'auto'}).height();
+
+                $(this).css({ 'height' : heightnow }).animate({ 'height': heightfull }, 200);
+            });
+
+            $(window).on('resize', function() {
+                keywordsList.css({'height':'auto'}).height();
+            });
+
+            $(window).on('load', function() {
+                var keywordCount = $('.keywords-list').children("span").length;
+
+                if (keywordCount > 0) {
+                    keywordsList.css({'height':'auto'}).height();
+
+                }
+            });
+            // 키워드 끝
+
+        });
         // input file 파일 첨부시 fileCheck 함수 실행
         $("#input_file").on("change", fileCheck);
+
+
     });
 
     $(function () {
@@ -205,16 +287,14 @@
     // 이미지
     let imageFileDict = {};
 
-
     function fileCheck(e) {
-        var files = e.target.files;
+        const files = e.target.files;
 
         // 파일 배열 담기
-        var filesArr = Array.prototype.slice.call(files);
+        const filesArr = Array.prototype.slice.call(files);
 
-        // 파일 개수 확인 및 제한
         if (fileCount + filesArr.length > totalCount) {
-            $.alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
+            alert('이미지는 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
             return;
         } else {
             fileCount = fileCount + filesArr.length;
@@ -222,25 +302,20 @@
 
         // 각각의 파일 배열담기 및 기타
         filesArr.forEach(function (f) {
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = function (e) {
                 imageFileDict[fileNum] = files;
-
                 content_files.push(f);
-
                 $('#articlefileChange').append(
-                    '<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
-                    + '<font style="font-size:12px">' + f.name + '</font>'
-                    + '<button> x </button>'
-                    + `<img src="${e.target.result}" data-file=${f.name} className="article-image" width="125" height="125"/>`
-                    + '</div>'
-
+                    '<div class="mx-1" id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">' +
+                    '<button> 삭제 </button>' +
+                    `<img src="${e.target.result}" data-file=${f.name} className="article-image" style="width: 150px; height: 150px"/>` +
+                    '</div>'
                 );
                 fileNum ++;
             };
             reader.readAsDataURL(f);
         });
-        console.log(content_files);
         //초기화 한다.
         $("#input_file").val("");
     }
@@ -251,20 +326,39 @@
         content_files[no].is_delete = true;
         $('#' + fileNum).remove();
         fileCount --;
-        console.log(content_files);
     }
 
-    function registerAction() {
+    document.graduationForm.addEventListener("keydown", evt => {
+        if (evt.code === "Enter") evt.preventDefault();
+    });
+
+    function registerAction(e) {
 
         const form = $("form")[0];
         const formData = new FormData(form);
+
+        if (memberArray.length > 4) {
+            alert("인원은 4명까지만 등록 가능합니다.");
+            return;
+        }
+
+        if (memberArray.length === 0) {
+            alert("본인 포함 팀장과 팀원들을 적어주시기 바랍니다.")
+            return;
+        }
+
+        formData.append("teamMember", memberArray);
         formData.append("title", $('#title').val());
         formData.append("teamName", $('#teamName').val());
-        formData.append("teamMember", $('#teamMember').val());
         formData.append("path", $('#path').val());
         formData.append("graduationType", $('#graduationType').val());
         formData.append("graduationDate", $("#graduationDate").val())
         formData.append("description", $('#description').val());
+
+        if (content_files.length === 0) {
+            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
+            return;
+        }
 
         for (let x = 0; x < content_files.length; x++) {
             // 삭제 안한것만 담아 준다.
@@ -286,7 +380,7 @@
                 location.href = "/graduation/" + path;
             },
             error: function (xhr, status, error) {
-                console.log("실패",status);
+                alert("작성한 내용들을 다시 확인해주세요.")
             }
         });
         return false;
