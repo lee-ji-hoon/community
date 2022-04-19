@@ -27,6 +27,7 @@ public class GraduationController {
     public String graduationListView(@CurrentUser Account account, Model model) {
 
         model.addAttribute(account);
+        model.addAttribute("proejctList",graduationRepository.findAll());
 
         return "graduation/graduation-list";
     }
@@ -49,6 +50,8 @@ public class GraduationController {
                                        @RequestParam(value = "graduationType", required = false) String graduationType,
                                        @RequestParam(value = "graduationDate", required = false) int graduationDate,
                                        @RequestParam(value = "description", required = false) String description) {
+        log.info("teamMember : {}", teamMember);
+
         for (MultipartFile file : multipartFile) {
             log.info("이미지 파일 : {}", file.getName());
         }
