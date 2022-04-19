@@ -94,7 +94,6 @@
                                    th:errors="*{price}">itemDetail Error</p>
                             </div>
 
-
                             <div>
                                 <label for="itemStatus"> 상품 상태 </label>
                                 <select id="itemStatus" name="" class="selectpicker with-border"
@@ -166,7 +165,6 @@
         input.addEventListener('keyup', function(e) {
             let value = e.target.value;
             value = Number(value.replaceAll(',', ''));
-            console.log(value);
             if(isNaN(value)) {         //NaN인지 판별
                 input.value = 0;
             }else {                   //NaN이 아닌 경우
