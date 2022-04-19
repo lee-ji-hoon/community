@@ -7,11 +7,14 @@ import com.community.domain.graduation.GraduationRepository;
 import com.community.service.GraduationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,13 +68,29 @@ public class GraduationController {
         return newGraduationProject.getId();
     }
 
+    @PostMapping("/graduation/{path}/delete")
+    public String graduationDelete(@PathVariable Long path) {
+
+        Graduation graduation = graduationRepository.findById(path).get();
+        graduationService.deleteGraduation(graduation);
+
+        return "redirect:/graduation";
+    }
+
     @GetMapping("/graduation/{path}")
     public String graduationView(Model model, @PathVariable Long path,
                                  @CurrentUser Account account) {
 
         Optional<Graduation> byId = graduationRepository.findById(path);
 
-        model.addAttribute("project",byId.get());
+        String teamMember = byId.get().getTeamMember();
+        String[] teamMemberArray = teamMember.split(",");
+        List<String> teamMemberList = new ArrayList<>();
+
+        teamMemberList.addAll(Arrays.asList(teamMemberArray));
+
+        model.addAttribute("project", byId.get());
+        model.addAttribute("teamMemberList", teamMemberList);
         model.addAttribute(account);
 
         return "graduation/graduation-view";

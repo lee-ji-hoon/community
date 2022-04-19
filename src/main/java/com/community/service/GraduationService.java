@@ -49,7 +49,7 @@ public class GraduationService {
 
             for (String imageFileName : imageFileList) {
                 S3 s3 = new S3();
-                s3.setImageName(imageFileName);
+                s3.setImageName(uploadFolder + imageFileName);
                 s3.setImagePath(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + imageFileName);
                 s3.setGraduation(graduation);
 
@@ -61,5 +61,13 @@ public class GraduationService {
         }
 
         return graduationRepository.save(graduation);
+    }
+
+    public void deleteGraduation(Graduation graduation) {
+        List<S3> imageList = graduation.getImageList(); // 이미지 불러오기
+
+        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+
+        graduationRepository.delete(graduation);
     }
 }

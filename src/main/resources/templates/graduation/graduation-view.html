@@ -58,7 +58,7 @@
                                             <span class="md:block hidden"> 글 수정하기 </span>
                                         </a>
                                         <hr class="my-4">
-                                        <!--<div id="create-post-modal" uk-modal>
+                                        <div id="create-post-modal" uk-modal>
                                             <div class="uk-modal-dialog">
                                                 <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
                                                         type="button" uk-close>
@@ -66,156 +66,151 @@
                                                 </button>
 
                                                 <div class="uk-modal-header text-white">
-                                                    <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
+                                                    <h3 class="text-lg font-semibold" id="forum_head"> 졸업작품 내용 수정하기 </h3>
                                                 </div>
                                                 <form class="needs-validation" id="board_form" onsubmit="return false">
                                                     <div class="uk-modal-body" uk-overflow-auto>
                                                         <div class="space-y-4 g:w-8/12">
-                                                            <div class="font-semibold text-lg"> 유형 선택 </div>
                                                             <hr>
-                                                            <div class="px-2 space-y-2 d-none">
-                                                                <div class="font-semibold text-base"> cid </div>
-                                                                <input type="hidden" placeholder="cid를 입력해주세요." id="cid"
-                                                                       th:value="${council.cid}" name="cid" readonly
-                                                                       aria-describedby="cidHelp"
-                                                                       class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
-                                                            </div>
+                                                            <input type="hidden" id="id" th:value="${project.id}" name="id" readonly>
                                                             <div class="grid grid-cols-2 gap-2">
                                                                 <div>
-                                                                    <label for="selectBox"> 글 종류 선택 </label>
+                                                                    <label for="graduationDate" class="font-bold">졸업작품 연도</label>
                                                                     <div class="form-group">
-                                                                        <select id="selectBox" name="postSort"  class="shadow-none with-border px-2 selectpicker mb-2" aria-describedby="postSortHelp">
-                                                                            <option data-icon="icon-material-outline-assignment" value="공지" th:selected="${council.postSort}=='공지'">공지</option>
-                                                                            <option data-icon="icon-material-outline-help-outline" value="행사" th:selected="${council.postSort}=='행사'">행사</option>
+                                                                        <select id="graduationDate" name="graduationDate"
+                                                                                class="selectpicker form-control"
+                                                                                aria-describedby="graduationDateHelp" required>
+                                                                            <option th:each="date : ${#numbers.sequence(10, 30)}"
+                                                                                    th:selected="${project.graduationDate}==${date}"
+                                                                                    th:value="${date}"
+                                                                                    th:text="'20'+${date}+'년'"></option>
                                                                         </select>
-                                                                        <small id="postSortHelp" class="form-text text-muted">
-                                                                            타학과 행사는 공지로 올려주세요.
+                                                                        <small id="graduationDateHelp" class="form-text text-muted">
+                                                                            졸업작품을 전시한 연도를 선택해주세요.
                                                                         </small>
                                                                     </div>
                                                                 </div>
                                                                 <div>
                                                                     <div class="form-group mb-3">
-                                                                        <label for="postTarget"> 참여 및 공지 대상 </label>
-                                                                        <select id="postTarget" name="postTarget" aria-describedby="postTargetHelp" class="shadow-none with-border px-2 selectpicker mb-2" multiple>
-                                                                            <option data-icon="icon-material-outline-assignment" value="전체 학년" th:selected="${council.postTarget}=='전체 학년'">전체 학년</option>
-                                                                            <option data-icon="icon-material-outline-assignment" value="1학년" th:selected="${council.postTarget}=='1학년'">1학년</option>
-                                                                            <option data-icon="icon-material-outline-assignment" value="2학년" th:selected="${council.postTarget}=='2학년'">2학년</option>
-                                                                            <option data-icon="icon-material-outline-assignment" value="3학년" th:selected="${council.postTarget}=='2학년'">3학년</option>
-                                                                            <option data-icon="icon-material-outline-assignment" value="4학년" th:selected="${council.postTarget}=='3학년'">4학년</option>
+                                                                        <label for="graduationType" class="font-bold"> 졸업작품 전시 종류</label>
+
+                                                                        <select id="graduationType" name="graduationType"
+                                                                                class="selectpicker form-control"
+                                                                                aria-describedby="graduationTypeHelp" required>
+                                                                            <option class=""
+                                                                                    th:selected="${project.graduationDate}=='웹'"
+                                                                                    value="WEB" selected>웹</option>
+                                                                            <option class=""
+                                                                                    th:selected="${project.graduationDate}=='MOBILE'"
+                                                                                    value="MOBILE">모바일</option>
+                                                                            <option class=""
+                                                                                    th:selected="${project.graduationDate}=='VIDEO'"
+                                                                                    value="VIDEO">영상</option>
+                                                                            <option class=""
+                                                                                    th:selected="${project.graduationDate}=='VR_AR'"
+                                                                                    value="VR_AR">VR/AR</option>
                                                                         </select>
-                                                                        <small id="postTargetHelp" class="form-text text-muted">
-                                                                            전체 학년일 경우 <b class="text-blue-500">전체 학년</b>만 선택해주세요.
+                                                                        <small id="studyMethodHelp" class="form-text text-muted">
+                                                                            웹 / 모바일 / 영상 / VR/AR 중에 선택해주세요.
                                                                         </small>
+                                                                        <small class="invalid-feedback">졸업작품 종목을 다시 선택해주세요.</small>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <hr>
-                                                            <div class="font-semibold text-lg"> 상세 정보 입력 </div>
-                                                            &lt;!&ndash; 제목 &ndash;&gt;
-                                                            <div class="form-group">
-                                                                <div class="line">
-                                                                    <input class="line__input form-control" id="title" name="postTitle"
-                                                                           th:value="${council.postTitle}"
-                                                                           type="text" onkeyup="this.setAttribute(  'value', this.value);"
-                                                                           aria-describedby="titleHelp" required autocomplete="off">
-                                                                    <span for="username" class="line__placeholder"> 제목 </span>
+                                                            <!-- 제목 -->
+                                                            <div class="grid grid-cols-2 gap-2">
+                                                                <div class="col-span-2">
+                                                                    <label for="title" class="font-bold"> 졸업작품 프로젝트명</label>
+                                                                    <input th:value="${project.title}"
+                                                                           id="title" type="text" name="title"
+                                                                           class="shadow-none with-border form-control"
+                                                                           placeholder="예) unect" aria-describedby="titleHelp"
+                                                                           required max="20">
+                                                                    <small id="titleHelp" class="form-text text-muted">
+                                                                        20자 이내로 졸업작품 프로젝트명을 적어주세요.
+                                                                    </small>
+                                                                    <small class="invalid-feedback">팀 프로젝트명을 다시 확인해주세요.</small>
                                                                 </div>
-                                                                <small id="titleHelp" class="form-text text-muted">
-                                                                    제목은 5글자부터 최대 30글자까지 입력 가능합니다.
-                                                                </small>
-                                                                <small class="invalid-feedback">제목을 입력해주세요.</small>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <div class="line">
-                                                                    <input class="line__input form-control" id="postLink" name="postLink"
-                                                                           th:value="${council.postLink}"
-                                                                           type="text" onkeyup="this.setAttribute(  'value', this.value);"
-                                                                           aria-describedby="postLinkHelp" autocomplete="off">
-                                                                    <span for="postLink" class="line__placeholder"> 참여 및 참고 링크 </span>
-                                                                </div>
-                                                                <small id="postLinkHelp" class="form-text text-muted">
-                                                                    링크가 없을 경우 아무것도 입력하지 않아도 됩니다.
-                                                                </small>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <div class="line">
-                                                                    <input class="line__input form-control" id="contactNum" name="contactNum"
-                                                                           th:value="${council.contactNum}"
-                                                                           type="text" onkeyup="this.setAttribute(  'value', this.value);"
-                                                                           aria-describedby="contactNumHelp" autocomplete="off">
-                                                                    <span for="contactNum" class="line__placeholder"> 연락처 </span>
-                                                                </div>
-                                                                <small id="contactNumHelp" class="form-text text-muted">
-                                                                    학우들이 편하게 연락할 수 있는 번호 혹은 카카오톡 아이디를 입력해주세요.
-                                                                    <br>작성할 내용이 없다면 아무것도 입력하지 않아도 됩니다.
-                                                                </small>
-                                                            </div>
-                                                            <div id="eventDatePick">
-                                                                <hr class="my-3">
-                                                                <div class="grid grid-cols-2 gap-4">
-                                                                    <div>
-                                                                        <label for="applyPeriodStartDate">신청 시작일</label>
-                                                                        <div class="form-group">
-                                                                            <input id="applyPeriodStartDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                                                   th:value="${council.applyPeriodStartDate}"
-                                                                                   name="applyPeriodStartDate" aria-describedby="applyPeriodStartDateHelp">
-                                                                        </div>
-                                                                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="applyPeriodStartDate">신청 마감일</label>
-                                                                        <div class="form-group">
-                                                                            <input id="applyPeriodEndDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                                                   th:value="${council.applyPeriodEndDate}"
-                                                                                   name="applyPeriodEndDate" aria-describedby="applyPeriodEndDateHelp">
-                                                                        </div>
-                                                                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="eventStartDate">행사 시작일</label>
-                                                                        <div class="form-group">
-                                                                            <input id="eventStartDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                                                   th:value="${council.eventStartDate}"
-                                                                                   name="eventStartDate" aria-describedby="eventStartDateHelp">
-                                                                        </div>
-                                                                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="eventEndDate">행사 종료일</label>
-                                                                        <div class="form-group">
-                                                                            <input id="eventEndDate" type="date" class="shadow-none with-border p-3 form-control"
-                                                                                   th:value="${council.eventEndDate}"
-                                                                                   name="eventEndDate" aria-describedby="eventEndDateHelp">
-                                                                        </div>
-                                                                        <small class="invalid-feedback">날짜를 확인해주세요.</small>
+                                                                <div class="col-span-2">
+                                                                    <div class="col-span-2">
+                                                                        <label for="teamName" class="font-bold"> 팀 이름</label>
+                                                                        <input th:value="${project.teamName}"
+                                                                               id="teamName" type="text" name="teamName"
+                                                                               class="shadow-none with-border form-control"
+                                                                               placeholder="예) 봄" aria-describedby="teamNameHelp"
+                                                                               required max="20">
+                                                                        <small id="teamNameHelp" class="form-text text-muted">
+                                                                            20자 이내로 졸업작품팀 이름을 작성해주세요.
+                                                                        </small>
+                                                                        <small class="invalid-feedback">팀 이름을 다시 작성해주세요. </small>
                                                                     </div>
                                                                 </div>
-                                                                <hr class="my-3">
-                                                            </div>
-                                                            &lt;!&ndash; 본문 &ndash;&gt;
-                                                            <div class="form-group">
-                                                                <div>
-                                                                    <textarea class="form-control" id="content" name="postContent" th:text="${council.postContent}"
-                                                                              type="text" aria-describedby="contentHelp" required></textarea>
+                                                                <div class="col-span-2">
+                                                                    <label for="teamMember" class="font-bold"> 멤버</label>
+                                                                    <div class="keywords-container">
+                                                                        <div class="keyword-input-container shadow-none">
+                                                                            <input id="teamMember" name="teamMember" type="text" class="keyword-input with-border"
+                                                                                   placeholder="팀 멤버를 추가해주세요." aria-describedby="teamMemberHelp"
+                                                                                   maxlength="5"/>
+                                                                            <button type="button" class="keyword-input-button ripple-effect">
+                                                                                <i class="icon-feather-plus"></i></button>
+                                                                        </div>
+                                                                        <div class="keywords-list">
+                                                                            <span class="keyword" th:each="member : ${teamMemberList}">
+                                                                                <span class="keyword-remove"
+                                                                                      th:value="${member}"
+                                                                                      th:text="${member}">Javascript</span>
+                                                                                <span class="keyword-text"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </div>
+                                                                    <small class="invalid-feedback">팀 멤버를 다시 확인해주세요. </small>
                                                                 </div>
-                                                                <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                                <div class="col-span-2">
+                                                                    <label for="path" class="font-bold"> 졸업작품 링크(주소)</label>
+                                                                    <input th:value="${project.path}"
+                                                                           id="path" type="text" name="path"
+                                                                           class="shadow-none with-border form-control"
+                                                                           placeholder="프로젝트 접근 주소(링크)를 작성해주세요."
+                                                                           aria-describedby="pathHelp"
+                                                                           required max="100">
+                                                                    <small id="pathHelp" class="form-text text-muted">
+                                                                        졸업작품 링크나 주소를 적어주세요
+                                                                    </small>
+                                                                    <small class="invalid-feedback">주소를 다시 작성해주세요. </small>
+                                                                </div>
+                                                                <div class="col-span-2">
+                                                                    <label for="description" class="font-bold"> 프로젝트 설명</label>
+                                                                    <textarea th:utext="${project.description}"
+                                                                              id="description" type="textarea" name="description"
+                                                                              class="shadow-none with-border p-3 form-control"
+                                                                              placeholder="졸업작품을 자세히 설명해 주세요." aria-describedby="fullDescriptionHelp"
+                                                                              required>
+                                                                    </textarea>
+
+                                                                    <small id="descriptionHelp" class="form-text text-muted"></small>
+                                                                    <small class="invalid-feedback">설명을 다시 작성해주세요. </small>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="uk-modal-footer uk-text-right text-white">
-                                                        <button th:onclick="|location.href='@{/council/detail/delete/{councilId}(councilId=${council.cid})}'|"
-                                                                class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">삭제하기</button>
-                                                        <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">저장</button>
+                                                        <div class="bg-gray-10 p-3 flex justify-end space-x-1">
+                                                            <button type="submit" form="projectDeleteForm" class="p-2 px-4 rounded bg-red-600 text-white"> 삭제 </button>
+                                                            <button type="submit" onclick="registerAction()" class="button bg-blue-600" > 저장 </button>
+                                                        </div>
                                                     </div>
                                                 </form>
-
-
                                             </div>
-                                        </div>-->
+                                        </div>
                                     </div>
                                 </div>
 
+                                <form id="projectDeleteForm" th:action="@{'/graduation/'+${project.id}+'/delete'}" method="post">
+                                </form>
                                 <!--팀 간단 소개-->
                                 <div class="space-y-2">
                                     <div class="flex items-center space-x-3 my-1">
@@ -276,5 +271,26 @@
     </div>
 
 </div>
+
+<footer th:replace="theme-fragments.html :: summernote-ko-kr"></footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const memberList = [[${teamMemberList}]];
+    /*]]>*/
+
+    $(document).ready(function () {
+        for (const member in memberList) {
+            memberArray.push(memberList[member]);
+        }
+
+        console.log(memberArray);
+    });
+</script>
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: graduation-note-tag"></script>
+<script th:replace="theme-fragments.html :: s3-imge-upload(uploadUrl = '/graduation/update')"></script>
+
+
+
 </body>
 </html>
