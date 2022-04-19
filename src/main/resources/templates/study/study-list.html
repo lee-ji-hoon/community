@@ -89,7 +89,6 @@
                                 </div>
                             </div>
 
-
                             <nav class="responsive-nav md:m-0 -mx-4">
                                 <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                     <li><a href="#" class="lg:px-2"> 참여 </a></li>
@@ -106,11 +105,7 @@
                         </a>
                     </div>
 
-
-
                     <div class="uk-switcher" id="timeline-tab">
-                        <!--전체-->
-<!--                        <div th:replace="theme-fragments.html :: study-list-type-not-contains(studyType=${studyListId})"></div>-->
                         <!--참여 중 스터디-->
                         <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
                         <!--관리 중 스터디-->
