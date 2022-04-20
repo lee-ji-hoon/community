@@ -30,7 +30,7 @@ public class GraduationService {
                                            String path, String graduationType,
                                            int graduationDate, String description, Account account) {
 
-        String uploadFolder = "graduation-img/";
+
 
         Graduation graduation = Graduation.builder()
                 .title(title)
@@ -44,7 +44,44 @@ public class GraduationService {
                 .uploadTime(LocalDateTime.now())
                 .build();
         
-        if (multipartFile.size() != 0) {
+
+        uploadImage(multipartFile, graduation);
+
+        return graduationRepository.save(graduation);
+    }
+
+    public void deleteGraduation(Graduation graduation) {
+        List<S3> imageList = graduation.getImageList(); // 이미지 불러오기
+
+        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+
+        graduationRepository.delete(graduation);
+    }
+
+    public void deleteImage(S3 s3) {
+        s3Repository.delete(s3);
+        s3Service.deleteFile(s3.getImageName());
+    }
+
+    public void updateGraduation(Graduation graduation, List<MultipartFile> multipartFile, String title,
+                                 String teamMember, String teamName, String path, String graduationType,
+                                 int graduationDate, String description) {
+
+        graduation.setTitle(title);
+        graduation.setTeamMember(teamMember);
+        graduation.setTeamName(teamName);
+        graduation.setPath(path);
+        graduation.setGraduationType(graduationType);
+        graduation.setGraduationDate(graduationDate);
+        graduation.setDescription(description);
+
+        uploadImage(multipartFile, graduation);
+    }
+
+    private void uploadImage(List<MultipartFile> multipartFile, Graduation graduation) {
+        String uploadFolder = "graduation-img/";
+
+        if (multipartFile != null) {
             List<String> imageFileList = s3Service.upload(multipartFile, uploadFolder);
 
             for (String imageFileName : imageFileList) {
@@ -59,15 +96,5 @@ public class GraduationService {
                 log.info("s3Image : {}", s3Image);
             }
         }
-
-        return graduationRepository.save(graduation);
-    }
-
-    public void deleteGraduation(Graduation graduation) {
-        List<S3> imageList = graduation.getImageList(); // 이미지 불러오기
-
-        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
-
-        graduationRepository.delete(graduation);
     }
 }
