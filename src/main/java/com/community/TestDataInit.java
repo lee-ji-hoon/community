@@ -154,7 +154,7 @@ public class TestDataInit {
                     .teamName(make)
                     .description(make)
                     .path(make)
-                    .graduationType("MOVIE")
+                    .graduationType("VIDEO")
                     .teamMember("가준영")
                     .graduationDate(25)
                     .build();
