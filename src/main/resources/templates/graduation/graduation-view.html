@@ -3,6 +3,23 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="theme-fragments.html :: head"></head>
+
+<style>
+    a[data-fancybox] img {
+        cursor: zoom-in;
+    }
+
+    .fancybox__container {
+        --fancybox-thumbs-border-radius: 50%;
+        --fancybox-thumbs-ratio: 1;
+
+        --fancybox-thumbs-width: 50px;
+        --fancybox-thumbs-height: 50px;
+
+        --fancybox-accent-color: #F472B6;
+    }
+</style>
+<link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
 <body>
 
 <div id="wrapper">
@@ -37,8 +54,14 @@
                         </div>
                     </div>
 
-                    <div th:each="image : ${project.getImageList()}">
-                        <img th:src="${image.getImagePath()}" height="200"/>
+                    <div id="imageRefreshForm" class="imageRefreshForm">
+                        <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
+                            <a th:each="image : ${project.getImageList()}"
+                               th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="첫 사진">
+                                <img class="rounded" style="width: 200px; height: 150px;"
+                                     th:src="${image.getImagePath()}"/>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -58,6 +81,7 @@
                                             <span class="md:block hidden"> 글 수정하기 </span>
                                         </a>
                                         <hr class="my-4">
+                                        <!--수정 폼-->
                                         <div id="create-post-modal" uk-modal>
                                             <div class="uk-modal-dialog">
                                                 <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
@@ -193,6 +217,39 @@
                                                                     <small id="descriptionHelp" class="form-text text-muted"></small>
                                                                     <small class="invalid-feedback">설명을 다시 작성해주세요. </small>
                                                                 </div>
+
+                                                                <div class="col-span-2">
+                                                                    <div uk-form-custom class="w-full py-3">
+                                                                        <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                                                <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                                                <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                                            </svg>
+                                                                        </div>
+                                                                        <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                                    </div>
+
+                                                                    <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                                                </div>
+
+                                                                <div class="col-span-2">
+                                                                    <br/>
+                                                                    <div id="refreshForm" class="refreshForm" name="refreshForm">
+                                                                        <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+
+                                                                            <div th:each="image : ${project.imageList}"
+                                                                                 class="mx-1">
+                                                                                <form method="post" onsubmit="return false" name="imageDelete" id="imageDelete">
+                                                                                    <input type="hidden" name="imageName" id="imageName" th:value="${image.getImageName()}">
+                                                                                    <button type="submit" onclick="imageDeleteInit()"> 삭제 </button>
+                                                                                </form>
+                                                                                <img th:src="${image.getImagePath()}"
+                                                                                     classname="article-image"
+                                                                                     style="width: 150px; height:200px;"/>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -272,8 +329,34 @@
 
 </div>
 
+<script src="/node_modules/@fancyapps/ui/dist/fancybox.umd.js"></script>
 <footer th:replace="theme-fragments.html :: summernote-ko-kr"></footer>
 <script th:inline="javascript">
+    function imageDeleteInit() {
+        console.log("이미지 삭제 실행");
+
+        const form = $("form")[0];
+        const formData = new FormData(form);
+        formData.append("imageName", $('#imageName').val());
+
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "/graduation/image/delete",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (path) {
+                $('.refreshForm').load(location.href+' .refreshForm');
+                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
+                alert("이미지가 삭제됐습니다.");
+            },
+            error: function (xhr, status, error) {
+                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
+            }
+        });
+    }
+
     /*<![CDATA[*/
     const memberList = [[${teamMemberList}]];
     /*]]>*/
@@ -282,13 +365,14 @@
         for (const member in memberList) {
             memberArray.push(memberList[member]);
         }
-
         console.log(memberArray);
     });
+
+
 </script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
 <script th:replace="theme-fragments.html :: graduation-note-tag"></script>
-<script th:replace="theme-fragments.html :: s3-imge-upload(uploadUrl = '/graduation/update')"></script>
+<script th:replace="theme-fragments.html :: s3-imge-upload(uploadUrl = '/graduation/'+ ${project.id} +'/update')"></script>
 
 
 

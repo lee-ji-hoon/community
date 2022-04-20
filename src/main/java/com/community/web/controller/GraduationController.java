@@ -4,6 +4,8 @@ import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.graduation.Graduation;
 import com.community.domain.graduation.GraduationRepository;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
 import com.community.service.GraduationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class GraduationController {
 
     private final GraduationService graduationService;
     private final GraduationRepository graduationRepository;
+    private final S3Repository s3Repository;
 
     @GetMapping("/graduation")
     public String graduationListView(@CurrentUser Account account, Model model) {
@@ -45,7 +48,7 @@ public class GraduationController {
     @ResponseBody
     @RequestMapping(value = "/graduation-new", method = RequestMethod.POST)
     public Long graduationFormSubmit(@CurrentUser Account account,
-                                       @RequestParam("article_file") List<MultipartFile> multipartFile,
+                                       @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
                                        @RequestParam(value = "title", required = false) String title,
                                        @RequestParam(value = "teamName", required = false) String teamName,
                                        @RequestParam(value = "teamMember", required = false ) String teamMember,
@@ -75,6 +78,39 @@ public class GraduationController {
         graduationService.deleteGraduation(graduation);
 
         return "redirect:/graduation";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/graduation/image/delete", method = RequestMethod.POST)
+    public ResponseEntity graduationDeleteImage(@RequestParam(value = "imageName") String imageName) {
+        S3 s3 = s3Repository.findByImageName(imageName);
+
+        graduationService.deleteImage(s3);
+
+        if(s3 != null) ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/graduation/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity graduationUpdate(@PathVariable Long id,
+                                           @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
+                                           @RequestParam(value = "title", required = false) String title,
+                                           @RequestParam(value = "teamName", required = false) String teamName,
+                                           @RequestParam(value = "teamMember", required = false ) String teamMember,
+                                           @RequestParam(value = "path", required = false) String path,
+                                           @RequestParam(value = "graduationType", required = false) String graduationType,
+                                           @RequestParam(value = "graduationDate", required = false) int graduationDate,
+                                           @RequestParam(value = "description", required = false) String description) {
+
+        Optional<Graduation> byId = graduationRepository.findById(id);
+        Graduation graduation = byId.get();
+
+        graduationService.updateGraduation(graduation, multipartFile, title,
+                teamMember, teamName, path, graduationType,
+                graduationDate, description);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/graduation/{path}")
