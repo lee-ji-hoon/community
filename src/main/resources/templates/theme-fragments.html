@@ -2531,4 +2531,21 @@
     }
 </script>
 
+
+<span th:fragment="projectTypeBadge(projectType)"
+        th:classappend="${projectType == 'WEB'}? 'bg-blue-700' :
+                      (${projectType == 'MOBILE'}? 'bg-green-700' :
+                      (${projectType == 'VIDEO'}? 'bg-yellow-700' :
+                      (${projectType == 'VR/AR'}? 'bg-indigo-700' :
+                      'bg-purple-700')))"
+      class="rounded-full font-weight-light text-monospace
+             badge badge-pill badge-info mr-1 px-2">
+    <span class="text-white">
+        <i class="fa fa-tag"></i>
+        <a class="text-sm"
+           th:href="@{'/graduation/search-keyword/'+${projectType}}"
+           th:text="${projectType}"></a>
+    </span>
+</span>
+
 </html>
