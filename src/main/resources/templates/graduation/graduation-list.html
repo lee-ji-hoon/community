@@ -44,7 +44,9 @@
                                 <div class="card">
                                     <div class="card-media h-28">
                                         <div class="card-media-overly"></div>
-                                        <img th:src="${project.imageList.get(0).getImagePath()}" th:alt="${project.title}" class="">
+                                        <img th:if="${project.imageList.size() != 0}"
+                                             th:src="${project.imageList.get(0).getImagePath()}"
+                                             th:alt="${project.title}" class="">
                                     </div>
 
                                     <div class="card-body">

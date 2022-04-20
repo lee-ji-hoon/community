@@ -362,8 +362,6 @@
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/js/foundation.min.js" crossorigin="anonymous"></script>
-    <script src="/node_modules/cropper/dist/cropper.min.js"></script>
-    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
 
     <!-- css -->
     <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">-->
@@ -2370,7 +2368,7 @@
     // 파일 현재 필드 숫자 totalCount랑 비교값
     let fileCount = 0;
     // 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
-    const totalCount = 10;
+    const totalCount = 6;
     // 파일 고유넘버
     let fileNum = 0;
     // 첨부파일 배열
@@ -2379,6 +2377,7 @@
     let imageFileDict = {};
 
     function fileCheck(e) {
+
         const files = e.target.files;
 
         // 파일 배열 담기
@@ -2400,7 +2399,7 @@
                 $('#articlefileChange').append(
                     '<div class="mx-1" id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">' +
                     '<button> 삭제 </button>' +
-                    `<img src="${e.target.result}" data-file=${f.name} className="article-image" style="width: 150px; height: 150px"/>` +
+                    `<img src="${e.target.result}" data-file=${f.name} className="article-image" style="width: 150px; height: 200px"/>` +
                     '</div>'
                 );
                 fileNum ++;
@@ -2422,6 +2421,59 @@
     document.graduationForm.addEventListener("keydown", evt => {
         if (evt.code === "Enter") evt.preventDefault();
     });
+
+    function updateProject(e) {
+        const form = $("form")[0];
+        const formData = new FormData(form);
+
+        if (memberArray.length > 4) {
+            alert("인원은 4명까지만 등록 가능합니다.");
+            return;
+        }
+
+        if (memberArray.length === 0) {
+            alert("본인 포함 팀장과 팀원들을 적어주시기 바랍니다.")
+            return;
+        }
+
+        formData.append("teamMember", memberArray);
+        formData.append("title", $('#title').val());
+        formData.append("teamName", $('#teamName').val());
+        formData.append("path", $('#path').val());
+        formData.append("graduationType", $('#graduationType').val());
+        formData.append("graduationDate", $("#graduationDate").val())
+        formData.append("description", $('#description').val());
+
+        if (content_files.length === 0) {
+            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
+            return;
+        }
+
+        for (let x = 0; x < content_files.length; x++) {
+            // 삭제 안한것만 담아 준다.
+            if (!content_files[x].is_delete) {
+                formData.append("article_file", content_files[x]);
+            }
+        }
+        /*
+        * 파일업로드 multiple ajax처리
+        */
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "[(${uploadUrl})]",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert("작성한 내용들을 다시 확인해주세요.")
+            }
+        });
+        return false;
+    }
 
     function registerAction(e) {
 
@@ -2446,7 +2498,7 @@
         formData.append("graduationDate", $("#graduationDate").val())
         formData.append("description", $('#description').val());
 
-        if (content_files.length === 0) {
+        if (content_files.length === 0 && $('#imageName').val() == null) {
             alert('이미지는 최소 1개 이상 업로드해야 합니다.');
             return;
         }
