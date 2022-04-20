@@ -9,6 +9,9 @@ import com.community.infra.aws.S3Repository;
 import com.community.service.GraduationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,10 +33,14 @@ public class GraduationController {
     private final S3Repository s3Repository;
 
     @GetMapping("/graduation")
-    public String graduationListView(@CurrentUser Account account, Model model) {
+    public String graduationListView(@CurrentUser Account account, Model model,
+                                     @PageableDefault(size = 9, page = 0, sort = "graduationDate",
+                                             direction = Sort.Direction.ASC) Pageable pageable,
+                                     @RequestParam(required = false, defaultValue = "0", value = "page") int page){
 
         model.addAttribute(account);
-        model.addAttribute("proejctList",graduationRepository.findAll());
+        model.addAttribute("pageNo", page);
+        model.addAttribute("projectList", graduationRepository.findAllGraduation(pageable));
 
         return "graduation/graduation-list";
     }

@@ -9,5 +9,5 @@ public interface GraduationRepositoryExtension {
 
     Page<Graduation> findByGraduationDate(int date, Pageable pageable);
 
-    Page<Graduation> findAll(Pageable pageable);
+    Page<Graduation> findAllGraduation(Pageable pageable);
 }

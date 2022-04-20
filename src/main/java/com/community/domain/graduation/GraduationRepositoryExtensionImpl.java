@@ -14,7 +14,7 @@ public class GraduationRepositoryExtensionImpl extends QuerydslRepositorySupport
     }
 
     @Override
-    public Page<Graduation> findAll(Pageable pageable) {
+    public Page<Graduation> findAllGraduation(Pageable pageable) {
         QGraduation qGraduation = QGraduation.graduation;
         JPQLQuery<Graduation> query = from(qGraduation)
                 .distinct();
