@@ -9,5 +9,7 @@ public interface GraduationRepositoryExtension {
 
     Page<Graduation> findByGraduationDate(int date, Pageable pageable);
 
+    Page<Graduation> findByGraduationType(String keyword, Pageable pageable);
+
     Page<Graduation> findAllGraduation(Pageable pageable);
 }

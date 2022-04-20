@@ -37,4 +37,17 @@ public class GraduationRepositoryExtensionImpl extends QuerydslRepositorySupport
 
         return new PageImpl<>(graduationQueryResults.getResults(), pageable, graduationQueryResults.getTotal());
     }
+
+    @Override
+    public Page<Graduation> findByGraduationType(String keyword, Pageable pageable) {
+        QGraduation qGraduation = QGraduation.graduation;
+        JPQLQuery<Graduation> query = from(qGraduation)
+                .where(qGraduation.graduationType.eq(keyword))
+                .distinct();
+
+        JPQLQuery<Graduation> graduationJPQLQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<Graduation> graduationQueryResults = graduationJPQLQuery.fetchResults();
+
+        return new PageImpl<>(graduationQueryResults.getResults(), pageable, graduationQueryResults.getTotal());
+    }
 }

@@ -180,7 +180,7 @@ public class TestDataInit {
                     .teamName(make)
                     .description(make)
                     .path(make)
-                    .graduationType("VR/AR")
+                    .graduationType("VR_AR")
                     .teamMember("가준영")
                     .graduationDate(2022)
                     .build();
