@@ -28,6 +28,7 @@ public class Graduation {
 
     private String teamName;
 
+    @Column(length=1000)
     private String description;
 
     private String path;
