@@ -61,7 +61,8 @@
                                                              font-weight-light text-monospace badge badge-pill badge-info mr-1 px-2 py-1"
                                                       th:classappend="${project.graduationType.equals('WEB')}? 'bg-blue-700' :
                                                       (${project.graduationType.equals('MOBILE')}? 'bg-green-700' :
-                                                      (${project.graduationType.equals('VIDEO')}? 'bg-orange-700' : 'bg-yellow-700'))">
+                                                      (${project.graduationType.equals('VIDEO')}? 'bg-orange-700' :
+                                                      (${project.graduationType.equals('VR/AR')}? 'bg-yellow-700' : 'bg-sky-700')))">
                                                     <span class="text-white">
                                                         <i class="fa fa-tag"></i>
                                                         <span class="" th:text="${project.graduationType}">Tag</span>
