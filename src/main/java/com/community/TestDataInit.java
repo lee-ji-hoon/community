@@ -143,7 +143,7 @@ public class TestDataInit {
                     .path(make)
                     .graduationType("WEB")
                     .teamMember("이지훈")
-                    .graduationDate(22)
+                    .graduationDate(2019)
                     .build();
             graduationRepository.save(graduation);
         }
@@ -156,7 +156,46 @@ public class TestDataInit {
                     .path(make)
                     .graduationType("VIDEO")
                     .teamMember("가준영")
-                    .graduationDate(25)
+                    .graduationDate(2020)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("MOBILE")
+                    .teamMember("가준영")
+                    .graduationDate(2021)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("VR/AR")
+                    .teamMember("가준영")
+                    .graduationDate(2022)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("기타")
+                    .teamMember("가준영")
+                    .graduationDate(2023)
                     .build();
             graduationRepository.save(graduation);
         }*/

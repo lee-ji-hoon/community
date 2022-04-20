@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,18 +39,24 @@ public class GraduationController {
                                      @PageableDefault(size = 9, page = 0, sort = "graduationDate",
                                              direction = Sort.Direction.ASC) Pageable pageable,
                                      @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
 
         model.addAttribute(account);
         model.addAttribute("pageNo", page);
         model.addAttribute("projectList", graduationRepository.findAllGraduation(pageable));
+        model.addAttribute("now", format);
+
 
         return "graduation/graduation-list";
     }
 
     @GetMapping("/graduation-form")
     public String graduationForm(@CurrentUser Account account, Model model) {
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
 
         model.addAttribute(account);
+        model.addAttribute("now", format);
+
         return "graduation/graduation-form";
     }
 
@@ -63,12 +71,6 @@ public class GraduationController {
                                        @RequestParam(value = "graduationType", required = false) String graduationType,
                                        @RequestParam(value = "graduationDate", required = false) int graduationDate,
                                        @RequestParam(value = "description", required = false) String description) {
-        log.info("teamMember : {}", teamMember);
-
-        for (MultipartFile file : multipartFile) {
-            log.info("이미지 파일 : {}", file.getName());
-        }
-
         Graduation newGraduationProject = graduationService.createNewGraduationProject(
                 multipartFile, title,
                 teamMember, teamName, path, graduationType,
