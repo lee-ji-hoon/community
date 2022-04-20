@@ -135,7 +135,7 @@ public class TestDataInit {
                     null, 5, 10));
         }*/
 
-        for (int i = 0; i < 20; i++) {
+        /*for (int i = 0; i < 20; i++) {
             Graduation graduation = Graduation.builder()
                     .title(i + make)
                     .teamName(make)
@@ -143,7 +143,7 @@ public class TestDataInit {
                     .path(make)
                     .graduationType("WEB")
                     .teamMember("이지훈")
-              /*      .graduationDate(2019)
+                    .graduationDate(2019)
                     .build();
             graduationRepository.save(graduation);
         }
