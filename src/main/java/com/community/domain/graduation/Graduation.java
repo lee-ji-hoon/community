@@ -28,7 +28,8 @@ public class Graduation {
 
     private String teamName;
 
-    @Column(length=1000)
+    @Lob
+    @Column( length = 100000 )
     private String description;
 
     private String path;
