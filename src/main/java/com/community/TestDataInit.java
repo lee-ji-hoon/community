@@ -7,6 +7,8 @@ import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
+import com.community.domain.graduation.Graduation;
+import com.community.domain.graduation.GraduationRepository;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketItemStatus;
 import com.community.domain.market.MarketRepository;
@@ -31,9 +33,11 @@ public class TestDataInit {
     private final PasswordEncoder passwordEncoder;
     private final MarketRepository marketRepository;
     private final StudyRepository studyRepository;
+    private final GraduationRepository graduationRepository;
 
     @PostConstruct
     public void init() {
+        String make = RandomString.make(5);
         String BOARD_CONTENT_VALUE = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\n" +
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Ut enim ad minim veniam,\n" +
@@ -114,25 +118,89 @@ public class TestDataInit {
         }
 
         /*for (int i = 0; i < 50; i++) {
-            String make = RandomString.make(5);
             marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "sell", null, "상세내용" + make, MarketItemStatus.SELLING, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
             marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "buy", null, "상세내용" + make, MarketItemStatus.SHARE, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
             marketRepository.save(new Market(null, null, "새것", "name" + i, 1500, "share", null, "상세내용" + make, MarketItemStatus.PURCHASE, null, "https://unectbucket.s3.ap-northeast-2.amazonaws.com/market-img/3fa026fe-fdab-4cee-a3ce-6d21bbe96a66.JPG", true, LocalDateTime.now()));
         }*/
 
         /*for (int i = 0; i < 50; i++) {
-            String make = RandomString.make(5);
             councilRepository.save(new Council(null, "공지", make, "전체 학년", null, null, make, null, null, null, null, null, null, null, null, null, null, LocalDateTime.now()));
         }*/
 
         /*for (int i = 0; i < 50; i++) {
-            String make = RandomString.make(5);
             Study save = studyRepository.save(new Study(null, null, null, null, null, null,
                     null, null, null, null, null, null,
                     null, null, null, null,
                     null, null, null,
                     null, 5, 10));
         }*/
+
+        /*for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("WEB")
+                    .teamMember("이지훈")
+                    .graduationDate(2019)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("VIDEO")
+                    .teamMember("가준영")
+                    .graduationDate(2020)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("MOBILE")
+                    .teamMember("가준영")
+                    .graduationDate(2021)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("VR_AR")
+                    .teamMember("가준영")
+                    .graduationDate(2022)
+                    .build();
+            graduationRepository.save(graduation);
+        }
+
+        for (int i = 0; i < 20; i++) {
+            Graduation graduation = Graduation.builder()
+                    .title(i + make)
+                    .teamName(make)
+                    .description(make)
+                    .path(make)
+                    .graduationType("기타")
+                    .teamMember("가준영")
+                    .graduationDate(2023)
+                    .build();
+            graduationRepository.save(graduation);
+        }*/
+
+
     }
 
 }

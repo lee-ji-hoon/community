@@ -49,10 +49,4 @@ public class Graduation {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public void addImage(S3 s3, Graduation graduation) {
-        log.info("s3 : {}", s3.getImageName());
-        log.info("graduation : {}", graduation);
-        graduation.imageList.add(s3);
-    }
-
 }

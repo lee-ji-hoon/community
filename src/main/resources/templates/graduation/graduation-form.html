@@ -106,6 +106,7 @@
                                     <option class="" value="MOBILE">모바일</option>
                                     <option class="" value="VIDEO">영상</option>
                                     <option class="" value="VR_AR">VR/AR</option>
+                                    <option class="" value="기타">기타</option>
                                 </select>
                                 <small id="studyMethodHelp" class="form-text text-muted">
                                     웹 / 모바일 / 영상 / VR/AR 중에 선택해주세요.
@@ -117,7 +118,9 @@
                                 <select id="graduationDate" name="graduationDate"
                                         class="selectpicker form-control"
                                         aria-describedby="graduationDateHelp" required>
-                                    <option th:each="date : ${#numbers.sequence(10, 30)}" th:value="${date}" th:text="'20'+${date}+'년'"></option>
+                                    <option th:each="date : ${#numbers.sequence(2015, now)}"
+                                            th:value="${date}"
+                                            th:text="${date}+'년'"></option>
                                 </select>
                                 <small id="graduationDateHelp" class="form-text text-muted">
                                     졸업작품을 전시한 연도를 선택해주세요.

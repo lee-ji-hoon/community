@@ -9,12 +9,19 @@ import com.community.infra.aws.S3Repository;
 import com.community.service.GraduationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.FacesWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,18 +37,72 @@ public class GraduationController {
     private final S3Repository s3Repository;
 
     @GetMapping("/graduation")
-    public String graduationListView(@CurrentUser Account account, Model model) {
+    public String graduationListView(@CurrentUser Account account, Model model,
+                                     @PageableDefault(size = 9, page = 0, sort = "graduationDate",
+                                             direction = Sort.Direction.ASC) Pageable pageable,
+                                     @RequestParam(required = false, defaultValue = "0", value = "page") int page){
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
+        Page<Graduation> graduationPage = graduationRepository.findAllGraduation(pageable);
 
         model.addAttribute(account);
-        model.addAttribute("proejctList",graduationRepository.findAll());
+        model.addAttribute("pageNo", page);
+        model.addAttribute("projectList", graduationPage);
+        model.addAttribute("now", format);
+
 
         return "graduation/graduation-list";
     }
 
-    @GetMapping("/graduation-form")
-    public String graduationForm(@CurrentUser Account account, Model model) {
+    @GetMapping("/graduation/search-date/{date}")
+    public String graduationListByDate(@CurrentUser Account account, Model model,
+                                         @PathVariable int date,
+                                         @PageableDefault(size = 9, page = 0, sort = "graduationDate",
+                                             direction = Sort.Direction.ASC) Pageable pageable,
+                                         @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
+        Page<Graduation> graduationPage = graduationRepository.findByGraduationDate(date, pageable);
 
         model.addAttribute(account);
+        model.addAttribute("keyword", date);
+        model.addAttribute("pageNo", page);
+        model.addAttribute("href", "/graduation/search-date/");
+        model.addAttribute("projectList", graduationPage);
+        model.addAttribute("now", format);
+
+
+        return "graduation/graduation-search";
+    }
+
+    @GetMapping("/graduation/search-keyword/{keyword}")
+    public String graduationListByKeyword(@CurrentUser Account account, Model model,
+                                          @PathVariable String keyword,
+                                          @PageableDefault(size = 9, page = 0, sort = "graduationDate",
+                                                  direction = Sort.Direction.ASC) Pageable pageable,
+                                          @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
+        Page<Graduation> graduationPage = graduationRepository.findByGraduationType(keyword, pageable);
+
+        model.addAttribute(account);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("href", "/graduation/search-keyword/");
+        model.addAttribute("pageNo", page);
+        model.addAttribute("projectList", graduationPage);
+        model.addAttribute("now", format);
+
+
+        return "graduation/graduation-search";
+    }
+
+    @GetMapping("/graduation-form")
+    public String graduationForm(@CurrentUser Account account, Model model) {
+        int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
+
+        model.addAttribute(account);
+        model.addAttribute("now", format);
+
         return "graduation/graduation-form";
     }
 
@@ -56,12 +117,6 @@ public class GraduationController {
                                        @RequestParam(value = "graduationType", required = false) String graduationType,
                                        @RequestParam(value = "graduationDate", required = false) int graduationDate,
                                        @RequestParam(value = "description", required = false) String description) {
-        log.info("teamMember : {}", teamMember);
-
-        for (MultipartFile file : multipartFile) {
-            log.info("이미지 파일 : {}", file.getName());
-        }
-
         Graduation newGraduationProject = graduationService.createNewGraduationProject(
                 multipartFile, title,
                 teamMember, teamName, path, graduationType,

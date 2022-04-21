@@ -133,7 +133,10 @@
                                                                                     value="VIDEO">영상</option>
                                                                             <option class=""
                                                                                     th:selected="${project.graduationDate}=='VR_AR'"
-                                                                                    value="VR_AR">VR/AR</option>
+                                                                                    value="VR_AR">VR_AR</option>
+                                                                            <option class=""
+                                                                                    th:selected="${project.graduationDate}=='기타'"
+                                                                                    value="기타">기타</option>
                                                                         </select>
                                                                         <small id="studyMethodHelp" class="form-text text-muted">
                                                                             웹 / 모바일 / 영상 / VR/AR 중에 선택해주세요.
@@ -284,7 +287,7 @@
                                         <ion-icon name="calendar" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
                                         <div class="flex-1">
                                             <div>
-                                                <a th:text="'20'+${project.graduationDate}+'년'">주제</a>
+                                                <a th:text="${project.graduationDate}+'년'">연도</a>
                                             </div>
                                         </div>
                                     </div>
