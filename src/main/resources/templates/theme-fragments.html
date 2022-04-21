@@ -2272,6 +2272,9 @@
 </footer>
 <script th:fragment="graduation-note-tag">
     let memberArray = [];
+
+    /*const memberPattern = /[가-힣|a-zA-Z]/;*/
+
     $(document).ready(function() {
         //여기 아래 부분
         $('#description').summernote({
@@ -2289,6 +2292,8 @@
             // 키워드 시작
             const keywordInput = $(this).find(".keyword-input");
             const keywordsList = $(this).find(".keywords-list");
+
+
             // 태그 추가
             function addKeyword() {
                 var $newKeyword = $("" +
@@ -2319,12 +2324,16 @@
             // 태그 지우기
             $(document).on("click",".keyword-remove", function(){
                 $(this).parent().addClass('keyword-removed');
-
+                console.log("멤버 삭제");
                 function removeFromMarkup(){
-                    let value = $(".keyword-removed").remove().text();
+                    let value = $(".keyword-removed").remove().text().trim();
+                    console.log("삭제 할 값 : ", value);
+
                     memberArray = memberArray.filter(function(item) {
                         return item !== value;
                     });
+
+                    console.log("삭제 후 멤버 : ", memberArray)
                 }
                 setTimeout(removeFromMarkup, 500);
                 keywordsList.css({'height':'auto'}).height();
