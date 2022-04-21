@@ -1,16 +1,22 @@
 package com.community.domain.graduation;
 
 import com.community.domain.account.Account;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.community.infra.aws.S3;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Slf4j
 public class Graduation {
 
     @Id
@@ -22,6 +28,8 @@ public class Graduation {
 
     private String teamName;
 
+    @Lob
+    @Column( length = 100000 )
     private String description;
 
     private String path;
@@ -34,11 +42,8 @@ public class Graduation {
 
     private int graduationDate;
 
-    // 이미지 접근 이름
-    private String imageName;
-
-    // 이미지 주소
-    private String imagePath;
+    @OneToMany(mappedBy = "graduation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<S3> imageList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
