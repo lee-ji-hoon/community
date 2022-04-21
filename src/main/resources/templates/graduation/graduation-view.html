@@ -186,10 +186,10 @@
                                                                         </div>
                                                                         <div class="keywords-list">
                                                                             <span class="keyword" th:each="member : ${teamMemberList}">
-                                                                                <span class="keyword-remove"
+                                                                                <span class="keyword-remove"></span>
+                                                                                <span class="keyword-text"
                                                                                       th:value="${member}"
-                                                                                      th:text="${member}">Javascript</span>
-                                                                                <span class="keyword-text"></span>
+                                                                                      th:text="${member}"></span>
                                                                             </span>
                                                                         </div>
                                                                         <div class="clearfix"></div>
@@ -367,6 +367,7 @@
 
     $(document).ready(function () {
         for (const member in memberList) {
+            console.log("member : ",member);
             memberArray.push(memberList[member]);
         }
         console.log(memberArray);
