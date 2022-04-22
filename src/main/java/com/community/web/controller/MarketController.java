@@ -118,24 +118,15 @@ public class MarketController {
     }
     @ResponseBody
     @RequestMapping(value = "/market/register/new", method = RequestMethod.POST)
-    public String marketNewProduct(@CurrentUser Account account, Model model,
+    public Long marketNewProduct(@CurrentUser Account account, Model model,
                                     @RequestPart(value = "article_file", required = false) MultipartFile file,
                                     @RequestParam("imageFile") String imageFile) throws IOException {
         // TODO 멀티 이미지 및 AJAX 통신으로 변경
         Long marketId = null;
 
-        if (Objects.equals(imageFile, "checked")) {  // 이미지가 존재
-            String folderPath = "market-img/";
+        marketService.createNewItem();
 
-            String uploadFile = s3Service.upload(file, folderPath);
-            /*CloudFront에로 s3에 접근*/
-            String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + uploadFile;
-            model.addAttribute(account);
-
-        } else { // 이미지 없음
-            model.addAttribute(account);
-        }
-        return "redirect:/market/detail/" + marketId;
+        return marketId;
     }
 
     @PostMapping(value = "/market/detail/{marketId}/update")
