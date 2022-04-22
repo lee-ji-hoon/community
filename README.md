@@ -2,7 +2,7 @@
 
 ## 2022 02 08 기초 세팅
 
-- 팀명 : Spring
+- 팀명 : 봄
 - 프로젝트 : unect (university + connect)
 - 팀원 : 이지훈 (Springboot, JPA, QueryDsl), 가준영 (SpringBoot, JPA)
 
@@ -14,10 +14,7 @@
 
 [FlowChart](https://app.diagrams.net/#G16A5Jk-hlk1xUnX1pVzuDqR5D5I43Seua)
 
-- npm 
-<img width="115" alt="image" src="https://user-images.githubusercontent.com/53300830/155288339-6e533621-eed1-40f1-a76b-552a3a4ee43c.png">
-
-### Spring Initializr 세팅 
+### Spring Initializr 시작 세팅 
 ![image](https://user-images.githubusercontent.com/53300830/152991455-f48272b1-a1b2-4267-aa0f-2948daa15546.png)
 
 ### MYSQL // h2
