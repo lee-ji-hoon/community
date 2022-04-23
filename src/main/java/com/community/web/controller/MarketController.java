@@ -135,8 +135,7 @@ public class MarketController {
                              @RequestPart MultipartFile file,
                              @RequestParam("imageFile") String imageFile) throws IOException {
 
-        log.info("market getMarketType update : {}", marketForm.getMarketType());
-        log.info("market getItemStatus update : {}", marketForm.getItemStatus());
+        // TODO 마켓 재 수정 필요
         Market market = marketRepository.findByMarketId(marketId);
         if (account.getId().equals(market.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
             if (Objects.equals(imageFile, "checked")) {  // 새로운 이미지가 존재
