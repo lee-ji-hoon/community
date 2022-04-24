@@ -55,7 +55,7 @@ public class Council {
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "council", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<S3> s3List = new ArrayList<>();
+    private List<S3> imageList = new ArrayList<>();
 
     private Integer pageView;
 
