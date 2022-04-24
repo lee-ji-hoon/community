@@ -66,12 +66,12 @@
                                         <div class="uk-modal-header bg-white">
                                             <h3 class="text-lg font-semibold" id="forum_head">글 작성하기 </h3>
                                         </div>
-                                        <form class="needs-validation" id="board_form" action="/board/detail" th:action="@{/board/detail}" th:object="${boardForm}" method="post" novalidate>
+                                        <form class="needs-validation" id="board_form" onsubmit="return false" method="post" novalidate enctype="multipart/form-data">
                                             <div class="uk-modal-body" uk-overflow-auto>
                                                 <div class="space-y-4 g:w-8/12">
                                                     <div class="form-group">
                                                         <label for="selectBox"> 유형 선택 </label>
-                                                        <select id="selectBox" name="selectBox"  class="shadow-none with-border px-2" th:field="*{boardTitle}">
+                                                        <select id="selectBox" name="selectBox"  class="shadow-none with-border px-2">
                                                             <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
                                                             <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
                                                             <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
@@ -80,7 +80,7 @@
                                                     <div id="subBoardSort">
                                                         <div class="form-group">
                                                             <label for="selectBoxSub"> 종류 선택 </label>
-                                                            <select id="selectBoxSub" name="selectBoxSub" class="shadow-none with-border form-control px-2" th:field="*{subBoardTitle}">
+                                                            <select id="selectBoxSub" name="selectBoxSub" class="shadow-none with-border form-control px-2">
                                                                 <optgroup label="QnA" id="opgQnA">
                                                                     <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
                                                                     <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
@@ -101,7 +101,7 @@
                                                     <!-- 제목 -->
                                                     <div class="form-group">
                                                         <div class="line">
-                                                            <input class="line__input form-control" id="title" th:field="*{title}" max="30"
+                                                            <input class="line__input form-control" id="title" max="30"
                                                                    type="text" onkeyup="this.setAttribute('value', this.value);"
                                                                    aria-describedby="titleHelp" required autocomplete="off">
                                                             <span for="username" class="line__placeholder"> 제목 </span>
@@ -110,12 +110,11 @@
                                                             제목은 2글자부터 최대 30글자까지 입력 가능합니다.
                                                         </small>
                                                         <small class="invalid-feedback">제목을 입력해주세요.</small>
-                                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">title Error</small>
                                                     </div>
                                                     <!-- 소제목 -->
                                                     <div id="postTitleSub" class="form-group">
                                                         <div class="line">
-                                                            <input class="line__input form-group" id="subTitle" th:field="*{subTitle}"
+                                                            <input class="line__input form-group" id="subTitle"
                                                                    type="text" onkeyup="this.setAttribute('value', this.value);"
                                                                    aria-describedby="subTitleHelp" autocomplete="off">
                                                             <span for="username" class="line__placeholder"> 소제목 </span>
@@ -123,24 +122,41 @@
                                                         <small id="subTitleHelp" class="form-text text-muted">
                                                             예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
                                                         </small>
-                                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('subTitle')}" th:errors="*{subTitle}">subTitle Error</small>
                                                     </div>
                                                     <!-- 본문 -->
                                                     <div>
                                                         <div>
-                                                        <textarea class="form-control"  id="content" th:field="*{content}"
+                                                        <textarea class="form-control"  id="content"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>
                                                         </div>
                                                         <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
                                                         <small class="invalid-feedback">글을 입력해주세요.</small>
-                                                        <small class="form-text text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">content Error</small>
+                                                    </div>
+                                                    <div class="col-span-2">
+                                                        <div uk-form-custom class="w-full py-3">
+                                                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                        </div>
+
+                                                        <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                                    </div>
+
+                                                    <div class="col-span-2">
+                                                        <br />
+                                                        <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="uk-modal-footer uk-text-right bg-white">
                                                 <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">취소</button>
-                                                <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" id="board_form_send" type="submit">저장</button>
+                                                <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" type="submit" onclick="registerAction()">저장</button>
                                             </div>
                                         </form>
 
@@ -290,6 +306,7 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script th:replace="theme-fragments.html :: form-validation"></script>
+    <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
     <script type="application/javascript">
         $( document ).ready( function() {
             $('#content').summernote({
