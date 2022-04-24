@@ -28,4 +28,9 @@ public class InfoPageController {
         model.addAttribute(account);
         return "info/info-privacy";
     }
+    @GetMapping("/info/faq")
+    public String faqPage(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return "info/info-faq";
+    }
 }

@@ -701,22 +701,28 @@
         </ul>
 
         <ul class="side_links">
-            <li>
+            <li th:classappend="${currentSideMenu == 'about'}? active">
                 <a th:href="@{/info/about}">
                     <ion-icon name="people-outline" class="side-icon"></ion-icon>
                     <span>소개</span>
                 </a>
             </li>
-            <li>
+            <li th:classappend="${currentSideMenu == 'contact'}? active">
                 <a th:href="@{/info/contact}">
                     <ion-icon name="mail-outline" class="side-icon"></ion-icon>
                     <span>건의사항</span>
                 </a>
             </li>
-            <li>
+            <li th:classappend="${currentSideMenu == 'privacy'}? active">
                 <a th:href="@{/info/privacy}">
                     <ion-icon name="document-text-outline" class="side-icon"></ion-icon>
                     <span>서비스 약관</span>
+                </a>
+            </li>
+            <li th:classappend="${currentSideMenu == 'faq'}? active">
+                <a th:href="@{/info/faq}">
+                    <ion-icon name="help-circle-outline" class="side-icon"></ion-icon>
+                    <span>자주 묻는 질문(FAQ)</span>
                 </a>
             </li>
 
