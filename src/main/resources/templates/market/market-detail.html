@@ -10,6 +10,20 @@
     #deleteBtn:hover {
         color: #EF4444;
     }
+
+    a[data-fancybox] img {
+        cursor: zoom-in;
+    }
+
+    .fancybox__container {
+        --fancybox-thumbs-border-radius: 50%;
+        --fancybox-thumbs-ratio: 1;
+
+        --fancybox-thumbs-width: 50px;
+        --fancybox-thumbs-height: 50px;
+
+        --fancybox-accent-color: #F472B6;
+    }
 </style>
 <body>
 
@@ -125,7 +139,6 @@
                                             <li>
                                                 <form th:action="@{'/market/detail/'+${product.marketId}+'/delete'}"
                                                       method="POST" id="market-delete" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-200 rounded-md dark:hover:bg-red-600" novalidate>
-                                                    <input type="hidden" th:value="${product.filePath}" name="file" id="file">
                                                     <button id="deleteBtn" type="submit" style="" >
                                                         <i class="uil-trash-alt mr-1"></i>삭제
                                                     </button>
@@ -141,7 +154,18 @@
                                 <div class="text-2xl font-semibold pt-2" th:text="${product.itemName}"> Product title</div>
                                 <p th:utext="${product.itemDetail}"> 물건 설명</p>
 
-                                <img th:src="${product.getFilePath()}"/>
+                                <!--이미지-->
+                                <div id="imageRefreshForm" class="imageRefreshForm">
+                                    <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
+                                        <a th:each="image : ${product.getImageList()}"
+                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="첫 사진">
+                                            <img class="rounded" style="width: 200px; height: 150px;"
+                                                 th:src="${image.getImagePath()}"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+
                                 <!--<td th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></td>-->
                                 <div th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"
                                      class="top-3 absolute bg-gray-100 font-semibold px-3 py-1 right-3 rounded-full text text-sm">
@@ -366,14 +390,11 @@
                                 <h4> 수정   </h4>
                             </div>
                             <form class="needs-validation space-y-4 g:w-8/12 market_form" id="market_form"
-                                   enctype="multipart/form-data" method="post"
-                                  th:action="@{'/market/detail/' + ${product.marketId} + '/update'}"
-                                  th:object="${marketForm}" novalidate>
+                                   enctype="multipart/form-data" method="post" novalidate>
                                 <div class="p-6 space-y-3 flex-1">
                                     <div>
                                         <label for="marketType"> 카테고리 </label>
                                         <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
-                                                th:filed="*{marketType}">
                                             <option value="판매" th:selected="${product.marketType}=='sell'" th:value="sell"> 판매 </option>
                                             <option value="구매" th:selected="${product.marketType}=='buy'" th:value="buy"> 구매 </option>
                                             <option value="나눔" th:selected="${product.marketType}=='share'" th:value="share"> 나눔 </option>
@@ -382,13 +403,10 @@
                                             어떤 방식의 상품을 등록할지 선택해주세요.
                                         </small>
                                         <small class="invalid-feedback">다시 선택해주세요.</small>
-                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('marketType')}"
-                                           th:errors="*{marketType}">marketType Error</p>
                                     </div>
                                     <div>
                                         <label for="itemName"> 품명  </label>
                                         <input id="itemName"type="text" name="itemName"
-                                               th:filed="*{itemName}"
                                                th:value="${product.itemName}"
                                                aria-describedby="itemNameHelp" required max="50"
                                                class="with-border" placeholder="">
@@ -396,21 +414,16 @@
                                             50자 이내로 적어주세요.
                                         </small>
                                         <small class="invalid-feedback">물건의 품명을 다시 확인해주세요.</small>
-                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('itemName')}"
-                                           th:errors="*{itemName}">itemName Error</p>
                                     </div>
                                     <div>
                                         <label for="description"> 설명  </label>
                                         <textarea id="description" type="text" name="itemDetail"
-                                                  th:filed="*{itemDetail}"
                                                   th:value="${product.itemDetail}" th:utext="${product.itemDetail}" rows="2" class="with-border w-full p-4"
                                                   placeholder="상품의 설명을 자세히 적어주세요." required max="250"></textarea>
                                         <small id="itemDetailHelp" class="form-text text-muted">
                                             상품의 설명은 250자 이내로 작성 가능합니다.
                                         </small>
                                         <small class="invalid-feedback">상품 설명을 다시 확인해주세요.</small>
-                                        <p class="form-text text-danger" th:if="${#fields.hasErrors('itemDetail')}"
-                                           th:errors="*{itemDetail}">itemDetail Error</p>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-4">
@@ -421,18 +434,14 @@
                                                    type="text" class="with-border w-full"
                                                    aria-describedby="priceHelp"
                                                    maxlength="10">
-                                            <input type="hidden" id="priceNum" th:field="*{price}">
                                             <small id="priceHelp" class="form-text text-muted">
                                                 숫자만 입력 가능하며, 그외에는 입력할시 입력창이 초기화됩니다.
                                             </small>
                                             <small class="invalid-feedback">숫자만 입력이 가능합니다.</small>
-                                            <p class="form-text text-danger" th:if="${#fields.hasErrors('price')}"
-                                               th:errors="*{price}">itemDetail Error</p>
                                         </div>
                                         <div>
                                             <label for="itemStatus"> 상품 상태 </label>
                                             <select id="itemStatus" name="itemStatus" class="selectpicker with-border"
-                                                    th:filed="*{itemStatus}"
                                                     aria-describedby="itemStatusHelp">
                                                 <option value="새것" th:selected="${product.itemStatus}=='새것'" th:value="새것"> 새 것 </option>
                                                 <option value="사용감있음" th:selected="${product.itemStatus}=='사용감있음'" th:value="사용감있음"> 사용감 있음 </option>
@@ -442,8 +451,6 @@
                                                 본인이 판매할 물건의 상태 혹은 구매하고 싶은 물건의 상태를 골라주세요
                                             </small>
                                             <small class="invalid-feedback">상품 상태를 다시 확인해주세요.</small>
-                                            <p class="form-text text-danger" th:if="${#fields.hasErrors('itemStatus')}"
-                                               th:errors="*{itemStatus}">itemDetail Error</p>
                                         </div>
                                     </div>
                                     <div uk-form-custom class="w-full py-3">
@@ -455,12 +462,11 @@
                                         </div>
                                         <input class="my-5" type="file" name="file" id="input-image" accept="image/png, image/jpeg">
 
-                                        <img style="width: 500px;" id="preview-image" th:src="${product.filePath}">
                                         <input type="hidden" name="imageFile" id="imageFile">
                                     </div>
                                 </div>
                                 <div class="p-5">
-                                    <button onclick="update_market()" type="submit"
+                                    <button onclick="" type="submit"
                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                                         수정
                                     </button>
@@ -477,18 +483,11 @@
         </div>
     </div>
 </div>
+<script src="/node_modules/@fancyapps/ui/dist/fancybox.umd.js"></script>
+<link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
 <div th:replace="theme-fragments :: bookmarkAjax"></div>
 <div th:replace="theme-fragments :: replyAjax"></div>
 <script type="application/javascript" th:inline="javascript">
-    function update_market() {
-        let price = document.getElementById("price");
-        let priceNum = document.getElementById("priceNum");
-
-        priceNum.value = price.value.replaceAll(',', '');
-
-        $("#market_form").submit();
-    }
-
     const input = document.querySelector('#price');      //[1]
     input.addEventListener('keyup', function(e) {
         let value = e.target.value;
@@ -502,34 +501,6 @@
         }
     })
 
-    function readImage(input) {
-
-        let maxSize = 5 * 1024 * 1024; // 5MB
-        let size = input.files[0].size;
-        console.log(size);
-        if(size > maxSize){
-            alert("이미지 용량은 5MB 이내로 등록 가능합니다. ");
-            return;
-        }
-
-        // 인풋 태그에 파일이 있는 경우
-        if(input.files && input.files[0]) {
-            // 이미지 파일인지 검사 (생략)
-            let imageFile = $("#imageFile");
-            imageFile.val("checked");
-            console.log(imageFile);
-
-            // FileReader 인스턴스 생성
-            const reader = new FileReader()
-            // 이미지가 로드가 된 경우
-            reader.onload = e => {
-                const previewImage = document.getElementById("preview-image")
-                previewImage.src = e.target.result
-            }
-            // reader가 이미지 읽도록 하기
-            reader.readAsDataURL(input.files[0])
-        }
-    }
     // input file에 change 이벤트 부여
     const inputImage = document.getElementById("input-image")
     inputImage.addEventListener("change", e => {
