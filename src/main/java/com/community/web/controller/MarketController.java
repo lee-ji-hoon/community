@@ -116,35 +116,17 @@ public class MarketController {
 
         return "market/market-form";
     }
-
-    @PostMapping("/market/register/new")
-    public String marketNewProduct(@CurrentUser Account account, Model model,
-                                    @Valid MarketForm marketForm,
-                                    @RequestPart MultipartFile file,
+    @ResponseBody
+    @RequestMapping(value = "/market/register/new", method = RequestMethod.POST)
+    public Long marketNewProduct(@CurrentUser Account account, Model model,
+                                    @RequestPart(value = "article_file", required = false) MultipartFile file,
                                     @RequestParam("imageFile") String imageFile) throws IOException {
-        log.info("file = {}", file.getName());
-        log.info("imageFile = {}", imageFile);
+        // TODO 멀티 이미지 및 AJAX 통신으로 변경
         Long marketId = null;
 
-        if (Objects.equals(imageFile, "checked")) {  // 이미지가 존재
-            String folderPath = "market-img/";
+        marketService.createNewItem();
 
-            String uploadFile = s3Service.upload(file, folderPath);
-
-            /*CloudFront에로 s3에 접근*/
-            String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + uploadFile;
-
-            Market newItem = marketService.createNewItem(modelMapper.map(marketForm, Market.class),
-                                                                        account, marketImagePath, uploadFile, folderPath, marketForm.getMarketType());
-            model.addAttribute(account);
-            marketId = newItem.getMarketId();
-
-        } else { // 이미지 없음
-            Market newItem = marketService.createNewItemNoImage(modelMapper.map(marketForm, Market.class), account, marketForm.getMarketType());
-            model.addAttribute(account);
-            marketId = newItem.getMarketId();
-        }
-        return "redirect:/market/detail/" + marketId;
+        return marketId;
     }
 
     @PostMapping(value = "/market/detail/{marketId}/update")
@@ -153,8 +135,7 @@ public class MarketController {
                              @RequestPart MultipartFile file,
                              @RequestParam("imageFile") String imageFile) throws IOException {
 
-        log.info("market getMarketType update : {}", marketForm.getMarketType());
-        log.info("market getItemStatus update : {}", marketForm.getItemStatus());
+        // TODO 마켓 재 수정 필요
         Market market = marketRepository.findByMarketId(marketId);
         if (account.getId().equals(market.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
             if (Objects.equals(imageFile, "checked")) {  // 새로운 이미지가 존재
