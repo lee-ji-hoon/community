@@ -52,14 +52,10 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
     private final ReplyRepository replyRepository;
-    private final AccountRepository accountRepository;
-    private final BoardReportRepository boardReportRepository;
-    private final ReplyReportRepository replyReportRepository;
     private final BookmarkRepository bookmarkRepository;
     private final S3Repository s3Repository;
 
     private final BoardService boardService;
-    private final LikeService likeService;
     private final ReplyService replyService;
 
     @GetMapping("/board/{type}/search")
@@ -200,7 +196,7 @@ public class BoardController {
         return "board/board-detail";
     }
 
-    @PostMapping("/board/update/{boardId}")
+    /*@PostMapping("/board/update/{boardId}")
     public String boardDetailUpdate(@PathVariable long boardId, @Valid BoardForm boardForm, Errors errors, Model model,
                                     RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         boardService.updateBoard(boardId, boardForm);
@@ -208,7 +204,7 @@ public class BoardController {
 
 
         return "redirect:/board/detail/{boardId}";
-    }
+    }*/
     // 게시글 수정 후 {boardId}로 리다이렉트
     /*@ResponseBody
     @RequestMapping(value = "/board/detail/update")
@@ -278,11 +274,19 @@ public class BoardController {
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         log.info("보드 찾기 : " + boardId);
         Board currentBoard = boardRepository.findByBid(boardId);
+        String postSort = currentBoard.getBoardTitle();
         if (account.getId().equals(currentBoard.getWriter().getId())) {
             log.info("보드 삭제 : " + currentBoard);
             boardService.deleteBoard(currentBoard);
             redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
-            return "redirect:/board";
+            switch (postSort) {
+                case "자유" :
+                    return "redirect:/board/free";
+                case "정보" :
+                    return "redirect:/board/forum";
+                case "질문" :
+                    return "redirect:/board/qna";
+            }
         }
         redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
         return "redirect:/board/detail/{boardId}";
