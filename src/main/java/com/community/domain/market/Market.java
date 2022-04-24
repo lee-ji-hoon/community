@@ -45,7 +45,7 @@ public class Market {
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @OneToMany(mappedBy = "market", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<S3> s3List = new ArrayList<>();
+    private List<S3> imageList = new ArrayList<>();
 
     @Lob
     @Type(type = "text")
@@ -55,7 +55,7 @@ public class Market {
     @Enumerated(EnumType.STRING)
     private MarketItemStatus marketItemStatus;
 
-    private boolean published = true;
-
     private LocalDateTime uploadTime;
+
+    private boolean published = true;
 }

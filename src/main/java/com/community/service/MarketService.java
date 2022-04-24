@@ -24,21 +24,15 @@ public class MarketService {
 
     private final MarketRepository marketRepository;
     private final S3Repository s3Repository;
+
     private final S3Service s3Service;
 
-    /*public void createNewItem() {
-        *//*marketSetType(market, marketType);
-        market.setUploadTime(LocalDateTime.now());
-        market.setSeller(account);
-        market.setFileName(uploadFolder+uploadFile);
-        market.setFilePath(marketImagePath);
-        return marketRepository.save(market);*//*
 
-    }*/
-
-    public Market createNewItem(List<MultipartFile> multipartFileLIst, String itemName, String description, int price,
-                              String itemStatus, Account account) {
+    public Market createNewItem(List<MultipartFile> multipartFileLIst, String itemName, String marketType,
+                                String description, int price,
+                                String itemStatus, Account account) {
         Market market = Market.builder()
+                .marketType(marketType)
                 .itemName(itemName)
                 .itemDetail(description)
                 .price(price)
@@ -46,6 +40,8 @@ public class MarketService {
                 .seller(account)
                 .uploadTime(LocalDateTime.now())
                 .build();
+
+        marketSetType(market, market.getMarketType());
 
         uploadImage(multipartFileLIst, market);
 

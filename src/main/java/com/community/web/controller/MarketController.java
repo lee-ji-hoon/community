@@ -36,9 +36,7 @@ import java.util.Optional;
 public class MarketController {
 
     private final MarketService marketService;
-    private final ModelMapper modelMapper;
     private final BoardService boardService;
-    private final S3Service s3Service;
 
     private final MarketRepository marketRepository;
     private final ReplyRepository replyRepository;
@@ -115,18 +113,20 @@ public class MarketController {
         return "market/market-form";
     }
     @ResponseBody
-    @RequestMapping(value = "/market/register/new", method = RequestMethod.POST)
-    public String marketNewProduct(@CurrentUser Account account,
+    @RequestMapping(value = "/market/register", method = RequestMethod.POST)
+    public Long marketNewProduct(@CurrentUser Account account,
                                     @RequestPart(value = "article_file", required = false) List<MultipartFile> multipartFileLIst,
                                     @RequestPart(value = "itemName", required = false) String itemName,
+                                    @RequestPart(value = "marketType", required = false) String marketType,
                                     @RequestPart(value = "description", required = false) String description,
-                                    @RequestPart(value = "price", required = false) int price,
+                                    @RequestPart(value = "price", required = false) String price,
                                     @RequestPart(value = "itemStatus", required = false) String itemStatus) throws IOException {
+        log.info("market 등록 진행 중");
 
-        Market newItem = marketService.createNewItem(multipartFileLIst, itemName, description, price, itemStatus, account);
 
+        Market market = marketService.createNewItem(multipartFileLIst, itemName, marketType, description, Integer.parseInt(price), itemStatus, account);
 
-        return "redirect:/market/" + newItem.getMarketId();
+        return market.getMarketId();
     }
 
     @GetMapping("/market/detail/{marketId}")
