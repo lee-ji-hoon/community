@@ -294,7 +294,6 @@
                 var data = new Identicon(hash,{format:'svg'}).toString();
                 $(this).attr('src', "data:image/svg+xml;base64,"+data);
             });
-
             $('#loadingSpin').hide();
 
             $(document).on('click', '#search_btn', function() {
@@ -356,8 +355,8 @@
     <!-- 기존에서 불러온 것
     ================================================== -->
     <!-- script -->
-
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="/node_modules/clipboard/dist/clipboard.min.js"></script>
     <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -1147,6 +1146,23 @@
                 height: 300
             });
         });
+    </script>
+</div>
+<div th:fragment="clipboard-save">
+    <script type="application/javascript">
+        function clipboardSave() {
+            var clipboard = new Clipboard('.clipboard-btn');
+            clipboard.on('success', function(e) {
+                console.log(e);
+                alert("Copy Success");
+                clipboard.destroy();
+            });
+            clipboard.on('error', function(e) {
+                console.log(e);
+                alert("Copy Failed");
+                clipboard.destroy();
+            });
+        }
     </script>
 </div>
 
