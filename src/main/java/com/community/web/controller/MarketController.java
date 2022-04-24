@@ -11,7 +11,6 @@ import com.community.service.BoardService;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.MarketService;
-import com.community.web.dto.MarketForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -100,7 +99,7 @@ public class MarketController {
     }
 
     @GetMapping("/market/register/new")
-    public String marketNewForm(@CurrentUser Account account, Model model, @Valid MarketForm marketForm, RedirectAttributes redirectAttributes){
+    public String marketNewForm(@CurrentUser Account account, Model model,  RedirectAttributes redirectAttributes){
         boolean emailVerified = account.isEmailVerified();
 
         log.info("email 체크 : {}", emailVerified);
@@ -112,45 +111,22 @@ public class MarketController {
         }
 
         model.addAttribute(account);
-        model.addAttribute(new MarketForm());
 
         return "market/market-form";
     }
     @ResponseBody
     @RequestMapping(value = "/market/register/new", method = RequestMethod.POST)
-    public Long marketNewProduct(@CurrentUser Account account, Model model,
-                                    @RequestPart(value = "article_file", required = false) MultipartFile file,
-                                    @RequestParam("imageFile") String imageFile) throws IOException {
-        // TODO 멀티 이미지 및 AJAX 통신으로 변경
-        Long marketId = null;
+    public String marketNewProduct(@CurrentUser Account account,
+                                    @RequestPart(value = "article_file", required = false) List<MultipartFile> multipartFileLIst,
+                                    @RequestPart(value = "itemName", required = false) String itemName,
+                                    @RequestPart(value = "description", required = false) String description,
+                                    @RequestPart(value = "price", required = false) int price,
+                                    @RequestPart(value = "itemStatus", required = false) String itemStatus) throws IOException {
 
-        marketService.createNewItem();
+        Market newItem = marketService.createNewItem(multipartFileLIst, itemName, description, price, itemStatus, account);
 
-        return marketId;
-    }
 
-    @PostMapping(value = "/market/detail/{marketId}/update")
-    public String marketUpdate(@CurrentUser Account account, @PathVariable long marketId,
-                             @Valid MarketForm marketForm,
-                             @RequestPart MultipartFile file,
-                             @RequestParam("imageFile") String imageFile) throws IOException {
-
-        // TODO 마켓 재 수정 필요
-        Market market = marketRepository.findByMarketId(marketId);
-        if (account.getId().equals(market.getSeller().getId())) { // 현재 접속중 유저와 seller 동일 체크
-            if (Objects.equals(imageFile, "checked")) {  // 새로운 이미지가 존재
-                s3Service.deleteFile(market.getFileName());
-                String uploadFolder = "market-img/"; // 업로드 폴더
-                String uploadFile = s3Service.upload(file, uploadFolder); // 이미지 업로드
-
-                /*CloudFront에로 s3에 접근*/
-                String marketImagePath = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + uploadFile;
-
-                marketService.updateMarketImage(market ,marketImagePath, uploadFile, uploadFolder);
-            }
-            marketService.updateMarket(marketForm, market, account, marketForm.getMarketType());
-        }
-        return "redirect:/market/detail/" + marketId;
+        return "redirect:/market/" + newItem.getMarketId();
     }
 
     @GetMapping("/market/detail/{marketId}")
@@ -167,20 +143,16 @@ public class MarketController {
         model.addAttribute("product", detail);
         model.addAttribute("reply", replies);
         model.addAttribute("service", boardService);
-        model.addAttribute(new MarketForm(detail));
 
         return "market/market-detail";
     }
 
     @PostMapping("/market/detail/{marketId}/delete")
     public String marketDelete(@CurrentUser Account account, Model model,
-                               @PathVariable long marketId, RedirectAttributes redirectAttributes) {
+                               @PathVariable Long marketId, RedirectAttributes redirectAttributes) {
         Market market = marketRepository.findByMarketId(marketId);
 
         if (account.getId().equals(market.getSeller().getId())) {
-            String fileName = market.getFileName();
-            if (fileName != null) s3Service.deleteFile(fileName);
-
             marketService.deleteProduct(market);
             redirectAttributes.addFlashAttribute("message", "해당 게시글이 삭제 됐습니다.");
             model.addAttribute(account);
