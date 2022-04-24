@@ -1,5 +1,9 @@
 package com.community.service;
 
+import com.community.domain.graduation.Graduation;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
+import com.community.infra.aws.S3Service;
 import com.community.web.dto.CouncilForm;
 import com.community.domain.account.Account;
 import com.community.domain.council.Council;
@@ -11,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -27,36 +32,69 @@ import java.util.List;
 public class CouncilService {
 
     private final CouncilRepository councilRepository;
+    private final S3Repository s3Repository;
+    private final S3Service s3Service;
 
-    public Council saveNewPosts(CouncilForm councilForm, Account account) {
+    public Council saveNewPosts(List<MultipartFile> multipartFile, Account account, String postSort, String postTarget,
+                                String postTitle, String postLink, String contactNum,
+                                LocalDate applyPeriodStartDate, LocalDate applyPeriodEndDate,
+                                LocalDate eventStartDate, LocalDate eventEndDate, String postContent) {
         Council council = Council.builder()
-                .postTitle(councilForm.getPostTitle())
-                .postLink(councilForm.getPostLink())
-                .postContent(councilForm.getPostContent())
-                .postTarget(councilForm.getPostTarget())
-                .postSort(councilForm.getPostSort())
-                .contactNum(councilForm.getContactNum())
                 .postWriter(account)
-                .pageView(0)
-                .eventStartDate(councilForm.getEventStartDate())
-                .eventEndDate(councilForm.getEventEndDate())
-                .applyPeriodStartDate(councilForm.getApplyPeriodStartDate())
-                .applyPeriodEndDate(councilForm.getApplyPeriodEndDate())
+                .postSort(postSort)
+                .postTarget(postTarget)
+                .postTitle(postTitle)
+                .postLink(postLink)
+                .contactNum(contactNum)
+                .applyPeriodStartDate(applyPeriodStartDate)
+                .applyPeriodEndDate(applyPeriodEndDate)
+                .eventStartDate(eventStartDate)
+                .eventEndDate(eventEndDate)
+                .postContent(postContent)
                 .uploadTime(LocalDateTime.now())
+                .pageView(0)
                 .build();
+
+        uploadImage(multipartFile, council);
+
         return councilRepository.save(council);
+    }
+
+    private void uploadImage(List<MultipartFile> multipartFile, Council council) {
+        String uploadFolder = "council-img/";
+
+        if (multipartFile != null) {
+            List<String> imageFileList = s3Service.upload(multipartFile, uploadFolder);
+
+            for (String imageFileName : imageFileList) {
+                S3 s3 = new S3();
+                s3.setImageName(uploadFolder + imageFileName);
+                s3.setImagePath(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + imageFileName);
+                s3.setCouncil(council);
+
+                S3 s3Image = s3Repository.save(s3);
+
+                log.info("graduation Image :{}", council.getImageList());
+                log.info("s3Image : {}", s3Image);
+            }
+        }
+    }
+
+    public void deleteImage(S3 s3) {
+        s3Repository.delete(s3);
+        s3Service.deleteFile(s3.getImageName());
+    }
+
+    public void deleteCouncil(Council council) {
+        List<S3> imageList = council.getImageList(); // 이미지 불러오기
+
+        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+
+        councilRepository.delete(council);
     }
 
     public List<Council> postSort(String sort) {
         return councilRepository.findAllByPostSortOrderByEventEndDateDesc(sort);
-    }
-
-    public List<Council> noticeSort(String sort) {
-        return councilRepository.findTop4ByPostSortOrderByUploadTimeDesc(sort);
-    }
-
-    public Page<Council> noticePage(String sort, int page) {
-        return councilRepository.findByPostSortOrderByUploadTimeDesc(sort, PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "uploadTime")));
     }
 
     public LocalDate nowDate() {
@@ -111,7 +149,7 @@ public class CouncilService {
     }
 
     // 업데이트
-    public Council updateCouncil(Long cid, CouncilForm councilForm) {
+    /*public Council updateCouncil(Long cid, CouncilForm councilForm) {
         Council council = councilRepository.findByCid(cid);
         council.setPostSort(councilForm.getPostSort());
         council.setPostTitle(councilForm.getPostTitle());
@@ -125,6 +163,25 @@ public class CouncilService {
         council.setApplyPeriodEndDate(councilForm.getApplyPeriodEndDate());
         return councilRepository.save(council);
 
+    }*/
+    public void updateCouncil(Council council, List<MultipartFile> multipartFile,
+                                 String postSort, String postTarget,
+                                 String postTitle, String postLink, String contactNum,
+                                 LocalDate applyPeriodStartDate, LocalDate applyPeriodEndDate,
+                                 LocalDate eventStartDate, LocalDate eventEndDate, String postContent) {
+
+        council.setPostSort(postSort);
+        council.setPostTitle(postTitle);
+        council.setPostTarget(postTarget);
+        council.setPostLink(postLink);
+        council.setContactNum(contactNum);
+        council.setPostContent(postContent);
+        council.setApplyPeriodStartDate(applyPeriodStartDate);
+        council.setApplyPeriodEndDate(applyPeriodEndDate);
+        council.setEventStartDate(eventStartDate);
+        council.setEventEndDate(eventEndDate);
+
+        uploadImage(multipartFile, council);
     }
 
 }

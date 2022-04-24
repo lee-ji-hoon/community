@@ -8,7 +8,8 @@ import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.likes.LikeRepository;
 import com.community.domain.likes.Likes;
-import com.community.domain.market.Market;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
 import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.council.Council;
@@ -21,10 +22,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +47,8 @@ public class CouncilController {
     private final BookmarkRepository bookmarkRepository;
     private final LikeRepository likeRepository;
     private final ReplyRepository replyRepository;
+    private final S3Repository s3Repository;
+
     private final CouncilService councilService;
     private final BoardService boardService;
     private final ReplyService replyService;
@@ -98,19 +103,39 @@ public class CouncilController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/council/noticeGetMore")
-    public void councilNoticeGetMore() {
-
+    @RequestMapping(value = "/council-new", method = RequestMethod.POST)
+    public Long createNewPost(@CurrentUser Account account,
+                              @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                              @RequestParam(value = "postSort", required = false) String postSort,
+                              @RequestParam(value = "postTarget", required = false) String postTarget,
+                              @RequestParam(value = "postTitle", required = false) String postTitle,
+                              @RequestParam(value = "postLink", required = false) String postLink,
+                              @RequestParam(value = "contactNum", required = false) String contactNum,
+                              @RequestParam(value = "applyPeriodStartDate", required = false) String applyPeriodStartDate,
+                              @RequestParam(value = "applyPeriodEndDate", required = false) String applyPeriodEndDate,
+                              @RequestParam(value = "eventStartDate", required = false) String eventStartDate,
+                              @RequestParam(value = "eventEndDate", required = false) String eventEndDate,
+                              @RequestParam(value = "postContent", required = false) String postContent) {
+        LocalDate APSD = LocalDate.parse(applyPeriodStartDate, DateTimeFormatter.ISO_DATE);
+        LocalDate APED = LocalDate.parse(applyPeriodEndDate, DateTimeFormatter.ISO_DATE);
+        LocalDate ESD = LocalDate.parse(eventStartDate, DateTimeFormatter.ISO_DATE);
+        LocalDate EED = LocalDate.parse(eventEndDate, DateTimeFormatter.ISO_DATE);
+        Council newCouncilPost = councilService.saveNewPosts(multipartFile, account, postSort, postTarget,
+                postTitle, postLink, contactNum,
+                APSD, APED, ESD, EED, postContent);
+        return newCouncilPost.getCid();
     }
 
-    @PostMapping("/council/detail")
-    public String createNewPost(@Valid CouncilForm councilForm, Errors errors, RedirectAttributes redirectAttributes, @CurrentUser Account account) {
-        if (errors.hasErrors()) {
-            return "council/councils";
-        }
-        Council savedPost = councilService.saveNewPosts(councilForm, account);
-        redirectAttributes.addAttribute("cid", savedPost.getCid());
-        return "redirect:/council/detail/{cid}";
+    @ResponseBody
+    @RequestMapping(value = "/council/image/delete", method = RequestMethod.POST)
+    public ResponseEntity councilDeleteImage(@RequestParam(value = "imageName") String imageName) {
+        S3 s3 = s3Repository.findByImageName(imageName);
+
+        councilService.deleteImage(s3);
+
+        if(s3 != null) ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/council/detail/{cid}")
@@ -136,8 +161,36 @@ public class CouncilController {
         return "council/council-detail";
     }
 
-    // 게시글 수정 후 {boardId}로 리다이렉트
     @ResponseBody
+    @RequestMapping(value = "/council/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity councilUpdate(@PathVariable Long id,
+                                           @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                           @RequestParam(value = "postSort", required = false) String postSort,
+                                           @RequestParam(value = "postTarget", required = false) String postTarget,
+                                           @RequestParam(value = "postTitle", required = false) String postTitle,
+                                           @RequestParam(value = "postLink", required = false) String postLink,
+                                           @RequestParam(value = "contactNum", required = false) String contactNum,
+                                           @RequestParam(value = "applyPeriodStartDate", required = false) String applyPeriodStartDate,
+                                           @RequestParam(value = "applyPeriodEndDate", required = false) String applyPeriodEndDate,
+                                           @RequestParam(value = "eventStartDate", required = false) String eventStartDate,
+                                           @RequestParam(value = "eventEndDate", required = false) String eventEndDate,
+                                           @RequestParam(value = "postContent", required = false) String postContent) {
+        LocalDate APSD = LocalDate.parse(applyPeriodStartDate, DateTimeFormatter.ISO_DATE);
+        LocalDate APED = LocalDate.parse(applyPeriodEndDate, DateTimeFormatter.ISO_DATE);
+        LocalDate ESD = LocalDate.parse(eventStartDate, DateTimeFormatter.ISO_DATE);
+        LocalDate EED = LocalDate.parse(eventEndDate, DateTimeFormatter.ISO_DATE);
+
+        Optional<Council> byId = councilRepository.findById(id);
+        Council council = byId.get();
+
+        councilService.updateCouncil(council, multipartFile, postSort, postTarget,
+                postTitle, postLink, contactNum,
+                APSD, APED, ESD, EED, postContent);
+        return ResponseEntity.ok().build();
+    }
+
+    // 게시글 수정 후 {boardId}로 리다이렉트
+    /*@ResponseBody
     @RequestMapping(value = "/council/detail/update")
     public String boardUpdate(CouncilForm councilForm, @CurrentUser Account account,
                               @RequestParam(value = "cid") String cid,
@@ -181,7 +234,7 @@ public class CouncilController {
         }
         message = "잘못된 요청입니다.";
         return message;
-    }
+    }*/
 
     @GetMapping("/council/detail/delete/{councilId}")
     public String deleteCouncil(@PathVariable Long councilId, @CurrentUser Account account) {
@@ -189,7 +242,7 @@ public class CouncilController {
         if (!council.getPostWriter().getId().equals(account.getId())) {
             return "error-page";
         }
-        councilRepository.delete(council);
-        return "redirect:/council";
+        councilService.deleteCouncil(council);
+        return "redirect:/council/notice";
     }
 }

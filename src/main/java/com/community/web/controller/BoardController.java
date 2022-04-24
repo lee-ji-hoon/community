@@ -8,6 +8,9 @@ import com.community.domain.board.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.council.Council;
+import com.community.domain.graduation.Graduation;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
 import com.community.web.dto.BoardForm;
 import com.community.web.dto.ReplyForm;
 import com.community.web.dto.BoardReportForm;
@@ -27,10 +30,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,13 +52,10 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
     private final ReplyRepository replyRepository;
-    private final AccountRepository accountRepository;
-    private final BoardReportRepository boardReportRepository;
-    private final ReplyReportRepository replyReportRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final S3Repository s3Repository;
 
     private final BoardService boardService;
-    private final LikeService likeService;
     private final ReplyService replyService;
 
     @GetMapping("/board/{type}/search")
@@ -113,10 +115,27 @@ public class BoardController {
         return "board/boards";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/board-new", method = RequestMethod.POST)
+    public Long graduationFormSubmit(@CurrentUser Account account,
+                                     @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                     @RequestParam(value = "selectBox", required = false) String selectBox,
+                                     @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
+                                     @RequestParam(value = "title", required = false ) String title,
+                                     @RequestParam(value = "subTitle", required = false) String subTitle,
+                                     @RequestParam(value = "content", required = false) String content) {
+        Board newBoard = boardService.saveNewBoard(
+                multipartFile, account,
+                selectBox, selectBoxSub,
+                title, subTitle, content);
+
+        return newBoard.getBid();
+    }
+
     /* 게시물 작성 관련 */
 
     // 게시물 작성 후 detail 페이지로 Post
-    @PostMapping("/board/detail")
+    /*@PostMapping("/board/detail")
     public String detailView(@Valid BoardForm boardForm, Errors errors, Model model,
                              RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         boolean emailVerified = account.isEmailVerified();
@@ -136,7 +155,7 @@ public class BoardController {
         Board savedBoard = boardService.saveNewBoard(boardForm, account);
         redirectAttributes.addAttribute("boardId", savedBoard.getBid());
         return "redirect:/board/detail/{boardId}";
-    }
+    }*/
 
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
@@ -177,7 +196,7 @@ public class BoardController {
         return "board/board-detail";
     }
 
-    @PostMapping("/board/update/{boardId}")
+    /*@PostMapping("/board/update/{boardId}")
     public String boardDetailUpdate(@PathVariable long boardId, @Valid BoardForm boardForm, Errors errors, Model model,
                                     RedirectAttributes redirectAttributes, @CurrentUser Account account) {
         boardService.updateBoard(boardId, boardForm);
@@ -185,9 +204,9 @@ public class BoardController {
 
 
         return "redirect:/board/detail/{boardId}";
-    }
+    }*/
     // 게시글 수정 후 {boardId}로 리다이렉트
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/board/detail/update")
     public String boardUpdate(BoardForm boardForm, @CurrentUser Account account,
                               @RequestParam(value = "bid") String bid,
@@ -218,6 +237,36 @@ public class BoardController {
         log.info("잘못된 게시물 수정 요청 : bid = " + boardId + " accountId = " + account.getId());
         message = "잘못된 요청입니다.";
         return message;
+    }*/
+
+    @ResponseBody
+    @RequestMapping(value = "/board/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity graduationUpdate(@PathVariable Long id,
+                                           @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
+                                           @RequestParam(value = "selectBox", required = false) String selectBox,
+                                           @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
+                                           @RequestParam(value = "title", required = false ) String title,
+                                           @RequestParam(value = "subTitle", required = false) String subTitle,
+                                           @RequestParam(value = "content", required = false) String content) {
+
+        Optional<Board> byId = boardRepository.findById(id);
+        Board board = byId.get();
+
+        boardService.updateBoard(board, multipartFile, selectBox,
+                selectBoxSub, title, subTitle, content);
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/board/image/delete", method = RequestMethod.POST)
+    public ResponseEntity graduationDeleteImage(@RequestParam(value = "imageName") String imageName) {
+        S3 s3 = s3Repository.findByImageName(imageName);
+
+        boardService.deleteImage(s3);
+
+        if(s3 != null) ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok().build();
     }
 
     // 게시물 삭제
@@ -225,11 +274,19 @@ public class BoardController {
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         log.info("보드 찾기 : " + boardId);
         Board currentBoard = boardRepository.findByBid(boardId);
+        String postSort = currentBoard.getBoardTitle();
         if (account.getId().equals(currentBoard.getWriter().getId())) {
             log.info("보드 삭제 : " + currentBoard);
-            boardRepository.deleteById(currentBoard.getBid());
+            boardService.deleteBoard(currentBoard);
             redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
-            return "redirect:/board";
+            switch (postSort) {
+                case "자유" :
+                    return "redirect:/board/free";
+                case "정보" :
+                    return "redirect:/board/forum";
+                case "질문" :
+                    return "redirect:/board/qna";
+            }
         }
         redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
         return "redirect:/board/detail/{boardId}";
