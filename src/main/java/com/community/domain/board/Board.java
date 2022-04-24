@@ -3,6 +3,7 @@ package com.community.domain.board;
 import com.community.domain.account.Account;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
+import com.community.infra.aws.S3;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarkList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<S3> s3List = new ArrayList<>();
 
     private Boolean isReported;
 
