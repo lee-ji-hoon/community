@@ -3,6 +3,10 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
+import com.community.domain.graduation.Graduation;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
+import com.community.infra.aws.S3Service;
 import com.community.web.dto.BoardForm;
 import com.community.domain.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,27 +35,82 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
+    private final S3Repository s3Repository;
+    private final S3Service s3Service;
+
     public static final int SEC = 60;
     public static final int MIN = 60;
     public static final int HOUR = 24;
     public static final int DAY = 30;
     public static final int MONTH = 12;
 
-    public Board saveNewBoard(@Valid BoardForm boardForm, Account account) {
+    public Board saveNewBoard(List<MultipartFile> multipartFile, Account account,
+                              String selectBox, String selectBoxSub,
+                              String title, String subTitle, String content) {
 
         Board board = Board.builder()
-                .title(boardForm.getTitle())
-                .subTitle(boardForm.getSubTitle())
-                .content(boardForm.getContent())
-                .boardTitle(boardForm.getBoardTitle())
-                .subBoardTitle(boardForm.getSubBoardTitle())
+                .writer(account)
+                .boardTitle(selectBox)
+                .subTitle(selectBoxSub)
+                .title(title)
+                .content(content)
+                .subBoardTitle(subTitle)
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)
                 .reportCount(0)
-                .writer(account)
                 .build();
+
+        uploadImage(multipartFile, board);
+
         return boardRepository.save(board);
+    }
+
+    public void deleteBoard(Board board) {
+        List<S3> imageList = board.getImageList(); // 이미지 불러오기
+
+        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+
+        boardRepository.delete(board);
+    }
+
+    public void updateBoard(Board board, List<MultipartFile> multipartFile,
+                                 String selectBox, String selectBoxSub,
+                                 String title, String subTitle, String content) {
+
+        board.setBoardTitle(selectBox);
+        board.setSubTitle(selectBoxSub);
+        board.setTitle(title);
+        board.setContent(content);
+        board.setSubBoardTitle(subTitle);
+        board.setUpdateTime(LocalDateTime.now());
+
+        uploadImage(multipartFile, board);
+    }
+
+    public void deleteImage(S3 s3) {
+        s3Repository.delete(s3);
+        s3Service.deleteFile(s3.getImageName());
+    }
+
+    private void uploadImage(List<MultipartFile> multipartFile, Board board) {
+        String uploadFolder = "board-img/";
+
+        if (multipartFile != null) {
+            List<String> imageFileList = s3Service.upload(multipartFile, uploadFolder);
+
+            for (String imageFileName : imageFileList) {
+                S3 s3 = new S3();
+                s3.setImageName(uploadFolder + imageFileName);
+                s3.setImagePath(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + imageFileName);
+                s3.setBoard(board);
+
+                S3 s3Image = s3Repository.save(s3);
+
+                log.info("graduation Image :{}", board.getImageList());
+                log.info("s3Image : {}", s3Image);
+            }
+        }
     }
 
     public Board updateBoard(Long boardId, BoardForm boardForm) {
@@ -94,24 +154,12 @@ public class BoardService {
         return msg;
     }
 
-    public Page<Board> boardPageSystem(String title, int page) {
-        return boardRepository.findAllByBoardTitleOrderByUploadTimeDesc(title, PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "idx")));
-    }
-
-    public Page<Board> boardPage(String boardTitle, int page) {
-        return boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false, PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "uploadTime")));
-    }
-
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
         Board board = boardRepository.findByBid(boardId);
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);
-    }
-
-    public List<Board> boardTitleList(String boardTitle) {
-        return boardRepository.findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(boardTitle, false);
     }
 
     public void viewUpdate(long id, HttpServletRequest request, HttpServletResponse response) {
