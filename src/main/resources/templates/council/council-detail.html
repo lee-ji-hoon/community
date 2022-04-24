@@ -34,16 +34,21 @@
                             <div class="space-y-4">
                                 <h3 class="font-semibold text-xl text-center" th:text="${council.postTitle}"> 제목 </h3>
                                 <hr>
-                                <div th:utext="${council.postContent}">내용</div>
                                 <div id="imageRefreshForm" class="imageRefreshForm">
-                                    <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
-                                        <a th:each="image : ${council.getImageList()}"
-                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="첫 사진">
-                                            <img class="rounded" style="width: 200px; height: 150px;"
-                                                 th:src="${image.getImagePath()}"/>
-                                        </a>
+                                    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slider="center: true">
+                                        <ul class="uk-slider-items uk-grid">
+                                            <li class="uk-width-3-4" th:each="image : ${council.getImageList()}">
+                                                <a th:href="${image.getImagePath()}" target="_blank" data-fancybox="gallery" >
+                                                    <img th:src="${image.getImagePath()}" alt="" class="w-full h-60 object-cover rounded-md">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <a class="uk-position-center-left uk-position-small uk-hidden-hover text-white p-4" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                                        <a class="uk-position-center-right uk-position-small uk-hidden-hover text-white p-4" href="#" uk-slidenav-next uk-slider-item="next"></a>
                                     </div>
                                 </div>
+                                <hr>
+                                <div th:utext="${council.postContent}">내용</div>
                                 <hr class="my-4">
                                 <div id="blk_div" class="flex">
                                     <div class="flex-none w-5">
