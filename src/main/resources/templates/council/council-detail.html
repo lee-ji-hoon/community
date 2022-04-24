@@ -35,7 +35,7 @@
                                 <h3 class="font-semibold text-xl text-center" th:text="${council.postTitle}"> 제목 </h3>
                                 <hr>
                                 <div id="imageRefreshForm" class="imageRefreshForm">
-                                    <div class="uk-container" uk-slider>
+                                    <div class="uk-container" uk-slider="center: true">
 
                                         <div class="uk-position-relative uk-visible-toggle uk-light">
 
@@ -550,7 +550,7 @@
         })();
 
         // summernote
-        $('#content').summernote({
+        $('#postContent').summernote({
             placeholder: '정확한 내용을 입력해주세요.',
             tabsize: 2,
             toolbar: [
