@@ -4,13 +4,17 @@ import com.community.domain.account.Account;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketItemStatus;
 import com.community.domain.market.MarketRepository;
-import com.community.web.dto.MarketForm;
+import com.community.infra.aws.S3;
+import com.community.infra.aws.S3Repository;
+import com.community.infra.aws.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -19,23 +23,46 @@ import java.time.LocalDateTime;
 public class MarketService {
 
     private final MarketRepository marketRepository;
+    private final S3Repository s3Repository;
 
-    public void createNewItem() {
-        /*marketSetType(market, marketType);
-        market.setUploadTime(LocalDateTime.now());
-        market.setSeller(account);
-        market.setFileName(uploadFolder+uploadFile);
-        market.setFilePath(marketImagePath);
-        return marketRepository.save(market);*/
+    private final S3Service s3Service;
 
-    }
 
-    public Market createNewItemNoImage(Market market, Account account, String marketType) {
-        marketSetType(market, marketType);
-        market.setUploadTime(LocalDateTime.now());
-        market.setSeller(account);
+    public Market createNewItem(List<MultipartFile> multipartFileLIst, String itemName, String marketType,
+                                String description, int price,
+                                String itemStatus, Account account) {
+        Market market = Market.builder()
+                .marketType(marketType)
+                .itemName(itemName)
+                .itemDetail(description)
+                .price(price)
+                .itemStatus(itemStatus)
+                .seller(account)
+                .uploadTime(LocalDateTime.now())
+                .build();
+
+        marketSetType(market, market.getMarketType());
+
+        uploadImage(multipartFileLIst, market);
 
         return marketRepository.save(market);
+    }
+
+    public void uploadImage(List<MultipartFile> multipartFiles, Market market) {
+        String uploadFolder = "market-img/";
+
+        if (multipartFiles != null) {
+            List<String> imageFileList = s3Service.upload(multipartFiles, uploadFolder);
+
+            for (String imageFileName : imageFileList) {
+                S3 s3 = new S3();
+                s3.setImageName(uploadFolder + imageFileName);
+                s3.setImagePath(S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + uploadFolder + imageFileName);
+                s3.setMarket(market);
+
+                s3Repository.save(s3);
+            }
+        }
     }
 
     private void marketSetType(Market market, String marketType) {
@@ -88,10 +115,14 @@ public class MarketService {
     }
 
     public void deleteProduct(Market market) {
-        marketRepository.deleteById(market.getMarketId());
+        List<S3> imageList = market.getImageList();
+
+        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName());
+
+        marketRepository.delete(market);
     }
 
-    public void updateMarketImage(Market market, String marketImagePath, String uploadFile, String uploadFolder) {
+    /*public void updateMarketImage(Market market, String marketImagePath, String uploadFile, String uploadFolder) {
         market.setFilePath(marketImagePath);
         market.setFileName(uploadFolder + uploadFile);
 
@@ -108,5 +139,7 @@ public class MarketService {
         market.setMarketType(marketForm.getMarketType());
 
         marketRepository.save(market);
-    }
+    }*/
+
+
 }
