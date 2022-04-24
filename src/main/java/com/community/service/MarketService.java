@@ -20,14 +20,14 @@ public class MarketService {
 
     private final MarketRepository marketRepository;
 
-    public Market createNewItem(Market market, Account account, String marketImagePath, String uploadFile, String uploadFolder, String marketType) {
-        marketSetType(market, marketType);
+    public void createNewItem() {
+        /*marketSetType(market, marketType);
         market.setUploadTime(LocalDateTime.now());
         market.setSeller(account);
         market.setFileName(uploadFolder+uploadFile);
         market.setFilePath(marketImagePath);
+        return marketRepository.save(market);*/
 
-        return marketRepository.save(market);
     }
 
     public Market createNewItemNoImage(Market market, Account account, String marketType) {
