@@ -34,6 +34,26 @@
                             <div class="space-y-4">
                                 <h3 class="font-semibold text-xl text-center" th:text="${council.postTitle}"> 제목 </h3>
                                 <hr>
+                                <div id="imageRefreshForm" class="imageRefreshForm">
+                                    <div class="uk-container" uk-slider="center: true">
+
+                                        <div class="uk-position-relative uk-visible-toggle uk-light">
+
+                                            <div class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m" uk-lightbox>
+                                                <div th:each="image : ${council.getImageList()}">
+                                                    <a th:href="${image.getImagePath()}">
+                                                        <img th:src="${image.getImagePath()}" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                                            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div th:utext="${council.postContent}">내용</div>
                                 <hr class="my-4">
                                 <div id="blk_div" class="flex">
@@ -192,7 +212,7 @@
                                                 <div class="uk-modal-header text-white">
                                                     <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
                                                 </div>
-                                                <form class="needs-validation" id="board_form" onsubmit="return false">
+                                                <form class="needs-validation" onsubmit="return false">
                                                     <div class="uk-modal-body" uk-overflow-auto>
                                                         <div class="space-y-4 g:w-8/12">
                                                             <div class="font-semibold text-lg"> 유형 선택 </div>
@@ -206,9 +226,9 @@
                                                             </div>
                                                             <div class="grid grid-cols-2 gap-2">
                                                                 <div>
-                                                                    <label for="selectBox"> 글 종류 선택 </label>
+                                                                    <label for="postSort"> 글 종류 선택 </label>
                                                                     <div class="form-group">
-                                                                        <select id="selectBox" name="postSort"  class="shadow-none with-border px-2 selectpicker mb-2" aria-describedby="postSortHelp">
+                                                                        <select id="postSort" name="postSort"  class="shadow-none with-border px-2 selectpicker mb-2" aria-describedby="postSortHelp">
                                                                             <option data-icon="icon-material-outline-assignment" value="공지" th:selected="${council.postSort}=='공지'">공지</option>
                                                                             <option data-icon="icon-material-outline-help-outline" value="행사" th:selected="${council.postSort}=='행사'">행사</option>
                                                                         </select>
@@ -238,7 +258,7 @@
                                                             <!-- 제목 -->
                                                             <div class="form-group">
                                                                 <div class="line">
-                                                                    <input class="line__input form-control" id="title" name="postTitle"
+                                                                    <input class="line__input form-control" id="postTitle" name="postTitle"
                                                                            th:value="${council.postTitle}"
                                                                            type="text" onkeyup="this.setAttribute(  'value', this.value);"
                                                                            aria-describedby="titleHelp" required autocomplete="off">
@@ -319,10 +339,42 @@
                                                             <!-- 본문 -->
                                                             <div class="form-group">
                                                                 <div>
-                                                                    <textarea class="form-control" id="content" name="postContent" th:text="${council.postContent}"
+                                                                    <textarea class="form-control" id="postContent" name="postContent" th:text="${council.postContent}"
                                                                               type="text" aria-describedby="contentHelp" required></textarea>
                                                                 </div>
                                                                 <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                            </div>
+                                                            <div class="col-span-2">
+                                                                <div uk-form-custom class="w-full py-3">
+                                                                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                                </div>
+
+                                                                <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                                            </div>
+
+                                                            <div class="col-span-2">
+                                                                <br/>
+                                                                <div id="refreshForm" class="refreshForm" name="refreshForm">
+                                                                    <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+
+                                                                        <div th:each="image : ${council.imageList}"
+                                                                             class="mx-1">
+                                                                            <form method="post" onsubmit="return false" name="imageDelete" id="imageDelete">
+                                                                                <input type="hidden" name="imageName" id="imageName" th:value="${image.getImageName()}">
+                                                                                <button type="submit" onclick="imageDeleteInit()"> 삭제 </button>
+                                                                            </form>
+                                                                            <img th:src="${image.getImagePath()}"
+                                                                                 classname="article-image"
+                                                                                 style="width: 150px; height:200px;"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -333,8 +385,6 @@
                                                         <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">저장</button>
                                                     </div>
                                                 </form>
-
-
                                             </div>
                                         </div>
                                     </th:block>
@@ -461,9 +511,34 @@
 <div th:replace="theme-fragments :: bookmarkAjax"></div>
 <div th:replace="theme-fragments :: likeAjax"></div>
 <div th:replace="theme-fragments :: replyAjax"></div>
+<script th:replace="theme-fragments.html :: s3-council-image-upload(uploadUrl = '/council/'+ ${council.cid} +'/update')"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
+    function imageDeleteInit() {
+        console.log("이미지 삭제 실행");
+
+        const form = $("form")[0];
+        const formData = new FormData(form);
+        formData.append("imageName", $('#imageName').val());
+
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "/council/image/delete",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (path) {
+                $('.refreshForm').load(location.href+' .refreshForm');
+                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
+                alert("이미지가 삭제됐습니다.");
+            },
+            error: function (xhr, status, error) {
+                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
+            }
+        });
+    }
     $(document).ready(function (){
         // Delay 함수
         var delay = (function (){
@@ -475,7 +550,7 @@
         })();
 
         // summernote
-        $('#content').summernote({
+        $('#postContent').summernote({
             placeholder: '정확한 내용을 입력해주세요.',
             tabsize: 2,
             toolbar: [
@@ -584,8 +659,8 @@
                 keydown=true;
             }, 5000);
         });*/
-        jQuery('#selectBox').change(function() {
-            var state = jQuery('#selectBox option:selected').val();
+        jQuery('#postSort').change(function() {
+            var state = jQuery('#postSort option:selected').val();
             if (state == '공지') {
                 // 작성 값 초기화 및 메뉴명 변경
                 $("#forum_head").text('공지글 작성하기');

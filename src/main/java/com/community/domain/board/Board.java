@@ -3,6 +3,7 @@ package com.community.domain.board;
 import com.community.domain.account.Account;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
+import com.community.infra.aws.S3;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,6 +42,9 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<S3> imageList = new ArrayList<>();
+
     private Boolean isReported;
 
     private Integer reportCount;
@@ -52,12 +56,6 @@ public class Board {
     @ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private Account writer;
-
-    // bucket object 이름
-    private String fileName;
-
-    // 실제 접근 주소
-    private String filePath;
 
     private Integer pageView;
 

@@ -4,6 +4,7 @@ import com.community.domain.account.Account;
 import com.community.domain.board.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
+import com.community.infra.aws.S3;
 import lombok.*;
 
 import javax.persistence.*;
@@ -53,11 +54,8 @@ public class Council {
     @OneToMany(mappedBy = "council", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
-    // bucket object 이름
-    private String fileName;
-
-    // 실제 접근 주소
-    private String filePath;
+    @OneToMany(mappedBy = "council", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<S3> imageList = new ArrayList<>();
 
     private Integer pageView;
 
