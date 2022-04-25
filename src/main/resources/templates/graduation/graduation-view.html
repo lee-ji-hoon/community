@@ -337,31 +337,6 @@
 
 <footer th:replace="theme-fragments.html :: summernote-ko-kr"></footer>
 <script th:inline="javascript">
-    function imageDeleteInit() {
-        console.log("이미지 삭제 실행");
-
-        const form = $("form")[0];
-        const formData = new FormData(form);
-        formData.append("imageName", $('#imageName').val());
-
-        $.ajax({
-            type: "POST",
-            enctype: "multipart/form-data",
-            url: "/graduation/image/delete",
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (path) {
-                $('.refreshForm').load(location.href+' .refreshForm');
-                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
-                alert("이미지가 삭제됐습니다.");
-            },
-            error: function (xhr, status, error) {
-                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
-            }
-        });
-    }
-
     /*<![CDATA[*/
     const memberList = [[${teamMemberList}]];
     /*]]>*/
@@ -373,8 +348,6 @@
         }
         console.log(memberArray);
     });
-
-
 </script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
 <script th:replace="theme-fragments.html :: graduation-note-tag"></script>
