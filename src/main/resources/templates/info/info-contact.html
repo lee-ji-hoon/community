@@ -21,8 +21,12 @@
             <div class="bg-gradient-to-tr flex from-blue-400 h-52 items-center justify-center lg:h-80 pb-10 relative to-blue-300 via-blue-400 w-full">
 
                 <div class="text-center max-w-xl mx-auto z-10 relative px-5">
-                    <div class="lg:text-4xl text-2xl text-white font-semibold mb-3"> Leave a message </div>
-                    <div class="text-white text-lg font-medium text-opacity-90"> 궁금하거나, 페이지에 대한 버그가 있으면 아래에 남겨주세요. </div>
+                    <div class="lg:text-4xl text-2xl text-white font-semibold mb-3">안녕하세요, <a th:text="${account.nickname}"></a>님</div>
+                    <div class="text-white text-lg font-medium text-opacity-90">
+                        문의할 내용을 아래 양식에 맞게 작성해주세요.<br>
+                        이전에 작성한 내역을 보려면 <a th:href="@{/info/contact/lists}">여기</a>를 클릭해주세요.
+
+                    </div>
                 </div>
             
             </div>
