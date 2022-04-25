@@ -709,7 +709,7 @@
             <li th:classappend="${currentSideMenu == 'contact'}? active">
                 <a th:href="@{/info/contact}">
                     <ion-icon name="mail-outline" class="side-icon"></ion-icon>
-                    <span>건의사항</span>
+                    <span>문의사항</span>
                 </a>
             </li>
             <li th:classappend="${currentSideMenu == 'privacy'}? active">
@@ -2832,7 +2832,7 @@
             contentType: false,
             data: formData,
             success: function (path) {
-                location.href = "/council/detail/" + path;
+                location.href = "/info/contact/detail/" + path;
             },
             error: function (xhr, status, error) {
                 alert("작성한 내용들을 다시 확인해주세요." + error)
