@@ -242,10 +242,7 @@
 
                                                                             <div th:each="image : ${project.imageList}"
                                                                                  class="mx-1">
-                                                                                <form method="post" onsubmit="return false" name="imageDelete" id="imageDelete">
-                                                                                    <input type="hidden" name="imageName" id="imageName" th:value="${image.getImageName()}">
-                                                                                    <button type="submit" onclick="imageDeleteInit()"> 삭제 </button>
-                                                                                </form>
+                                                                                <a href="#" th:onclick="|imageDeleteInit(${image.id})|"> 삭제 </a>
                                                                                 <img th:src="${image.getImagePath()}"
                                                                                      classname="article-image"
                                                                                      style="width: 150px; height:200px;"/>

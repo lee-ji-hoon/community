@@ -2899,31 +2899,6 @@
         $("#input_file").val("");
     }
 
-    function imageDeleteInit() {
-        console.log("이미지 삭제 실행");
-
-        const form = $("form")[0];
-        const formData = new FormData(form);
-        formData.append("imageName", $('#imageName').val());
-
-        $.ajax({
-            type: "POST",
-            enctype: "multipart/form-data",
-            url: "/s3/image/delete",
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (path) {
-                $('.refreshForm').load(location.href+' .refreshForm');
-                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
-                alert("이미지가 삭제됐습니다.");
-            },
-            error: function (xhr, status, error) {
-                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
-            }
-        });
-    }
-
     // 파일 부분 삭제 함수
     function fileDelete(fileNum){
         var no = fileNum.replace(/[^0-9]/g, "");
@@ -3043,6 +3018,19 @@
         });
         return false;
     }
+
+    function imageDeleteInit(id) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            url: "/s3/image/delete",
+            data: {"imageId": id},
+            success : function (){
+                $('.refreshForm').load(location.href+' .refreshForm');
+                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
+            },
+        })
+    }
 </script>
 <script th:fragment="s3-market-imge-upload(uploadUrl)">
     $(document).ready(function () {
@@ -3142,11 +3130,11 @@
             processData: false,
             contentType: false,
             data: formData,
-            success: function (path) {
+            success: function () {
                 location.reload();
             },
             error: function (xhr, status, error) {
-                alert("작성한 내용들을 다시 확인해주세요." + error)
+                alert("작성한 내용들을 다시 확인해주세요.")
             }
         });
         return false;
@@ -3196,30 +3184,19 @@
         return false;
     }
 
-    function imageDeleteInit() {
-        console.log("이미지 삭제 실행");
-
-        const form = $("form")[0];
-        const formData = new FormData(form);
-        formData.append("imageName", $('#imageName').val());
-
+    function imageDeleteInit(id) {
         $.ajax({
-            type: "POST",
-            enctype: "multipart/form-data",
+            type: "GET",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
             url: "/s3/image/delete",
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (path) {
+            data: {"imageId": id},
+            success : function (){
                 $('.refreshForm').load(location.href+' .refreshForm');
                 $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
-                alert("이미지가 삭제됐습니다.");
             },
-            error: function (xhr, status, error) {
-                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
-            }
-        });
+        })
     }
+
 </script>
 
 
