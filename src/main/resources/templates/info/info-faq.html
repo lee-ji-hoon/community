@@ -24,13 +24,13 @@
                     <h1 class="md:text-3xl text-lg font-semibold text-gray-900 leading-0 mb-3"> 자주 묻는 질문 (FAQ) </h1>
                     <nav class="responsive-nav md:m-0 -mx-4 nav-small">
                         <ul uk-switcher="connect: #components-nav ;animation: uk-animation-fade ; toggle: > * ">
-                            <li><a href="#" class="lg:px-2">로그인</a></li>
-                            <li><a href="#" class="lg:px-2">게시물 작성</a></li>
-                            <li><a href="#" class="lg:px-2">보안</a></li>
+                            <li><a href="#" class="lg:px-2">계정</a></li>
                             <li><a href="#" class="lg:px-2">기능</a></li>
+                            <li><a href="#" class="lg:px-2">장터</a></li>
+                            <!--<li><a href="#" class="lg:px-2">기능</a></li>
                             <li><a href="#" class="lg:px-2">Off canvas</a></li>
                             <li><a href="#" class="lg:px-2">Scrollspy</a></li>
-                            <li><a href="#" class="lg:px-2">Tooltip</a></li>
+                            <li><a href="#" class="lg:px-2">Tooltip</a></li>-->
                         </ul>
                     </nav>
 
@@ -42,793 +42,430 @@
                 <div class="uk-switcher my-12" id="components-nav">
 
 
-                    <!-- Accordion -->
+                    <!-- 계정 -->
                     <div>
 
                         <div class="md:flex md:space-x-14">
                             <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Accordion</h2>
-                                <p class="text-base mb-10">  Create a list of items that can be shown individually by clicking an item's header. </p>
+                                <h2 class="text-xl font-semibold mb-2" id="account-login">개인 정보</h2>
+                                <p class="text-base mb-10">UNECT에서는 개인정보를 타 사이트에 제공 및 판매하지 않습니다.</p>
 
-                                <ul uk-accordion>
+                                <ul uk-accordion class="pl-4">
                                     <li class="uk-open">
-                                        <a class="uk-accordion-title" href="#">Item 1</a>
+                                        <a class="uk-accordion-title" href="#">개인 정보가 유출될까봐 걱정돼요.</a>
                                         <div class="uk-accordion-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="uk-accordion-title" href="#">Item 2</a>
-                                        <div class="uk-accordion-content">
-                                            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="uk-accordion-title" href="#">Item 3</a>
-                                        <div class="uk-accordion-content">
-                                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                                            <p>저희 UNECT는 타 사이트에 제공 및 판매하지 않습니다.</p>
+                                            <p>또한 비밀번호는 50자 이상의 랜덤 알파벳 및 기호로 저장됩니다.</p>
                                         </div>
                                     </li>
                                 </ul>
 
                                 <br><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Multiple-open-item"> Multiple open items</h3>
-                                <p class="text-base mb-10">  To display multiple content sections at the same time without one collapsing when the other one is opened, add the <code>multiple: true</code> option to the <code>uk-accordion</code> attribute.</p>
+                                <h3 class="text-lg font-semibold mb-2" id="account-change">정보 변경</h3>
+                                <p class="text-base mb-10">회원 정보 변경은 <a th:href="@{/profile/settings/profile-settings}" class="text-blue-500">프로필 페이지</a>에서 변경이 가능합니다.</p>
 
-                                <ul uk-accordion="multiple: true">
+                                <ul uk-accordion="multiple: true" class="pl-4">
                                     <li class="uk-open">
-                                        <a class="uk-accordion-title" href="#">Item 1</a>
+                                        <a class="uk-accordion-title" href="#">비밀번호 변경은 어떻게 하나요?</a>
                                         <div class="uk-accordion-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="uk-accordion-title" href="#">Item 2</a>
-                                        <div class="uk-accordion-content">
-                                            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a class="uk-accordion-title" href="#">Item 3</a>
-                                        <div class="uk-accordion-content">
-                                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
+                                            <p>비밀번호 변경은 해당 <a th:href="@{/profile/settings/password}" class="text-blue-500">링크</a>에서 변경할 수 있습니다.</p>
                                         </div>
                                     </li>
                                 </ul>
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Multiple-open-item" uk-scroll> Multiple open items </a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- filter -->
-                    <div>
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Filter </h2>
-                                <p class="text-base mb-10"> Filter or sort items in any given layout by meta data.  </p>
-
-                                <div uk-filter="target: .js-filter">
-
-                                    <ul class="tab1 flex mb-5">
-                                        <li class="uk-active" uk-filter-control><a href="#">All</a></li>
-                                        <li uk-filter-control=".data-color-green"><a href="#">Green</a></li>
-                                        <li uk-filter-control=".data-color-blue"><a href="#">Blue</a></li>
-                                        <li uk-filter-control=".data-color-red"><a href="#">Black</a></li>
-                                    </ul>
-
-                                    <ul class="js-filter grid md:grid-cols-3 grid-cols-3 gap-5 text-lg capitalize">
-                                        <li class="data-color-blue">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-red-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-red-500">Item</div>
-                                        </li>
-                                        <li class="data-color-blue">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-green-500">Item</div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-
-                                <br><br><hr><br>
-                                <h3 class="text-lg font-semibold mb-2" id=""> Meta Data </h3>
-                                <p class="text-base mb-10"> Items can have different meta data for filtering. You just need to define the HTML classes or <code>data</code> attributes and create the corresponding CSS selectors for the filter controls. This example uses <code>data</code> attributes for the filter instead of HTML classes </p>
-
-                                <div uk-filter="target: .js-filter">
-
-                                    <ul class="tab1 flex mb-5">
-                                        <li class="uk-active" uk-filter-control><a href="#">All</a></li>
-                                        <li uk-filter-control=".data-color-green"><a href="#">Green</a></li>
-                                        <li uk-filter-control=".data-color-blue"><a href="#">Blue</a></li>
-                                        <li uk-filter-control=".data-color-red"><a href="#">Black</a></li>
-                                        <li uk-filter-control=".tag-large"><a href="#">Green large</a></li>
-                                    </ul>
-
-                                    <ul class="js-filter grid md:grid-cols-3 grid-cols-3 gap-5 text-lg capitalize">
-                                        <li class="data-color-blue">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-red-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-red-500">Item</div>
-                                        </li>
-                                        <li class="data-color-blue">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green tag-large">
-                                            <div class="text-white rounded-md flex items-center justify-center h-36 bg-green-500">Item large</div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-
-                                <br><br><hr><br>
-                                <h3 class="text-lg font-semibold mb-2" id=""> Multiple Filters </h3>
-                                <p class="text-base mb-10"> Define different types of meta data and add any number of controls to filter them. The filter controls are exclusive, meaning just one criteria is filtered at a time. </p>
-
-                                <div uk-filter="target: .js-filter">
-
-                                    <div class="flex divide-x space-x-1">
-                                        <ul class="tab1 flex mb-5">
-                                            <li class="uk-active" uk-filter-control><a href="#">All</a></li>
-                                        </ul>
-                                        <ul class="tab1 flex mb-5 pl-3">
-                                            <li uk-filter-control=".data-color-green"><a href="#">Green</a></li>
-                                            <li uk-filter-control=".data-color-blue"><a href="#">Blue</a></li>
-                                            <li uk-filter-control=".data-color-red"><a href="#">Black</a></li>
-                                        </ul>
-                                        <ul class="tab1 flex mb-5 pl-3">
-                                            <li uk-filter-control=".data-size-small"><a href="#">Small</a></li>
-                                            <li uk-filter-control=".data-size-medium"><a href="#">Medium</a></li>
-                                            <li uk-filter-control=".data-size-large"><a href="#">Large</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <ul class="js-filter grid md:grid-cols-3 grid-cols-3 gap-5 text-lg capitalize">
-
-                                        <li class="data-color-blue data-size-large">
-                                            <div class="text-white rounded-md flex items-center justify-center h-36 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green data-size-large">
-                                            <div class="text-white rounded-md flex items-center justify-center h-36 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red data-size-large">
-                                            <div class="text-white rounded-md flex items-center justify-center h-36 bg-red-500">Item</div>
-                                        </li>
-
-                                        <li class="data-color-blue data-size-medium">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green data-size-medium">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red data-size-medium">
-                                            <div class="text-white rounded-md flex items-center justify-center h-28 bg-red-500">Item</div>
-                                        </li>
-
-                                        <li class="data-color-blue data-size-small">
-                                            <div class="text-white rounded-md flex items-center justify-center h-20 bg-blue-500">Item</div>
-                                        </li>
-                                        <li class="data-color-green data-size-small">
-                                            <div class="text-white rounded-md flex items-center justify-center h-20 bg-green-500">Item</div>
-                                        </li>
-                                        <li class="data-color-red data-size-small">
-                                            <div class="text-white rounded-md flex items-center justify-center h-20 bg-red-500">Item</div>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#" uk-scroll>   </a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Dropdown -->
-                    <div>
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Drop </h2>
-                                <p class="text-base mb-10">Position any element in relation to another element. </p>
-
-                                <div class="flex space-x-2">
-
-                                    <button class="button gray" type="button"> Hover </button>
-                                    <div uk-drop class="card p-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                                    </div>
-
-                                    <button class="button gray" type="button"> click </button>
-                                    <div uk-drop="mode: click" class="card p-4">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                                    </div>
-
-                                </div>
-
-
-                                <br><br><hr><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Style-modifiers"> Style modifiers</h3>
-                                <p class="text-base mb-10"> You can place a grid from the <a href="grid">Grid component</a> inside a drop. Just wrap the content with a <code>&lt;div&gt;</code> element and add the <code>uk-grid</code> attribute. If the grid should stack automatically, whenever the drop no longer fits its container, just add the <code>.uk-drop-grid</code> class </p>
-
-
-                                <button class="button gray" type="button">Hover</button>
-
-                                <div class="uk-width-large" uk-drop>
-                                    <div class="card p-5">
-                                        <div class="uk-drop-grid uk-child-width-1-2@m" uk-grid>
-                                            <div>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                                            </div>
-                                            <div>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <br><br><hr><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Position"> Position </h3>
-                                <p class="text-base mb-10">Add one of the following options to the <code>uk-drop</code> attribute to adjust the drop's alignment. </p>
-
-                                <pre class="p-2 rounded-md mb-6 border-l-4 border-red-400 pl-4 bg-white shadow"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">uk-drop</span>=<span class="hljs-string">"pos: top-left"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
-
-                                <div class="bg-white shadow p-3 space-x-1 space-y-1 rounded-md">
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">bottom-left</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">bottom-center</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">bottom-justify</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">top-left</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">top-center</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">top-right</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">top-justify</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">left-top</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">left-center</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">left-bottom</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">right-top</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">right-center</code>
-                                    <code class="bg-red-50 border-l-2 border-red-500 p-2 rounded leading-10">right-bottom</code>
-                                </div>
-                                <br>
-                                <div class="gap-4 grid grid-flow-col  p-4 rounded-md bg-gray-100 border ">
-
-                                    <div>
-                                        <button class="button gray w-full" type="button">Top Right</button>
-                                        <div uk-drop="pos: top-right">
-                                            <div class="card p-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <button class="button gray w-full" type="button">Bottom Justify</button>
-                                        <div uk-drop="pos: bottom-justify">
-                                            <div class="card p-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <button class="button gray w-full" type="button">Right Center</button>
-                                        <div uk-drop="pos: right-center">
-                                            <div class="card p-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-                                <br><br><hr><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Offset"> Offset  </h3>
-                                <p class="text-base mb-10"> To define a custom offset between the drop container and the toggle, add the <code>offset</code> option with a value for the offset, measured in pixels. </p>
-
-                                <pre class="p-2 rounded-md mb-6 border-l-4 border-red-400 pl-4 bg-white shadow"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">uk-drop</span>=<span class="hljs-string">"offset: 80"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
-
-                                <br>
-
-                                <button class="button gray" type="button"> Hover </button>
-                                <div uk-drop="offset: 50;pos:right-center" class="card p-4">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
-                                </div>
-
-
-
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Position" uk-scroll> Position   </a></li>
-                                    <li> <a href="#Offset" uk-scroll> Offset   </a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- modal  -->
-                    <div>
-
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> modal </h2>
-                                <p class="text-base mb-10"> Create modal dialogs with different styles and transitions.  </p>
-
-                                <div class="flex items-center space-x-3">
-                                    <!-- This is a button toggling the modal -->
-                                    <button class="button gray" type="button" uk-toggle="target: #modal-example">Open</button>
-                                    <!-- This is an anchor toggling the modal -->
-                                    <a href="#modal-example" uk-toggle>Open</a>
-                                </div>
-
-                                <!-- This is the modal -->
-                                <div id="modal-example" uk-modal>
-                                    <div class="uk-modal-body uk-modal-dialog rounded-md shadow-2xl">
-                                        <h2 class="mb-2 uk-modal-title">Headline</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                        <div class="uk-modal-footer text-right mt-6 px-0 space-x-1">
-                                            <button class="button gray uk-modal-close" type="button">Cancel</button>
-                                            <button class="button" type="button">Save</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <br><br><hr><br><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Close-button"> Close button </h3>
-                                <p class="text-base mb-10">To create a close button, enable its functionality and add proper styling and positioning, add the <code>.uk-modal-close-default</code> class to an <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code> element. To place the close button outside the modal, add the <code>.uk-modal-close-outside</code> class.</p>
-
-                                <!-- This is a button toggling the modal with the default close button -->
-                                <button class="button gray" type="button" uk-toggle="target: #modal-close-default">Default</button>
-
-                                <!-- This is the modal with the default close button -->
-                                <div id="modal-close-default" uk-modal>
-                                    <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl">
-                                        <button class="uk-modal-close-default bg-gray-300 p-2 rounded-full m-3" type="button" uk-close></button>
-                                        <h2 class="mb-2 uk-modal-title">Headline</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                    </div>
-                                </div>
-
-                                <!-- This is a button toggling the modal with the outside close button -->
-                                <button class="button gray" type="button" uk-toggle="target: #modal-close-outside">Outside</button>
-
-                                <!-- This is the modal with the outside close button -->
-                                <div id="modal-close-outside" uk-modal>
-                                    <div class="uk-modal-dialog uk-modal-body rounded-md shadow-2xl">
-                                        <button class="uk-modal-close-outside bg-gray-300 p-2 rounded-full" type="button" uk-close></button>
-                                        <h2 class="mb-2 uk-modal-title">Headline</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                    </div>
-                                </div>
-
-
-                                <br><br><br><hr><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Header-and-footer"> Header and footer </h3>
-                                <p class="text-base mb-10">To divide the modal into different content sections, use the following classes..</p>
-
-                                <a class="button gray" href="#modal-sections" uk-toggle>Open</a>
-                                <div id="modal-sections" uk-modal>
-                                    <div class="uk-modal-dialog">
-                                        <button class="uk-modal-close-default m-3" type="button" uk-close></button>
-                                        <div class="uk-modal-header">
-                                            <h2 class="uk-modal-title">Modal Title</h2>
-                                        </div>
-                                        <div class="uk-modal-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                        </div>
-                                        <div class="uk-modal-footer text-right">
-                                            <button class="button gray uk-modal-close" type="button">Cancel</button>
-                                            <button class="button" type="button">Save</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <br><br><br><hr><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Overflow">Overflow </h3>
-                                <p class="text-base mb-10">By default, the page will scroll with the modal, if its content exceeds the window height. To apply a scrollbar inside the modal, add the <code>overflow-auto</code>   to the modal body.</p>
-                                <a class="button gray" href="#modal-overflow" uk-toggle>Open</a>
-
-                                <div id="modal-overflow" uk-modal>
-                                    <div class="uk-modal-dialog">
-
-                                        <button class="uk-modal-close-default m-3" type="button" uk-close></button>
-
-                                        <div class="uk-modal-header">
-                                            <h2 class="uk-modal-title">Headline</h2>
-                                        </div>
-
-                                        <div class="uk-modal-body" uk-overflow-auto>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                        </div>
-                                        <div class="uk-modal-footer text-right">
-                                            <button class="button gray uk-modal-close" type="button">Cancel</button>
-                                            <button class="button" type="button">Save</button>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Close-button" uk-scroll> Close button  </a></li>
-                                    <li> <a href="#Header-and-footer" uk-scroll>  Header and footer </a></li>
-                                    <li> <a href="#Overflow" uk-scroll>  Overflow </a></li>
-                                    <li> <a href="#" uk-scroll>  </a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-
-
-                    </div>
-
-                    <!-- offcanvas  -->
-                    <div>
-
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Off-canvas </h2>
-                                <p class="text-base mb-10"> Create an off-canvas sidebar that slides in and out of the page, which is perfect for creating mobile navigations.  </p>
-
-
-                                <div class="flex items-center space-x-3">
-                                    <button class="button gray" type="button" uk-toggle="target: #offcanvas-usage">Open</button>
-                                    <a href="#offcanvas-usage" uk-toggle>Open</a>
-                                </div>
-
-                                <div id="offcanvas-usage" uk-offcanvas>
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-                                        <button class="uk-offcanvas-close m-2" type="button" uk-close></button>
-
-                                        <h3 class="font-medium mb-3 text-2xl">Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-
-                                <br><br><br><hr><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Overlay">Overlay </h3>
-                                <p class="text-base mb-10"> To add an overlay, blanking out the page, add the <code>overlay: true</code> parameter to the <code>uk-offcanvas</code> attribute. </p>
-
-                                <button class="button gray" type="button" uk-toggle="target: #offcanvas-overlay">Open</button>
-
-                                <div id="offcanvas-overlay" uk-offcanvas="overlay: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-                                        <button class="uk-offcanvas-close m-2" type="button" uk-close></button>
-
-                                        <h3 class="font-medium mb-3 text-2xl">Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-
-                                <br><br><br><hr><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Flip-modifier"> Flip modifier</h3>
-                                <p class="text-base mb-10"> Add the <code>flip: true</code> parameter to the <code>uk-offcanvas</code> attribute to adjust its alignment, so that it slides in from the right. </p>
-
-                                <button class="button gray" type="button" uk-toggle="target: #offcanvas-flip">Open</button>
-
-                                <div id="offcanvas-flip" uk-offcanvas="overlay: true ; flip: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-                                        <button class="uk-offcanvas-close m-2" type="button" uk-close></button>
-
-                                        <h3 class="font-medium mb-3 text-2xl">Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-
-                                <br><br><br><hr><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Animation-modes"> Animation modes</h3>
-                                <p class="text-base mb-10">By default, the off-canvas slides in. But you can actually choose between different animation modes for the off-canvas' entrance. Just add one of the following attributes. </p>
-
-
-                                <div class="flex space-x-4">
-                                    <button class="button gray" type="button" uk-toggle="target: #offcanvas-slide">Slide</button>
-                                    <button class="button gray" type="button" uk-toggle="target: #offcanvas-push">Push</button>
-                                    <button class="button gray" type="button" uk-toggle="target: #offcanvas-reveal">Reveal</button>
-                                    <button class="button gray" type="button" uk-toggle="target: #offcanvas-none">None</button>
-                                </div>
-
-                                <div id="offcanvas-slide" uk-offcanvas="overlay: true; flip: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-
-                                        <button class="uk-offcanvas-close" type="button" uk-close></button>
-
-                                        <h3>Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-                                <div id="offcanvas-push" uk-offcanvas="mode: push; overlay: true ; flip: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-
-                                        <button class="uk-offcanvas-close" type="button" uk-close></button>
-
-                                        <h3>Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-                                <div id="offcanvas-reveal" uk-offcanvas="mode: reveal; overlay: true; flip: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-
-                                        <button class="uk-offcanvas-close" type="button" uk-close></button>
-
-                                        <h3>Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-                                <div id="offcanvas-none" uk-offcanvas="mode: none; overlay: true; flip: true">
-                                    <div class="uk-offcanvas-bar bg-white p-7 shadow-2xl">
-
-                                        <button class="uk-offcanvas-close" type="button" uk-close></button>
-
-                                        <h3>Title</h3>
-
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Overlay" uk-scroll> Overlay  </a></li>
-                                    <li> <a href="#Flip-modifier" uk-sc☻roll> Flip modifier  </a></li>
-                                    <li> <a href="#Animation-modesr" uk-sc☻roll>  Animation modes  </a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <!-- scrollspy  -->
-                    <div>
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Scrollspy </h2>
-                                <p class="text-base mb-10"> Trigger events and animations while scrolling your page.  </p>
-
-
-                                <div class="grid grid-cols-2 gap-5">
-                                    <div>
-                                        <div class="bg-white shadow p-5 rounded-md" uk-scrollspy="cls: uk-animation-slide-left; repeat: true">
-                                            <h3 class="text-lg font-semibold mb-2">Left</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="bg-white shadow p-5 rounded-md" uk-scrollspy="cls: uk-animation-slide-right; repeat: true">
-                                            <h3 class="text-lg font-semibold mb-2">Right</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <br>
-
-                                <p class="text-sm">This example uses the <code>repeat: true</code> option. Scroll up and down to see the triggered animations. The layout is made with the <a href="card">Card component</a>.</p>
-
-                                <br><br> <br> <hr> <br>
-                                <h3 class="text-lg font-semibold mb-2" id="Groups"> Groups</h3>
-                                <p class="text-base mb-10"> You can also group scrollspy elements, so you won't have to apply the attribute to each of them. Just add the <code>uk-scrollspy="target: SELECTOR"</code> attribute to a container element, targeting the selector of the items you want to animate inside the container. When using a delay, it will be applied cumulatively to the items that scroll into view. </p>
-
-                                <div class="uk-child-width-1-3@m" uk-grid uk-scrollspy="cls: uk-animation-fade; target: .card; delay: 500; repeat: true">
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Fade</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <br><br> <br> <hr> <br>
-                                <h3 class="text-lg font-semibold mb-2" id=""> Set <code>cls</code> option per target </h3>
-                                <p class="text-base mb-10"> You can also give each target a separate <code>cls</code> option. Just add the <code>uk-scrollspy-class="CLASS"</code> attribute to a target element. It will override the <code>cls</code> option set on the component. </p>
-
-                                <div class="uk-child-width-1-3@m" uk-grid uk-scrollspy="cls: uk-animation-slide-bottom; target: .card; delay: 300; repeat: true">
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Bottom</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5" uk-scrollspy-class="uk-animation-slide-top">
-                                            <h3 class="text-lg font-semibold mb-2">Top</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="card p-5">
-                                            <h3 class="text-lg font-semibold mb-2">Bottom</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                            </div>
-                            <div class="w-1/4 md:block hidden">
-                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Groups" uk-scroll>  Groups </a></li>
-                                    <li> <a href="#Set" uk-scroll>  Set class option</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- tooltip  -->
-                    <div>
-
-                        <div class="md:flex md:space-x-14">
-                            <div class="md:w-3/4">
-                                <h2 class="text-xl font-semibold mb-2" id="basic"> Tooltip </h2>
-                                <p class="text-base mb-10"> Easily create a nice looking tooltip. </p>
-
-                                <button class="button gray" uk-tooltip="Hello World">Hover</button>
 
                                 <br><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id=""> Alignment </h3>
-                                <p class="text-base mb-10"> Add one of the following options to the <code>uk-tooltip</code> attribute to adjust the tooltip's alignment. </p>
+                                <h3 class="text-lg font-semibold mb-2" id="account-delete"> 가입 및 탈퇴 </h3>
+                                <p class="text-base mb-10">  </p>
 
-                                <pre class="bg-gray-200 p-3 mb-4 rounded-md"><code class="lang-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">uk-tooltip</span>=<span class="hljs-string">"title: Hello World; pos: top-left"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
-
-
-                                <ul class="grid lg:grid-cols-4 grid-cols-2 gap-3 bg-purple-200 p-4 rounded-md">
-                                    <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="Hello World">Top</div>
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">여러 계정을 생성할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희는 이메일 인증을 사용하기 때문에 1인당 1개의 계정만 생성이 가능합니다.</p>
+                                        </div>
                                     </li>
                                     <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: top-left">Top Left</div>
+                                        <a class="uk-accordion-title" href="#">회원 탈퇴는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴는 해당 <a th:href="@{/profile/settings/withdraw}" class="text-blue-500">링크</a>에서 탈퇴가 가능합니다.</p>
+                                        </div>
                                     </li>
                                     <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: top-right">Top Right</div>
+                                        <a class="uk-accordion-title" href="#">탈퇴 후 재가입이 가능한가요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴 후 재가입이 가능합니다.</p>
+                                            <p>하지만 신고당한 이력이 있다면 해당 건이 처리되기 전까지 회원 탈퇴는 불가능합니다.</p>
+                                        </div>
                                     </li>
                                     <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: bottom">Bottom</div>
-                                    </li>
-                                    <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: bottom-left">Bottom Left  </div>
-                                    </li>
-                                    <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: bottom-right">Bottom Right</div>
-                                    </li>
-                                    <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: left">Left</div>
-                                    </li>
-                                    <li>
-                                        <div class="bg-purple-500 rounded py-4 text-center text-white" uk-tooltip="title: Hello World; pos: right">Right</div>
+                                        <a class="uk-accordion-title" href="#">탈퇴하면 기존에 했던 내용들이 지워지나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴 시 작성했던 게시물, 댓글, 쪽지 등 모든 내용이 사라집니다.</p>
+                                        </div>
                                     </li>
                                 </ul>
-
-
-                                <br><br><br>
-                                <h3 class="text-lg font-semibold mb-2" id="Delay"> Delay </h3>
-                                <p class="text-base mb-10"> If you want the tooltip to appear with a little delay, just add the <code>delay</code> option to the <code>uk-tooltip</code> attribute with your value in milliseconds. </p>
-
-                                <button class="button gray" uk-tooltip="title: Hello World; delay: 500">Hover</button>
-
-
                             </div>
                             <div class="w-1/4 md:block hidden">
                                 <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
-                                    <li> <a href="#basic" uk-scroll> basic </a></li>
-                                    <li> <a href="#Delay" uk-scroll>  Delay </a></li>
+                                    <li> <a href="#account-login" uk-scroll> 개인 정보 </a></li>
+                                    <li> <a href="#account-change" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#account-delete" uk-scroll> 가입 및 탈퇴 </a></li>
                                 </ul>
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- 기능 -->
+                    <div>
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="function-notify">알림 설정</h2>
+                                <p class="text-base mb-10">알림 설정은 <a th:href="@{/profile/settings/alarm}" class="text-blue-500">프로필 페이지</a>에서 설정할 수 있습니다.</p>
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">알림을 꺼도 알림이 와요</a>
+                                        <div class="uk-accordion-content">
+                                            <p>알림을 끄고, 키는 행위를 반복하면 충돌이 일어나 제대로 기능이 작동하지 않을 수 있습니다.</p>
+                                            <p>페이지를 새로고침하고 다시 시도해주세요.</p>
+                                            <p>만약, 위 방법으로 해결되지 않는다면 <a th:href="@{/info/contact}" class="text-blue-500">건의사항</a>에 문의해주세요.</p>
+                                        </div>
+                                    </li>
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">크롬을 다운 받으라는 알림창이 떠요</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희 페이지는 크롬 브라우저에 최적화 되어있습니다.</p>
+                                            <p>불편하시더라도 크롬 혹은 safari로 사용해주시면 감사드리겠습니다!</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="function-page">페이지 사용</h3>
+                                <p class="text-base mb-10">대부분의 오류는 새로고침으로 해결할 수 있습니다.</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">댓글이 안 달려요</a>
+                                        <div class="uk-accordion-content">
+                                            <p>댓글은 최소 2글자 이상 작성해야합니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="function-etc"> 기타 기능 </h3>
+                                <p class="text-base mb-10"> 가나다라마바사 </p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">가나다라마바사</a>
+                                        <div class="uk-accordion-content">
+                                            <p>가나다라마바사</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="uk-accordion-title" href="#">가나다라마바사</a>
+                                        <div class="uk-accordion-content">
+                                            <p>가나다라마바사</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#function-notify" uk-scroll> 알람 설정 </a></li>
+                                    <li> <a href="#function-page" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#function-etc" uk-scroll> 기타 기능 </a></li>
+                                </ul>
+                            </div>
+                        </div>
 
                     </div>
+
+                    <!-- 장터 -->
+                    <div>
+
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="market-use">장터 사용</h2>
+                                <p class="text-base mb-10">가나다라마바사</p>
+
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">가나다라마바사</a>
+                                        <div class="uk-accordion-content">
+                                            <p>가나다라마바사</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="market-report">장터 사기 신고</h3>
+                                <p class="text-base mb-10">가나다라마바사</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">가나다라마바사</a>
+                                        <div class="uk-accordion-content">
+                                            <p>가나다라마바사</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#market-use" uk-scroll> 장터 사용 </a></li>
+                                    <li> <a href="#market-report" uk-scroll> 장터 사기 신고 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--
+                    &lt;!&ndash; 계정 &ndash;&gt;
+                    <div>
+
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="account-login">개인 정보</h2>
+                                <p class="text-base mb-10">UNECT에서는 개인정보를 타 사이트에 제공 및 판매하지 않습니다.</p>
+
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">개인 정보가 유출될까봐 걱정돼요.</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희 UNECT는 타 사이트에 제공 및 판매하지 않습니다.</p>
+                                            <p>또한 비밀번호는 50자 이상의 랜덤 알파벳 및 기호로 저장됩니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-change">정보 변경</h3>
+                                <p class="text-base mb-10">회원 정보 변경은 <a th:href="@{/profile/settings/profile-settings}" class="text-blue-500">프로필 페이지</a>에서 변경이 가능합니다.</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">비밀번호 변경은 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>비밀번호 변경은 해당 <a th:href="@{/profile/settings/password}" class="text-blue-500">링크</a>에서 변경할 수 있습니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-delete"> 가입 및 탈퇴 </h3>
+                                <p class="text-base mb-10">  </p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">여러 계정을 생성할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희는 이메일 인증을 사용하기 때문에 1인당 1개의 계정만 생성이 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="uk-accordion-title" href="#">회원 탈퇴는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴는 해당 <a th:href="@{/profile/settings/withdraw}" class="text-blue-500">링크</a>에서 탈퇴가 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#account-login" uk-scroll> 개인 정보 </a></li>
+                                    <li> <a href="#account-change" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#account-delete" uk-scroll> 가입 및 탈퇴 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    &lt;!&ndash; 계정 &ndash;&gt;
+                    <div>
+
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="account-login">개인 정보</h2>
+                                <p class="text-base mb-10">UNECT에서는 개인정보를 타 사이트에 제공 및 판매하지 않습니다.</p>
+
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">개인 정보가 유출될까봐 걱정돼요.</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희 UNECT는 타 사이트에 제공 및 판매하지 않습니다.</p>
+                                            <p>또한 비밀번호는 50자 이상의 랜덤 알파벳 및 기호로 저장됩니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-change">정보 변경</h3>
+                                <p class="text-base mb-10">회원 정보 변경은 <a th:href="@{/profile/settings/profile-settings}" class="text-blue-500">프로필 페이지</a>에서 변경이 가능합니다.</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">비밀번호 변경은 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>비밀번호 변경은 해당 <a th:href="@{/profile/settings/password}" class="text-blue-500">링크</a>에서 변경할 수 있습니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-delete"> 가입 및 탈퇴 </h3>
+                                <p class="text-base mb-10">  </p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">여러 계정을 생성할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희는 이메일 인증을 사용하기 때문에 1인당 1개의 계정만 생성이 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="uk-accordion-title" href="#">회원 탈퇴는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴는 해당 <a th:href="@{/profile/settings/withdraw}" class="text-blue-500">링크</a>에서 탈퇴가 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#account-login" uk-scroll> 개인 정보 </a></li>
+                                    <li> <a href="#account-change" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#account-delete" uk-scroll> 가입 및 탈퇴 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    &lt;!&ndash; 계정 &ndash;&gt;
+                    <div>
+
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="account-login">개인 정보</h2>
+                                <p class="text-base mb-10">UNECT에서는 개인정보를 타 사이트에 제공 및 판매하지 않습니다.</p>
+
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">개인 정보가 유출될까봐 걱정돼요.</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희 UNECT는 타 사이트에 제공 및 판매하지 않습니다.</p>
+                                            <p>또한 비밀번호는 50자 이상의 랜덤 알파벳 및 기호로 저장됩니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-change">정보 변경</h3>
+                                <p class="text-base mb-10">회원 정보 변경은 <a th:href="@{/profile/settings/profile-settings}" class="text-blue-500">프로필 페이지</a>에서 변경이 가능합니다.</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">비밀번호 변경은 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>비밀번호 변경은 해당 <a th:href="@{/profile/settings/password}" class="text-blue-500">링크</a>에서 변경할 수 있습니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-delete"> 가입 및 탈퇴 </h3>
+                                <p class="text-base mb-10">  </p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">여러 계정을 생성할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희는 이메일 인증을 사용하기 때문에 1인당 1개의 계정만 생성이 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="uk-accordion-title" href="#">회원 탈퇴는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴는 해당 <a th:href="@{/profile/settings/withdraw}" class="text-blue-500">링크</a>에서 탈퇴가 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#account-login" uk-scroll> 개인 정보 </a></li>
+                                    <li> <a href="#account-change" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#account-delete" uk-scroll> 가입 및 탈퇴 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    &lt;!&ndash; 계정 &ndash;&gt;
+                    <div>
+
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h2 class="text-xl font-semibold mb-2" id="account-login">개인 정보</h2>
+                                <p class="text-base mb-10">UNECT에서는 개인정보를 타 사이트에 제공 및 판매하지 않습니다.</p>
+
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">개인 정보가 유출될까봐 걱정돼요.</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희 UNECT는 타 사이트에 제공 및 판매하지 않습니다.</p>
+                                            <p>또한 비밀번호는 50자 이상의 랜덤 알파벳 및 기호로 저장됩니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-change">정보 변경</h3>
+                                <p class="text-base mb-10">회원 정보 변경은 <a th:href="@{/profile/settings/profile-settings}" class="text-blue-500">프로필 페이지</a>에서 변경이 가능합니다.</p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">비밀번호 변경은 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>비밀번호 변경은 해당 <a th:href="@{/profile/settings/password}" class="text-blue-500">링크</a>에서 변경할 수 있습니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="account-delete"> 가입 및 탈퇴 </h3>
+                                <p class="text-base mb-10">  </p>
+
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">여러 계정을 생성할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>저희는 이메일 인증을 사용하기 때문에 1인당 1개의 계정만 생성이 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="uk-accordion-title" href="#">회원 탈퇴는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>회원 탈퇴는 해당 <a th:href="@{/profile/settings/withdraw}" class="text-blue-500">링크</a>에서 탈퇴가 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#account-login" uk-scroll> 개인 정보 </a></li>
+                                    <li> <a href="#account-change" uk-scroll> 정보 변경 </a></li>
+                                    <li> <a href="#account-delete" uk-scroll> 가입 및 탈퇴 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>-->
                 </div>
 
             </div>
