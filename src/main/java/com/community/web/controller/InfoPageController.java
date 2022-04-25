@@ -57,9 +57,8 @@ public class InfoPageController {
         return newInquire.getId();
     }
 
-    // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/info/contact/detail/{inquireId}")
-    public String boardDetail(@PathVariable Long inquireId, @CurrentUser Account account,
+    public String inquireDetail(@PathVariable Long inquireId, @CurrentUser Account account,
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
@@ -72,6 +71,14 @@ public class InfoPageController {
         model.addAttribute("inquire", inquire.get());
 
         return "info/info-contact-detail";
+    }
+
+    @GetMapping("/info/contact/lists")
+    public String inquireList(@CurrentUser Account account, Model model) {
+
+        model.addAttribute("account", account);
+
+        return "info/info-contact";
     }
 
     @ResponseBody
