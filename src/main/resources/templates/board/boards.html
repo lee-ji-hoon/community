@@ -210,10 +210,10 @@
                                                     <div class="-space-x-2 flex items-center ml-1">
                                                         <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                             <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:data-id="${topReply.getAccount().studentId}"
+                                                                 th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
                                                                  alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
                                                             <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:src="${topReply.getAccount()?.profileImage}"
+                                                                 th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
                                                                  alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
                                                         </div>
                                                     </div>
