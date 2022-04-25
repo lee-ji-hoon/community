@@ -24,11 +24,11 @@
                     <h1 class="md:text-3xl text-lg font-semibold text-gray-900 leading-0 mb-3"> 자주 묻는 질문 (FAQ) </h1>
                     <nav class="responsive-nav md:m-0 -mx-4 nav-small">
                         <ul uk-switcher="connect: #components-nav ;animation: uk-animation-fade ; toggle: > * ">
+                            <li><a href="#" class="lg:px-2">학교 생활</a></li>
                             <li><a href="#" class="lg:px-2">계정</a></li>
                             <li><a href="#" class="lg:px-2">기능</a></li>
                             <li><a href="#" class="lg:px-2">장터</a></li>
-                            <!--<li><a href="#" class="lg:px-2">기능</a></li>
-                            <li><a href="#" class="lg:px-2">Off canvas</a></li>
+                            <!--<li><a href="#" class="lg:px-2">Off canvas</a></li>
                             <li><a href="#" class="lg:px-2">Scrollspy</a></li>
                             <li><a href="#" class="lg:px-2">Tooltip</a></li>-->
                         </ul>
@@ -41,6 +41,83 @@
 
                 <div class="uk-switcher my-12" id="components-nav">
 
+                    <!-- 학교 생활 -->
+                    <div>
+                        <div class="md:flex md:space-x-14">
+                            <div class="md:w-3/4">
+                                <h3 class="text-lg font-semibold mb-2" id="school-rest">휴학</h3>
+                                <ul uk-accordion class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">휴학의 종류는 어떤게 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>휴학은 일반휴학, 군휴학으로 나뉘어져있습니다.</p>
+                                            <p>일반 휴학은 1년, 군휴학은 2년간 가능합니다.</p>
+                                        </div>
+                                    </li>
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">휴학은 어떻게 신청하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>① 대학 홈페이지 → ② 남서울Portal → ③ 학부생포탈Login → ④ 서비스/도서관→ 민원→ 신청및조회 → ⑤ 휴학신청 작성 및 출력 (본인출력)→ ⑥ 학과사무실 경유(지도교수, 학과장 면담 후 확인 및 날인) → ⑦ 휴학원 제출(교무처)</p>
+                                            <p>👉 자세한 내용은 <a class="text-blue-500" th:href="@{https://mm.nsu.ac.kr/?m1=page_board_detail%25&menu_id=764%25&board_content_id=8293%25}" target="_blank">여기</a>를 참고해주세요.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="school-graduate">졸업</h3>
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">학교 졸업 요건은 어떻게 확인하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>① 대학 홈페이지 → ② 남서울Portal → ③ 학부생포탈Login → ④ 학적/졸업/교직 → 졸업 → 졸업학점기준 → ⑤ 졸업기준년도 입력</p>
+                                            <p>위의 경로로 들어가서 봉사시간 및 총취득학점을 확인하여 졸업 가능여부를 확인할 수 있습니다.</p>
+                                        </div>
+                                    </li>
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">학과 졸업 요건은 어떻게 확인하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>① 관련분야 자격증 취득, ② 최소 3개월 이상 인턴 경험 ③ 토익 600점 이상 혹은 어학점수 취득 ④ 4대보험이 지원되는 기업체로의 취업 ⑤ 관련분야 대학원 진학</p>
+                                            <p>위 내용 중 최소 1개의 요건을 만족해야 합니다.</p>
+                                            <p>👉 자세한 내용은 <a class="text-blue-500" th:href="@{https://mm.nsu.ac.kr/?m1=page%25&menu_id=756%25}" target="_blank">여기</a>를 참고해주세요.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="school-move">전과</h3>
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">전과는 어떻게 하나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>전과는 학년별 기준학점이상을 취득해야지 가능합니다.</p>
+                                            <p>👉 자세한 내용은 <a class="text-blue-500" th:href="@{https://mm.nsu.ac.kr/?m1=page_board_detail%25&menu_id=764%25&board_content_id=8295%25}" target="_blank">여기</a>를 참고해주세요.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <br><br><br>
+                                <h3 class="text-lg font-semibold mb-2" id="school-etc">학과 기타 사항</h3>
+                                <ul uk-accordion="multiple: true" class="pl-4">
+                                    <li class="uk-open">
+                                        <a class="uk-accordion-title" href="#">이외에 다른 내용은 어디서 확인할 수 있나요?</a>
+                                        <div class="uk-accordion-content">
+                                            <p>기타 다른 내용은 멀티미디어학과 종합알림에서 확인 가능합니다.</p>
+                                            <p>👉 자세한 내용은 <a class="text-blue-500" th:href="@{https://mm.nsu.ac.kr/?m1=page%25&menu_id=764%25}" target="_blank">여기</a>를 참고해주세요.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="w-1/4 md:block hidden">
+                                <ul class="docs-list" uk-scrollspy-nav="closest: li; scroll: true" uk-sticky="offset:90;media : @m">
+                                    <li> <a href="#school-rest" uk-scroll> 휴학 </a></li>
+                                    <li> <a href="#school-graduate" uk-scroll> 졸업 </a></li>
+                                    <li> <a href="#school-move" uk-scroll> 전과 </a></li>
+                                    <li> <a href="#school-etc" uk-scroll> 학과 기타 사항 </a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
 
                     <!-- 계정 -->
                     <div>
