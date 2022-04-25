@@ -294,7 +294,6 @@
                 var data = new Identicon(hash,{format:'svg'}).toString();
                 $(this).attr('src', "data:image/svg+xml;base64,"+data);
             });
-
             $('#loadingSpin').hide();
 
             $(document).on('click', '#search_btn', function() {
@@ -356,8 +355,8 @@
     <!-- 기존에서 불러온 것
     ================================================== -->
     <!-- script -->
-
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="/node_modules/clipboard/dist/clipboard.min.js"></script>
     <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
     <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -710,7 +709,7 @@
             <li th:classappend="${currentSideMenu == 'contact'}? active">
                 <a th:href="@{/info/contact}">
                     <ion-icon name="mail-outline" class="side-icon"></ion-icon>
-                    <span>건의사항</span>
+                    <span>문의사항</span>
                 </a>
             </li>
             <li th:classappend="${currentSideMenu == 'privacy'}? active">
@@ -1147,6 +1146,23 @@
                 height: 300
             });
         });
+    </script>
+</div>
+<div th:fragment="clipboard-save">
+    <script type="application/javascript">
+        function clipboardSave() {
+            var clipboard = new Clipboard('.clipboard-btn');
+            clipboard.on('success', function(e) {
+                console.log(e);
+                alert("Copy Success");
+                clipboard.destroy();
+            });
+            clipboard.on('error', function(e) {
+                console.log(e);
+                alert("Copy Failed");
+                clipboard.destroy();
+            });
+        }
     </script>
 </div>
 
@@ -2433,7 +2449,7 @@
         fileCount --;
     }
 
-    document.graduationForm.addEventListener("keydown", evt => {
+    document.board_form.addEventListener("keydown", evt => {
         if (evt.code === "Enter") evt.preventDefault();
     });
     document.imageDelete.addEventListener("keydown", evt => {
@@ -2584,7 +2600,7 @@
         fileCount --;
     }
 
-    document.graduationForm.addEventListener("keydown", evt => {
+    document.council_form.addEventListener("keydown", evt => {
         if (evt.code === "Enter") evt.preventDefault();
     });
     document.imageDelete.addEventListener("keydown", evt => {
@@ -2673,6 +2689,150 @@
             data: formData,
             success: function (path) {
                 location.href = "/council/detail/" + path;
+            },
+            error: function (xhr, status, error) {
+                alert("작성한 내용들을 다시 확인해주세요." + error)
+            }
+        });
+        return false;
+    }
+</script>
+<script th:fragment="s3-contact-image-upload(uploadUrl)">
+    $(document).ready(function () {
+        $("#input_file").on("change", fileCheck);
+    });
+    $(function () {
+        $('#btn-upload').click(function (e) {
+            e.preventDefault();
+            $('#input_file').click();
+        });
+    });
+
+    // 파일 현재 필드 숫자 totalCount랑 비교값
+    let fileCount = 0;
+    // 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+    const totalCount = 6;
+    // 파일 고유넘버
+    let fileNum = 0;
+    // 첨부파일 배열
+    const content_files = new Array();
+    // 이미지
+    let imageFileDict = {};
+
+    function fileCheck(e) {
+
+        const files = e.target.files;
+
+        // 파일 배열 담기
+        const filesArr = Array.prototype.slice.call(files);
+
+        if (fileCount + filesArr.length > totalCount) {
+            alert('이미지는 최대 '+totalCount+'개까지 업로드 할 수 있습니다.');
+            return;
+        } else {
+            fileCount = fileCount + filesArr.length;
+        }
+
+        // 각각의 파일 배열담기 및 기타
+        filesArr.forEach(function (f) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imageFileDict[fileNum] = files;
+                content_files.push(f);
+                $('#articlefileChange').append(
+                    '<div class="mx-1" id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">' +
+                    '<button> 삭제 </button>' +
+                    `<img src="${e.target.result}" data-file=${f.name} className="article-image" style="width: 150px; height: 200px"/>` +
+                    '</div>'
+                );
+                fileNum ++;
+            };
+            reader.readAsDataURL(f);
+        });
+        //초기화 한다.
+        $("#input_file").val("");
+    }
+
+    // 파일 부분 삭제 함수
+    function fileDelete(fileNum){
+        var no = fileNum.replace(/[^0-9]/g, "");
+        content_files[no].is_delete = true;
+        $('#' + fileNum).remove();
+        fileCount --;
+    }
+
+    document.contact_form.addEventListener("keydown", evt => {
+        if (evt.code === "Enter") evt.preventDefault();
+    });
+    document.imageDelete.addEventListener("keydown", evt => {
+        if (evt.code === "Enter") evt.preventDefault();
+    });
+    function updateProject(e) {
+        const form = $("form")[0];
+        const formData = new FormData(form);
+
+        formData.append("contact_title", $('#contact_title').val());
+        formData.append("contact_content", $('#contact_content').val());
+
+        // TODO 이미지 1개도 없을 때 생각해야함
+
+        for (let x = 0; x < content_files.length; x++) {
+            // 삭제 안한것만 담아 준다.
+            if (!content_files[x].is_delete) {
+                formData.append("article_file", content_files[x]);
+            }
+        }
+        /*
+        * 파일업로드 multiple ajax처리
+        */
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "[(${uploadUrl})]",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function () {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert("작성한 내용들을 다시 확인해주세요.")
+            }
+        });
+        return false;
+    }
+
+    function registerAction(e) {
+
+        const form = $("form")[0];
+        const formData = new FormData(form);
+
+        formData.append("contact_title", $('#contact_title').val());
+        formData.append("contact_content", $('#contact_content').val());
+
+        if (content_files.length === 0 && $('#imageName').val() == null) {
+            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
+            return;
+        }
+
+        for (let x = 0; x < content_files.length; x++) {
+            // 삭제 안한것만 담아 준다.
+            if (!content_files[x].is_delete) {
+                formData.append("article_file", content_files[x]);
+            }
+        }
+        /*
+        * 파일업로드 multiple ajax처리
+        */
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "[(${uploadUrl})]",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (path) {
+                location.href = "/info/contact/detail/" + path;
             },
             error: function (xhr, status, error) {
                 alert("작성한 내용들을 다시 확인해주세요." + error)

@@ -3,6 +3,7 @@ package com.community.infra.aws;
 import com.community.domain.board.Board;
 import com.community.domain.council.Council;
 import com.community.domain.graduation.Graduation;
+import com.community.domain.inquire.Inquire;
 import com.community.domain.market.Market;
 import lombok.*;
 
@@ -35,6 +36,10 @@ public class S3 {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "council_id")
     private Council council;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inquire_id")
+    private Inquire inquire;
 
     private String imagePath; // 이미지 접근 주소
 

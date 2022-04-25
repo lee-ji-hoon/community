@@ -113,18 +113,6 @@ public class BoardService {
         }
     }
 
-    public Board updateBoard(Long boardId, BoardForm boardForm) {
-        Board board = boardRepository.findByBid(boardId);
-        board.setTitle(boardForm.getTitle());
-        board.setSubBoardTitle(boardForm.getSubBoardTitle());
-        board.setBoardTitle(boardForm.getBoardTitle());
-        board.setSubTitle(boardForm.getSubTitle());
-        board.setContent(boardForm.getContent());
-        board.setUpdateTime(LocalDateTime.now());
-        return boardRepository.save(board);
-
-    }
-
     public String boardDateTime(LocalDateTime localDateTime){
         Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(instant);
