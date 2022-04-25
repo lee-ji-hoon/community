@@ -33,6 +33,7 @@ public class InfoPageService {
                 .title(contact_title)
                 .content(contact_content)
                 .uploadTime(LocalDateTime.now())
+                .answerTime(null)
                 .isAnswered(false)
                 .build();
 

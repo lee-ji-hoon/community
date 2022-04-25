@@ -36,6 +36,8 @@ public class Inquire {
 
     private LocalDateTime uploadTime;
 
+    private LocalDateTime answerTime;
+
     private Boolean isAnswered;
 
     @OneToMany(mappedBy = "inquire", cascade = CascadeType.ALL, orphanRemoval = true)

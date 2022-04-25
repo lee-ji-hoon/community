@@ -2,8 +2,8 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
-import com.community.domain.board.Board;
 import com.community.domain.inquire.Inquire;
+import com.community.domain.inquire.InquireRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
@@ -16,7 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -24,6 +27,7 @@ import java.util.List;
 public class InfoPageController {
 
     private final InfoPageService infoPageService;
+    private final InquireRepository inquireRepository;
     private final S3Repository s3Repository;
     private final S3Service s3Service;
 
@@ -41,7 +45,7 @@ public class InfoPageController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/contact-new", method = RequestMethod.POST)
+    @RequestMapping(value = "/inquire-new", method = RequestMethod.POST)
     public Long contactFormSubmit(@CurrentUser Account account,
                                      @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
                                      @RequestParam(value = "contact_title", required = false) String contact_title,
@@ -53,8 +57,25 @@ public class InfoPageController {
         return newInquire.getId();
     }
 
+    // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
+    @GetMapping("/info/contact/detail/{inquireId}")
+    public String boardDetail(@PathVariable Long inquireId, @CurrentUser Account account,
+                              HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+
+        Optional<Inquire> inquire = inquireRepository.findById(inquireId);
+        if (!inquire.get().getAccount().getNickname().equals(account.getNickname())) {
+            return "info/info-contact";
+        }
+
+        model.addAttribute("account", account);
+        model.addAttribute("inquire", inquire.get());
+
+        return "info/info-contact-detail";
+    }
+
     @ResponseBody
-    @RequestMapping(value = "/board/image/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/inquire/image/delete", method = RequestMethod.POST)
     public ResponseEntity graduationDeleteImage(@RequestParam(value = "imageName") String imageName) {
         S3 s3 = s3Repository.findByImageName(imageName);
 
