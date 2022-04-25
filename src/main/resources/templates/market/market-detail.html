@@ -395,9 +395,12 @@
                                     <div>
                                         <label for="marketType"> 카테고리 </label>
                                         <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border">
-                                            <option value="판매" th:selected="${product.marketType}=='sell'" th:value="sell"> 판매 </option>
-                                            <option value="구매" th:selected="${product.marketType}=='buy'" th:value="buy"> 구매 </option>
-                                            <option value="나눔" th:selected="${product.marketType}=='share'" th:value="share"> 나눔 </option>
+                                            <option value="판매" th:selected="${product.marketType}=='sell'"
+                                                    th:value="sell"> 판매 </option>
+                                            <option value="구매" th:selected="${product.marketType}=='buy'"
+                                                    th:value="buy"> 구매 </option>
+                                            <option value="나눔" th:selected="${product.marketType}=='share'"
+                                                    th:value="share"> 나눔 </option>
                                         </select>
                                         <small id="marketTypeHelp" class="form-text text-muted">
                                             어떤 방식의 상품을 등록할지 선택해주세요.
@@ -417,9 +420,11 @@
                                     </div>
                                     <div>
                                         <label for="description"> 설명  </label>
-                                        <textarea id="description" type="text" name="description"
+                                        <textarea id="description" name="description"
                                                   th:value="${product.itemDetail}" th:utext="${product.itemDetail}" rows="2" class="with-border w-full p-4"
-                                                  placeholder="상품의 설명을 자세히 적어주세요." required max="250"></textarea>
+                                                  placeholder="상품의 설명을 자세히 적어주세요." aria-describedby="itemDetailHelp"
+                                                  required max="250"></textarea>
+
                                         <small id="itemDetailHelp" class="form-text text-muted">
                                             상품의 설명은 250자 이내로 작성 가능합니다.
                                         </small>
@@ -501,8 +506,71 @@
 <div th:replace="theme-fragments :: bookmarkAjax"></div>
 <div th:replace="theme-fragments :: replyAjax"></div>
 <footer th:replace="theme-fragments.html :: summernote-ko-kr"></footer>
+<script th:replace="theme-fragments.html :: form-validation"></script>
 <script th:replace="theme-fragments.html :: s3-market-imge-upload(uploadUrl='/market/'+${product.marketId}+'/update')"></script>
 <script type="application/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        $('#description').summernote({
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+            ],
+            height: 300,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            lang: "ko-KR",					// 한글 설정
+            placeholder: '더 자세한 내용을 적어주세요. <br> 꼼꼼히 작성하면 물건을 더 빠르게 판매 할 수 있을거에요.  <br/> [판매/구매 내용 예시] <br/> 거래지역 : <br/> 물건 상태 : ' //placeholder 설정
+
+        });
+
+        // Delay 함수
+        var delay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        });
+
+
+
+        var c_textarea = $('#c_content');
+        $(document).on('click', '.chat_send', function () {
+            if (c_textarea.val().length < 2) {
+                swal("5글자 이상의 내용을 입력해주세요.", {
+                    icon: "warning",
+                });
+                c_textarea.val('');
+            }
+            if (c_textarea.val().length >= 2) {
+                console.log("쪽지 보내기");
+                $.ajax({
+                    url: '/chat/new',
+                    type: 'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data: $('#chat_form').serialize(),
+                    success: function (sendChat) {
+                        console.log("쪽지 성공");
+                        $('.form_refresh').load(window.location.href+' .form_refresh');
+                        c_textarea.value = '';
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(sendChat);
+                    },
+                    error: function (request, status, error) {
+                        console.log("쪽지 실패" + error);
+                    }
+                });
+                imageDelay(function (){
+                    $(".identicon").each(function() {
+                        var hash = md5($(this).data('id')).toString();
+                        var data = new Identicon(hash,{format:'svg'}).toString();
+                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                    });
+                }, 1000);
+            }
+        });
+    })
+
+
     const input = document.querySelector('#price');      //[1]
     input.addEventListener('keyup', function(e) {
         let value = e.target.value;
@@ -683,67 +751,6 @@
     }
     /*상품 상태 변경 끝*/
 
-    $(document).ready(function () {
-        // Delay 함수
-        var delay = (function (){
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
-
-        $(document).ready(function() {
-            //여기 아래 부분
-            $('#description').summernote({
-                toolbar: [
-                    ['font', ['bold', 'italic', 'underline', 'clear']],
-                ],
-                height: 300,                 // 에디터 높이
-                minHeight: null,             // 최소 높이
-                maxHeight: null,             // 최대 높이
-                lang: "ko-KR",					// 한글 설정
-                placeholder: '더 자세한 내용을 적어주세요. <br> 꼼꼼히 작성하면 물건을 더 빠르게 판매 할 수 있을거에요.  <br/> [판매/구매 내용 예시] <br/> 거래지역 : <br/> 물건 상태 : ' //placeholder 설정
-
-            });
-        });
-
-        var c_textarea = $('#c_content');
-        $(document).on('click', '.chat_send', function () {
-            if (c_textarea.val().length < 2) {
-                swal("5글자 이상의 내용을 입력해주세요.", {
-                    icon: "warning",
-                });
-                c_textarea.val('');
-            }
-            if (c_textarea.val().length >= 2) {
-                console.log("쪽지 보내기");
-                $.ajax({
-                    url: '/chat/new',
-                    type: 'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data: $('#chat_form').serialize(),
-                    success: function (sendChat) {
-                        console.log("쪽지 성공");
-                        $('.form_refresh').load(window.location.href+' .form_refresh');
-                        c_textarea.value = '';
-                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                        $("#isUpdated").replaceWith(sendChat);
-                    },
-                    error: function (request, status, error) {
-                        console.log("쪽지 실패" + error);
-                    }
-                });
-                imageDelay(function (){
-                    $(".identicon").each(function() {
-                        var hash = md5($(this).data('id')).toString();
-                        var data = new Identicon(hash,{format:'svg'}).toString();
-                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                    });
-                }, 1000);
-            }
-        });
-    })
 </script>
 </body>
 
