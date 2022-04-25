@@ -28,10 +28,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class S3Service {
     private AmazonS3 s3Client;
+    private final S3Repository s3Repository;
 
     // @Value lombok 아님
     // perperties 값 가져옴
@@ -119,6 +120,10 @@ public class S3Service {
             log.info("삭제 실행");
             s3Client.deleteObject(bucket, fileName);
         }
+    }
+    public void deleteImage(S3 s3) {
+        s3Repository.delete(s3);
+        deleteFile(s3.getImageName());
     }
 
 }
