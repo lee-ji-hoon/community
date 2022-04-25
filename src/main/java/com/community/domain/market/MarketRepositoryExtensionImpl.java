@@ -48,8 +48,7 @@ public class MarketRepositoryExtensionImpl extends QuerydslRepositorySupport imp
     public Page<Market> findBySellerAndMarketType(Account account, String marketType, Pageable pageable) {
         QMarket market = QMarket.market;
 
-        JPQLQuery<Market> query = from(market).where(market.published.isTrue()
-                        .and(market.seller.eq(account))
+        JPQLQuery<Market> query = from(market).where(market.seller.eq(account)
                         .and(market.marketType.contains(marketType)))
                         .distinct();
 
