@@ -136,18 +136,6 @@ public class GraduationController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/graduation/image/delete", method = RequestMethod.POST)
-    public ResponseEntity graduationDeleteImage(@RequestParam(value = "imageName") String imageName) {
-        S3 s3 = s3Repository.findByImageName(imageName);
-
-        graduationService.deleteImage(s3);
-
-        if(s3 != null) ResponseEntity.badRequest().build();
-
-        return ResponseEntity.ok().build();
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/graduation/{id}/update", method = RequestMethod.POST)
     public ResponseEntity graduationUpdate(@PathVariable Long id,
                                            @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
