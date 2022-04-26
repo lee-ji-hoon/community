@@ -37,8 +37,8 @@ public class CouncilService {
 
     public Council saveNewPosts(List<MultipartFile> multipartFile, Account account, String postSort, String postTarget,
                                 String postTitle, String postLink, String contactNum,
-                                LocalDate applyPeriodStartDate, LocalDate applyPeriodEndDate,
-                                LocalDate eventStartDate, LocalDate eventEndDate, String postContent) {
+                                LocalDateTime applyPeriodStartDate, LocalDateTime applyPeriodEndDate,
+                                LocalDateTime eventStartDate, LocalDateTime eventEndDate, String postContent) {
         Council council = Council.builder()
                 .postWriter(account)
                 .postSort(postSort)
@@ -92,8 +92,8 @@ public class CouncilService {
         return councilRepository.findAllByPostSortOrderByEventEndDateDesc(sort);
     }
 
-    public LocalDate nowDate() {
-        return LocalDate.now();
+    public LocalDateTime nowDate() {
+        return LocalDateTime.now();
     }
 
     public void viewUpdate(long id, HttpServletRequest request, HttpServletResponse response) {
@@ -162,8 +162,8 @@ public class CouncilService {
     public void updateCouncil(Council council, List<MultipartFile> multipartFile,
                                  String postSort, String postTarget,
                                  String postTitle, String postLink, String contactNum,
-                                 LocalDate applyPeriodStartDate, LocalDate applyPeriodEndDate,
-                                 LocalDate eventStartDate, LocalDate eventEndDate, String postContent) {
+                                 LocalDateTime applyPeriodStartDate, LocalDateTime applyPeriodEndDate,
+                              LocalDateTime eventStartDate, LocalDateTime eventEndDate, String postContent) {
 
         council.setPostSort(postSort);
         council.setPostTitle(postTitle);
