@@ -132,6 +132,10 @@ public class StudyService {
     }
 
     public void updateStudyCalendar(Study study, StudyCalendarForm studyCalendarForm) {
+        log.info("스터디 시작 일정 수정 {}", studyCalendarForm.getStartStudyDate());
+        log.info("스터디 마감 일정 수정 {}", studyCalendarForm.getLimitStudyDate());
+        log.info("인원 마감 일정 수정 {}", studyCalendarForm.getLimitMemberDate());
+
         modelMapper.map(studyCalendarForm, study);
     }
 

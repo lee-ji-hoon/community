@@ -45,7 +45,7 @@
                             <div class="flex items-center space-x-3">
                                 <ion-icon name="calendar-outline" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
                                 <div class="flex-1">
-                                    <div th:text="${study.limitMemberDate}"> 모집 마감일 </div>
+                                    <div th:text="${#temporals.format(study.limitMemberDate, 'MM월dd일 HH:mm') + ' 까지 모집'}"> 모집 마감일 </div>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3">
@@ -80,7 +80,7 @@
                                     </svg>
                                     <div>
                                         <div class="text-base font-semibold"> 스터디 시작 </div>
-                                        <div th:text="${study.startStudyDate}"> 02-02-21 - 11:31</div>
+                                        <div th:text="${#temporals.format(study.startStudyDate, 'MM월dd일 HH:mm')}"> 02-02-21 - 11:31</div>
                                     </div>
                                 </div>
                                 <div class="py-2 flex items-center space-x-4">
@@ -89,7 +89,7 @@
                                     </svg>
                                     <div>
                                         <div class="text-base font-semibold"> 스터디 종료 </div>
-                                        <div th:text="${study.limitStudyDate}"> 03-02-21 - 11:31</div>
+                                        <div th:text="${#temporals.format(study.limitStudyDate, 'MM월dd일 HH:mm')}"> 03-02-21 - 11:31</div>
                                     </div>
                                 </div>
                             </div>
