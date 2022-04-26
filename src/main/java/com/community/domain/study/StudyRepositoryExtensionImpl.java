@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
     @Override
     public List<Study> findByAccount(Set<Tag> tags) {
         QStudy qStudy = QStudy.study;
-        JPQLQuery<Study> studyJPQLQuery = from(qStudy).where(study.limitMemberDate.after(LocalDate.now())
+        JPQLQuery<Study> studyJPQLQuery = from(qStudy).where(study.limitMemberDate.after(LocalDateTime.now().now())
                         .and(qStudy.tags.any().in(tags)))
                         .leftJoin(qStudy.tags, QTag.tag).fetchJoin()
                         .orderBy(qStudy.publishedDateTime.desc())
