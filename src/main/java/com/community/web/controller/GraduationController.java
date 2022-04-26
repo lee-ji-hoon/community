@@ -34,7 +34,6 @@ public class GraduationController {
 
     private final GraduationService graduationService;
     private final GraduationRepository graduationRepository;
-    private final S3Repository s3Repository;
 
     @GetMapping("/graduation")
     public String graduationListView(@CurrentUser Account account, Model model,

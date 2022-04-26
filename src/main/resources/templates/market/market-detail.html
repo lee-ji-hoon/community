@@ -61,7 +61,7 @@
                             <!-- post header-->
                             <div class="flex justify-between items-center lg:p-4 p-2.5">
                                 <div class="flex flex-1 items-center space-x-4">
-                                    <a href="#">
+                                    <a th:href="@{'/profile/' + ${product.seller.nickname} + '/view'}">
                                         <img th:if="${#strings.isEmpty(product.seller.profileImage)}"
                                              th:data-id="${product.seller.studentId}"
                                              class="identicon border border-white rounded-full w-10 h-10"/>
@@ -70,7 +70,7 @@
                                              class=" border border-white rounded-full w-10 h-10">
                                     </a>
                                     <div class="flex-1 font-semibold capitalize">
-                                        <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
+                                        <a th:href="@{'/profile/' + ${product.seller.nickname} + '/view'}" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
                                         <div th:if="${product.marketType == 'sell'}" class="text-sm">판매</div>
                                         <div th:if="${product.marketType == 'buy'}" class="text-sm">구매</div>
                                         <div th:if="${product.marketType == 'share'}" class="text-sm">나눔</div>
@@ -158,7 +158,7 @@
                                 <div id="imageRefreshForm" class="imageRefreshForm">
                                     <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
                                         <a th:each="image : ${product.getImageList()}"
-                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="첫 사진">
+                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="장터">
                                             <img class="rounded" style="width: 200px; height: 150px;"
                                                  th:src="${image.getImagePath()}"/>
                                         </a>
@@ -360,7 +360,8 @@
                                     <br>
                                     <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
                                     <div>
-                                        <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
+
+                                        <a th:href="@{'/profile/' + ${reply.getAccount().nickname} + '/view'}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                         <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                         <th:block th:if="${!reply.getIsReported}">
                                             <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">

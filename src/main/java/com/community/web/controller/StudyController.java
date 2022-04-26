@@ -51,7 +51,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +128,7 @@ public class StudyController {
         model.addAttribute("myStudyList",
                 studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
-        model.addAttribute("now", LocalDate.now());
+        model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("accountWithTagsById", accountWithTagsById);
 
         return "study/study-list";
@@ -183,12 +183,16 @@ public class StudyController {
 
     // 스터디 추가
     @PostMapping(STUDY_FORM_URL)
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+    public String newStudySubmit(@CurrentUser Account account,  StudyForm studyForm, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
         }
+
+        log.info("스터디 시작 날짜: {}",studyForm.getStartStudyDate());
+        log.info("스터디 종료 날짜: {}",studyForm.getLimitStudyDate());
+        log.info("모집 종료 날짜: {}",studyForm.getLimitMemberDate());
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
 
@@ -355,13 +359,13 @@ public class StudyController {
 
         Study study = studyRepository.findStudyWithMembersByPath(path);
 
-        boolean checkBlockMembers = studyService.checkBlockMembers(study, account);
+        /*boolean checkBlockMembers = studyService.checkBlockMembers(study, account);*/
 
-        log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
+        /*log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
         if(!checkBlockMembers){
             redirectAttributes.addFlashAttribute("blockMessage", "스터디에서 차단 된 유저입니다.");
             return "redirect:/study/" + fixPath(path);
-        }
+        }*/
 
         studyService.addMember(study, account);
         redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");
@@ -539,7 +543,7 @@ public class StudyController {
         }
 
         // 24시간 체크 로직
-        if(!checkAlarmDateTime){
+        /*if(!checkAlarmDateTime){
             log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
             message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
                     "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
@@ -549,7 +553,7 @@ public class StudyController {
                     "    <p class=\"text-white text-opacity-75\">하루에 한 번 발송 가능합니다. 나중에 다시 시도해주세요.</p>\n" +
                     "</div>";
             return message;
-        }
+        }*/
 
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 

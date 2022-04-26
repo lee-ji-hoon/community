@@ -34,7 +34,6 @@ import java.util.*;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final LikeRepository likeRepository;
     private final S3Repository s3Repository;
     private final S3Service s3Service;
 
@@ -45,16 +44,16 @@ public class BoardService {
     public static final int MONTH = 12;
 
     public Board saveNewBoard(List<MultipartFile> multipartFile, Account account,
-                              String selectBox, String selectBoxSub,
-                              String title, String subTitle, String content) {
+                              String post_sort, String post_sub_sort,
+                              String post_title, String post_sub_title, String post_content) {
 
         Board board = Board.builder()
                 .writer(account)
-                .boardTitle(selectBox)
-                .subTitle(selectBoxSub)
-                .title(title)
-                .content(content)
-                .subBoardTitle(subTitle)
+                .boardTitle(post_sort)
+                .subBoardTitle(post_sub_sort)
+                .title(post_title)
+                .subTitle(post_sub_title)
+                .content(post_content)
                 .pageView(0)
                 .uploadTime(LocalDateTime.now())
                 .isReported(false)
@@ -75,22 +74,17 @@ public class BoardService {
     }
 
     public void updateBoard(Board board, List<MultipartFile> multipartFile,
-                                 String selectBox, String selectBoxSub,
-                                 String title, String subTitle, String content) {
+                                 String post_sort, String post_sub_sort,
+                                 String post_title, String post_sub_title, String post_content) {
 
-        board.setBoardTitle(selectBox);
-        board.setSubTitle(selectBoxSub);
-        board.setTitle(title);
-        board.setContent(content);
-        board.setSubBoardTitle(subTitle);
+        board.setBoardTitle(post_sort);
+        board.setSubBoardTitle(post_sub_sort);
+        board.setTitle(post_title);
+        board.setSubTitle(post_sub_title);
+        board.setContent(post_content);
         board.setUpdateTime(LocalDateTime.now());
 
         uploadImage(multipartFile, board);
-    }
-
-    public void deleteImage(S3 s3) {
-        s3Repository.delete(s3);
-        s3Service.deleteFile(s3.getImageName());
     }
 
     private void uploadImage(List<MultipartFile> multipartFile, Board board) {

@@ -94,11 +94,11 @@ public class Study {
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
-    private LocalDate limitStudyDate;
+    private LocalDateTime limitStudyDate;
 
-    private LocalDate startStudyDate;
+    private LocalDateTime startStudyDate;
 
-    private LocalDate limitMemberDate;
+    private LocalDateTime limitMemberDate;
 
     private LocalDateTime publishedDateTime;
 
@@ -162,15 +162,15 @@ public class Study {
     }
 
     private boolean isRecruiting() {
-        return this.limitMemberDate.isAfter(LocalDate.now());
+        return this.limitMemberDate.isAfter(LocalDateTime.now());
     }
 
     private boolean isClosed() {
-        return this.limitStudyDate.isBefore(LocalDate.now());
+        return this.limitStudyDate.isBefore(LocalDateTime.now());
     }
 
     private boolean isNotOpenAndClosed() {
-        return this.startStudyDate.isBefore(LocalDate.now()) && limitStudyDate.isAfter(LocalDate.now());
+        return this.startStudyDate.isBefore(LocalDateTime.now()) && limitStudyDate.isAfter(LocalDateTime.now());
     }
 
     public void addMember(Account account) {

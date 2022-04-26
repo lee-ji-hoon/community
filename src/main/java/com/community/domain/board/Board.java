@@ -24,13 +24,17 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long bid;
 
+    //post_sort
     private String boardTitle;
 
+    //post_sub_sort
     private String subBoardTitle;
 
     @NotBlank
+    //post_title
     private String title;
 
+    //post_sub_title
     private String subTitle;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -706,6 +706,12 @@
                     <span>소개</span>
                 </a>
             </li>
+            <li th:classappend="${currentSideMenu == 'notice'}? active">
+                <a href="#">
+                    <ion-icon name="newspaper-outline" class="side-icon"></ion-icon>
+                    <span>공지사항</span>
+                </a>
+            </li>
             <li th:classappend="${currentSideMenu == 'contact'}? active">
                 <a th:href="@{/info/contact}">
                     <ion-icon name="mail-outline" class="side-icon"></ion-icon>
@@ -977,7 +983,7 @@
 
                                 <a th:href="@{'/study/' + ${study.path}}"
                                    th:if="${study.endStudy()}"
-                                   class="bg-red-500 w-full fflex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
+                                   class="bg-red-500 w-full flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize">
                                     종료
                                 </a>
                                 <a th:href="@{'/study/' + ${study.path}}"
@@ -1800,7 +1806,7 @@
                             <div class="flex items-center flex-wrap space-x-1 mt-3 text-xs text-gray-500 capitalize">
                                 <div th:each="tag: ${study.tags}">
                                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 mt-1 py-1 pr-1">
                                     <a  class="text-decoration-none text-white">
                                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                                     </a>
@@ -1905,7 +1911,7 @@
                             <div class="flex items-center flex-wrap space-x-1 mt-3 text-xs text-gray-500 capitalize">
                                 <div th:each="tag: ${study.tags}">
                                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                                    font-weight-light text-monospace badge badge-pill badge-info py-1 mt-1 pr-1 mr-1">
                                     <a  class="text-decoration-none text-white">
                                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                                     </a>
@@ -2128,7 +2134,7 @@
         <div class="flex items-center flex-wrap space-x-1 mt-1 mb-2 text-xs text-gray-500 capitalize h-4">
             <div th:each="tag: ${study.tags}">
                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                    font-weight-light text-monospace badge badge-pill badge-info mr-1 mt-1 py-1 pr-1">
                     <a  class="text-decoration-none text-white">
                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                     </a>
@@ -2461,11 +2467,11 @@
         const form = $("form")[0];
         const formData = new FormData(form);
 
-        formData.append("selectBox", $('#selectBox').val());
-        formData.append("selectBoxSub", $('#selectBoxSub').val());
-        formData.append("title", $('#title').val());
-        formData.append("subTitle", $('#subTitle').val());
-        formData.append("content", $("#content").val())
+        formData.append("post_sort", $('#post_sort').val());
+        formData.append("post_sub_sort", $('#post_sub_sort').val());
+        formData.append("post_title", $('#post_title').val());
+        formData.append("post_sub_title", $('#post_sub_title').val());
+        formData.append("post_content", $("#post_content").val());
 
 
         // TODO 이미지 1개도 없을 때 생각해야함
@@ -2501,16 +2507,11 @@
         const form = $("form")[0];
         const formData = new FormData(form);
 
-        formData.append("selectBox", $('#selectBox').val());
-        formData.append("selectBoxSub", $('#selectBoxSub').val());
-        formData.append("title", $('#title').val());
-        formData.append("subTitle", $('#subTitle').val());
-        formData.append("content", $("#content").val())
-
-        if (content_files.length === 0 && $('#imageName').val() == null) {
-            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
-            return;
-        }
+        formData.append("post_sort", $('#post_sort').val());
+        formData.append("post_sub_sort", $('#post_sub_sort').val());
+        formData.append("post_title", $('#post_title').val());
+        formData.append("post_sub_title", $('#post_sub_title').val());
+        formData.append("post_content", $("#post_content").val());
 
         for (let x = 0; x < content_files.length; x++) {
             // 삭제 안한것만 담아 준다.
@@ -2667,11 +2668,6 @@
         formData.append("eventStartDate", $("#eventStartDate").val())
         formData.append("eventEndDate", $("#eventEndDate").val())
         formData.append("postContent", $("#content").val())
-
-        if (content_files.length === 0 && $('#imageName').val() == null) {
-            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
-            return;
-        }
 
         for (let x = 0; x < content_files.length; x++) {
             // 삭제 안한것만 담아 준다.

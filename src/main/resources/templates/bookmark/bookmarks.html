@@ -39,7 +39,12 @@
                                 <div th:if="${bookmark.getMarket() != null}" th:with="market = ${bookmark.getMarket()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-2.jpg" alt="" class="">
+                                        <th:block th:if="${market.getImageList().size()==0}">
+                                            <img th:src="@{/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${market.getImageList().size()!=0}">
+                                            <img th:src="${market.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5">장터</div>
                                     </div>
                                     <div class="card-body">
@@ -100,7 +105,12 @@
                                 <div th:if="${bookmark.getBoard() != null}" th:with="board = ${bookmark.getBoard()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${board.getImageList().size()==0}">
+                                            <img th:src="@{/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${board.getImageList().size()!=0}">
+                                            <img th:src="${board.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-yellow-100 font-semibold px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5">커뮤니티</div>
                                     </div>
                                     <div class="card-body">
@@ -156,7 +166,12 @@
                                 <div th:if="${bookmark.getCouncil() != null}" th:with="council = ${bookmark.getCouncil()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${council.getImageList().size()==0}">
+                                            <img th:src="@{/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${council.getImageList().size()!=0}">
+                                            <img th:src="${council.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-red-100 font-semibold px-2.5 py-1 rounded-full text-red-500 text-xs top-2.5 left-2.5">학생회</div>
                                     </div>
                                     <div class="card-body">
@@ -207,7 +222,12 @@
                                 <div th:if="${bookmark.getStudy() != null}" th:with="study = ${bookmark.getStudy()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${study.getImage().isEmpty()}">
+                                            <img th:src="@{/images/study-banner.jpeg}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${!study.getImage().isEmpty()}">
+                                            <img th:src="${study.getImage()}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">스터디</div>
                                     </div>
                                     <div class="card-body">
@@ -221,9 +241,7 @@
                                             <div class="text-xs uppercase text-yellow-500 font-semibold">스터디 종료</div>
                                         </div>-->
                                         <a th:href="@{/study/{path}(path = ${study.getPath()})}" class="box-title  mb-1" th:text="${study.getTitle()}"></a>
-                                        <div class="text-sm font-medium mt-1">
-                                            작성자
-                                        </div>
+                                        <div class="text-sm font-medium mt-1" th:text="${study.shortDescription}"></div>
 
                                         <div class="flex items-center space-x-2 text-sm text-gray-500 capitalize mt-2">
                                             <div><ion-icon name="bookmark-outline" class="mr-2"></ion-icon><span th:text="${study.getBookmarkList().size()}"></span></div>
