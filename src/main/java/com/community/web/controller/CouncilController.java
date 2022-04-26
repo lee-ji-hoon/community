@@ -125,7 +125,7 @@ public class CouncilController {
                 APSD, APED, ESD, EED, postContent);
         return newCouncilPost.getCid();
     }
-    
+
     @GetMapping("/council/detail/{cid}")
     public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model,
                                 HttpServletRequest request, HttpServletResponse response) {
