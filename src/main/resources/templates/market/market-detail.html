@@ -360,7 +360,8 @@
                                     <br>
                                     <!--<a href="#" class="bg-gray-100 py-1.5 px-4 rounded-full absolute right-5 top-0">Replay</a>-->
                                     <div>
-                                        <a th:href="@{/profile/{nickname}(nickname=${reply.getAccount().nickname})}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
+
+                                        <a th:href="@{'/profile/' + ${reply.getAccount().nickname} + '/view'}"><h4 class="text-base m-0 font-semibold" th:text="${reply.getAccount().nickname}">댓글 작성자</h4></a>
                                         <span class="text-gray-700 text-sm" th:text="${service.boardDateTime(reply.uploadTime)}"></span>
                                         <th:block th:if="${!reply.getIsReported}">
                                             <form onsubmit="return false" th:id="|replyUpdateForm${reply.rid}|">
