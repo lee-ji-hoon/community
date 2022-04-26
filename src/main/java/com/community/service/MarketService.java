@@ -122,6 +122,18 @@ public class MarketService {
         marketRepository.delete(market);
     }
 
+    public void updateMarket(Market market, List<MultipartFile> multipartFileLIst, String itemName,
+                             String marketType, String description, String price, String itemStatus) {
+        market.setItemName(itemName);
+        market.setMarketType(marketType);
+        market.setItemDetail(description);
+        market.setPrice(Integer.parseInt(price));
+        market.setItemStatus(itemStatus);
+        marketSetType(market, market.getMarketType());
+
+        uploadImage(multipartFileLIst, market);
+    }
+
     /*public void updateMarketImage(Market market, String marketImagePath, String uploadFile, String uploadFolder) {
         market.setFilePath(marketImagePath);
         market.setFileName(uploadFolder + uploadFile);

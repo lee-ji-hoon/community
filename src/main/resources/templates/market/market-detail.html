@@ -43,7 +43,7 @@
                 <div class="breadcrumb">
                     <ul class="m-0">
                         <li>
-                            <a th:href="@{/market}">장터</a>
+                            <a th:href="@{/market/sell}">장터</a>
                         </li>
                         <li>
                             <a style="font-weight: bold" href="#"> 상세보기</a>
@@ -389,15 +389,18 @@
                             <div class="-mb-1 border-b font-semibold px-5 py-5 text-lg">
                                 <h4> 수정   </h4>
                             </div>
-                            <form class="needs-validation space-y-4 g:w-8/12 market_form" id="market_form"
-                                   enctype="multipart/form-data" method="post" novalidate>
+                            <form class="needs-validation space-y-4 g:w-8/12 market_form" id="marketForm" name="marketForm"
+                                   enctype="multipart/form-data" novalidate>
                                 <div class="p-6 space-y-3 flex-1">
                                     <div>
                                         <label for="marketType"> 카테고리 </label>
-                                        <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border"
-                                            <option value="판매" th:selected="${product.marketType}=='sell'" th:value="sell"> 판매 </option>
-                                            <option value="구매" th:selected="${product.marketType}=='buy'" th:value="buy"> 구매 </option>
-                                            <option value="나눔" th:selected="${product.marketType}=='share'" th:value="share"> 나눔 </option>
+                                        <select id="marketType" name="marketType" aria-describedby="marketTypeHelp" class="selectpicker with-border">
+                                            <option value="판매" th:selected="${product.marketType}=='sell'"
+                                                    th:value="sell"> 판매 </option>
+                                            <option value="구매" th:selected="${product.marketType}=='buy'"
+                                                    th:value="buy"> 구매 </option>
+                                            <option value="나눔" th:selected="${product.marketType}=='share'"
+                                                    th:value="share"> 나눔 </option>
                                         </select>
                                         <small id="marketTypeHelp" class="form-text text-muted">
                                             어떤 방식의 상품을 등록할지 선택해주세요.
@@ -417,9 +420,11 @@
                                     </div>
                                     <div>
                                         <label for="description"> 설명  </label>
-                                        <textarea id="description" type="text" name="itemDetail"
+                                        <textarea id="description" name="description"
                                                   th:value="${product.itemDetail}" th:utext="${product.itemDetail}" rows="2" class="with-border w-full p-4"
-                                                  placeholder="상품의 설명을 자세히 적어주세요." required max="250"></textarea>
+                                                  placeholder="상품의 설명을 자세히 적어주세요." aria-describedby="itemDetailHelp"
+                                                  required max="250"></textarea>
+
                                         <small id="itemDetailHelp" class="form-text text-muted">
                                             상품의 설명은 250자 이내로 작성 가능합니다.
                                         </small>
@@ -453,27 +458,40 @@
                                             <small class="invalid-feedback">상품 상태를 다시 확인해주세요.</small>
                                         </div>
                                     </div>
-                                    <div uk-form-custom class="w-full py-3">
-                                        <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                                                <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                                                <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                                            </svg>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div uk-form-custom class="w-full py-3 col-span-2">
+                                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                </svg>
+                                            </div>
+                                            <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
                                         </div>
-                                        <input class="my-5" type="file" name="file" id="input-image" accept="image/png, image/jpeg">
 
-                                        <input type="hidden" name="imageFile" id="imageFile">
+                                        <div class="col-span-2">
+                                            <br />
+                                            <div id="refreshForm" class="refreshForm" name="refreshForm">
+                                                <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+                                                    <div th:each="image : ${product.imageList}"
+                                                         class="mx-1">
+                                                        <a href="#" th:onclick="|imageDeleteInit(${image.id})|"> 삭제 </a>
+                                                        <img th:src="${image.getImagePath()}"
+                                                             classname="article-image"
+                                                             style="width: 150px; height:200px;"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="p-5">
-                                    <button onclick="" type="submit"
+                                    <button onclick="updateProject()" type="submit"
                                             class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                                         수정
                                     </button>
                                 </div>
                             </form>
-
-
                         </div>
                     </div>
                 </div>
@@ -487,7 +505,72 @@
 <link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
 <div th:replace="theme-fragments :: bookmarkAjax"></div>
 <div th:replace="theme-fragments :: replyAjax"></div>
+<footer th:replace="theme-fragments.html :: summernote-ko-kr"></footer>
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: s3-market-imge-upload(uploadUrl='/market/'+${product.marketId}+'/update')"></script>
 <script type="application/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        $('#description').summernote({
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+            ],
+            height: 300,                 // 에디터 높이
+            minHeight: null,             // 최소 높이
+            maxHeight: null,             // 최대 높이
+            lang: "ko-KR",					// 한글 설정
+            placeholder: '더 자세한 내용을 적어주세요. <br> 꼼꼼히 작성하면 물건을 더 빠르게 판매 할 수 있을거에요.  <br/> [판매/구매 내용 예시] <br/> 거래지역 : <br/> 물건 상태 : ' //placeholder 설정
+
+        });
+
+        // Delay 함수
+        var delay = (function (){
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        });
+
+
+
+        var c_textarea = $('#c_content');
+        $(document).on('click', '.chat_send', function () {
+            if (c_textarea.val().length < 2) {
+                swal("5글자 이상의 내용을 입력해주세요.", {
+                    icon: "warning",
+                });
+                c_textarea.val('');
+            }
+            if (c_textarea.val().length >= 2) {
+                console.log("쪽지 보내기");
+                $.ajax({
+                    url: '/chat/new',
+                    type: 'get',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    data: $('#chat_form').serialize(),
+                    success: function (sendChat) {
+                        console.log("쪽지 성공");
+                        $('.form_refresh').load(window.location.href+' .form_refresh');
+                        c_textarea.value = '';
+                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
+                        $("#isUpdated").replaceWith(sendChat);
+                    },
+                    error: function (request, status, error) {
+                        console.log("쪽지 실패" + error);
+                    }
+                });
+                imageDelay(function (){
+                    $(".identicon").each(function() {
+                        var hash = md5($(this).data('id')).toString();
+                        var data = new Identicon(hash,{format:'svg'}).toString();
+                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
+                    });
+                }, 1000);
+            }
+        });
+    })
+
+
     const input = document.querySelector('#price');      //[1]
     input.addEventListener('keyup', function(e) {
         let value = e.target.value;
@@ -639,6 +722,7 @@
                 })
             });
     }
+
     function marketShareEnd() {
         /*<![CDATA[*/
         var path = [[${product.marketId}]];
@@ -667,64 +751,7 @@
     }
     /*상품 상태 변경 끝*/
 
-    $(document).ready(function () {
-        // Delay 함수
-        var delay = (function (){
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
-
-        $('#description').summernote({
-            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
-            tabsize: 2,
-            toolbar: [
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-            ],
-            maxHeight: null,
-            minHeight: null,
-            lang: 'ko-KR',
-            height: 500,
-        });
-
-        var c_textarea = $('#c_content');
-        $(document).on('click', '.chat_send', function () {
-            if (c_textarea.val().length < 2) {
-                swal("5글자 이상의 내용을 입력해주세요.", {
-                    icon: "warning",
-                });
-                c_textarea.val('');
-            }
-            if (c_textarea.val().length >= 2) {
-                console.log("쪽지 보내기");
-                $.ajax({
-                    url: '/chat/new',
-                    type: 'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data: $('#chat_form').serialize(),
-                    success: function (sendChat) {
-                        console.log("쪽지 성공");
-                        $('.form_refresh').load(window.location.href+' .form_refresh');
-                        c_textarea.value = '';
-                        $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                        $("#isUpdated").replaceWith(sendChat);
-                    },
-                    error: function (request, status, error) {
-                        console.log("쪽지 실패" + error);
-                    }
-                });
-                imageDelay(function (){
-                    $(".identicon").each(function() {
-                        var hash = md5($(this).data('id')).toString();
-                        var data = new Identicon(hash,{format:'svg'}).toString();
-                        $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                    });
-                }, 1000);
-            }
-        });
-    })
 </script>
 </body>
+
 </html>
