@@ -39,7 +39,12 @@
                                 <div th:if="${bookmark.getMarket() != null}" th:with="market = ${bookmark.getMarket()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-2.jpg" alt="" class="">
+                                        <th:block th:if="${market.getImageList().size()==0}">
+                                            <img th:src="@{../static/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${market.getImageList().size()!=0}">
+                                            <img th:src="${market.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-blue-100 font-semibold px-2.5 py-1 rounded-full text-blue-500 text-xs top-2.5 left-2.5">장터</div>
                                     </div>
                                     <div class="card-body">
@@ -100,7 +105,12 @@
                                 <div th:if="${bookmark.getBoard() != null}" th:with="board = ${bookmark.getBoard()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${board.getImageList().size()==0}">
+                                            <img th:src="@{../static/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${board.getImageList().size()!=0}">
+                                            <img th:src="${board.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-yellow-100 font-semibold px-2.5 py-1 rounded-full text-yellow-500 text-xs top-2.5 left-2.5">커뮤니티</div>
                                     </div>
                                     <div class="card-body">
@@ -156,7 +166,12 @@
                                 <div th:if="${bookmark.getCouncil() != null}" th:with="council = ${bookmark.getCouncil()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${council.getImageList().size()==0}">
+                                            <img th:src="@{../static/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${council.getImageList().size()!=0}">
+                                            <img th:src="${council.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-red-100 font-semibold px-2.5 py-1 rounded-full text-red-500 text-xs top-2.5 left-2.5">학생회</div>
                                     </div>
                                     <div class="card-body">
@@ -207,7 +222,12 @@
                                 <div th:if="${bookmark.getStudy() != null}" th:with="study = ${bookmark.getStudy()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <img src="assets/images/events/img-4.jpg" alt="" class="">
+                                        <th:block th:if="${study.getImageList().size()==0}">
+                                            <img th:src="@{../static/images/default-image.png}" alt="" class="">
+                                        </th:block>
+                                        <th:block th:if="${study.getImageList().size()!=0}">
+                                            <img th:src="${study.getImageList().get(0).imagePath}" alt="" class="">
+                                        </th:block>
                                         <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">스터디</div>
                                     </div>
                                     <div class="card-body">
