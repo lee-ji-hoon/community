@@ -80,11 +80,6 @@ public class CouncilService {
         }
     }
 
-    public void deleteImage(S3 s3) {
-        s3Repository.delete(s3);
-        s3Service.deleteFile(s3.getImageName());
-    }
-
     public void deleteCouncil(Council council) {
         List<S3> imageList = council.getImageList(); // 이미지 불러오기
 

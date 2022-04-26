@@ -1,29 +1,21 @@
 package com.community.web.controller;
 
-import com.community.domain.account.AccountRepository;
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
-import com.community.domain.council.Council;
-import com.community.domain.graduation.Graduation;
-import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.web.dto.BoardForm;
 import com.community.web.dto.ReplyForm;
 import com.community.web.dto.BoardReportForm;
-import com.community.web.dto.SearchForm;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.likes.LikeRepository;
-import com.community.service.LikeService;
 import com.community.domain.likes.Likes;
-import com.community.domain.report.BoardReportRepository;
-import com.community.domain.report.ReplyReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,14 +25,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,7 +107,7 @@ public class BoardController {
 
     @ResponseBody
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
-    public Long graduationFormSubmit(@CurrentUser Account account,
+    public Long boardFormSubmit(@CurrentUser Account account,
                                      @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
                                      @RequestParam(value = "selectBox", required = false) String selectBox,
                                      @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
@@ -241,7 +231,7 @@ public class BoardController {
 
     @ResponseBody
     @RequestMapping(value = "/board/{id}/update", method = RequestMethod.POST)
-    public ResponseEntity graduationUpdate(@PathVariable Long id,
+    public ResponseEntity boardUpdate(@PathVariable Long id,
                                            @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                            @RequestParam(value = "selectBox", required = false) String selectBox,
                                            @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
@@ -254,18 +244,6 @@ public class BoardController {
 
         boardService.updateBoard(board, multipartFile, selectBox,
                 selectBoxSub, title, subTitle, content);
-        return ResponseEntity.ok().build();
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/board/image/delete", method = RequestMethod.POST)
-    public ResponseEntity graduationDeleteImage(@RequestParam(value = "imageName") String imageName) {
-        S3 s3 = s3Repository.findByImageName(imageName);
-
-        boardService.deleteImage(s3);
-
-        if(s3 != null) ResponseEntity.badRequest().build();
-
         return ResponseEntity.ok().build();
     }
 

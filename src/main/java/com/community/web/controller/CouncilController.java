@@ -125,19 +125,7 @@ public class CouncilController {
                 APSD, APED, ESD, EED, postContent);
         return newCouncilPost.getCid();
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/council/image/delete", method = RequestMethod.POST)
-    public ResponseEntity councilDeleteImage(@RequestParam(value = "imageName") String imageName) {
-        S3 s3 = s3Repository.findByImageName(imageName);
-
-        councilService.deleteImage(s3);
-
-        if(s3 != null) ResponseEntity.badRequest().build();
-
-        return ResponseEntity.ok().build();
-    }
-
+    
     @GetMapping("/council/detail/{cid}")
     public String councilDetail(@CurrentUser Account account, @PathVariable long cid, Model model,
                                 HttpServletRequest request, HttpServletResponse response) {
