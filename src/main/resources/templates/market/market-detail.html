@@ -158,7 +158,7 @@
                                 <div id="imageRefreshForm" class="imageRefreshForm">
                                     <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
                                         <a th:each="image : ${product.getImageList()}"
-                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="첫 사진">
+                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="장터">
                                             <img class="rounded" style="width: 200px; height: 150px;"
                                                  th:src="${image.getImagePath()}"/>
                                         </a>
