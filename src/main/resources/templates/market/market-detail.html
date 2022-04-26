@@ -61,7 +61,7 @@
                             <!-- post header-->
                             <div class="flex justify-between items-center lg:p-4 p-2.5">
                                 <div class="flex flex-1 items-center space-x-4">
-                                    <a href="#">
+                                    <a th:href="@{'/profile/' + ${product.seller.nickname} + '/view'}">
                                         <img th:if="${#strings.isEmpty(product.seller.profileImage)}"
                                              th:data-id="${product.seller.studentId}"
                                              class="identicon border border-white rounded-full w-10 h-10"/>
@@ -70,7 +70,7 @@
                                              class=" border border-white rounded-full w-10 h-10">
                                     </a>
                                     <div class="flex-1 font-semibold capitalize">
-                                        <a href="#" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
+                                        <a th:href="@{'/profile/' + ${product.seller.nickname} + '/view'}" class="text-black" th:text="${product.seller.nickname}"> Johnson smith </a>
                                         <div th:if="${product.marketType == 'sell'}" class="text-sm">판매</div>
                                         <div th:if="${product.marketType == 'buy'}" class="text-sm">구매</div>
                                         <div th:if="${product.marketType == 'share'}" class="text-sm">나눔</div>
