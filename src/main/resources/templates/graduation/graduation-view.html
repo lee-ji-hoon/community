@@ -104,7 +104,7 @@
                                                                         <select id="graduationDate" name="graduationDate"
                                                                                 class="selectpicker form-control"
                                                                                 aria-describedby="graduationDateHelp" required>
-                                                                            <option th:each="date : ${#numbers.sequence(10, 30)}"
+                                                                            <option th:each="date : ${#numbers.sequence(2015, 2020)}"
                                                                                     th:selected="${project.graduationDate}==${date}"
                                                                                     th:value="${date}"
                                                                                     th:text="'20'+${date}+'년'"></option>
@@ -122,19 +122,19 @@
                                                                                 class="selectpicker form-control"
                                                                                 aria-describedby="graduationTypeHelp" required>
                                                                             <option class=""
-                                                                                    th:selected="${project.graduationDate}=='웹'"
+                                                                                    th:selected="${project.graduationType}=='웹'"
                                                                                     value="WEB" selected>웹</option>
                                                                             <option class=""
-                                                                                    th:selected="${project.graduationDate}=='MOBILE'"
+                                                                                    th:selected="${project.graduationType}=='MOBILE'"
                                                                                     value="MOBILE">모바일</option>
                                                                             <option class=""
-                                                                                    th:selected="${project.graduationDate}=='VIDEO'"
+                                                                                    th:selected="${project.graduationType}=='VIDEO'"
                                                                                     value="VIDEO">영상</option>
                                                                             <option class=""
-                                                                                    th:selected="${project.graduationDate}=='VR_AR'"
+                                                                                    th:selected="${project.graduationType}=='VR_AR'"
                                                                                     value="VR_AR">VR_AR</option>
                                                                             <option class=""
-                                                                                    th:selected="${project.graduationDate}=='기타'"
+                                                                                    th:selected="${project.graduationType}=='기타'"
                                                                                     value="기타">기타</option>
                                                                         </select>
                                                                         <small id="studyMethodHelp" class="form-text text-muted">
