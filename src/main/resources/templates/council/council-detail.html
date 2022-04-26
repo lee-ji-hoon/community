@@ -88,8 +88,8 @@
                                     <div class="flex-none">
                                         <div th:if="${bookmark.isEmpty()}">
                                             <form id="bookmarkAdd">
-                                                <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
-                                                <input type="hidden" id="postSort" name="postSort" value="council"/>
+                                                <input type="hidden" id="b_postId" name="postId" th:value="${council.getCid()}"/>
+                                                <input type="hidden" id="b_postSort" name="postSort" value="council"/>
                                                 <div uk-tooltip="북마크">
                                                     <a class="bookmark_click">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkAddBtn" class="text-gray-500 font-bold" fill="currentColor">
@@ -102,8 +102,8 @@
                                         <div th:if="${bookmark.isPresent()}">
                                             <form id="bookmarkCancel">
                                                 <div uk-tooltip="북마크 해제">
-                                                    <input type="hidden" id="postId" name="postId" th:value="${council.getCid()}"/>
-                                                    <input type="hidden" id="postSort" name="postSort" value="council"/>
+                                                    <input type="hidden" id="b_postId" name="postId" th:value="${council.getCid()}"/>
+                                                    <input type="hidden" id="b_postSort" name="postSort" value="council"/>
                                                     <a class="bookmark_click">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
                                                             <path d="M34 6h-20c-2.21 0-3.98 1.79-3.98 4l-.02 32 14-6 14 6v-32c0-2.21-1.79-4-4-4zm0 30l-10-4.35-10 4.35v-26h20v26z"/>
@@ -209,18 +209,11 @@
                                                 <div class="uk-modal-header text-white">
                                                     <h3 class="text-lg font-semibold" id="forum_head"> 공지글 작성하기 </h3>
                                                 </div>
-                                                <form class="needs-validation" onsubmit="return false">
+                                                <form id="council_form" class="needs-validation" onsubmit="return false">
                                                     <div class="uk-modal-body" uk-overflow-auto>
                                                         <div class="space-y-4 g:w-8/12">
                                                             <div class="font-semibold text-lg"> 유형 선택 </div>
                                                             <hr>
-                                                            <div class="px-2 space-y-2 d-none">
-                                                                <div class="font-semibold text-base"> cid </div>
-                                                                <input type="hidden" placeholder="cid를 입력해주세요." id="cid"
-                                                                       th:value="${council.cid}" name="cid" readonly
-                                                                       aria-describedby="cidHelp"
-                                                                       class="-mt-2 -mx-3 bg-transparent focus:bg-white focus:ring-gray-300 h-8 outline-none px-0 text-base w-full form-control">
-                                                            </div>
                                                             <div class="grid grid-cols-2 gap-2">
                                                                 <div>
                                                                     <label for="postSort"> 글 종류 선택 </label>
@@ -375,7 +368,7 @@
                                                     <div class="uk-modal-footer uk-text-right text-white">
                                                         <button th:onclick="|location.href='@{/council/detail/delete/{councilId}(councilId=${council.cid})}'|"
                                                                 class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">삭제하기</button>
-                                                        <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium board_form_send uk-modal-close">저장</button>
+                                                        <button type="submit" onclick="updateProject()" class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium">저장</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -543,103 +536,6 @@
             height: 500,
         });
 
-        // 게시글 업데이트
-        $(document).on('click', '.board_form_send', function() {
-            $.ajax({
-                url:'/council/detail/update',
-                type:'get',
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                data : $('#board_form').serialize(),
-                success : function (message){
-                    $('.council_content').load(window.location.href+' .council_content');
-                    $('.council_sidebar').load(window.location.href+' .council_sidebar');
-                    $('#board_form').load(window.location.href+' #board_form');
-                    $("#isUpdatedForm").html('<div id="isUpdated"></div>');
-                    $("#isUpdated").replaceWith(message);
-                    $('#content').summernote('reset');
-                },
-            });
-            imageDelay(function (){
-                $(".identicon").each(function() {
-                    var hash = md5($(this).data('id')).toString();
-                    var data = new Identicon(hash,{format:'svg'}).toString();
-                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                });
-            }, 1000);
-        });
-
-        // 댓글 작성 ajax
-        /*var keydown = true;
-        var input = document.getElementById("r_content");
-        input.addEventListener('keypress', function(key){
-            if (input.value == '' && key.key == 'Enter') {
-                swal("댓글을 입력해주세요.");
-            }
-            if(input.value != '' && key.key == 'Enter'){
-                if (keydown) {
-                    $.ajax({
-                        url:'/council/detail/reply',
-                        type:'get',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        data : $('#reply_form').serialize(),
-                        dataType : "json",
-                        success : function (){
-                            $('.reply_div').load(location.href+' .reply_div');
-                            input.value ='';
-                            keydown = false;
-                            $(input).attr("readonly",true);
-                            $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
-                        },
-                    });
-                }
-            }
-            imageDelay(function (){
-                $(".identicon").each(function() {
-                    var hash = md5($(this).data('id')).toString();
-                    var data = new Identicon(hash,{format:'svg'}).toString();
-                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                });
-            }, 1000);
-            delay(function (){
-                $(input).removeAttr("readonly");
-                $(input).attr("placeholder","댓글을 입력해주세요.");
-                keydown=true;
-            }, 5000);
-        });
-        // 댓글 작성 ajax
-        $(document).on('click', '.write_reply', function() {
-            if (input.value == '') {
-                swal("댓글을 입력해주세요.");
-            }
-            if (input.value != '') {
-                $.ajax({
-                    url:'/council/detail/reply',
-                    type:'get',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    data : $('#reply_form').serialize(),
-                    dataType : "json",
-                    success : function (){
-                        $('.reply_div').load(location.href+' .reply_div');
-                        input.value ='';
-                        keydown = false;
-                        $(input).attr("readonly",true);
-                        $(input).attr("placeholder","5초 뒤에 댓글을 입력할 수 있습니다.");
-                    },
-                });
-            }
-            imageDelay(function (){
-                $(".identicon").each(function() {
-                    var hash = md5($(this).data('id')).toString();
-                    var data = new Identicon(hash,{format:'svg'}).toString();
-                    $(this).attr('src', "data:image/svg+xml;base64,"+data);
-                });
-            }, 1000);
-            delay(function (){
-                $(input).removeAttr("readonly");
-                $(input).attr("placeholder","댓글을 입력해주세요.");
-                keydown=true;
-            }, 5000);
-        });*/
         jQuery('#postSort').change(function() {
             var state = jQuery('#postSort option:selected').val();
             if (state == '공지') {

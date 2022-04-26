@@ -98,8 +98,8 @@
                                         <!-- 제목 -->
                                         <div class="form-group">
                                             <div class="line">
-                                                <input class="line__input form-control" id="title"
-                                                       name="title"
+                                                <input class="line__input form-control" id="postTitle"
+                                                       name="postTitle"
                                                        type="text" onkeyup="this.setAttribute(  'value', this.value);"
                                                        aria-describedby="titleHelp" required autocomplete="off">
                                                 <span for="username" class="line__placeholder"> 제목 </span>
@@ -174,7 +174,7 @@
                                         <!-- 본문 -->
                                         <div class="form-group">
                                             <div>
-                                            <textarea class="form-control" id="content" name="content"
+                                            <textarea class="form-control" id="postContent" name="postContent"
                                                       type="text" aria-describedby="contentHelp" required></textarea>
                                             </div>
                                             <small class="invalid-feedback">글을 입력해주세요.</small>
@@ -282,7 +282,41 @@
                 </div>
             </th:block>
             <th:block th:if="${type == 'event'}">
-                <div class="relative" uk-slider="finite: true">
+                <div class="grid md:grid-cols-4 grid-cols-2 gap-3 mt-5 mb-5">
+                    <div th:each="event : ${councilType}">
+                        <div class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
+                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
+                                <th:block th:if="${event.getImageList().size()==0}">
+                                    <img th:src="@{/images/default-image.png}" class="w-full h-full absolute object-cover inset-0">
+                                </th:block>
+                                <th:block th:if="${event.getImageList().size()!=0}">
+                                    <img th:src="${event.getImageList().get(0).imagePath}" class="w-full h-full absolute object-cover inset-0">
+                                </th:block>
+                                <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                    <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                        진행중 </div>
+                                </th:block>
+                                <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                    <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                        종료 </div>
+                                </th:block>
+
+                                <!-- overly-->
+                                <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
+                                <div class="absolute bottom-0 w-full p-3 text-white uk-transition-slide-bottom-small flex items-center">
+                                    <div class="flex-1">
+                                        <div class="text-lg" th:text="${event.postTitle}"> 제목  </div>
+                                        <div class="flex space-x-3 lg:flex-initial text-sm">
+                                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">좋아요 : <a th:text="${event.getLikesList().size()}"></a></a>
+                                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">댓글 : <a th:text="${event.getReplyList().size()}"></a></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="relative" uk-slider="finite: true">
                     <div class="uk-slider-container px-4 py-3">
 
                         <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
@@ -313,7 +347,7 @@
                         <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
                            href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
                     </div>
-                </div>
+                </div>-->
                 <div class="mt-2">
                     <div th:if="${councilType.totalPages != 0}" class="justify-center flex">
                         <nav aria-label="Page navigation"
@@ -354,7 +388,6 @@
             </th:block>
         </div>
     </div>
-
 </div>
 
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -364,7 +397,7 @@
 <script type="application/javascript">
     // 등록 버튼 클릭 시
     $( document ).ready( function() {
-        $('#content').summernote({
+        $('#postContent').summernote({
             placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
             tabsize: 2,
             toolbar: [
@@ -377,7 +410,7 @@
         });
 
         function resetValue() {
-            $('#title').val('');
+            $('#postTitle').val('');
         }
         $('#postTitle').val('');
         jQuery('#postSort').change(function() {
