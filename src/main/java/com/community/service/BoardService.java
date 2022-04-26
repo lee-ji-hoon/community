@@ -88,11 +88,6 @@ public class BoardService {
         uploadImage(multipartFile, board);
     }
 
-    public void deleteImage(S3 s3) {
-        s3Repository.delete(s3);
-        s3Service.deleteFile(s3.getImageName());
-    }
-
     private void uploadImage(List<MultipartFile> multipartFile, Board board) {
         String uploadFolder = "board-img/";
 
