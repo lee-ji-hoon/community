@@ -38,6 +38,7 @@ public class MarketService {
                 .price(price)
                 .itemStatus(itemStatus)
                 .seller(account)
+                .published(true)
                 .uploadTime(LocalDateTime.now())
                 .build();
 

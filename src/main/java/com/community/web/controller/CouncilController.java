@@ -152,7 +152,7 @@ public class CouncilController {
     @ResponseBody
     @RequestMapping(value = "/council/{id}/update", method = RequestMethod.POST)
     public ResponseEntity councilUpdate(@PathVariable Long id,
-                                           @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                           @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                            @RequestParam(value = "postSort", required = false) String postSort,
                                            @RequestParam(value = "postTarget", required = false) String postTarget,
                                            @RequestParam(value = "postTitle", required = false) String postTitle,

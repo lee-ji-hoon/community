@@ -404,7 +404,7 @@
                                 </div>
 
                                 <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold justify-items-center">
-                                    <a th:each="managers : ${study.managers}" th:href="@{'/profile/' + ${managers.nickname}}" style="width:64px" class="text-center">
+                                    <a th:each="managers : ${study.managers}" th:href="@{'/profile/' + ${managers.nickname} + '/view'}" style="width:64px" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
                                             <img th:if="${#strings.isEmpty(managers.profileImage)}"
                                                  th:data-id="${managers.studentId}"
@@ -415,7 +415,7 @@
                                         </div>
                                         <span th:text="${managers.nickname}" class="text-center text-sm"> 유저 닉네임 </span> <i class="fa fa-id-badge"></i>
                                     </a>
-                                    <a th:each="member : ${study.members}" th:href="@{'/profile/' + ${member.nickname}}" class="text-center">
+                                    <a th:each="member : ${study.members}" th:href="@{'/profile/' + ${member.nickname} + '/view'}" class="text-center">
                                         <div class="avatar relative rounded-md overflow-hidden w-16 h-16 mb-2 place-content-center">
                                             <img th:if="${#strings.isEmpty(member.profileImage)}"
                                                  th:data-id="${member.studentId}"
