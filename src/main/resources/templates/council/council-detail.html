@@ -6,9 +6,6 @@
     .updateSubmit{
         display: none;
     }
-    #eventDatePick{
-        display: none;
-    }
 </style>
 <body>
 
@@ -294,13 +291,13 @@
                                                                     <br>작성할 내용이 없다면 아무것도 입력하지 않아도 됩니다.
                                                                 </small>
                                                             </div>
-                                                            <div id="eventDatePick">
+                                                            <div id="eventDatePick" th:classappend="${council.postSort != '행사' ? 'hidden' : ''}">
                                                                 <hr class="my-3">
                                                                 <div class="grid grid-cols-2 gap-4">
                                                                     <div>
                                                                         <label for="applyPeriodStartDate">신청 시작일</label>
                                                                         <div class="form-group">
-                                                                            <input id="applyPeriodStartDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                                            <input id="applyPeriodStartDate" type="datetime-local" class="shadow-none with-border p-3 form-control"
                                                                                    th:value="${council.applyPeriodStartDate}"
                                                                                    name="applyPeriodStartDate" aria-describedby="applyPeriodStartDateHelp">
                                                                         </div>
@@ -309,7 +306,7 @@
                                                                     <div>
                                                                         <label for="applyPeriodStartDate">신청 마감일</label>
                                                                         <div class="form-group">
-                                                                            <input id="applyPeriodEndDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                                            <input id="applyPeriodEndDate" type="datetime-local" class="shadow-none with-border p-3 form-control"
                                                                                    th:value="${council.applyPeriodEndDate}"
                                                                                    name="applyPeriodEndDate" aria-describedby="applyPeriodEndDateHelp">
                                                                         </div>
@@ -318,7 +315,7 @@
                                                                     <div>
                                                                         <label for="eventStartDate">행사 시작일</label>
                                                                         <div class="form-group">
-                                                                            <input id="eventStartDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                                            <input id="eventStartDate" type="datetime-local" class="shadow-none with-border p-3 form-control"
                                                                                    th:value="${council.eventStartDate}"
                                                                                    name="eventStartDate" aria-describedby="eventStartDateHelp">
                                                                         </div>
@@ -327,7 +324,7 @@
                                                                     <div>
                                                                         <label for="eventEndDate">행사 종료일</label>
                                                                         <div class="form-group">
-                                                                            <input id="eventEndDate" type="date" class="shadow-none with-border p-3 form-control"
+                                                                            <input id="eventEndDate" type="datetime-local" class="shadow-none with-border p-3 form-control"
                                                                                    th:value="${council.eventEndDate}"
                                                                                    name="eventEndDate" aria-describedby="eventEndDateHelp">
                                                                         </div>
@@ -393,7 +390,7 @@
                                                 </svg>
                                                 <div>
                                                     <div class="text-lg font-semibold"> 신청 진행전 </div>
-                                                    <div><a th:text="${council.applyPeriodStartDate}"></a>일 부터 신청 시작</div>
+                                                    <div><a th:text="${#temporals.format(council.applyPeriodStartDate, 'yyyy-MM-dd')}"></a>일 부터 신청 시작</div>
                                                 </div>
                                             </th:block>
                                             <!-- 신청 진행 중 -->
@@ -403,7 +400,7 @@
                                                 </svg>
                                                 <div>
                                                     <div class="text-lg font-semibold"> 신청 진행중 </div>
-                                                    <div>~ <a th:text="${council.applyPeriodEndDate}"></a>까지</div>
+                                                    <div>~ <a th:text="${#temporals.format(council.applyPeriodEndDate, 'yyyy-MM-dd')}"></a>까지</div>
                                                 </div>
                                             </th:block>
                                             <!-- 신청 마감 -->
@@ -413,7 +410,7 @@
                                                 </svg>
                                                 <div>
                                                     <div class="text-lg font-semibold"> 신청 마감 </div>
-                                                    <div>마감일 : <a th:text="${council.applyPeriodEndDate}"></a></div>
+                                                    <div>마감일 : <a th:text="${#temporals.format(council.applyPeriodEndDate, 'yyyy-MM-dd')}"></a></div>
                                                 </div>
                                             </th:block>
                                         </div>
@@ -426,10 +423,10 @@
                                                 <div>
                                                     <div class="text-lg font-semibold"> 행사 진행전 </div>
                                                     <th:block th:if="${council.eventStartDate == council.eventEndDate}">
-                                                        <div><a th:text="${council.eventEndDate}"></a>일 행사</div>
+                                                        <div><a th:text="${#temporals.format(council.eventEndDate, 'yyyy-MM-dd')}"></a>일 행사</div>
                                                     </th:block>
                                                     <th:block th:if="${council.eventStartDate != council.eventEndDate}">
-                                                        <div><a th:text="${council.eventStartDate}"></a>일 부터 행사 시작</div>
+                                                        <div><a th:text="${#temporals.format(council.eventStartDate, 'yyyy-MM-dd')}"></a>일 부터 행사 시작</div>
                                                     </th:block>
                                                 </div>
                                             </th:block>
@@ -441,10 +438,10 @@
                                                 <div>
                                                     <div class="text-lg font-semibold"> 행사 진행중 </div>
                                                     <th:block th:if="${council.eventStartDate == council.eventEndDate}">
-                                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                                        <div><a th:text="${#temporals.format(council.eventEndDate, 'yyyy-MM-dd')}"></a></div>
                                                     </th:block>
                                                     <th:block th:if="${council.eventStartDate != council.eventEndDate}">
-                                                        <div><a th:text="${council.eventStartDate}"></a> ~ <a th:text="${council.eventEndDate}"></a></div>
+                                                        <div><a th:text="${#temporals.format(council.eventStartDate, 'yyyy-MM-dd')}"></a> ~ <a th:text="${#temporals.format(council.eventEndDate, 'yyyy-MM-dd')}"></a></div>
                                                     </th:block>
                                                 </div>
                                             </th:block>
@@ -456,10 +453,10 @@
                                                 <div>
                                                     <div class="text-lg font-semibold"> 행사 종료 </div>
                                                     <th:block th:if="${council.eventStartDate == council.eventEndDate}">
-                                                        <div><a th:text="${council.eventEndDate}"></a></div>
+                                                        <div><a th:text="${#temporals.format(council.eventEndDate, 'yyyy-MM-dd')}"></a></div>
                                                     </th:block>
                                                     <th:block th:if="${council.eventStartDate != council.eventEndDate}">
-                                                        <div>마감일 : <a th:text="${council.eventEndDate}"></a></div>
+                                                        <div>마감일 : <a th:text="${#temporals.format(council.eventEndDate, 'yyyy-MM-dd')}"></a></div>
                                                     </th:block>
                                                 </div>
                                             </th:block>
