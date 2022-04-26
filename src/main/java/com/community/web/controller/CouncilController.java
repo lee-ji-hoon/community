@@ -160,23 +160,21 @@ public class CouncilController {
                                            @RequestParam(value = "postTitle", required = false) String postTitle,
                                            @RequestParam(value = "postLink", required = false) String postLink,
                                            @RequestParam(value = "contactNum", required = false) String contactNum,
-                                           @RequestParam(value = "applyPeriodStartDate", required = false) String applyPeriodStartDate,
-                                           @RequestParam(value = "applyPeriodEndDate", required = false) String applyPeriodEndDate,
-                                           @RequestParam(value = "eventStartDate", required = false) String eventStartDate,
-                                           @RequestParam(value = "eventEndDate", required = false) String eventEndDate,
+                                           @RequestParam(value = "applyPeriodStartDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodStartDate,
+                                           @RequestParam(value = "applyPeriodEndDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodEndDate,
+                                           @RequestParam(value = "eventStartDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDate,
+                                           @RequestParam(value = "eventEndDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDate,
                                            @RequestParam(value = "postContent", required = false) String postContent) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-        LocalDateTime APSD = LocalDateTime.parse(applyPeriodStartDate, dateTimeFormatter);
-        LocalDateTime APED = LocalDateTime.parse(applyPeriodEndDate, dateTimeFormatter);
-        LocalDateTime ESD = LocalDateTime.parse(eventStartDate, dateTimeFormatter);
-        LocalDateTime EED = LocalDateTime.parse(eventEndDate, dateTimeFormatter);
-
         Optional<Council> byId = councilRepository.findById(id);
         Council council = byId.get();
 
         councilService.updateCouncil(council, multipartFile, postSort, postTarget,
                 postTitle, postLink, contactNum,
-                APSD, APED, ESD, EED, postContent);
+                applyPeriodStartDate, applyPeriodEndDate, eventStartDate, eventEndDate, postContent);
         return ResponseEntity.ok().build();
     }
 
