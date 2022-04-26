@@ -51,7 +51,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +127,7 @@ public class StudyController {
         model.addAttribute("myStudyList",
                 studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
-        model.addAttribute("now", LocalDate.now());
+        model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("accountWithTagsById", accountWithTagsById);
 
         return "study/study-list";
@@ -355,13 +354,13 @@ public class StudyController {
 
         Study study = studyRepository.findStudyWithMembersByPath(path);
 
-        boolean checkBlockMembers = studyService.checkBlockMembers(study, account);
+        /*boolean checkBlockMembers = studyService.checkBlockMembers(study, account);*/
 
-        log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
+        /*log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
         if(!checkBlockMembers){
             redirectAttributes.addFlashAttribute("blockMessage", "스터디에서 차단 된 유저입니다.");
             return "redirect:/study/" + fixPath(path);
-        }
+        }*/
 
         studyService.addMember(study, account);
         redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");

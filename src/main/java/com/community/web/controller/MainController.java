@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class MainController {
 
         model.addAttribute("enrollStudy", enrollStudy);
         model.addAttribute("myStudy", myStudy);
-        model.addAttribute("now", LocalDate.now());
+        model.addAttribute("now", LocalDateTime.now());
 
         model.addAttribute("notice", noticeLists);
         model.addAttribute("service", boardService);
