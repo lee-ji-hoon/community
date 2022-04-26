@@ -706,6 +706,12 @@
                     <span>소개</span>
                 </a>
             </li>
+            <li th:classappend="${currentSideMenu == 'notice'}? active">
+                <a href="#">
+                    <ion-icon name="newspaper-outline" class="side-icon"></ion-icon>
+                    <span>공지사항</span>
+                </a>
+            </li>
             <li th:classappend="${currentSideMenu == 'contact'}? active">
                 <a th:href="@{/info/contact}">
                     <ion-icon name="mail-outline" class="side-icon"></ion-icon>
