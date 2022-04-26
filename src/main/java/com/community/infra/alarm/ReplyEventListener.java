@@ -24,7 +24,6 @@ import java.util.Set;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-@Async
 public class ReplyEventListener {
 
     private final AlarmRepository alarmRepository;

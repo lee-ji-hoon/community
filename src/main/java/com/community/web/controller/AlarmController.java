@@ -95,6 +95,9 @@ public class AlarmController {
             case BOARD_REPLY: case LIKES: log.info("board 페이지 이동 : {}", path);
                 Long boardNumber = Long.valueOf(path);
                 return "redirect:/board/detail/"+boardNumber;
+            case MARKET_REPLY:
+                Long marketId = Long.valueOf(path);
+                return "redirect:/market/detail/" + marketId;
         }
         return "error-page";
     }
