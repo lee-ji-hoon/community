@@ -51,7 +51,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +127,7 @@ public class StudyController {
         model.addAttribute("myStudyList",
                 studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account));
         model.addAttribute("studyTagListTitle",tagRepository.findAll());
-        model.addAttribute("now", LocalDate.now());
+        model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("accountWithTagsById", accountWithTagsById);
 
         return "study/study-list";
