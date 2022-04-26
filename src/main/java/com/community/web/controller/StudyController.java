@@ -355,13 +355,13 @@ public class StudyController {
 
         Study study = studyRepository.findStudyWithMembersByPath(path);
 
-        boolean checkBlockMembers = studyService.checkBlockMembers(study, account);
+        /*boolean checkBlockMembers = studyService.checkBlockMembers(study, account);*/
 
-        log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
+        /*log.info("스터디 차단 여부 확인 : {}", checkBlockMembers);
         if(!checkBlockMembers){
             redirectAttributes.addFlashAttribute("blockMessage", "스터디에서 차단 된 유저입니다.");
             return "redirect:/study/" + fixPath(path);
-        }
+        }*/
 
         studyService.addMember(study, account);
         redirectAttributes.addFlashAttribute("message", "스터디 인원에 추가됐습니다. 생선된 모임들을 확인해주세요.");
