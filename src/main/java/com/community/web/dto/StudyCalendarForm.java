@@ -4,19 +4,20 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class StudyCalendarForm {
 
     private int limitMember;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate limitMemberDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime limitMemberDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startStudyDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime startStudyDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate limitStudyDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime limitStudyDate;
 
 }

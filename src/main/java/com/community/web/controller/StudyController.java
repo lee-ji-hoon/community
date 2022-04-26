@@ -51,6 +51,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -182,12 +183,16 @@ public class StudyController {
 
     // 스터디 추가
     @PostMapping(STUDY_FORM_URL)
-    public String newStudySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
+    public String newStudySubmit(@CurrentUser Account account,  StudyForm studyForm, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return STUDY_FORM_VIEW;
         }
+
+        log.info("스터디 시작 날짜: {}",studyForm.getStartStudyDate());
+        log.info("스터디 종료 날짜: {}",studyForm.getLimitStudyDate());
+        log.info("모집 종료 날짜: {}",studyForm.getLimitMemberDate());
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
 

@@ -45,15 +45,23 @@
                         <div>
                             <label for="limitMemberDate" class="font-bold">인원 모집 기간</label>
                             <div class="form-group">
-                                <input id="limitMemberDate" type="date" th:field="*{limitMemberDate}" class="shadow-none with-border p-3 form-control"
+                                <input id="limitMemberDate" type="datetime-local"
+                                       th:value="${study.limitMemberDate}"
+                                       class="shadow-none with-border p-3 form-control"
                                        aria-describedby="limitPersonDateHelp" required>
+
+                                <input type="hidden"
+                                       id="limitMemberDateNum" value=""
+                                       th:field="*{limitMemberDate}">
                             </div>
                             <small id="limitPersonDateHelp" class="form-text text-muted">
                                 스터디 인원 모집 마감일을 설정해주세요<br>
                                 인원 모집 시작은 설정에서 가능합니다.
                             </small>
                             <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                            <small class="form-text text-danger" th:if="${#fields.hasErrors('limitMemberDate')}" th:errors="*{limitMemberDate}">limitMemberDate Error</small>
+                            <small class="form-text text-danger"
+                                   th:if="${#fields.hasErrors('limitMemberDate')}"
+                                   th:errors="*{limitMemberDate}">limitMemberDate Error</small>
                         </div>
                         <hr/>
                         <div class="grid grid-cols-2 gap-3">
@@ -61,26 +69,41 @@
                             <div>
                                 <label for="startStudyDate" class="font-bold">스터디 시작일</label>
                                 <div class="form-group">
-                                    <input id="startStudyDate" type="date" th:field="*{startStudyDate}" class="shadow-none with-border p-3 form-control"
+                                    <input id="startStudyDate" type="datetime-local"
+                                           th:value="${study.startStudyDate}"
+                                           class="shadow-none with-border p-3 form-control"
                                            aria-describedby="startStudyDateHelp" required>
+
+                                    <input type="hidden"
+                                           id="startStudyDateNum" value=""
+                                           th:field="*{startStudyDate}">
                                 </div>
                                 <small id="startStudyDateHelp" class="form-text text-muted">
                                     스터디 시작 날짜를 설정해주세요
                                 </small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('startStudyDate')}" th:errors="*{startStudyDate}">startStudyDate Error</small>
+                                <small class="form-text text-danger"
+                                       th:if="${#fields.hasErrors('startStudyDate')}"
+                                       th:errors="*{startStudyDate}">startStudyDate Error</small>
                                 <small class="invalid-feedback">스터디 시작 날짜를 다시 확인해주세요.</small>
                             </div>
                             <div>
                                 <label for="limitStudyDate" class="font-bold">스터디 종료일</label>
                                 <div class="form-group">
-                                    <input id="limitStudyDate" type="date" th:field="*{limitStudyDate}" class="shadow-none with-border p-3 form-control"
+                                    <input id="limitStudyDate" type="datetime-local"
+                                           th:value="${study.limitStudyDate}"
+                                           class="shadow-none with-border p-3 form-control"
                                            aria-describedby="limitStudyDateHelp" required>
+                                    <input type="hidden"
+                                           id="limitStudyDateNum" value=""
+                                           th:field="*{limitStudyDate}">
                                 </div>
                                 <small id="limitStudyDateHelp" class="form-text text-muted">
                                     스터디 종료 날짜를 설정해주세요<br>
                                 </small>
                                 <small class="invalid-feedback">날짜를 확인해주세요.</small>
-                                <small class="form-text text-danger" th:if="${#fields.hasErrors('limitStudyDate')}" th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
+                                <small class="form-text text-danger"
+                                       th:if="${#fields.hasErrors('limitStudyDate')}"
+                                       th:errors="*{limitStudyDate}">limitStudyDateHelp Error</small>
                             </div>
                         </div>
                         <a type="submit" id="calendar-submit"
@@ -97,7 +120,19 @@
         let limitMember = document.getElementById("limitMember");
         let limitMemberNum = document.getElementById("limitMemberNum");
 
+        let limitMemberDate = document.getElementById("limitMemberDate");
+        let limitMemberDateNum = document.getElementById("limitMemberDateNum");
+
+        let startStudyDate = document.getElementById("startStudyDate");
+        let startStudyDateNum = document.getElementById("startStudyDateNum");
+
+        let limitStudyDate = document.getElementById("limitStudyDate");
+        let limitStudyDateNum = document.getElementById("limitStudyDateNum");
+
         limitMemberNum.value = limitMember.value;
+        limitMemberDateNum.value = limitMemberDate.value;
+        startStudyDateNum.value = startStudyDate.value;
+        limitStudyDateNum.value = limitStudyDate.value;
 
         $("#calendarForm").submit();
     }
