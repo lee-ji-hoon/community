@@ -222,11 +222,11 @@
                                 <div th:if="${bookmark.getStudy() != null}" th:with="study = ${bookmark.getStudy()}" class="card">
                                     <div class="card-media h-32">
                                         <div class="card-media-overly"></div>
-                                        <th:block th:if="${study.getImageList().size()==0}">
+                                        <th:block th:if="${study.getImage().isEmpty()}">
                                             <img th:src="@{../static/images/default-image.png}" alt="" class="">
                                         </th:block>
-                                        <th:block th:if="${study.getImageList().size()!=0}">
-                                            <img th:src="${study.getImageList().get(0).imagePath}" alt="" class="">
+                                        <th:block th:if="${!study.getImage().isEmpty()}">
+                                            <img th:src="${study.getImage()}" alt="" class="">
                                         </th:block>
                                         <div class="absolute bg-green-100 font-semibold px-2.5 py-1 rounded-full text-green-500 text-xs top-2.5 left-2.5">스터디</div>
                                     </div>
