@@ -105,7 +105,7 @@ public class CouncilController {
     @ResponseBody
     @RequestMapping(value = "/council-new", method = RequestMethod.POST)
     public Long createNewPost(@CurrentUser Account account,
-                              @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                              @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                               @RequestParam(value = "postSort", required = false) String postSort,
                               @RequestParam(value = "postTarget", required = false) String postTarget,
                               @RequestParam(value = "postTitle", required = false) String postTitle,

@@ -108,7 +108,7 @@ public class BoardController {
     @ResponseBody
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
     public Long boardFormSubmit(@CurrentUser Account account,
-                                     @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                     @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                      @RequestParam(value = "selectBox", required = false) String selectBox,
                                      @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
                                      @RequestParam(value = "title", required = false ) String title,
