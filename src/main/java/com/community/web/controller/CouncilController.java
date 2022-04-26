@@ -58,7 +58,7 @@ public class CouncilController {
     @GetMapping("/council/{type}/search")
     public String councilSearch(String keyword, @CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 8, page = 0, sort = "uploadTime",
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
 
@@ -79,7 +79,7 @@ public class CouncilController {
     @GetMapping("/council/{type}")
     public String councilRecent(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 8, page = 0, sort = "uploadTime",
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
         switch (type) {
