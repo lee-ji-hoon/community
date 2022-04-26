@@ -109,15 +109,15 @@ public class BoardController {
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
     public Long boardFormSubmit(@CurrentUser Account account,
                                      @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                     @RequestParam(value = "selectBox", required = false) String selectBox,
-                                     @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
-                                     @RequestParam(value = "title", required = false ) String title,
-                                     @RequestParam(value = "subTitle", required = false) String subTitle,
-                                     @RequestParam(value = "content", required = false) String content) {
+                                     @RequestParam(value = "post_sort", required = false) String post_sort,
+                                     @RequestParam(value = "post_sub_sort", required = false) String post_sub_sort,
+                                     @RequestParam(value = "post_title", required = false ) String post_title,
+                                     @RequestParam(value = "post_sub_title", required = false) String post_sub_title,
+                                     @RequestParam(value = "post_content", required = false) String post_content) {
         Board newBoard = boardService.saveNewBoard(
                 multipartFile, account,
-                selectBox, selectBoxSub,
-                title, subTitle, content);
+                post_sort, post_sub_sort,
+                post_title, post_sub_title, post_content);
 
         return newBoard.getBid();
     }
@@ -233,17 +233,17 @@ public class BoardController {
     @RequestMapping(value = "/board/{id}/update", method = RequestMethod.POST)
     public ResponseEntity boardUpdate(@PathVariable Long id,
                                            @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                           @RequestParam(value = "selectBox", required = false) String selectBox,
-                                           @RequestParam(value = "selectBoxSub", required = false) String selectBoxSub,
-                                           @RequestParam(value = "title", required = false ) String title,
-                                           @RequestParam(value = "subTitle", required = false) String subTitle,
-                                           @RequestParam(value = "content", required = false) String content) {
+                                           @RequestParam(value = "post_sort", required = false) String post_sort,
+                                           @RequestParam(value = "post_sub_sort", required = false) String post_sub_sort,
+                                           @RequestParam(value = "post_title", required = false ) String post_title,
+                                           @RequestParam(value = "post_sub_title", required = false) String post_sub_title,
+                                           @RequestParam(value = "post_content", required = false) String post_content) {
 
         Optional<Board> byId = boardRepository.findById(id);
         Board board = byId.get();
 
-        boardService.updateBoard(board, multipartFile, selectBox,
-                selectBoxSub, title, subTitle, content);
+        boardService.updateBoard(board, multipartFile, post_sort,
+                post_sub_sort, post_title, post_sub_title, post_content);
         return ResponseEntity.ok().build();
     }
 
