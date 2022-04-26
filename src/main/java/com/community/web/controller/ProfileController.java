@@ -140,19 +140,20 @@ public class ProfileController {
         switch (division) {
             case "market" :
                 model.addAttribute("myProductCountBySell",
-                        marketRepository.countAllBySellerAndMarketType(account, "판매"));
+                        marketRepository.countAllBySellerAndMarketType(account, "sell"));
                 model.addAttribute("myProductCountByBuy",
-                        marketRepository.countAllBySellerAndMarketType(account, "구매"));
+                        marketRepository.countAllBySellerAndMarketType(account, "buy"));
                 switch (sortType) {
                     case "sell":
                         model.addAttribute("market",
-                                marketRepository.findBySellerAndMarketType(account, "판매", pageable));
+                                marketRepository.findBySellerAndMarketType(account, "sell", pageable));
                         break;
                     case "buy":
                         model.addAttribute("market",
-                                marketRepository.findBySellerAndMarketType(account, "구매", pageable));
+                                marketRepository.findBySellerAndMarketType(account, "buy", pageable));
                         break;
                 }
+                break;
             case "board" :
                 model.addAttribute("myBoardCountByFree",
                         boardRepository.countAllByWriterAndBoardTitle(account, "자유"));

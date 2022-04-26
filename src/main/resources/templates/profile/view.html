@@ -303,13 +303,17 @@
                             </nav>
 
                             <div class="lg:mt-8 mt-4">
-                                <div th:each="market : ${market.getContent()}"
+                                <div th:each="market : ${market}"
                                      class="flex items-start card flex-wrap p-2 my-5 sm:space-x-6">
                                     <a th:href="@{'/market/detail/'+${market.marketId}}" class="w-40 h-40 relative mt-1 order-1">
-                                        <img th:if="${market.getFilePath() != null}" th:src="${market.getFilePath()}" alt="" class="rounded-md" style="width: 160px; height: 160px;">
+                                        <img th:if="${market.imageList.size() != 0}"
+                                             th:src="${market.imageList.get(0).getImagePath()}"
+                                             class="rounded-md" style="width: 160px; height: 160px;">
                                     </a>
                                     <div class="flex-1 sm:order-2">
-                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:text="${market.marketType}">Phaseout </h4>
+                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'sell'}">판매 </h4>
+                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'buy'}">구매 </h4>
+                                        <h4 class="text-base text-gray-500 font-medium mb-2" th:if="${market.marketType == 'share'}">나눔 </h4>
                                         <a th:href="@{'/market/detail/'+${market.marketId}}">
                                             <h3 class="text-xl font-medium mb-4" th:text="${market.itemName}"> Technical Event Support Specialist </h3>
                                         </a>

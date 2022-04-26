@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -103,7 +104,7 @@ public class MarketController {
         log.info("email 체크 : {}", emailVerified);
         if (!emailVerified) {
             model.addAttribute(account);
-            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+            redirectAttributes.addFlashAttribute("emailVerifiedChecㅕked", "이메일 인증 후에 사용 가능합니다.");
 
             return "redirect:/market/";
         }
@@ -127,6 +128,25 @@ public class MarketController {
         Market market = marketService.createNewItem(multipartFileLIst, itemName, marketType, description, Integer.parseInt(price), itemStatus, account);
 
         return market.getMarketId();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/market/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity marketUpdate(@PathVariable Long id,
+                                       @RequestPart(value = "article_file", required = false) List<MultipartFile> multipartFileLIst,
+                                       @RequestPart(value = "itemName", required = false) String itemName,
+                                       @RequestPart(value = "marketType", required = false) String marketType,
+                                       @RequestPart(value = "description", required = false) String description,
+                                       @RequestPart(value = "price", required = false) String price,
+                                       @RequestPart(value = "itemStatus", required = false) String itemStatus) {
+
+        Optional<Market> byId = marketRepository.findById(id);
+        Market market = byId.get();
+
+        marketService.updateMarket(market, multipartFileLIst, itemName,
+                marketType, description, price, itemStatus);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/market/detail/{marketId}")

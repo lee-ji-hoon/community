@@ -58,11 +58,6 @@ public class GraduationService {
         graduationRepository.delete(graduation);
     }
 
-    public void deleteImage(S3 s3) {
-        s3Repository.delete(s3);
-        s3Service.deleteFile(s3.getImageName());
-    }
-
     public void updateGraduation(Graduation graduation, List<MultipartFile> multipartFile, String title,
                                  String teamMember, String teamName, String path, String graduationType,
                                  int graduationDate, String description) {
