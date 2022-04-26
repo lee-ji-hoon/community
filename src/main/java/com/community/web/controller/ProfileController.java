@@ -140,39 +140,39 @@ public class ProfileController {
         switch (division) {
             case "market" :
                 model.addAttribute("myProductCountBySell",
-                        marketRepository.countAllBySellerAndMarketType(account, "sell"));
+                        marketRepository.countAllBySellerAndMarketType(byAccount, "sell"));
                 model.addAttribute("myProductCountByBuy",
-                        marketRepository.countAllBySellerAndMarketType(account, "buy"));
+                        marketRepository.countAllBySellerAndMarketType(byAccount, "buy"));
                 switch (sortType) {
                     case "sell":
                         model.addAttribute("market",
-                                marketRepository.findBySellerAndMarketType(account, "sell", pageable));
+                                marketRepository.findBySellerAndMarketType(byAccount, "sell", pageable));
                         break;
                     case "buy":
                         model.addAttribute("market",
-                                marketRepository.findBySellerAndMarketType(account, "buy", pageable));
+                                marketRepository.findBySellerAndMarketType(byAccount, "buy", pageable));
                         break;
                 }
                 break;
             case "board" :
                 model.addAttribute("myBoardCountByFree",
-                        boardRepository.countAllByWriterAndBoardTitle(account, "자유"));
+                        boardRepository.countAllByWriterAndBoardTitle(byAccount, "자유"));
                 model.addAttribute("myBoardCountByForum",
-                        boardRepository.countAllByWriterAndBoardTitle(account, "정보"));
+                        boardRepository.countAllByWriterAndBoardTitle(byAccount, "정보"));
                 model.addAttribute("myBoardCountByQnA",
-                        boardRepository.countAllByWriterAndBoardTitle(account, "질문"));
+                        boardRepository.countAllByWriterAndBoardTitle(byAccount, "질문"));
                 switch (sortType) {
                     case "free":
                         model.addAttribute("board",
-                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "자유", false, pageable));
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(byAccount, "자유", false, pageable));
                         break;
                     case "forum":
                         model.addAttribute("board",
-                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "정보", false, pageable));
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(byAccount, "정보", false, pageable));
                         break;
                     case "qna":
                         model.addAttribute("board",
-                                boardRepository.findByWriterAndBoardTitleAndIsReported(account, "질문", false, pageable));
+                                boardRepository.findByWriterAndBoardTitleAndIsReported(byAccount, "질문", false, pageable));
                         break;
                 }
         }
