@@ -201,13 +201,9 @@
                                                                         <br/>
                                                                         <div id="refreshForm" class="refreshForm" name="refreshForm">
                                                                             <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
-
                                                                                 <div th:each="image : ${board.imageList}"
                                                                                      class="mx-1">
-                                                                                    <form method="post" onsubmit="return false" name="imageDelete" id="imageDelete">
-                                                                                        <input type="hidden" name="imageName" id="imageName" th:value="${image.getImageName()}">
-                                                                                        <button type="submit" onclick="imageDeleteInit()"> 삭제 </button>
-                                                                                    </form>
+                                                                                    <a href="#" th:onclick="|imageDeleteInit(${image.id})|"> 삭제 </a>
                                                                                     <img th:src="${image.getImagePath()}"
                                                                                          classname="article-image"
                                                                                          style="width: 150px; height:200px;"/>
@@ -473,29 +469,17 @@
 <script th:replace="theme-fragments.html :: form-validation"></script>
 <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl = '/board/'+ ${board.bid} +'/update')"></script>
 <script type="application/javascript" th:inline="javascript">
-    function imageDeleteInit() {
-        console.log("이미지 삭제 실행");
-
-        const form = $("form")[0];
-        const formData = new FormData(form);
-        formData.append("imageName", $('#imageName').val());
-
+    function imageDeleteInit(id) {
         $.ajax({
-            type: "POST",
-            enctype: "multipart/form-data",
-            url: "/board/image/delete",
-            processData: false,
-            contentType: false,
-            data: formData,
-            success: function (path) {
+            type: "GET",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            url: "/s3/image/delete",
+            data: {"imageId": id},
+            success : function (){
                 $('.refreshForm').load(location.href+' .refreshForm');
                 $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
-                alert("이미지가 삭제됐습니다.");
             },
-            error: function (xhr, status, error) {
-                alert("이미지 삭제에 실패했습니다 다시 시도해주세요.")
-            }
-        });
+        })
     }
     $(document).ready(function (){
         // summernote
