@@ -107,7 +107,7 @@
                                                                             <option th:each="date : ${#numbers.sequence(2015, 2020)}"
                                                                                     th:selected="${project.graduationDate}==${date}"
                                                                                     th:value="${date}"
-                                                                                    th:text="'20'+${date}+'년'"></option>
+                                                                                    th:text="${date}"></option>
                                                                         </select>
                                                                         <small id="graduationDateHelp" class="form-text text-muted">
                                                                             졸업작품을 전시한 연도를 선택해주세요.
