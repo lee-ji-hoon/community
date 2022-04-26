@@ -1800,7 +1800,7 @@
                             <div class="flex items-center flex-wrap space-x-1 mt-3 text-xs text-gray-500 capitalize">
                                 <div th:each="tag: ${study.tags}">
                                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 mt-1 py-1 pr-1">
                                     <a  class="text-decoration-none text-white">
                                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                                     </a>
@@ -1905,7 +1905,7 @@
                             <div class="flex items-center flex-wrap space-x-1 mt-3 text-xs text-gray-500 capitalize">
                                 <div th:each="tag: ${study.tags}">
                                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                                    font-weight-light text-monospace badge badge-pill badge-info py-1 mt-1 pr-1 mr-1">
                                     <a  class="text-decoration-none text-white">
                                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                                     </a>
@@ -2128,7 +2128,7 @@
         <div class="flex items-center flex-wrap space-x-1 mt-1 mb-2 text-xs text-gray-500 capitalize h-4">
             <div th:each="tag: ${study.tags}">
                 <span th:if="${tagStat.count} < 4" class="bg-gray-100 rounded-full
-                    font-weight-light text-monospace badge badge-pill badge-info mr-1 p-1">
+                    font-weight-light text-monospace badge badge-pill badge-info mr-1 mt-1 py-1 pr-1">
                     <a  class="text-decoration-none text-white">
                         <i class="fa fa-tag"></i> <span class="" th:text="${tag.title}">Tag</span>
                     </a>
