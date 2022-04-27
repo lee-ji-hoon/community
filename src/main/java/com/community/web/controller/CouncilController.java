@@ -62,7 +62,7 @@ public class CouncilController {
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
 
-        Page<Council> searchCouncilResult = councilRepository.findByPostSortAndPostTitleContainingOrPostContentContainingOrderByUploadTimeDesc(type, keyword, keyword, pageable);
+        Page<Council> searchCouncilResult = councilRepository.findByPostSortOrPostTitleContainingOrPostContentContainingOrderByUploadTimeDesc(type, keyword, keyword, pageable);
 
         model.addAttribute("searchCouncilResult", searchCouncilResult);
         model.addAttribute("pageNo", page);
