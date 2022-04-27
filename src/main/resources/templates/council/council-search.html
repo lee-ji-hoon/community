@@ -105,36 +105,37 @@
                     </div>
                 </th:block>
                 <th:block th:if="${type == 'event'}">
-                    <div class="relative" uk-slider="finite: true">
-                        <div class="uk-slider-container px-4 py-3">
+                    <div class="grid md:grid-cols-4 grid-cols-2 gap-3 mt-5 mb-5">
+                        <div th:each="event : ${searchCouncilResult}">
+                            <div class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
+                                <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
+                                    <th:block th:if="${event.getImageList().size()==0}">
+                                        <img th:src="@{/images/default-image.png}" class="w-full h-full absolute object-cover inset-0">
+                                    </th:block>
+                                    <th:block th:if="${event.getImageList().size()!=0}">
+                                        <img th:src="${event.getImageList().get(0).imagePath}" class="w-full h-full absolute object-cover inset-0">
+                                    </th:block>
+                                    <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
+                                        <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                            진행중 </div>
+                                    </th:block>
+                                    <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
+                                        <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
+                                            종료 </div>
+                                    </th:block>
 
-                            <ul class="uk-slider-items uk-child-width-1-5@m uk-child-width-1-4@s uk-child-width-1-2 uk-grid-small uk-grid">
-                                <li th:each="event : ${searchCouncilResult}">
-                                    <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">
-                                        <div class="rounded-xl overflow-hidden relative w-full h-44 cursor-pointer transform hover:scale-105 duration-300 hover:shadow-md">
-                                            <div class="absolute w-full h-3/4 -bottom-6 bg-gradient-to-b from-transparent to-gray-800 z-10">
-                                            </div>
-                                            <img th:src="@{/images/{cid}.jpeg(cid=${event.cid})}" class="absolute w-full h-full" alt="">
-                                            <th:block th:if="${event.eventEndDate >= councilService.nowDate()}">
-                                                <div class="absolute bg-green-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
-                                                    진행중 </div>
-                                            </th:block>
-                                            <th:block th:if="${event.eventEndDate < councilService.nowDate()}">
-                                                <div class="absolute bg-red-500 font-semibold px-2.5 py-1 rounded-full text-white text-xs top-2.5 left-2.5">
-                                                    종료 </div>
-                                            </th:block>
-                                            <div class="absolute bottom-0 w-full p-3 text-white z-20 font-semibold">
-                                                <div class="text-xl" th:text="${event.postTitle}"> 제목 </div>
-                                                <div class="text-sm"><a th:text="${event.eventEndDate}"></a> 까지</div>
+                                    <!-- overly-->
+                                    <div class="-bottom-0 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
+                                    <div class="absolute bottom-0 w-full p-3 text-white uk-transition-slide-bottom-small flex items-center">
+                                        <div class="flex-1">
+                                            <div class="text-lg" th:text="${event.postTitle}"> 제목  </div>
+                                            <div class="flex lg:flex-initial text-sm">
+                                                <a th:text="|행사 기간 : ${#temporals.format(event.eventStartDate, 'MM월 dd일')} ~ ${#temporals.format(event.eventEndDate, 'MM월 dd일')}|"></a>
                                             </div>
                                         </div>
-                                    </a>
-                                </li>
-                            </ul>
-                            <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -left-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
-                               href="#" uk-slider-item="previous"> <i class="icon-feather-chevron-left"></i></a>
-                            <a class="absolute bg-white top-20 -mt-2 flex items-center justify-center p-2 -right-4 rounded-full shadow-md text-xl w-9 z-10 dark:bg-gray-800 dark:text-white"
-                               href="#" uk-slider-item="next"> <i class="icon-feather-chevron-right"></i></a>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-2">
