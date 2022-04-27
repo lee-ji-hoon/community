@@ -384,10 +384,10 @@
 
                                 <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
                                     <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                         th:data-id="${reply.getAccount().studentId}"
+                                         th:data-id="${reply.getAccount().studentId}" style="width: 48px; height: 48px;"
                                          alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
                                     <img th:if="${!#strings.isEmpty(reply.getAccount()?.profileImage)}"
-                                         th:src="${reply.getAccount()?.profileImage}"
+                                         th:src="${reply.getAccount()?.profileImage}" style="width: 48px; height: 48px;"
                                          alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                                     <th:block th:if="${reply.getAccount().id == account.id}">
                                         <div class="absolute right-16 top-0 text-blue-500" uk-tooltip="댓글 수정" th:onclick="|updateBtn.replyUpdate(${reply.rid})|" th:id="|replyUpdateBtn${reply.rid}|">

@@ -59,13 +59,13 @@ public class Council {
 
     private Integer pageView;
 
-    private LocalDate eventStartDate;
+    private LocalDateTime eventStartDate;
 
-    private LocalDate eventEndDate;
+    private LocalDateTime eventEndDate;
 
-    private LocalDate applyPeriodStartDate;
+    private LocalDateTime applyPeriodStartDate;
 
-    private LocalDate applyPeriodEndDate;
+    private LocalDateTime applyPeriodEndDate;
 
     private LocalDateTime uploadTime;
 }
