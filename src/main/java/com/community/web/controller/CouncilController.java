@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +58,7 @@ public class CouncilController {
     @GetMapping("/council/{type}/search")
     public String councilSearch(String keyword, @CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 8, page = 0, sort = "uploadTime",
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
 
@@ -77,7 +79,7 @@ public class CouncilController {
     @GetMapping("/council/{type}")
     public String councilRecent(@CurrentUser Account account, Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 8, page = 0, sort = "uploadTime",
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
         switch (type) {
@@ -111,18 +113,18 @@ public class CouncilController {
                               @RequestParam(value = "postTitle", required = false) String postTitle,
                               @RequestParam(value = "postLink", required = false) String postLink,
                               @RequestParam(value = "contactNum", required = false) String contactNum,
-                              @RequestParam(value = "applyPeriodStartDate", required = false) String applyPeriodStartDate,
-                              @RequestParam(value = "applyPeriodEndDate", required = false) String applyPeriodEndDate,
-                              @RequestParam(value = "eventStartDate", required = false) String eventStartDate,
-                              @RequestParam(value = "eventEndDate", required = false) String eventEndDate,
+                              @RequestParam(value = "applyPeriodStartDate", required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodStartDate,
+                              @RequestParam(value = "applyPeriodEndDate", required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodEndDate,
+                              @RequestParam(value = "eventStartDate", required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDate,
+                              @RequestParam(value = "eventEndDate", required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDate,
                               @RequestParam(value = "postContent", required = false) String postContent) {
-        LocalDate APSD = LocalDate.parse(applyPeriodStartDate, DateTimeFormatter.ISO_DATE);
-        LocalDate APED = LocalDate.parse(applyPeriodEndDate, DateTimeFormatter.ISO_DATE);
-        LocalDate ESD = LocalDate.parse(eventStartDate, DateTimeFormatter.ISO_DATE);
-        LocalDate EED = LocalDate.parse(eventEndDate, DateTimeFormatter.ISO_DATE);
         Council newCouncilPost = councilService.saveNewPosts(multipartFile, account, postSort, postTarget,
                 postTitle, postLink, contactNum,
-                APSD, APED, ESD, EED, postContent);
+                applyPeriodStartDate, applyPeriodEndDate, eventStartDate, eventEndDate, postContent);
         return newCouncilPost.getCid();
     }
 
@@ -158,22 +160,21 @@ public class CouncilController {
                                            @RequestParam(value = "postTitle", required = false) String postTitle,
                                            @RequestParam(value = "postLink", required = false) String postLink,
                                            @RequestParam(value = "contactNum", required = false) String contactNum,
-                                           @RequestParam(value = "applyPeriodStartDate", required = false) String applyPeriodStartDate,
-                                           @RequestParam(value = "applyPeriodEndDate", required = false) String applyPeriodEndDate,
-                                           @RequestParam(value = "eventStartDate", required = false) String eventStartDate,
-                                           @RequestParam(value = "eventEndDate", required = false) String eventEndDate,
+                                           @RequestParam(value = "applyPeriodStartDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodStartDate,
+                                           @RequestParam(value = "applyPeriodEndDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applyPeriodEndDate,
+                                           @RequestParam(value = "eventStartDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDate,
+                                           @RequestParam(value = "eventEndDate", required = false)
+                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDate,
                                            @RequestParam(value = "postContent", required = false) String postContent) {
-        LocalDate APSD = LocalDate.parse(applyPeriodStartDate, DateTimeFormatter.ISO_DATE);
-        LocalDate APED = LocalDate.parse(applyPeriodEndDate, DateTimeFormatter.ISO_DATE);
-        LocalDate ESD = LocalDate.parse(eventStartDate, DateTimeFormatter.ISO_DATE);
-        LocalDate EED = LocalDate.parse(eventEndDate, DateTimeFormatter.ISO_DATE);
-
         Optional<Council> byId = councilRepository.findById(id);
         Council council = byId.get();
 
         councilService.updateCouncil(council, multipartFile, postSort, postTarget,
                 postTitle, postLink, contactNum,
-                APSD, APED, ESD, EED, postContent);
+                applyPeriodStartDate, applyPeriodEndDate, eventStartDate, eventEndDate, postContent);
         return ResponseEntity.ok().build();
     }
 
