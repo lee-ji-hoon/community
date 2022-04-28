@@ -543,7 +543,7 @@ public class StudyController {
         }
 
         // 24시간 체크 로직
-        /*if(!checkAlarmDateTime){
+        if(!checkAlarmDateTime){
             log.info("study 알림 최근 시간 :{} 현재 시간 :{} ", studyUpdate.getRecentAlarmDateTime(), LocalDateTime.now());
             message = "<div class=\"bg-red-500 border m-4 p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
                     "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
@@ -553,7 +553,7 @@ public class StudyController {
                     "    <p class=\"text-white text-opacity-75\">하루에 한 번 발송 가능합니다. 나중에 다시 시도해주세요.</p>\n" +
                     "</div>";
             return message;
-        }*/
+        }
 
         applicationEventPublisher.publishEvent(new StudyCreatedPublish(studyUpdate, account));
 
