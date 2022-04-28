@@ -55,7 +55,7 @@ public class BoardController {
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
 
-        Page<Board> searchBoardResult = boardRepository.findByBoardTitleOrContentContainingOrTitleContainingAndIsReportedOrderByUploadTimeDesc(type, keyword, keyword, false, pageable);
+        Page<Board> searchBoardResult = boardRepository.findByKeywordAndType(type, keyword, pageable);
         for (Board board : searchBoardResult) {
             log.info("boardTitle={}", board.getTitle());
         }
