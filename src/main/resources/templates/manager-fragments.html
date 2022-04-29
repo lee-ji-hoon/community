@@ -38,31 +38,6 @@
         </button>
         <a class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0" th:href="@{/manager/main}">
             unect </a>
-        <ul class="md:hidden items-center flex flex-wrap list-none">
-            <li class="inline-block relative">
-                <a class="text-blueGray-500 block py-1 px-3" onclick="openDropdown(event,'notification-dropdown')">
-                    <i class="fas fa-bell"></i></a>
-                <div class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48" id="notification-dropdown">
-                    <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Action</a><a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Another action</a><a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Something else here</a>
-                    <div class="h-0 my-2 border border-solid border-blueGray-100">
-                    </div>
-                    <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Seprated link</a>
-                </div>
-            </li>
-            <li class="inline-block relative">
-                <a class="text-blueGray-500 block" onclick="openDropdown(event,'user-responsive-dropdown')">
-                    <div class="items-center flex">
-                        <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full"><img alt="..." class="w-full rounded-full align-middle border-none shadow-lg" src="../../assets/img/team-1-800x800.jpg"/></span>
-                    </div>
-                </a>
-                <div class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48" id="user-responsive-dropdown">
-                    <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Action</a><a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Another action</a><a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Something else here</a>
-                    <div class="h-0 my-2 border border-solid border-blueGray-100">
-                    </div>
-                    <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Seprated link</a>
-                </div>
-            </li>
-        </ul>
         <div class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded hidden" id="example-collapse-sidebar">
             <div class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200">
                 <div class="flex flex-wrap">
@@ -206,34 +181,6 @@
 <nav th:fragment="m_header" class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4">
     <div class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
         <a class="text-white text-sm uppercase hidden lg:inline-block font-semibold" th:href="@{/manager/main}">Dashboard</a>
-        <ul class="flex-col md:flex-row list-none items-center hidden md:flex">
-            <!--<a href="#" th:href="@{'/profile/' + ${account.nickname}}" class="user">
-                <div class="user_avatar">
-
-                </div>
-                <div class="user_name">
-                    <div class="user_name">
-                        <div th:text="${account.nickname}">유저이름</div>
-                        <span th:text="${account.studentId}">유저 학번</span>
-                    </div>
-                </div>
-            </a>-->
-            <a class="text-blueGray-500 block" onclick="openDropdown(event,'user-dropdown')">
-                <div class="items-center flex">
-                    <span class="w-12 h-12 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-                        <img alt="..." class="w-full rounded-full align-middle border-none shadow-lg" src="../../assets/img/team-1-800x800.jpg"/>
-                    </span>
-                </div>
-            </a>
-            <div class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48" id="user-dropdown">
-                <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Action</a>
-                <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Another action</a>
-                <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Something else here</a>
-                <div class="h-0 my-2 border border-solid border-blueGray-100">
-                </div>
-                <a class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700">Seprated link</a>
-            </div>
-        </ul>
     </div>
 </nav>
 <!-- 카드 헤더 -->
