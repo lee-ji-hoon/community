@@ -18,12 +18,30 @@
             <div class="breadcrumb-area py-0">
                 <div class="breadcrumb">
                     <ul class="m-0">
-                        <li>
-                            <a th:href="@{/board/free}">커뮤니티</a>
-                        </li>
-                        <li>
-                            <a style="font-weight: bold" href="#">검색 </a>
-                        </li>
+                        <th:block th:if="${type.equals('free')}">
+                            <li>
+                                <a th:href="@{/board/free}">자유게시판</a>
+                            </li>
+                            <li>
+                                <a style="font-weight: bold">검색 </a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${type.equals('forum')}">
+                            <li>
+                                <a th:href="@{/board/forum}">정보게시판</a>
+                            </li>
+                            <li>
+                                <a style="font-weight: bold">검색 </a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${type.equals('qna')}">
+                            <li>
+                                <a th:href="@{/board/qna}">질문게시판</a>
+                            </li>
+                            <li>
+                                <a style="font-weight: bold">검색 </a>
+                            </li>
+                        </th:block>
                     </ul>
                 </div>
             </div>
@@ -78,10 +96,10 @@
                                             <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                 <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                      th:data-id="${topReply.getAccount().studentId}"
-                                                     alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
+                                                     alt="" class="identicon border-2 border-white rounded-full w-7 h-7 is_avatar">
                                                 <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
                                                      th:src="${topReply.getAccount()?.profileImage}"
-                                                     alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                     alt="" class="border-2 border-white rounded-full w-7 h-7 is_avatar"/>
                                             </div>
                                         </div>
                                     </th:block>

@@ -1,11 +1,5 @@
 package com.community.domain.board;
 
-import com.community.domain.account.Account;
-import com.community.domain.account.QAccount;
-import com.community.domain.market.Market;
-import com.community.domain.market.QMarket;
-import com.community.domain.study.QStudy;
-import com.community.domain.study.Study;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
@@ -24,8 +18,8 @@ public class BoardRepositoryExtensionImpl extends QuerydslRepositorySupport impl
 
         JPQLQuery<Board> query = from(board).where(board.isReported.isFalse()
                         .and(board.boardTitle.contains(type))
-                        .and(board.title.containsIgnoreCase(keyword))
-                        .or(board.content.containsIgnoreCase(keyword)))
+                        .and(board.title.containsIgnoreCase(keyword)
+                                .or(board.content.containsIgnoreCase(keyword))))
                 .distinct();
 
         JPQLQuery<Board> boardJPQLQuery = getQuerydsl().applyPagination(pageable, query);
