@@ -54,8 +54,20 @@ public class BoardController {
                               @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
+        String searchType = "";
+        switch (type) {
+            case "free" :
+                searchType = "자유";
+                break;
+            case "forum" :
+                searchType = "정보";
+                break;
+            case "qna" :
+                searchType = "질문";
+                break;
+        }
 
-        Page<Board> searchBoardResult = boardRepository.findByKeywordAndType(type, keyword, pageable);
+        Page<Board> searchBoardResult = boardRepository.findByKeywordAndType(searchType, keyword, pageable);
         for (Board board : searchBoardResult) {
             log.info("boardTitle={}", board.getTitle());
         }
