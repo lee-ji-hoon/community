@@ -49,19 +49,19 @@
                                 <hr>
                                 <div th:utext="${project.description}">내용</div>
                                 <hr class="my-4">
+                                <div id="imageRefreshForm" class="imageRefreshForm">
+                                    <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto">
+                                        <a th:each="image : ${project.getImageList()}"
+                                           th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="졸업작품">
+                                            <img class="rounded" style="width: 200px; height: 150px;"
+                                                 th:src="${image.getImagePath()}"/>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="imageRefreshForm" class="imageRefreshForm">
-                        <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
-                            <a th:each="image : ${project.getImageList()}"
-                               th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="졸업작품">
-                                <img class="rounded" style="width: 200px; height: 150px;"
-                                     th:src="${image.getImagePath()}"/>
-                            </a>
-                        </div>
-                    </div>
                 </div>
 
                 <!--사이드바-->

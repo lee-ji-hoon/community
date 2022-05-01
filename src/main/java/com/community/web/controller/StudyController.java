@@ -111,7 +111,7 @@ public class StudyController {
 
     @GetMapping("/study")
     public String study(@CurrentUser Account account, Model model,
-                        @PageableDefault(size = 9, page = 0, sort = "publishedDateTime",
+                        @PageableDefault(size = 6, page = 0, sort = "publishedDateTime",
                                 direction = Sort.Direction.ASC) Pageable pageable,
                         @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
         model.addAttribute(account);

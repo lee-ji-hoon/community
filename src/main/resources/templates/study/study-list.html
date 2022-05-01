@@ -105,14 +105,6 @@
                         </a>
                     </div>
 
-                    <div class="uk-switcher" id="timeline-tab">
-                        <!--참여 중 스터디-->
-                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
-                        <!--관리 중 스터디-->
-                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
-
-                    </div>
-
                     <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
                         <div>
                             <h2 class="text-xl font-semibold"> 추천 스터디 </h2>
@@ -121,6 +113,14 @@
                     </div>
                     <!--추천 중인 스터디-->
                     <div th:replace="theme-fragments.html :: study-list-type-not-contains(studyType=${suggestStudyList})"></div>
+
+                    <div class="uk-switcher" id="timeline-tab">
+                        <!--참여 중 스터디-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
+                        <!--관리 중 스터디-->
+                        <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
+                    </div>
+
 
                 </div>
                 <div class="lg:w-1/4 w-full lg:mt-0 mt-7">

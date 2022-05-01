@@ -34,7 +34,7 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
                         .leftJoin(qStudy.tags, QTag.tag).fetchJoin()
                         .orderBy(qStudy.publishedDateTime.desc())
                         .distinct()
-                        .limit(9);
+                        .limit(3);
         return studyJPQLQuery.fetch();
     }
 
