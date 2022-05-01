@@ -1,4 +1,4 @@
-# 남서울대학교 멀티미디어 학과 전용 커뮤니티 프로젝트
+# 멀티미디어 학과 전용 커뮤니티 프로젝트
 
 ## 2022 02 08 기초 세팅
 
@@ -52,5 +52,10 @@
 <hr/>
 
 ### 3차 프로토타입 발표 4/27(수)
+[[Google Slide](https://docs.google.com/presentation/d/1jxpAf2MXjjL9CIVvUULy3Go33thGOWZvqlOCQ48JEBc/edit#slide=id.p)]
 
+[[Notion](https://www.notion.so/3-e4a49e39cf5b413caa273f1f669c0cf6)]
+
+#### 결과
+- 통과 했으며, 현재 기준에서 더이상 일 벌리지말고 유효성 검사에 집중하며 버그 잡을 것
 
