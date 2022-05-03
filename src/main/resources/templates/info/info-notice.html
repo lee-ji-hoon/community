@@ -65,8 +65,8 @@
                                                     <div class="form-group">
                                                         <label for="notice_topCheck"> 상단 고정 </label>
                                                         <select id="notice_topCheck" name="notice_topCheck" class="shadow-none with-border px-2 selectpicker mb-2">
-                                                            <option data-icon="icon-material-outline-assignment" value="true" selected>고정</option>
-                                                            <option data-icon="icon-material-outline-assignment" value="false">고정안함</option>
+                                                            <option value="true" selected>고정</option>
+                                                            <option value="false">고정안함</option>
                                                         </select>
                                                     </div>
                                                     <!-- 본문 -->
@@ -75,7 +75,6 @@
                                                         <textarea class="form-control"  id="notice_content" name="notice_content"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>
                                                         </div>
-                                                        <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
                                                         <small class="invalid-feedback">글을 입력해주세요.</small>
                                                     </div>
                                                     <div class="col-span-2">
@@ -196,8 +195,8 @@
 <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/notice-new')"></script>
 <script type="application/javascript">
     $( document ).ready( function() {
-        $('#post_content').summernote({
-            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+        $('#notice_content').summernote({
+            placeholder: '공지 내용을 작성해주세요.',
             tabsize: 2,
             toolbar: [
                 ['font', ['bold', 'italic', 'underline', 'clear']],

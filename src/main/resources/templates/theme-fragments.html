@@ -711,7 +711,7 @@
                 </a>
             </li>
             <li th:classappend="${currentSideMenu == 'notice'}? active">
-                <a href="#">
+                <a th:href="@{/info/notice}">
                     <ion-icon name="newspaper-outline" class="side-icon"></ion-icon>
                     <span>공지사항</span>
                 </a>
@@ -2676,7 +2676,7 @@
             contentType: false,
             data: formData,
             success: function (path) {
-                location.href = "/board/detail/" + path;
+                location.href = "/notice/detail/" + path;
             },
             error: function (xhr, status, error) {
                 alert("작성한 내용들을 다시 확인해주세요." + error)
