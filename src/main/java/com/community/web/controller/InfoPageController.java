@@ -3,15 +3,19 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
+import com.community.domain.board.Reply;
+import com.community.domain.bookmark.Bookmark;
 import com.community.domain.inquire.Inquire;
 import com.community.domain.inquire.InquireRepository;
+import com.community.domain.likes.Likes;
 import com.community.domain.notice.Notice;
 import com.community.domain.notice.NoticeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
-import com.community.infra.aws.S3Service;
 import com.community.service.InfoPageService;
 import com.community.web.dto.BoardForm;
+import com.community.web.dto.BoardReportForm;
+import com.community.web.dto.ReplyForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -82,6 +86,22 @@ public class InfoPageController {
                 notice_title, notice_content);
 
         return notice.getNotice_id();
+    }
+
+    @GetMapping("/info/notice/detail/{noticeId}")
+    public String boardDetail(@PathVariable Long noticeId, @CurrentUser Account account,
+                              HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+
+        model.addAttribute("account", account);
+
+        Optional<Notice> currentNotice = noticeRepository.findById(noticeId);
+
+        model.addAttribute("notice", currentNotice);
+
+        model.addAttribute(new ReplyForm());
+
+        return "info/info-notice-detail";
     }
     /* 공지사항 끝 */
 
