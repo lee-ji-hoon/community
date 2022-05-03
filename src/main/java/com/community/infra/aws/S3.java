@@ -4,6 +4,7 @@ import com.community.domain.board.Board;
 import com.community.domain.council.Council;
 import com.community.domain.graduation.Graduation;
 import com.community.domain.inquire.Inquire;
+import com.community.domain.inquire.InquireAnswer;
 import com.community.domain.market.Market;
 import com.community.domain.notice.Notice;
 import lombok.*;
@@ -41,6 +42,10 @@ public class S3 {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inquire_id")
     private Inquire inquire;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
+    private InquireAnswer inquireAnswer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
