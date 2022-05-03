@@ -2,14 +2,22 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
+import com.community.domain.board.Board;
 import com.community.domain.inquire.Inquire;
 import com.community.domain.inquire.InquireRepository;
+import com.community.domain.notice.Notice;
+import com.community.domain.notice.NoticeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
 import com.community.service.InfoPageService;
+import com.community.web.dto.BoardForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,14 +36,54 @@ public class InfoPageController {
 
     private final InfoPageService infoPageService;
     private final InquireRepository inquireRepository;
+    private final NoticeRepository noticeRepository;
     private final S3Repository s3Repository;
-    private final S3Service s3Service;
 
     @GetMapping("/info/about")
     public String aboutPage(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         return "info/info-about";
     }
+
+    /* 공지사항 시작 */
+    @GetMapping("/info/notice")
+    public String boardTypeList(@CurrentUser Account account, Model model,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                        direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<Notice> notices = noticeRepository.findAllByOrderByUploadTimeDesc(pageable);
+
+        model.addAttribute("pageNo", page);
+        model.addAttribute("notices", notices);
+        model.addAttribute(account);
+
+        return "info/info-notice";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/notice-new", method = RequestMethod.POST)
+    public Long contactFormSubmit(@CurrentUser Account account,
+                                  @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                  @RequestParam(value = "notice_topCheck", required = false) String notice_topCheck,
+                                  @RequestParam(value = "notice_title", required = false) String notice_title,
+                                  @RequestParam(value = "notice_content", required = false) String notice_content) {
+        Boolean isTop = false;
+        switch (notice_topCheck) {
+            case "true":
+                isTop=true;
+                break;
+            case "false":
+                isTop=false;
+                break;
+        }
+        Notice notice = infoPageService.saveNewNotice(
+                multipartFile, isTop,
+                notice_title, notice_content);
+
+        return notice.getNotice_id();
+    }
+    /* 공지사항 끝 */
 
     /* 건의사항 시작 */
     @GetMapping("/info/contact")
@@ -46,10 +94,10 @@ public class InfoPageController {
 
     @ResponseBody
     @RequestMapping(value = "/inquire-new", method = RequestMethod.POST)
-    public Long contactFormSubmit(@CurrentUser Account account,
-                                     @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
-                                     @RequestParam(value = "contact_title", required = false) String contact_title,
-                                     @RequestParam(value = "contact_content", required = false) String contact_content) {
+    public Long noticeFormSubmit(@CurrentUser Account account,
+                                 @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                 @RequestParam(value = "contact_title", required = false) String contact_title,
+                                 @RequestParam(value = "contact_content", required = false) String contact_content) {
         Inquire newInquire = infoPageService.saveNewInquire(
                 multipartFile, account,
                 contact_title, contact_content);
