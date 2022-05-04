@@ -36,6 +36,7 @@ public class InfoPageService {
                 .noticeTitle(notice_title)
                 .noticeContent(notice_content)
                 .topSetting(notice_topCheck)
+                .uploadTime(LocalDateTime.now())
                 .build();
 
         uploadNoticeImage(multipartFile, notice);
