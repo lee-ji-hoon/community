@@ -194,7 +194,7 @@
     }
     $(document).ready(function (){
         // summernote
-        $('#content').summernote({
+        $('#notice_content').summernote({
             placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
             tabsize: 2,
             toolbar: [
@@ -206,60 +206,6 @@
             height: 500,
         });
 
-        // 게시글 업데이트 관련
-        $('#postTitle').val('');
-        jQuery('#selectBox').change(function() {
-            var state = jQuery('#selectBox option:selected').val();
-            if (state == '자유') {
-                // 작성 값 초기화 및 메뉴명 변경
-                $('#titleHelp').text("글의 주제를 나타내는 제목을 작성해주세요.");
-                $('#subTitleHelp').text("");
-                $('#contentHelp').text("정치 및 저격 등 수준 낮은 게시글은 예고 없이 삭제됩니다.");
-
-                // 자유게시판일 경우 SubTitle 빈값
-                $("#selectBoxSub option:eq(0)").prop("selected", true);
-
-                // Hide and Show
-                jQuery('#subBoardSort').hide();
-                jQuery('#postTitleSub').hide();
-                //$('#selectBoxSub').selectpicker('refresh');
-                //$('#board_form').load(window.location.href+' #board_form');
-            }
-            if (state == '질문') {
-                // 작성 값 초기화 및 메뉴명 변경
-                $('#titleHelp').text("무엇이 궁금한가요?");
-                $('#subTitleHelp').text("");
-                $('#contentHelp').text("궁금한 내용을 최대한 자세하게 작성해주세요.");
-
-                // 질문게시판일 경우 SubTitle 선택 selected
-                $("#selectBoxSub option:eq(0)").prop("selected", true);
-
-                // Hide and Show
-                jQuery('#opgQnA').show();
-                jQuery('#opgInfo').hide();
-                jQuery('#subBoardSort').show();
-                jQuery('#postTitleSub').hide();
-                //$('#selectBoxSub').selectpicker('refresh');
-                //$('#board_form').load(window.location.href+' #board_form');
-            }
-            if (state == '정보') {
-                // 작성 값 초기화 및 메뉴명 변경
-                $('#titleHelp').text("공유하려는 정보의 주제를 작성해주세요.");
-                $('#subTitleHelp').text("해당 글을 어필하는 소제목을 작성해주세요.");
-                $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
-
-                // 정보게시판일 경우 SubTitle 선택 selected
-                $("#selectBoxSub option:eq(0)").prop("selected", true);
-
-                // Hide and Show
-                jQuery('#opgQnA').hide();
-                jQuery('#opgInfo').show();
-                jQuery('#subBoardSort').show();
-                jQuery('#postTitleSub').show();
-                //$('#selectBoxSub').selectpicker('refresh');
-                //$('#board_form').load(window.location.href+' #board_form');
-            }
-        });
     })
 </script>
 
