@@ -17,7 +17,7 @@ public interface CouncilRepository extends JpaRepository<Council, Long> {
 
     Page<Council> findByPostSortOrderByUploadTimeDesc(String postSort, Pageable pageable);
 
-    Page<Council> findByPostSortAndPostTitleContainingOrPostContentContainingOrderByUploadTimeDesc(String type, String keyword1, String keyword2, Pageable pageable);
+    Page<Council> findByPostSortOrPostTitleContainingOrPostContentContainingOrderByUploadTimeDesc(String type, String keyword1, String keyword2, Pageable pageable);
 
 
     Council findByCid(long cid);

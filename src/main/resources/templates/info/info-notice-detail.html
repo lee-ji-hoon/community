@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<style>
+    #utextDiv{
+        overflow:hidden; word-wrap:break-word;
+    }
+    .updateSubmit{
+        display: none;
+    }
+    #subBoardSort, #postTitleSub{
+        display: none;
+    }
+</style>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='notice')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+            <div class="breadcrumb-area py-0">
+                <div class="breadcrumb">
+                    <ul class="m-0">
+                        <li>
+                            <a th:href="@{info/notice}">공지사항</a>
+                        </li>
+                        <li>
+                            <a style="font-weight: bold"> 상세보기</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="lg:flex lg:space-x-10">
+
+                <div class="lg:w-3/4 space-y-5 mb-3">
+                    <div id="isUpdatedForm">
+                        <div id="isUpdated"></div>
+                    </div>
+                    <div th:if="${isUpdatedMessage}">
+                        <div th:replace="theme-fragments.html :: blue-notice(message=${isUpdatedMessage})"></div>
+                    </div>
+                    <div th:if="${isReportedMessage}">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
+                    </div>
+                    <div th:if="${errorMessage}">
+                        <div th:replace="theme-fragments.html :: red-notice(message=${errorMessage})"></div>
+                    </div>
+                    <div class="card">
+                        <div class="form_refresh">
+                            <div class="p-7">
+                                <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${notice.noticeTitle}">제목</h1>
+                                <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <!-- Board 작성자면 뜨는 수정폼 -->
+                                        <th:block th:if="${account.accountType.equals(account.accountType.ADMIN)}">
+                                            <div>
+                                                <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
+                                                   data-tippy-placement="right" title="게시물 수정하기">
+                                                    <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
+                                                </a>
+                                                <!-- Craete video post modal -->
+                                                <div id="create-post-modal" uk-modal>
+                                                    <div class="uk-modal-dialog">
+                                                        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                                                type="button" uk-close>
+                                                            <i class="icon-feather-close"></i>
+                                                        </button>
+
+                                                        <div class="uk-modal-header bg-white">
+                                                            <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
+                                                        </div>
+                                                        <form class="needs-validation" id="board_form" onsubmit="return false">
+                                                            <div class="uk-modal-body" uk-overflow-auto>
+                                                                <div class="space-y-4 g:w-8/12">
+                                                                    <!-- 제목 -->
+                                                                    <div class="form-group">
+                                                                        <div class="line">
+                                                                            <input class="line__input form-control" id="notice_title" max="30" name="notice_title"
+                                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                                                   aria-describedby="titleHelp" required autocomplete="off">
+                                                                            <span for="username" class="line__placeholder"> 제목 </span>
+                                                                        </div>
+                                                                        <small id="titleHelp" class="form-text text-muted">
+                                                                            제목은 2글자부터 최대 30글자까지 입력 가능합니다.
+                                                                        </small>
+                                                                        <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="notice_topCheck"> 상단 고정 </label>
+                                                                        <select id="notice_topCheck" name="notice_topCheck" class="shadow-none with-border px-2 selectpicker mb-2">
+                                                                            <option value="true" selected>고정</option>
+                                                                            <option value="false">고정안함</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <!-- 본문 -->
+                                                                    <div>
+                                                                        <div>
+                                                        <textarea class="form-control"  id="notice_content" name="notice_content"
+                                                                  type="text" aria-describedby="contentHelp" required></textarea>
+                                                                        </div>
+                                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                                    </div>
+                                                                    <div class="col-span-2">
+                                                                        <div uk-form-custom class="w-full py-3">
+                                                                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                                                </svg>
+                                                                            </div>
+                                                                            <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                                        </div>
+
+                                                                        <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                                                    </div>
+
+                                                                    <div class="col-span-2">
+                                                                        <br />
+                                                                        <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="uk-modal-footer uk-text-right bg-white">
+                                                                <a th:href="@{/info/notice/detail/{noticeId}/delete(noticeId=${notice.notice_id})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
+                                                                <button type="submit" onclick="updateProject()" class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium">수정하기</button>
+                                                            </div>
+                                                        </form>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <th:block th:if="${notice.getImageList().size() != 0}">
+                                    <div id="imageRefreshForm" class="imageRefreshForm">
+                                        <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
+                                            <a th:each="image : ${notice.getImageList()}"
+                                               th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="학생회">
+                                                <img class="rounded" style="width: 200px; height: 150px;"
+                                                     th:src="${image.getImagePath()}"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <hr class="pb-2">
+                                </th:block>
+                                <div id="blk_div">
+                                    <div class="space-y-3 content" id="utextDiv" th:utext="${notice.noticeContent}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+<div th:replace="theme-fragments :: bookmarkAjax"></div>
+<div th:replace="theme-fragments :: likeAjax"></div>
+<div th:replace="theme-fragments :: replyAjax"></div>
+<script src="/node_modules/@fancyapps/ui/dist/fancybox.umd.js"></script>
+<link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: s3-notice-image-upload(uploadUrl = '/info/notice/'+ ${notice.notice_id} +'/update')"></script>
+<script type="application/javascript" th:inline="javascript">
+    function imageDeleteInit(id) {
+        $.ajax({
+            type: "GET",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            url: "/s3/image/delete",
+            data: {"imageId": id},
+            success : function (){
+                $('.refreshForm').load(location.href+' .refreshForm');
+                $('.imageRefreshForm').load(location.href+' .imageRefreshForm');
+            },
+        })
+    }
+    $(document).ready(function (){
+        // summernote
+        $('#notice_content').summernote({
+            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+            tabsize: 2,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+            ],
+            maxHeight: null,
+            minHeight: null,
+            lang : 'ko-KR',
+            height: 500,
+        });
+
+    })
+</script>
+
+</body>
+</html>

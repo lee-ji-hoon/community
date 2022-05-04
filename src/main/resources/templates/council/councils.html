@@ -40,7 +40,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div th:if="${account.studentId=='11-111111'}">
+                <div th:if="${account.accountType.equals(account.accountType.COUNCIL)}">
                     <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                             <path fill-rule="evenodd"
@@ -302,13 +302,12 @@
                                 </th:block>
 
                                 <!-- overly-->
-                                <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
+                                <div class="-bottom-0 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
                                 <div class="absolute bottom-0 w-full p-3 text-white uk-transition-slide-bottom-small flex items-center">
                                     <div class="flex-1">
                                         <div class="text-lg" th:text="${event.postTitle}"> 제목  </div>
-                                        <div class="flex space-x-3 lg:flex-initial text-sm">
-                                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">좋아요 : <a th:text="${event.getLikesList().size()}"></a></a>
-                                            <a th:href="@{/council/detail/{cid}(cid = ${event.cid})}">댓글 : <a th:text="${event.getReplyList().size()}"></a></a>
+                                        <div class="flex lg:flex-initial text-sm">
+                                            <a th:text="|행사 기간 : ${#temporals.format(event.eventStartDate, 'MM월 dd일')} ~ ${#temporals.format(event.eventEndDate, 'MM월 dd일')}|"></a>
                                         </div>
                                     </div>
                                 </div>
