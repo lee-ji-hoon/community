@@ -68,10 +68,12 @@ public class InfoPageController {
     @ResponseBody
     @RequestMapping(value = "/notice-new", method = RequestMethod.POST)
     public Long contactFormSubmit(@CurrentUser Account account,
-                                  @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                  @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                   @RequestParam(value = "notice_topCheck", required = false) String notice_topCheck,
                                   @RequestParam(value = "notice_title", required = false) String notice_title,
                                   @RequestParam(value = "notice_content", required = false) String notice_content) {
+        log.info("notice_topCheck = {}", notice_topCheck);
+
         Boolean isTop = false;
         switch (notice_topCheck) {
             case "true":
@@ -81,6 +83,7 @@ public class InfoPageController {
                 isTop=false;
                 break;
         }
+        log.info("isTop = {}", isTop);
         Notice notice = infoPageService.saveNewNotice(
                 multipartFile, isTop,
                 notice_title, notice_content);
@@ -97,12 +100,39 @@ public class InfoPageController {
 
         Optional<Notice> currentNotice = noticeRepository.findById(noticeId);
 
-        model.addAttribute("notice", currentNotice);
+        model.addAttribute("notice", currentNotice.get());
 
         model.addAttribute(new ReplyForm());
 
         return "info/info-notice-detail";
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/info/notice/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity boardUpdate(@PathVariable Long id,
+                                      @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
+                                      @RequestParam(value = "notice_topCheck", required = false) String notice_topCheck,
+                                      @RequestParam(value = "notice_title", required = false) String notice_title,
+                                      @RequestParam(value = "notice_content", required = false) String notice_content) {
+        Boolean isTop = false;
+        switch (notice_topCheck) {
+            case "true":
+                isTop=true;
+                break;
+            case "false":
+                isTop=false;
+                break;
+        }
+
+        Optional<Notice> byId = noticeRepository.findById(id);
+        Notice notice = byId.get();
+
+        infoPageService.updateNotice(notice, multipartFile,
+                isTop, notice_title, notice_content);
+
+        return ResponseEntity.ok().build();
+    }
+
     /* 공지사항 끝 */
 
     /* 건의사항 시작 */

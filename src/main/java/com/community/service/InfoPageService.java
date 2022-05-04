@@ -67,6 +67,17 @@ public class InfoPageService {
             }
         }
     }
+    public void updateNotice(Notice notice, List<MultipartFile> multipartFile,
+                             Boolean notice_topCheck,
+                             String notice_title, String notice_content) {
+
+        notice.setTopSetting(notice_topCheck);
+        notice.setNoticeTitle(notice_title);
+        notice.setNoticeContent(notice_content);
+
+        uploadNoticeImage(multipartFile, notice);
+    }
+
     /* 공지사항 끝 */
 
     /* 문의사항 시작 */
