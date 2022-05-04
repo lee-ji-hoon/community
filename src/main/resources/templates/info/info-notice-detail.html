@@ -178,7 +178,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
-<script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl = '/board/'+ ${board.bid} +'/update')"></script>
+<script th:replace="theme-fragments.html :: s3-notice-image-upload(uploadUrl = '/info/notice/'+ ${notice.notice_id} +'/update')"></script>
 <script type="application/javascript" th:inline="javascript">
     function imageDeleteInit(id) {
         $.ajax({
