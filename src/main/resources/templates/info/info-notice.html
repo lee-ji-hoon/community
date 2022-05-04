@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="theme-fragments.html :: head"></head>
+<style th:replace="theme-fragments.html :: search_form"></style>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='notice')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+
+            <div class="lg:flex  lg:space-x-12">
+
+                <div class="lg:w-3/4 mb-3">
+                    <div class="flex justify-between relative md:mb-4 mb-3">
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-semibold"> 유넥트 공지사항 </h2>
+                        </div>
+                        <div th:if="${account.accountType.equals(account.accountType.ADMIN)}">
+                            <div>
+                                <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10" data-tippy-placement="left" title="새 게시글 작성하기">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span> 게시글 작성 </span>
+                                </a>
+                                <!-- Craete video post modal -->
+                                <div id="create-post-modal" uk-modal>
+                                    <div class="uk-modal-dialog">
+                                        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                                type="button" uk-close>
+                                            <i class="icon-feather-close"></i>
+                                        </button>
+
+                                        <div class="uk-modal-header bg-white">
+                                            <h3 class="text-lg font-semibold" id="forum_head">공지글 작성하기 </h3>
+                                        </div>
+                                        <form class="needs-validation" id="notice_form" onsubmit="return false" method="post" novalidate enctype="multipart/form-data">
+                                            <div class="uk-modal-body" uk-overflow-auto>
+                                                <div class="space-y-4 g:w-8/12">
+                                                    <!-- 제목 -->
+                                                    <div class="form-group">
+                                                        <div class="line">
+                                                            <input class="line__input form-control" id="notice_title" max="30" name="notice_title"
+                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                                   aria-describedby="titleHelp" required autocomplete="off">
+                                                            <span for="username" class="line__placeholder"> 제목 </span>
+                                                        </div>
+                                                        <small id="titleHelp" class="form-text text-muted">
+                                                            제목은 2글자부터 최대 30글자까지 입력 가능합니다.
+                                                        </small>
+                                                        <small class="invalid-feedback">제목을 입력해주세요.</small>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="notice_topCheck"> 상단 고정 </label>
+                                                        <select id="notice_topCheck" name="notice_topCheck" class="shadow-none with-border px-2 selectpicker mb-2">
+                                                            <option value="true" selected>고정</option>
+                                                            <option value="false">고정안함</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- 본문 -->
+                                                    <div>
+                                                        <div>
+                                                        <textarea class="form-control"  id="notice_content" name="notice_content"
+                                                                  type="text" aria-describedby="contentHelp" required></textarea>
+                                                        </div>
+                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
+                                                    </div>
+                                                    <div class="col-span-2">
+                                                        <div uk-form-custom class="w-full py-3">
+                                                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                        </div>
+
+                                                        <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                                    </div>
+
+                                                    <div class="col-span-2">
+                                                        <br />
+                                                        <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-modal-footer uk-text-right bg-white">
+                                                <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">취소</button>
+                                                <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" type="submit" onclick="registerAction()">저장</button>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form th:action="@{'/notice/search'}" class="form-inline" method="get"
+                                  style=" float: right; position: relative; margin-top: 40px">
+                                <div class="box">
+                                    <div class="container-1">
+                                        <span class="icon"><i class="fa fa-search"></i></span>
+
+                                        <input type="search" name="keyword" id="search" placeholder="공지사항 검색" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div>
+                        <th:block th:if="${deleteMessage}">
+                            <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-2"></div>
+                        </th:block>
+                        <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="notice : ${notices}">
+                            <div class="lg:flex lg:space-x-6 py-3">
+                                <div class="flex-1 lg:pt-0">
+                                    <th:block th:if="${notice.getTopSetting().TRUE}">
+                                        <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500">TOP</div>
+                                    </th:block>
+                                    <a th:href="@{/info/notice/detail/{noticeId}(noticeId = ${notice.notice_id})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${notice.noticeTitle}"></a>
+                                    <div class="flex items-center pt-2">
+                                        <div class="flex items-center">
+                                            <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                            <a class="text-xs" th:text="${account.dateTime(notice.uploadTime)}"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div th:if="${notices.totalPages != 0}" class="justify-center flex">
+                                <nav aria-label="Page navigation"
+                                     th:with="start=${(notices.number/5)*5 + 1},
+                                         end=(${(notices.totalPages == 0) ? 1 : (start + 4 < notices.totalPages ? start + 4 : notices.totalPages)})">
+                                    <ul class="inline-flex space-x-2">
+                                        <li th:if="${start > 1}">
+                                            <a th:href="@{'/notice/'(page=${start - 2})}">
+                                                <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li th:each="page : ${#numbers.sequence(start, end)}">
+                                            <a th:href="@{'/notice/'(page=${page - 1})}">
+                                                <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                        class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                        th:text="${page}">
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li th:if="${end < notices.totalPages}">
+                                            <a th:href="@{'/notice/'(page=${start + 4})}">
+                                                <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script th:replace="theme-fragments.html :: form-validation"></script>
+<script th:replace="theme-fragments.html :: s3-notice-image-upload(uploadUrl='/notice-new')"></script>
+<script type="application/javascript">
+    $( document ).ready( function() {
+        $('#notice_content').summernote({
+            placeholder: '공지 내용을 작성해주세요.',
+            tabsize: 2,
+            toolbar: [
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+            ],
+            maxHeight: null,
+            minHeight: null,
+            lang : 'ko-KR',
+            height: 500,
+        });
+    });
+</script>
+
+</body>
+</html>
