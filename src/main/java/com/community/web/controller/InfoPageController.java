@@ -3,18 +3,13 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
-import com.community.domain.board.Reply;
-import com.community.domain.bookmark.Bookmark;
 import com.community.domain.inquire.Inquire;
 import com.community.domain.inquire.InquireRepository;
-import com.community.domain.likes.Likes;
 import com.community.domain.notice.Notice;
 import com.community.domain.notice.NoticeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.service.InfoPageService;
-import com.community.web.dto.BoardForm;
-import com.community.web.dto.BoardReportForm;
 import com.community.web.dto.ReplyForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -131,6 +127,20 @@ public class InfoPageController {
                 isTop, notice_title, notice_content);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 게시물 삭제
+    @GetMapping("/info/notice/detail/{noticeId}/delete")
+    public String boardDelete(@PathVariable long noticeId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
+        Optional<Notice> currentNotice = noticeRepository.findById(noticeId);
+        Notice notice = currentNotice.get();
+        if (account.getAccountType().equals("ADMIN")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
+            return "redirect:/info/notice/detail/{noticeId}";
+        }
+        infoPageService.deleteNotice(notice);
+        redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
+        return "redirect:/info/notice";
     }
 
     /* 공지사항 끝 */
