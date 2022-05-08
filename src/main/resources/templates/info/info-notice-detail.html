@@ -57,14 +57,14 @@
                     <div class="card">
                         <div class="form_refresh">
                             <div class="p-7">
-                                <h1 class="lg:text-3xl text-2xl font-semibold mt-4 mb-2" th:text="${notice.noticeTitle}">제목</h1>
-                                <div class="flex items-center space-x-3 my-4 pb-4 border-b border-gray-100">
+                                <div class="flex items-center space-x-3 pb-4 border-b border-gray-100">
                                     <div class="grid grid-cols-2 gap-4">
-                                        <!-- Board 작성자면 뜨는 수정폼 -->
+                                        <h1 class="lg:text-3xl text-2xl font-semibold mb-2" th:text="${notice.noticeTitle}">제목</h1>
+                                        <!-- ADMIN 만 뜨는 수정폼 -->
                                         <th:block th:if="${account.accountType.equals(account.accountType.ADMIN)}">
                                             <div>
                                                 <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
-                                                   data-tippy-placement="right" title="게시물 수정하기">
+                                                   data-tippy-placement="right" title="공지글 수정하기">
                                                     <i class="fa fa-cog fa-2x" id="updateFormBtn"></i>
                                                 </a>
                                                 <!-- Craete video post modal -->
@@ -76,7 +76,7 @@
                                                         </button>
 
                                                         <div class="uk-modal-header bg-white">
-                                                            <h3 class="text-lg font-semibold" id="forum_head"> 게시글 수정하기 </h3>
+                                                            <h3 class="text-lg font-semibold" id="forum_head"> 공지글 수정하기 </h3>
                                                         </div>
                                                         <form class="needs-validation" id="board_form" onsubmit="return false">
                                                             <div class="uk-modal-body" uk-overflow-auto>
@@ -85,7 +85,7 @@
                                                                     <div class="form-group">
                                                                         <div class="line">
                                                                             <input class="line__input form-control" id="notice_title" max="30" name="notice_title"
-                                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                                                   type="text" onkeyup="this.setAttribute('value', this.value);" th:value="${notice.noticeTitle}"
                                                                                    aria-describedby="titleHelp" required autocomplete="off">
                                                                             <span for="username" class="line__placeholder"> 제목 </span>
                                                                         </div>
@@ -97,15 +97,15 @@
                                                                     <div class="form-group">
                                                                         <label for="notice_topCheck"> 상단 고정 </label>
                                                                         <select id="notice_topCheck" name="notice_topCheck" class="shadow-none with-border px-2 selectpicker mb-2">
-                                                                            <option value="true" selected>고정</option>
-                                                                            <option value="false">고정안함</option>
+                                                                            <option value="true" th:selected="${notice.topSetting}">고정</option>
+                                                                            <option value="false" th:selected="${!notice.topSetting}">고정안함</option>
                                                                         </select>
                                                                     </div>
                                                                     <!-- 본문 -->
                                                                     <div>
                                                                         <div>
                                                         <textarea class="form-control"  id="notice_content" name="notice_content"
-                                                                  type="text" aria-describedby="contentHelp" required></textarea>
+                                                                  type="text" aria-describedby="contentHelp" th:value="${notice.noticeContent}"></textarea>
                                                                         </div>
                                                                         <small class="invalid-feedback">글을 입력해주세요.</small>
                                                                     </div>
@@ -145,7 +145,7 @@
                                     </div>
                                 </div>
                                 <th:block th:if="${notice.getImageList().size() != 0}">
-                                    <div id="imageRefreshForm" class="imageRefreshForm">
+                                    <div id="imageRefreshForm" class="imageRefreshForm my-2">
                                         <div class="grid grid-cols-3 gap-5 justify-center max-w-5xl mx-auto px-6">
                                             <a th:each="image : ${notice.getImageList()}"
                                                th:href="${image.getImagePath()}" data-fancybox="gallery" data-caption="학생회">
