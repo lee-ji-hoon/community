@@ -203,12 +203,6 @@ public class InfoPageController {
     }
 
     /* 건의사항 끝 */
-
-    @GetMapping("/info/privacy")
-    public String privacyPage(@CurrentUser Account account, Model model) {
-        model.addAttribute(account);
-        return "info/info-privacy";
-    }
     @GetMapping("/info/faq")
     public String faqPage(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
