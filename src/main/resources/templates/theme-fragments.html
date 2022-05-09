@@ -722,12 +722,6 @@
                     <span>문의사항</span>
                 </a>
             </li>
-            <li th:classappend="${currentSideMenu == 'privacy'}? active">
-                <a th:href="@{/info/privacy}">
-                    <ion-icon name="document-text-outline" class="side-icon"></ion-icon>
-                    <span>서비스 약관</span>
-                </a>
-            </li>
             <li th:classappend="${currentSideMenu == 'faq'}? active">
                 <a th:href="@{/info/faq}">
                     <ion-icon name="help-circle-outline" class="side-icon"></ion-icon>
