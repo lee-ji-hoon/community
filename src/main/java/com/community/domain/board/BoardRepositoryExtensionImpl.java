@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.List;
+
 public class BoardRepositoryExtensionImpl extends QuerydslRepositorySupport implements BoardRepositoryExtension {
     public BoardRepositoryExtensionImpl() {
         super(Board.class);
@@ -27,4 +29,21 @@ public class BoardRepositoryExtensionImpl extends QuerydslRepositorySupport impl
 
         return new PageImpl<>(boardQueryResults.getResults(), pageable, boardQueryResults.getTotal());
     }
+
+    /*@Override
+    public List<Board> findTop5Board(String type, String keyword, Pageable pageable) {
+        QBoard board = QBoard.board;
+
+        JPQLQuery<Board> query = from(board).where(board.isReported.isFalse()
+                        .and(board.boardTitle.contains(type))
+                        .and(board.title.containsIgnoreCase(keyword)
+                                .or(board.content.containsIgnoreCase(keyword))))
+                .limit(5)
+                .distinct();
+
+        JPQLQuery<Board> boardJPQLQuery = getQuerydsl().applyPagination(pageable, query);
+        QueryResults<Board> boardQueryResults = boardJPQLQuery.fetchResults();
+
+        return new PageImpl<>(boardQueryResults.getResults(), pageable, boardQueryResults.getTotal());
+    }*/
 }
