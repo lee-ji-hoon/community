@@ -72,6 +72,8 @@ public class ProfileController {
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                               Model model, @CurrentUser Account account) {
+        log.info("프로필 기본 페이지 진입");
+
         if (nickname == null) {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
@@ -113,6 +115,8 @@ public class ProfileController {
                                   @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                           direction = Sort.Direction.ASC) Pageable pageable,
                                   @RequestParam(required = false, defaultValue = "0", value = "page") int page) {
+
+        log.info("프로필 장터 / 커뮤니티 정리 진입");
 
         Account byAccount = accountService.getAccount(nickname);
 
