@@ -43,27 +43,6 @@ import java.util.stream.Collectors;
 public class ProfileController {
     private final ProfileService profileService;
 
-    private static final String SETTINGS_PROFILE_VIEW_NAME = "profile/settings/profile-settings";
-    private static final String SETTINGS_PROFILE_URL = "/profile/settings/profile-settings";
-
-    private static final String SETTINGS_PROFILE_IMG_VIEW_NAME = "profile/settings/profile-img";
-    private static final String SETTINGS_PROFILE_IMG_URL = "/profile/settings/profile-img";
-
-    private static final String SETTINGS_PASSWORD_VIEW_NAME = "profile/settings/password";
-    private static final String SETTINGS_PASSWORD_URL = "/profile/settings/password";
-
-    private static final String SETTINGS_ALARM_VIEW_NAME = "profile/settings/alarm";
-    private static final String SETTINGS_ALARM_URL = "/profile/settings/alarm";
-
-    private static final String SETTINGS_ACCOUNT_VIEW_NAME = "profile/settings/account";
-    private static final String SETTINGS_ACCOUNT_URL = "/profile/settings/account";
-
-    private static final String SETTINGS_WITHDRAW_VIEW_NAME = "profile/settings/withdraw";
-    private static final String SETTINGS_WITHDRAW_URL = "/profile/settings/withdraw";
-
-    private static final String SETTINGS_TAGS_VIEW_NAME = "profile/settings/tags";
-    private static final String SETTINGS_TAGS_URL = "/profile/settings/tags";
-
     private final AccountRepository accountRepository;
     private final TagRepository tagRepository;
     private final StudyRepository studyRepository;
@@ -186,40 +165,40 @@ public class ProfileController {
     }
 
     // 프로필 변경 페이지
-    @GetMapping(SETTINGS_PROFILE_URL)
+    @GetMapping("/profile/settings/profile-settings")
     public String updateProfileForm(@CurrentUser Account account, Model model) {
 
         model.addAttribute(account);
         model.addAttribute(new ProfileForm(account));
 
-        return SETTINGS_PROFILE_VIEW_NAME;
+        return "profile/settings/profile-settings";
     }
 
     // 프로필 변경 요청
-    @PostMapping(SETTINGS_PROFILE_URL)
+    @PostMapping("/profile/settings/profile-settings")
     public String updateProfile(@CurrentUser Account account, @Valid ProfileForm profile, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return SETTINGS_PROFILE_VIEW_NAME;
+            return "profile/settings/profile-settings";
         }
 
         profileService.updateProfile(account, profile);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        return "redirect:" + SETTINGS_PROFILE_URL;
+        return "redirect:" + "/profile/settings/profile-settings";
     }
 
     // 프로필 이미지 변경
-    @GetMapping(SETTINGS_PROFILE_IMG_URL)
+    @GetMapping("/profile/settings/profile-img")
     public String updateProfileImageForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new ProfileForm(account));
 
-        return SETTINGS_PROFILE_IMG_VIEW_NAME;
+        return "profile/settings/profile-img";
     }
 
     // 프로필 이미지 변경 요청
-    @PostMapping(SETTINGS_PROFILE_IMG_URL)
+    @PostMapping("/profile/settings/profile-img")
     public String updateProfileImageForm(@CurrentUser Account account,
                                          @RequestPart(required = false, value = "file") MultipartFile file,
                                             RedirectAttributes redirectAttributes) throws IOException {
@@ -238,41 +217,41 @@ public class ProfileController {
         profileService.updateProfileImage(account, profile, profileImageKey, folderPath);
         redirectAttributes.addFlashAttribute("message", "프로필이미지를 수정했습니다.");
 
-        return "redirect:" + SETTINGS_PROFILE_IMG_URL;
+        return "redirect:" + "/profile/settings/profile-img";
     }
 
     // 패스워드 변경 페이지
-    @GetMapping(SETTINGS_PASSWORD_URL)
+    @GetMapping("/profile/settings/password")
     public String updatePasswordForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new PasswordForm());
-        return SETTINGS_PASSWORD_VIEW_NAME;
+        return "profile/settings/password";
     }
 
     // 패스워드 변경 요청
-    @PostMapping(SETTINGS_PASSWORD_URL)
+    @PostMapping("/profile/settings/password")
     public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm, Errors errors,
                                  Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return SETTINGS_PASSWORD_VIEW_NAME;
+            return "profile/settings/password";
         }
 
         profileService.updatePassword(account, passwordForm.getNewPassword());
         attributes.addFlashAttribute("message", "패스워드를 변경했습니다.");
-        return "redirect:" + SETTINGS_PASSWORD_URL;
+        return "redirect:" + "/profile/settings/password";
     }
 
     // 알림 설정 변경 페이지
-    @GetMapping(SETTINGS_ALARM_URL)
+    @GetMapping("/profile/settings/alarm")
     public String updateNotificationsForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new AlarmForm(account));
-        return SETTINGS_ALARM_VIEW_NAME;
+        return "profile/settings/alarm";
     }
 
     // 알림 설정 변경 요청
-    @GetMapping(SETTINGS_ALARM_URL + "/update")
+    @GetMapping("/profile/settings/alarm" + "/update")
     @ResponseBody
     public String updateNotifications(@CurrentUser Account account, RedirectAttributes attributes,
                                               @RequestParam(required = false, value = "studyCreatedByWeb") String studyCreatedByWeb,
@@ -303,48 +282,48 @@ public class ProfileController {
     }
 
     // 닉네임 변경 페이지
-    @GetMapping(SETTINGS_ACCOUNT_URL)
+    @GetMapping("/profile/settings/account")
     public String updateAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new AccountForm());
-        return SETTINGS_ACCOUNT_VIEW_NAME;
+        return "profile/settings/account";
     }
 
     // 닉네임 변경 요청
-    @PostMapping(SETTINGS_ACCOUNT_URL)
+    @PostMapping("/profile/settings/account")
     public String updateAccount(@CurrentUser Account account, @Valid AccountForm accountForm, Errors errors,
                                 Model model, RedirectAttributes redirectAttributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return SETTINGS_ACCOUNT_VIEW_NAME;
+            return "profile/settings/account";
         }
 
         profileService.updateNickname(account, accountForm.getNickname());
         redirectAttributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
-        return "redirect:" + SETTINGS_ACCOUNT_URL;
+        return "redirect:" + "/profile/settings/account";
     }
 
     // 회원 탈퇴 페이지
-    @GetMapping(SETTINGS_WITHDRAW_URL)
+    @GetMapping("/profile/settings/withdraw")
     public String withdrawAccountForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new WithdrawForm());
-        return SETTINGS_WITHDRAW_VIEW_NAME;
+        return "profile/settings/withdraw";
     }
 
     // 회원 탈퇴 요청
-    @PostMapping(SETTINGS_WITHDRAW_URL)
+    @PostMapping("/profile/settings/withdraw")
     public String withdrawAccount(@CurrentUser Account account, WithdrawForm withdrawForm,
                                   Errors errors, Model model, RedirectAttributes redirectAttributes) throws Exception {
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return SETTINGS_WITHDRAW_VIEW_NAME;
+            return "profile/settings/withdraw";
         }
         profileService.withdraw(account, withdrawForm.getCheckPassword());
         if (accountRepository.findByNickname(account.getNickname()) != null) {
             model.addAttribute(account);
             redirectAttributes.addFlashAttribute("withdraw_message", "비밀번호를 다시 확인해주세요.");
-            return "redirect:" + SETTINGS_WITHDRAW_URL;
+            return "redirect:" + "/profile/settings/withdraw";
         } else {
             SecurityContextHolder.clearContext();
             return "redirect:/";
@@ -352,7 +331,7 @@ public class ProfileController {
     }
 
     // 태그 페이지
-    @GetMapping(SETTINGS_TAGS_URL)
+    @GetMapping("/profile/settings/tags")
     public String TagsForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = profileService.getTags(account);
@@ -361,11 +340,11 @@ public class ProfileController {
         List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
         model.addAttribute("tagList", objectMapper.writeValueAsString(allTags));
 
-        return SETTINGS_TAGS_VIEW_NAME;
+        return "profile/settings/tags";
     }
 
     // 태그 추가 요청
-    @PostMapping(SETTINGS_TAGS_URL + "/add")
+    @PostMapping("/profile/settings/tags" + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         Tag tag = tagService.findOrAdd(tagForm.getTagTitle());
@@ -375,7 +354,7 @@ public class ProfileController {
     }
 
     // 태그 삭제 요청
-    @PostMapping(SETTINGS_TAGS_URL + "/remove")
+    @PostMapping("/profile/settings/tags" + "/remove")
     @ResponseBody
     public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
