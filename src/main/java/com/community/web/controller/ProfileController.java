@@ -99,10 +99,6 @@ public class ProfileController {
                 model.addAttribute("myStudyListSize",
                         studyRepository.countAllByManagersContaining(byAccount));
                 break;
-            case "board" :
-                return "redirect:/profile/"+byAccount.getNickname()+"/board/free" ;
-            case "market" :
-                return "redirect:/profile/"+byAccount.getNickname()+"/market/sell" ;
         }
         return "profile/view";
     }
