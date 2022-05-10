@@ -1,10 +1,27 @@
 # 멀티미디어 학과 전용 커뮤니티 프로젝트
 
-## 2022 02 08 기초 세팅
+### Unect(University + Connect) 프로젝트 (2022 02 08  ~ )  
+
+에브리타임 같이 각 학교 학생들이 모두 소통할 수 있는 커뮤니티 보다 더 작은 개념으로 
+우리과의 있는 선후배들이 일면식이 없어도 서로의 정보를 교환하고 친목을 도모할 수 있는 사이트를 만들고 싶다는 생각에서 비롯됨.   
+
+> 특히, 코로나 사태가 장기화됨에 따라 더더욱 같은 과 학생끼리도 친해질 계기가 없었는데   
+요즘 세대 학생들이 모두 사용하는 SNS 형태의 사이트로 계기를 마련해주고자 함
+
+#### 📋 구현할 페이지
+1. 커뮤니티 게시판
+2. 스터디 게시판
+3. 장터
+4. 학생회
+5. 졸업작품
+6. 북마크
+7. 개개인의 프로필 페이지 
+
+## 🚀  2022 02 08 기초 세팅
 
 - 팀명 : 봄
 - 프로젝트 : unect (university + connect)
-- 팀원 : 이지훈 (Springboot, JPA, QueryDsl), 가준영 (SpringBoot, JPA)
+- 팀원 : 이지훈 (Springboot, JPA, QueryDsl, AWS, MYSQL), 가준영 (SpringBoot, JPA, MYSQL)
 
 [Notion](https://www.notion.so/c080919d0f1e48c68971c8e96b997072)
 
@@ -17,12 +34,32 @@
 ### Spring Initializr 시작 세팅 
 ![image](https://user-images.githubusercontent.com/53300830/152991455-f48272b1-a1b2-4267-aa0f-2948daa15546.png)
 
-### MYSQL // h2
-- CREATE DATABASE community;
-- CREATE USER master@'%' IDENTIFIED BY 'nsuspring';
-- GRANT ALL PRIVILEGES ON community.* TO master@'%' WITH GRANT OPTION;
+## 🚀  개발 환경
+### Back-end
+Spring Boot / Spring Data JPA / Spring Security / QueryDsl / Gradle
 
-<hr/>
+### DataBase
+MySQL, H2
+
+### Infra
+[Amazon] EC2, ROUTE53, RDS, CloudFront, S3
+
+## 🚀  프로젝트 구조
+![image](https://user-images.githubusercontent.com/53300830/167577841-e9cb3513-2a5f-40b4-81ae-af93bdc64c89.png) ![image](https://user-images.githubusercontent.com/53300830/167578982-066e6642-b7a4-4c6f-ad15-97697aea903d.png)
+
+
+> 프로젝트 설계를 진행하면서 레이어를 우선으로할지 고민하다가 둘 다 적용해보고 결정하기로 했다.  
+> 그 결과 우리는 레이어를 우선으로 하는게 좀 더 보기 편하다고 느껴져 위 처럼 구성했다.
+
+## 🚀  ERD
+![dev community](https://user-images.githubusercontent.com/53300830/167578110-b77870a8-70c7-4582-ad90-7755124a4853.png)
+
+## 🚀  추가적인 구현 사항
+- AWS EC2를 이용해서 이미지 업로드
+- HTTPS에 필요한 SSL 인증서를 AWS에서 발급 후 도메인 적용 (https://unect.cf/)
+- Ajax를 이용한 비동기 통신으로 댓글 좋아요등 사용자에게 편리하게 구현
+
+## 🚀  졸업작품 진행 상황
 
 ### 1차 기획안 발표 3/16(수)
 [[Google Slide](https://docs.google.com/presentation/d/11x7zjGIO5-ZYY59PbaNRUh9odlZ44SJzNyocKh50_XQ/edit#slide=id.g11d3f6e9f66_0_977)]
