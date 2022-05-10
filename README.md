@@ -78,7 +78,7 @@ public String updateProfileImageForm(@CurrentUser Account account,
     return "redirect:" + "/profile/settings/profile-img";
 }
 ```
-
+> 디비에 저장하는 방식 대신 이미지를 S3에 저장후 해당 접근 URL을 DB에 저장해서 불러오는 방식으로 해결했다.
 <hr/>
 
 ### ✅ 이슈 2. S3 이미지 업로드 중 동일한 이름의 파일로 인해 오류 발생
@@ -112,7 +112,7 @@ private String getFileExtension(String fileName) {
     }
 }
 ```
-> 기존 확장자 + randUUID()를 이용해서 파일 이름을 유니크하게 만들어서 해결
+> 기존 확장자 + randUUID()를 이용해서 파일 이름을 유니크하게 만들어서 해결했다.
 
 <hr/>
 
