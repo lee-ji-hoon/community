@@ -51,7 +51,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -80,14 +79,6 @@ public class StudyController {
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
     private final BookmarkRepository bookmarkRepository;
-
-    private static final String STUDY_FORM_URL = "/study-form";
-    private static final String STUDY_FORM_VIEW = "study/study-form";
-
-    private static final String STUDY_PATH_URL = "/study/{path}";
-    private static final String STUDY_PATH_VIEW = "study/{path}";
-
-    private static final String STUDY_SETTINGS = STUDY_PATH_URL + "/settings/";
 
     private String fixPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);
@@ -135,7 +126,7 @@ public class StudyController {
     }
 
     // 스터디 이동
-    @GetMapping(STUDY_PATH_URL)
+    @GetMapping("/study/{path}")
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
 
         Study bypath = studyService.getPath(path);
@@ -164,7 +155,7 @@ public class StudyController {
     }
 
     // 스터디 추가 뷰
-    @GetMapping(STUDY_FORM_URL)
+    @GetMapping("/study-form")
     public String newStudyForm(@CurrentUser Account account, Model model, RedirectAttributes redirectAttributes) {
         boolean emailVerified = account.isEmailVerified();
 
@@ -178,16 +169,16 @@ public class StudyController {
 
         model.addAttribute(account);
         model.addAttribute(new StudyForm());
-        return STUDY_FORM_VIEW;
+        return "study/study-form";
     }
 
     // 스터디 추가
-    @PostMapping(STUDY_FORM_URL)
+    @PostMapping("/study-form")
     public String newStudySubmit(@CurrentUser Account account,  StudyForm studyForm, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
-            return STUDY_FORM_VIEW;
+            return "study/study-form";
         }
 
         log.info("스터디 시작 날짜: {}",studyForm.getStartStudyDate());
@@ -200,7 +191,7 @@ public class StudyController {
     }
 
     // 모임 페이지
-    @GetMapping(STUDY_PATH_URL + "/meetings")
+    @GetMapping("/study/{path}/meetings")
     public String meetingListView(@CurrentUser Account account,
                                   @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
@@ -217,7 +208,7 @@ public class StudyController {
         return "study/study-meetings";
     }
 
-    @PostMapping(STUDY_PATH_URL + "/meetings")
+    @PostMapping("/study/{path}" + "/meetings")
     public String meetingList(@CurrentUser Account account, @PathVariable String path,
                               Model model, @Valid MeetingsForm meetingsForm) {
 
@@ -238,7 +229,7 @@ public class StudyController {
         return "redirect:/study/" + URLEncoder.encode(studyUpdate.getPath(), StandardCharsets.UTF_8) + "/meetings";
     }
 
-    @GetMapping(STUDY_PATH_URL + "/meetings/{meetingsId}")
+    @GetMapping("/study/{path}/meetings/{meetingsId}")
     public String deleteMeeting(@CurrentUser Account account, @PathVariable String path,
                                 Model model, @PathVariable long meetingsId) {
         log.info("모임 삭제 실행");
@@ -344,7 +335,7 @@ public class StudyController {
 
 
     // 스터디 참여
-    @GetMapping(STUDY_PATH_VIEW + "/join")
+    @GetMapping("study/{path}/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path, Model model,
                             RedirectAttributes redirectAttributes) {
         boolean emailVerified = account.isEmailVerified();
@@ -374,7 +365,7 @@ public class StudyController {
     }
 
     // 스터디 탈퇴
-    @GetMapping(STUDY_PATH_VIEW + "/remove")
+    @GetMapping("study/{path}/remove")
     public String removeStudy(@CurrentUser Account account, RedirectAttributes redirectAttributes,
                               @PathVariable String path) {
         Study studyWithMembersByPath = studyRepository.findStudyWithMembersByPath(path);
@@ -385,7 +376,7 @@ public class StudyController {
     }
 
     // 스터디 설명 수정 시작
-    @GetMapping(STUDY_SETTINGS + "description")
+    @GetMapping("/study/{path}/settings/description")
     public String studyDescriptionForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
@@ -399,7 +390,7 @@ public class StudyController {
     }
 
 
-    @PostMapping(STUDY_SETTINGS + "description")
+    @PostMapping("/study/{path}/settings/description")
     public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path, String image,
                                   @Valid StudyDescriptionForm studyDescriptionForm,
                                   Errors errors, Model model, RedirectAttributes redirectAttributes) {
@@ -418,7 +409,7 @@ public class StudyController {
     }
     // 스터디 설명 수정 끝
 
-    @GetMapping(STUDY_SETTINGS + "calendar")
+    @GetMapping("/study/{path}/settings/calendar")
     public String studyCalendarForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
@@ -432,7 +423,7 @@ public class StudyController {
         return "study/settings/calendar";
     }
 
-    @PostMapping(STUDY_SETTINGS + "calendar")
+    @PostMapping("/study/{path}/settings/calendar")
     public String updateStudyDescriptionForm(@CurrentUser Account account, @PathVariable String path,
                                              @Valid StudyCalendarForm studyCalendarForm,
                                              Errors errors, Model model, RedirectAttributes redirectAttributes) {
@@ -450,7 +441,7 @@ public class StudyController {
         return "redirect:/study/" + fixPath(path) + "/settings/calendar";
     }
 
-    @GetMapping(STUDY_SETTINGS + "members")
+    @GetMapping("/study/{path}/settings/members")
     public String studyMembersView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
@@ -464,7 +455,7 @@ public class StudyController {
     }
 
     @ResponseBody
-    @RequestMapping(value = STUDY_SETTINGS + "removeMember")
+    @RequestMapping(value = "/study/{path}/settings/removeMember")
     public String excludeStudyMembers(@PathVariable String path,
                                       @RequestParam(value = "studyMemberId") Long studyMemberId) {
         Optional<Account> byId = accountRepository.findById(studyMemberId);
@@ -485,7 +476,7 @@ public class StudyController {
     }
 
     @ResponseBody
-    @RequestMapping(value = STUDY_SETTINGS + "unBlockMember")
+    @RequestMapping(value = "/study/{path}/settings/unBlockMember")
     public String unBlockMembers(@PathVariable String path,
                                       @RequestParam(value = "blockMemberId") Long blockMemberId) {
         Optional<Account> byId = accountRepository.findById(blockMemberId);
@@ -506,7 +497,7 @@ public class StudyController {
         return message;
     }
 
-    @GetMapping(STUDY_SETTINGS + "alarm")
+    @GetMapping("/study/{path}/settings/alarm")
     public String sendStudyAlarmView(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
@@ -520,7 +511,7 @@ public class StudyController {
     }
 
     @ResponseBody
-    @RequestMapping(value = STUDY_SETTINGS + "sendAlarm")
+    @RequestMapping(value = "/study/{path}/settings/sendAlarm")
     public String sendStudyAlarm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         boolean checkAlarmDateTime = studyService.checkAlarmDateTime(studyUpdate);
@@ -567,7 +558,7 @@ public class StudyController {
         return message;
     }
 
-    @PostMapping(STUDY_SETTINGS + "banner")
+    @PostMapping("/study/{path}/settings/banner")
     public String studyImageUpToDate(@CurrentUser Account account,
                                      @RequestPart MultipartFile file,
                                      @PathVariable String path, RedirectAttributes redirectAttributes) throws IOException {
@@ -593,7 +584,7 @@ public class StudyController {
     }
 
     // 태그 수정 시작
-    @GetMapping(STUDY_SETTINGS + "tags")
+    @GetMapping("/study/{path}/settings/tags")
     public String studyTagsForm(@CurrentUser Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
         Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndStudy(account, studyUpdate);
@@ -609,7 +600,7 @@ public class StudyController {
         return "study/settings/tags";
     }
 
-    @PostMapping(STUDY_SETTINGS + "tags/add")
+    @PostMapping("/study/{path}/settings/tags/add")
     @ResponseBody
     public ResponseEntity studyTagsAdd(@CurrentUser Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
 
@@ -622,7 +613,7 @@ public class StudyController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(STUDY_SETTINGS + "tags/remove")
+    @PostMapping("/study/{path}/settings/tags/remove")
     @ResponseBody
     public ResponseEntity studyTagsRemove(@CurrentUser Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
 
@@ -641,7 +632,7 @@ public class StudyController {
 
     /* 스터디 전체적인 설정 시작 */
     // 스터디 설정 시작
-    @GetMapping(STUDY_SETTINGS + "config")
+    @GetMapping("/study/{path}/settings/config")
     public String studyForm(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study studyUpdate = studyService.getStudyUpdate(account, path);
 
@@ -655,7 +646,7 @@ public class StudyController {
     }
 
     // 스터디 이름 변경
-    @PostMapping(STUDY_SETTINGS + "config/title")
+    @PostMapping("/study/{path}/settings/config/title")
     public String studyTitleUpdate(@CurrentUser Account account, @PathVariable String path, RedirectAttributes redirectAttributes, Model model, String newTitle) {
         Study studyToUpdateStatus = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidTitle(newTitle)) {
@@ -672,7 +663,7 @@ public class StudyController {
     }
 
     // 스터디 삭제
-    @PostMapping(STUDY_SETTINGS + "config/remove")
+    @PostMapping("/study/{path}/settings/config/remove")
     public String removeStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.remove(study);
@@ -680,7 +671,7 @@ public class StudyController {
     }
 
     // 스터디 경로 수정
-    @PostMapping(STUDY_SETTINGS + "config/path")
+    @PostMapping("/study/{path}/settings/config/path")
     public String updatePath(@CurrentUser Account account, @PathVariable String path, String newPath, Model model, RedirectAttributes redirectAttributes) {
         Study studyToUpdateStatus = studyService.getStudyToUpdateStatus(account, path);
         if (!studyService.isValidPath(newPath)) {
