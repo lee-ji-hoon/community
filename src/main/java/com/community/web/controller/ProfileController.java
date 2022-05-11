@@ -210,8 +210,8 @@ public class ProfileController {
         }
         String folderPath = "profile-img/";
 
-        String profileImageKey = s3Service.upload(file, folderPath);
-        String profile = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + profileImageKey;
+        String profileImageKey = s3Service.upload(file, folderPath); // s3 이미지 업로드
+        String profile = S3Service.CLOUD_FRONT_DOMAIN_NAME + "/" + folderPath + profileImageKey; // 디비에 저장하고 접근할 주소
 
         log.info("profileImage : {}", profile);
         profileService.updateProfileImage(account, profile, profileImageKey, folderPath);
