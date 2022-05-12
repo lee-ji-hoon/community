@@ -3,6 +3,8 @@ package com.community.domain.board;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -29,4 +31,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     List<Reply> findTop3ByBoardOrderByUploadTimeDesc(Board board);
 
     List<Reply> findAllByMeetingsOrderByUploadTimeDesc(Meetings meetings);
+
+    Page<Reply> findByIsReportedOrderByUploadTimeDesc(Boolean isReported, Pageable pageable);
 }
