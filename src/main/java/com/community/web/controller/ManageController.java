@@ -1,6 +1,7 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
+import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
