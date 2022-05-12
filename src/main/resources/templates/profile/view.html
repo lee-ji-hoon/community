@@ -61,10 +61,10 @@
                                 <a th:href="@{'/profile/' + ${byAccount.nickname} + '/study'}">스터디</a>
                         </li>
                             <li th:classappend="${division == 'board'}? active">
-                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board'}">게시글</a>
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/board/free'}">게시글</a>
                             </li>
                             <li th:classappend="${division == 'market'}? active">
-                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market'}">장터</a>
+                                <a th:href="@{'/profile/' + ${byAccount.nickname} + '/market/sell'}">장터</a>
                             </li>
                         </ul>
                     </nav>
