@@ -8,4 +8,6 @@ public interface ReplyReportRepository extends JpaRepository<ReplyReport, Long> 
 
     boolean existsByAccountAndReply(Account account, Reply reply);
 
+    ReplyReport findByAccountAndReply(Account account, Reply reply);
+
 }
