@@ -33,14 +33,14 @@ public class ReportService {
     private final ReplyRepository replyRepository;
 
     public void saveBoardReport(Board board, Account account, BoardReportForm reportForm) {
-        BoardReport Boardreport = BoardReport.builder()
+        BoardReport boardReport = BoardReport.builder()
                 .board(board)
                 .account(account)
                 .reportTime(LocalDateTime.now())
                 .report_title(reportForm.getReport_title())
                 .report_content(reportForm.getReport_content())
                 .build();
-        boardReportRepository.save(Boardreport);
+        boardReportRepository.save(boardReport);
         Integer boardReportCount = board.getReportCount();
         board.setReportCount(++boardReportCount);
         if (boardReportCount >= MAX_BOARD_AND_REPLY_REPORT_COUNT) {
