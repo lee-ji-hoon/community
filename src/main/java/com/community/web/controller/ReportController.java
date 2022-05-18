@@ -125,9 +125,10 @@ public class ReportController {
     }
 
     @PostMapping("/board/detail/{boardId}/report")
-    public String boardReport(@PathVariable Long boardId, BoardReportForm boardReportForm, @CurrentUser Account account) {
+    public String boardReport(@PathVariable Long boardId, BoardReportForm boardReportForm, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         Board currentBoard = boardRepository.findByBid(boardId);
         reportService.saveBoardReport(currentBoard, account, boardReportForm);
+        redirectAttributes.addFlashAttribute("isUpdatedMessage","신고 접수되었습니다.");
         return "redirect:/board/detail/{boardId}";
     }
     @PostMapping("/reply/detail/{rid}/report")
