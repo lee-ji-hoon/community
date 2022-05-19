@@ -47,9 +47,9 @@ public class ManageController {
                               @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
-        if (!account.getAccountType().equals(AccountType.ADMIN)) {
+        /*if (!account.getAccountType().equals(AccountType.ADMIN)) {
             return "redirect:/";
-        }
+        }*/
         switch (type) {
             case "board" :
                 Page<Board> boardReportedLists = boardRepository.findByIsReportedOrderByUploadTimeDesc(true, pageable);
