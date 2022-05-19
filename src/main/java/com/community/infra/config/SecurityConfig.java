@@ -30,9 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/login", "/logout", "/sign-up", "/check-email", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link", "/email-login-view", "/study/*").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
-                //.antMatchers("/manager/**").hasAnyRole("ADMIN")
-                .anyRequest().authenticated();
-        //http.exceptionHandling().accessDeniedPage("/error-page");
+                .anyRequest().authenticated()
+                .antMatchers("/manager/**").hasAnyRole("ADMIN");
+        http.exceptionHandling().accessDeniedPage("/error-page");
         http.formLogin()
                 .loginPage("/login")
                 .permitAll();
