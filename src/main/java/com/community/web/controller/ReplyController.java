@@ -111,7 +111,7 @@ public class ReplyController {
                     "</div>";
             return r_del_message;
         }
-        if (findReply.getAccount().getNickname().equals(account.getNickname()) || account.getAccountType().equals(AccountType.ADMIN)) {
+        if (findReply.getAccount().getNickname().equals(account.getNickname()) || account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
             log.info("신고되지 않은 댓글");
             r_del_message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
                     "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +

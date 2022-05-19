@@ -42,7 +42,7 @@ public class AccountService implements UserDetailsService {
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
-        newAccount.setAccountType(AccountType.USER);
+        newAccount.setAccountType(AccountType.ROLE_USER);
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
