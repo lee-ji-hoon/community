@@ -1,6 +1,7 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
+import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
@@ -265,7 +266,7 @@ public class BoardController {
         log.info("보드 찾기 : " + boardId);
         Board currentBoard = boardRepository.findByBid(boardId);
         String postSort = currentBoard.getBoardTitle();
-        if (account.getId().equals(currentBoard.getWriter().getId())) {
+        if (account.getId().equals(currentBoard.getWriter().getId()) || account.getAccountType().equals(AccountType.ADMIN)) {
             log.info("보드 삭제 : " + currentBoard);
             boardService.deleteBoard(currentBoard);
             redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");

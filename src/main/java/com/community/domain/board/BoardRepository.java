@@ -11,6 +11,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryExtension {
 
+    // 매니저 기능 관련
+    Page<Board> findByIsReportedOrderByUploadTimeDesc(Boolean isReported, Pageable pageable);
+
     // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
 

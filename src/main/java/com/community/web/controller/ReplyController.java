@@ -2,9 +2,12 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
+import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
+import com.community.domain.report.ReplyReport;
+import com.community.domain.report.ReplyReportRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
@@ -38,6 +41,7 @@ public class ReplyController {
     private final MarketRepository marketRepository;
     private final CouncilRepository councilRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final ReplyReportRepository replyReportRepository;
 
     private final ReplyService replyService;
 
@@ -90,12 +94,11 @@ public class ReplyController {
     }
     @ResponseBody
     @RequestMapping(value = "/reply/delete")
-    public String replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid) throws IOException{
+    public String replyDelete(@RequestParam(value = "reply_delete_rid") Long reply_delete_rid,
+                              @CurrentUser Account account) throws IOException{
         log.info("삭제 요청 : " + reply_delete_rid);
         String r_del_message = "";
         Reply findReply = replyRepository.findByRid(reply_delete_rid);
-//        Board board = boardRepository.findByBid(findReply.getBoard().getBid());
-//        String path = String.valueOf(board.getBid());
 
         if (findReply.getIsReported() || findReply.getReportCount() > 0) {
             log.info("이미 신고된 댓글");
@@ -108,15 +111,17 @@ public class ReplyController {
                     "</div>";
             return r_del_message;
         }
-        log.info("신고되지 않은 댓글");
-        r_del_message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
-                "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                "        <i class=\"icon-feather-x\"></i>\n" +
-                "    </button>\n" +
-                "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
-                "    <p class=\"text-white text-opacity-75\">댓글이 삭제되었습니다.</p>\n" +
-                "</div>";
-        replyRepository.delete(findReply);
+        if (findReply.getAccount().getNickname().equals(account.getNickname()) || account.getAccountType().equals(AccountType.ADMIN)) {
+            log.info("신고되지 않은 댓글");
+            r_del_message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
+                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
+                    "        <i class=\"icon-feather-x\"></i>\n" +
+                    "    </button>\n" +
+                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
+                    "    <p class=\"text-white text-opacity-75\">댓글이 삭제되었습니다.</p>\n" +
+                    "</div>";
+            replyRepository.delete(findReply);
+        }
         return r_del_message;
     }
 }

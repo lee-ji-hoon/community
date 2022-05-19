@@ -728,6 +728,14 @@
                     <span>자주 묻는 질문(FAQ)</span>
                 </a>
             </li>
+            <th:block th:if="${account.accountType.equals(account.accountType.ADMIN)}">
+                <li th:classappend="${currentSideMenu == 'manager'}? active">
+                    <a th:href="@{/manager/board}">
+                        <ion-icon name="settings-outline" class="side-icon"></ion-icon>
+                        <span>관리</span>
+                    </a>
+                </li>
+            </th:block>
 
         </ul>
 
