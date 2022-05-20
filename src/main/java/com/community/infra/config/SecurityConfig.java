@@ -27,9 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .mvcMatchers("/login", "/logout", "/sign-up", "/check-email", "/check-email-token",
+                .mvcMatchers("/login", "/sign-up", "/check-email", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link", "/email-login-view").permitAll()
-                .mvcMatchers("/study/*", "/board/*", "/council/*", "/").authenticated()
+                .antMatchers("/study/*", "/board/*", "/council/*", "/", "/logout").authenticated()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .antMatchers("/manager/*").hasAnyRole("ADMIN");
         /*
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/login").defaultSuccessUrl("/", true);
         // 로그인이 수행될 uri 매핑 (post 요청이 기본)
         http.formLogin().loginProcessingUrl("/login").defaultSuccessUrl("/", true);
-        //http.exceptionHandling().accessDeniedPage("/error-page");
+        http.exceptionHandling().accessDeniedPage("/");
 
         http.userDetailsService(accountService);
 
