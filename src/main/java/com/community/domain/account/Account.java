@@ -1,8 +1,5 @@
 package com.community.domain.account;
 
-import com.community.domain.alarm.Alarm;
-import com.community.domain.chat.Chat;
-import com.community.domain.chat.Room;
 import com.community.service.BoardService;
 import com.community.domain.likes.Likes;
 import com.community.domain.market.Market;
@@ -11,7 +8,6 @@ import com.community.domain.study.Study;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,12 +24,6 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-//@ToString
-/*@SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "community", // 매핑할 데이터베이스 시퀀스 이름
-        initialValue = 1,
-        allocationSize = 1)*/
 
 @NamedEntityGraph(name = "Account.withTags", attributeNodes = {
         @NamedAttributeNode("tags")

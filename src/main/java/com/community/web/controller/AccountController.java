@@ -28,7 +28,6 @@ public class AccountController {
     private final AccountService accountService;
 
     private final AccountRepository accountRepository;
-    private final StudyRepository studyRepository;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -98,8 +97,6 @@ public class AccountController {
         accountService.sendSignUpConfirmEmail(account);
         return "redirect:/check-email";
     }
-
-
 
     // 이메일 로그인
     @GetMapping("/email-login")
