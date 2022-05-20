@@ -3,16 +3,10 @@ package com.community;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.AccountType;
-import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
-import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
-import com.community.domain.graduation.Graduation;
 import com.community.domain.graduation.GraduationRepository;
-import com.community.domain.market.Market;
-import com.community.domain.market.MarketItemStatus;
 import com.community.domain.market.MarketRepository;
-import com.community.domain.study.Study;
 import com.community.domain.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
@@ -20,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
