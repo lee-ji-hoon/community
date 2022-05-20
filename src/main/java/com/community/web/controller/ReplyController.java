@@ -6,12 +6,10 @@ import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
-import com.community.domain.report.ReplyReport;
 import com.community.domain.report.ReplyReportRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
-import com.community.web.dto.ReplyForm;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.ReplyService;
@@ -22,13 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller

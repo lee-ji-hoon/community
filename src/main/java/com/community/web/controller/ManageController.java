@@ -1,7 +1,6 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
@@ -47,9 +46,6 @@ public class ManageController {
                               @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
-        /*if (!account.getAccountType().equals(AccountType.ADMIN)) {
-            return "redirect:/";
-        }*/
         switch (type) {
             case "board" :
                 Page<Board> boardReportedLists = boardRepository.findByIsReportedOrderByUploadTimeDesc(true, pageable);
