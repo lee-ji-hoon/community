@@ -332,8 +332,6 @@ public class StudyController {
     }
     // 모임 댓글 추가 끝
 
-
-
     // 스터디 참여
     @GetMapping("study/{path}/join")
     public String joinStudy(@CurrentUser Account account, @PathVariable String path, Model model,
