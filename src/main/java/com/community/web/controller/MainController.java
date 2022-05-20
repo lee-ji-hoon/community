@@ -15,6 +15,7 @@ import com.community.domain.council.CouncilRepository;
 import com.community.service.CouncilService;
 import com.community.service.LikeService;
 import com.community.domain.study.Study;
+import com.community.web.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -100,7 +101,8 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("account", new LoginRequest());
         return "login-form";
     }
 
