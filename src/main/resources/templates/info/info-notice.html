@@ -25,7 +25,7 @@
                         <div class="flex-1">
                             <h2 class="text-2xl font-semibold"> 유넥트 공지사항 </h2>
                         </div>
-                        <div th:if="${account.accountType.equals(account.accountType.ADMIN)}">
+                        <div th:if="${account.getAccountType.equals(account.getAccountType.ROLE_ADMIN)}">
                             <div>
                                 <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10" data-tippy-placement="left" title="새 게시글 작성하기">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">

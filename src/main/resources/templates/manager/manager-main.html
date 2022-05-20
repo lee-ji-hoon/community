@@ -44,7 +44,7 @@
                         <th:block th:if="${deleteMessage}">
                             <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
                         </th:block>
-                        <div th:if="${account.accountType.ADMIN}">
+                        <div th:if="${account.getAccountType.ROLE_ADMIN}">
 
                         </div>
                         <th:block th:if="${type == 'board'}">
