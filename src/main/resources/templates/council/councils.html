@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="theme-fragments.html :: head"></head>
 <style th:replace="theme-fragments.html :: search_form"></style>
 <style>
@@ -9,9 +10,6 @@
     }
 </style>
 <body>
-
-
-
 
 <div id="wrapper">
 
@@ -40,7 +38,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div th:if="${account.getAccountType.equals(account.getAccountType.ROLE_COUNCIL)}">
+                <div sec:authorize="hasRole('ADMIN') || hasRole('COUNCIL')">
                     <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5 absolute right-0">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                             <path fill-rule="evenodd"
