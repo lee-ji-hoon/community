@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.userDetailsService(accountService);
 
         http.rememberMe()
-                //.userDetailsService(accountService)
+                .userDetailsService(accountService)
                 .tokenRepository(tokenRepository());
     }
 
