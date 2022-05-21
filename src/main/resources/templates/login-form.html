@@ -24,13 +24,13 @@
                     <div class="lg:mt-0 lg:w-96 md:w-1/2 sm:w-2/3 mt-10 w-full">
 
                         <form class="needs-validation p-6 space-y-4 relative bg-white shadow-lg rounded-lg"
-                              action="#" method="post" th:action="@{/login}" novalidate>
+                              th:action method="post" novalidate th:object="${account}">
                             <div th:if="${param.error}">
                                 <div th:replace="theme-fragments.html :: red-notice(message='이메일 또는 패스워드가 정확하지 않습니다.')"></div>
                             </div>
                             <div class="form-group">
                                 <label for="username" class="mb-0">닉네임 또는 이메일</label>
-                                <input id="username" type="text" name="username"
+                                <input id="username" type="text" th:field="*{username}"
                                        placeholder="Info@example.com" aria-describedby="emailHelp" required
                                        class="form-control with-border">
                                 <small id="emailHelp" class="form-text text-muted">
@@ -40,7 +40,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="password" class="mb-0">패스워드</label>
-                                <input id="password" type="password" name="password"
+                                <input id="password" type="password" th:field="*{password}"
                                        aria-describedby="passwordHelp" placeholder="******" required
                                        class="form-control with-border">
                                 <small id="passwordHelp" class="form-text text-muted">

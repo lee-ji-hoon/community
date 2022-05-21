@@ -31,10 +31,10 @@
                             <nav class="responsive-nav md:m-0 -mx-4">
                                 <ul>
                                     <li th:classappend="${type == 'board'}? active">
-                                        <a th:href="@{/board/free}" class="lg:px-2"> 게시판 </a>
+                                        <a th:href="@{/manager/board}" class="lg:px-2"> 게시판 </a>
                                     </li>
                                     <li th:classappend="${type == 'reply'}? active">
-                                        <a th:href="@{/board/forum}" class="lg:px-2"> 댓글 </a>
+                                        <a th:href="@{/manager/reply}" class="lg:px-2"> 댓글 </a>
                                     </li>
                                 </ul>
                             </nav>
@@ -44,6 +44,9 @@
                         <th:block th:if="${deleteMessage}">
                             <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
                         </th:block>
+                        <div th:if="${account.getAccountType.ROLE_ADMIN}">
+
+                        </div>
                         <th:block th:if="${type == 'board'}">
                             <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${boardReportedLists}">
                                 <div class="lg:flex lg:space-x-6 py-3">
@@ -57,7 +60,7 @@
                                         <th:block th:if="${board.boardTitle=='질문'}">
                                             <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
                                         </th:block>
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
+                                        <a th:href="@{/manager/board/detail/{boardId}(boardId = ${board.bid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
                                         <div class="flex items-center pt-2">
                                             <div class="flex items-center">
                                                 <ion-icon name="time-outline" class="mr-2"></ion-icon>
@@ -70,7 +73,7 @@
                                             <div class="flex items-center">
                                                 <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
                                                 <a class="text-xs" th:text="${board.replyList.size()}"></a>
-                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                                <th:block th:if="${board.replyList.size()!=0}">
                                                     <div class="-space-x-2 flex items-center ml-1">
                                                         <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
                                                             <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
@@ -126,47 +129,25 @@
                                 </div>
                             </div>
                         </th:block>
-                        <!--<th:block th:if="${type == 'reply'}">
+                        <th:block th:if="${type == 'reply'}">
                             <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="reply : ${replyReportedLists}">
                                 <div class="lg:flex lg:space-x-6 py-3">
                                     <div class="flex-1 lg:pt-0">
-                                        <th:block th:if="${board.boardTitle=='자유'}">
-                                            <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
+                                        <th:block th:if="${reply.market!=null}">
+                                            <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500">장터</div>
                                         </th:block>
-                                        <th:block th:if="${board.boardTitle=='정보'}">
-                                            <div class="float-left bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
+                                        <th:block th:if="${reply.board!=null}">
+                                            <div class="float-left bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500">게시글</div>
                                         </th:block>
-                                        <th:block th:if="${board.boardTitle=='질문'}">
-                                            <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
+                                        <th:block th:if="${reply.council!=null}">
+                                            <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500">학생회</div>
                                         </th:block>
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
+                                        <a th:href="@{/manager/board/detail/{boardId}(boardId = ${reply.rid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${reply.content}"></a>
                                         <div class="flex items-center pt-2">
                                             <div class="flex items-center">
                                                 <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${account.dateTime(board.uploadTime)}"></a>
+                                                <a class="text-xs" th:text="${account.dateTime(reply.uploadTime)}"></a>
                                             </div>
-                                            <div class="flex items-center mx-4 align-middle">
-                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${board.likesList.size()}"></a>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${board.replyList.size()}"></a>
-                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
-                                                    <div class="-space-x-2 flex items-center ml-1">
-                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                            <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
-                                                                 alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
-                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
-                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
-                                                        </div>
-                                                    </div>
-                                                </th:block>
-
-                                            </div>
-                                            &lt;!&ndash;<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>&ndash;&gt;
                                         </div>
                                     </div>
                                 </div>
@@ -207,42 +188,10 @@
                                     </nav>
                                 </div>
                             </div>
-                        </th:block>-->
-                        
+                        </th:block>
                     </div>
                 </div>
 
-                <!--<div class="lg:w-1/4 w-full flex-shrink-0">
-                    <div uk-sticky="offset:100" class="uk-sticky">
-                        <div class="card divide-y divide-gray-100 px-4 mb-4">
-                            <h2 class="text-lg font-semibold my-3">실시간 인기글</h2>
-                            <ul>
-                                <li th:each="top5Board : ${top5Board}">
-                                    <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                        <h3 class="font-medium line-clamp-1" th:text="${top5Board.title}"></h3>
-                                        <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
-                                            <th:block th:if="${top5Board.boardTitle=='자유'}">
-                                                <div class="bg-blue-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${top5Board.boardTitle}"></div>
-                                            </th:block>
-                                            <th:block th:if="${top5Board.boardTitle=='정보'}">
-                                                <div class="bg-purple-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${top5Board.boardTitle}"></div>
-                                            </th:block>
-                                            <th:block th:if="${top5Board.boardTitle=='질문'}">
-                                                <div class="bg-yellow-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${top5Board.boardTitle}"></div>
-                                            </th:block>
-                                            <div class="pb-1"> . </div>
-                                            <ion-icon name="time-outline"></ion-icon>
-                                            <div th:text="${service.boardDateTime(top5Board.uploadTime)}"></div>
-                                            <div class="pb-1"> . </div>
-                                            <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                                            <div th:text="${replyService.boardReplySize(top5Board)}"></div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>-->
             </div>
 
 
@@ -254,21 +203,6 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
-<script type="application/javascript">
-    $( document ).ready( function() {
-        $('#post_content').summernote({
-            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
-            tabsize: 2,
-            toolbar: [
-                ['font', ['bold', 'italic', 'underline', 'clear']],
-            ],
-            maxHeight: null,
-            minHeight: null,
-            lang : 'ko-KR',
-            height: 500,
-        });
-    });
-</script>
 
 </body>
 </html>
