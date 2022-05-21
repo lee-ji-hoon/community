@@ -6,6 +6,8 @@ import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Reply;
 import com.community.domain.board.ReplyRepository;
+import com.community.domain.inquire.Inquire;
+import com.community.domain.inquire.InquireRepository;
 import com.community.domain.report.BoardReport;
 import com.community.domain.report.BoardReportRepository;
 import com.community.domain.report.ReplyReportRepository;
@@ -36,6 +38,7 @@ public class ManageController {
     private final BoardReportRepository boardReportRepository;
     private final ReplyRepository replyRepository;
     private final ReplyReportRepository replyReportRepository;
+    private final InquireRepository inquireRepository;
 
     private final ReplyService replyService;
     private final BoardService boardService;
@@ -54,6 +57,10 @@ public class ManageController {
             case "reply" :
                 Page<Reply> replyReportedLists = replyRepository.findByIsReportedOrderByUploadTimeDesc(true, pageable);
                 model.addAttribute("replyReportedLists", replyReportedLists);
+                break;
+            case "inquire" :
+                Page<Inquire> inquireAnswerLists = inquireRepository.findByIsAnsweredOrderByUploadTimeDesc(false, pageable);
+                model.addAttribute("inquireAnswerLists", inquireAnswerLists);
                 break;
         }
         model.addAttribute("pageNo", page);
