@@ -28,6 +28,10 @@ public class InquireAnswer {
     @JoinColumn(name = "inquire_id")
     private Inquire inquire;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private Account account;
+
     @Lob
     @Type(type = "text")
     @Basic(fetch = FetchType.EAGER)
