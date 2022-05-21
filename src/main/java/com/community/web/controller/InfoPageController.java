@@ -155,7 +155,7 @@ public class InfoPageController {
     @ResponseBody
     @RequestMapping(value = "/inquire-new", method = RequestMethod.POST)
     public Long noticeFormSubmit(@CurrentUser Account account,
-                                 @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                 @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                  @RequestParam(value = "contact_title", required = false) String contact_title,
                                  @RequestParam(value = "contact_content", required = false) String contact_content) {
         Inquire newInquire = infoPageService.saveNewInquire(
@@ -181,12 +181,29 @@ public class InfoPageController {
         return "info/info-contact-detail";
     }
 
-    @GetMapping("/info/contact/lists")
-    public String inquireList(@CurrentUser Account account, Model model) {
+    @GetMapping("/info/contact/lists/{type}")
+    public String inquireList(@CurrentUser Account account, Model model, @PathVariable String type) {
+
+        switch (type) {
+            case "waiting" :
+                List<Inquire> isAnsweredFalse = inquireRepository.findByIsAnsweredOrderByUploadTimeDesc(false);
+                model.addAttribute("inquires", isAnsweredFalse);
+                break;
+            case "replied" :
+                List<Inquire> isAnsweredTrue = inquireRepository.findByIsAnsweredOrderByUploadTimeDesc(true);
+                model.addAttribute("inquires", isAnsweredTrue);
+                break;
+        }
 
         model.addAttribute("account", account);
 
-        return "info/info-contact";
+        return "info/info-contact-lists";
+    }
+
+    @PostMapping("/manager/contact/detail/{id}/answered")
+    public String inquireAnswer(@CurrentUser Account account, Model model, @PathVariable Long id) {
+
+        return "";
     }
 
     @ResponseBody
