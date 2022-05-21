@@ -175,8 +175,8 @@ public class InfoPageController {
                               Model model) {
 
         Optional<Inquire> inquire = inquireRepository.findById(inquireId);
-        if (!inquire.get().getAccount().getNickname().equals(account.getNickname())) {
-            return "info/info-contact";
+        if (!inquire.get().getAccount().getNickname().equals(account.getNickname()) && !account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
+            return "redirect:/info/contact";
         }
 
         Optional<InquireAnswer> currentAnswer = inquireAnswerRepository.findByInquire(inquire.get());
