@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/email-login", "/check-email-login", "/login-link", "/email-login-view").permitAll()
                 .antMatchers("/study/*", "/board/*", "/council/*", "/", "/logout").authenticated()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
-                .antMatchers("/manager/*").hasAnyRole("ADMIN");
+                .antMatchers("/manager/*").hasAnyRole("ADMIN")
+                .anyRequest().authenticated();
         /*
         * 기존 formLogin 로직
         http.formLogin()
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         */
         http.logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/");
 
         // 인증 필요시 로그인 페이지와 로그인 성공시 리다이랙팅 경로 지정
         http.formLogin().loginPage("/login").defaultSuccessUrl("/", true);
