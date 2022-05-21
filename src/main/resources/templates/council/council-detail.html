@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="theme-fragments.html :: head"></head>
 <style>
     .updateSubmit{
@@ -186,7 +187,7 @@
                             </div>
                             <div class="card p-4">
                                 <div class="">
-                                    <th:block th:if="${account.studentId=='11-111111'}">
+                                    <th:block sec:authorize="hasRole('ADMIN') || hasRole('COUNCIL')">
                                         <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-9 lg:px-5 px-2 rounded-md bg-blue-600 text-white space-x-1.5">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5">
                                                 <path fill-rule="evenodd"
@@ -454,7 +455,7 @@
                                         </div>
                                         <hr class="my-4">
                                     </th:block>
-                                </div>
+                                </th:bloc>
                                 <div>
                                     <div class="flex items-center space-x-3 my-1">
                                         <ion-icon name="people" class="bg-gray-100 p-1.5 rounded-full text-xl"></ion-icon>
