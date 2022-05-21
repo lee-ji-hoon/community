@@ -36,7 +36,12 @@
             <ul class="card divide-y divide-gray-100 sm:m-0 -mx-5">
                 <li th:each="inquire : ${inquires}">
                     <div class="flex items-start space-x-5 p-7">
-                        <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-12 h-12 rounded-full">
+                        <img th:if="${#strings.isEmpty(inquire.getAccount()?.profileImage)}"
+                             th:data-id="${inquire.getAccount().studentId}" style="width: 48px; height: 48px;"
+                             alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
+                        <img th:if="${!#strings.isEmpty(inquire.getAccount()?.profileImage)}"
+                             th:src="${inquire.getAccount()?.profileImage}" style="width: 48px; height: 48px;"
+                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
                         <div class="flex-1">
                             <a th:href="@{/info/contact/detail/{id}(id=${inquire.id})}" class="text-lg font-semibold line-clamp-1 mb-1" th:text="${inquire.title}">Title</a>
                             <p class="text-sm text-gray-400 mb-2"> 업로드 날짜 : <span th:text="${account.dateTime(inquire.uploadTime)}"></span> </p>

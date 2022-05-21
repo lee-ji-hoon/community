@@ -36,6 +36,9 @@
                                     <li th:classappend="${type == 'reply'}? active">
                                         <a th:href="@{/manager/reply}" class="lg:px-2"> 댓글 </a>
                                     </li>
+                                    <li th:classappend="${type == 'inquire'}? active">
+                                        <a th:href="@{/manager/inquire}" class="lg:px-2"> 문의 </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
