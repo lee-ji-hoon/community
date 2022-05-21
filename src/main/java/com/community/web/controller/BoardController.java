@@ -44,7 +44,6 @@ public class BoardController {
     private final LikeRepository likeRepository;
     private final ReplyRepository replyRepository;
     private final BookmarkRepository bookmarkRepository;
-    private final S3Repository s3Repository;
 
     private final BoardService boardService;
     private final ReplyService replyService;
@@ -137,29 +136,6 @@ public class BoardController {
 
     /* 게시물 작성 관련 */
 
-    // 게시물 작성 후 detail 페이지로 Post
-    /*@PostMapping("/board/detail")
-    public String detailView(@Valid BoardForm boardForm, Errors errors, Model model,
-                             RedirectAttributes redirectAttributes, @CurrentUser Account account) {
-        boolean emailVerified = account.isEmailVerified();
-
-        log.info("email 체크 : {}", emailVerified);
-        if (!emailVerified) {
-            model.addAttribute(account);
-            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
-
-            return "redirect:/board";
-        }
-
-        if (errors.hasErrors()) {
-            return "board/boards";
-        }
-
-        Board savedBoard = boardService.saveNewBoard(boardForm, account);
-        redirectAttributes.addAttribute("boardId", savedBoard.getBid());
-        return "redirect:/board/detail/{boardId}";
-    }*/
-
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
     public String boardDetail(@PathVariable long boardId, @CurrentUser Account account,
@@ -175,9 +151,6 @@ public class BoardController {
 
         boardService.viewUpdate(boardId, request, response);
         Board currentBoard = boardRepository.findByBid(boardId);
-
-        // 최근에 올라온 게시물
-        List<Board> recentlyBoards = boardRepository.findTop4ByIsReportedOrderByUploadTimeDesc(false);
 
         // 좋아요 및 댓글
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);
@@ -198,49 +171,6 @@ public class BoardController {
 
         return "board/board-detail";
     }
-
-    /*@PostMapping("/board/update/{boardId}")
-    public String boardDetailUpdate(@PathVariable long boardId, @Valid BoardForm boardForm, Errors errors, Model model,
-                                    RedirectAttributes redirectAttributes, @CurrentUser Account account) {
-        boardService.updateBoard(boardId, boardForm);
-        redirectAttributes.addFlashAttribute("isUpdatedMessage", "게시물이 수정되었습니다.");
-
-
-        return "redirect:/board/detail/{boardId}";
-    }*/
-    // 게시글 수정 후 {boardId}로 리다이렉트
-    /*@ResponseBody
-    @RequestMapping(value = "/board/detail/update")
-    public String boardUpdate(BoardForm boardForm, @CurrentUser Account account,
-                              @RequestParam(value = "bid") String bid,
-                              @RequestParam(value = "boardTitle") String boardTitle,
-                              @RequestParam(value = "subBoardTitle") String subBoardTitle,
-                              @RequestParam(value = "title") String title,
-                              @RequestParam(value = "subTitle") String subTitle,
-                              @RequestParam(value = "content") String content) {
-        Long boardId = Long.valueOf(bid);
-        Board board = boardRepository.findByBid(boardId);
-        String message = null;
-        if (account.getId().equals(board.getWriter().getId())) {
-            boardForm.setBoardTitle(boardTitle);
-            boardForm.setSubBoardTitle(subBoardTitle);
-            boardForm.setTitle(title);
-            boardForm.setSubTitle(subTitle);
-            boardForm.setContent(content);
-            boardService.updateBoard(boardId, boardForm);
-            message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isUpdated\">\n" +
-                    "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +
-                    "        <i class=\"icon-feather-x\"></i>\n" +
-                    "    </button>\n" +
-                    "    <h3 class=\"text-lg font-semibold text-white\">알림</h3>\n" +
-                    "    <p class=\"text-white text-opacity-75\">게시물이 수정되었습니다.</p>\n" +
-                    "</div>";
-            return message;
-        }
-        log.info("잘못된 게시물 수정 요청 : bid = " + boardId + " accountId = " + account.getId());
-        message = "잘못된 요청입니다.";
-        return message;
-    }*/
 
     @ResponseBody
     @RequestMapping(value = "/board/{id}/update", method = RequestMethod.POST)

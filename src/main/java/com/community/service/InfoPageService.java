@@ -1,7 +1,6 @@
 package com.community.service;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Board;
 import com.community.domain.inquire.Inquire;
 import com.community.domain.inquire.InquireRepository;
 import com.community.domain.notice.Notice;

@@ -6,7 +6,6 @@ import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
 import com.community.domain.chat.Room;
 import com.community.domain.chat.RoomRepository;
-import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.web.dto.ChatForm;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,6 @@ import java.util.*;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final AccountRepository accountRepository;
-    private final MarketRepository marketRepository;
     private final RoomRepository roomRepository;
 
     public void saveNewRoom(ChatForm chatForm, Account roomHost, Account roomAttender, Account currentUser) {
@@ -89,6 +86,7 @@ public class ChatService {
         }
     }
 
+    // view에서 사용
     public int unReadCount(Room myRoom) {
         int cnt;
         List<Chat> findReadChkFalse = chatRepository.findByRoomAndReadChk(myRoom, false);
@@ -96,6 +94,7 @@ public class ChatService {
         return cnt;
     }
 
+    // view에서 사용
     public Map<String, Chat> dateCheckFunction(Room myRoom) {
         // Map<Chat, LocalDateTime>
         Map<Long, String> dateMap = new HashMap<>();

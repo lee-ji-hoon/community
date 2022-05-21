@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,8 +113,7 @@ public class ChatController {
     @RequestMapping(value = "/chat/new")
     public String sendChat(@RequestParam(value = "c_attender") Long c_attender,
                            @RequestParam(value = "c_content") String c_content,
-                           ChatForm chatForm, @CurrentUser Account account,
-                           RedirectAttributes redirectAttributes, Model model) throws IOException {
+                           ChatForm chatForm, @CurrentUser Account account) throws IOException {
 
         Optional<Account> roomAttender = accountRepository.findById(c_attender);
         Optional<Account> roomHost = accountRepository.findById(account.getId());
