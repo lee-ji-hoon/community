@@ -28,15 +28,11 @@ public class InquireAnswer {
     @JoinColumn(name = "inquire_id")
     private Inquire inquire;
 
-    private String answerTitle;
-
     @Lob
     @Type(type = "text")
     @Basic(fetch = FetchType.EAGER)
     private String answerContent;
 
-    private LocalDateTime uploadTime;
+    private LocalDateTime answerTime;
 
-    @OneToMany(mappedBy = "inquire", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<S3> imageList = new ArrayList<>();
 }
