@@ -6,12 +6,10 @@ import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
-import com.community.domain.report.ReplyReport;
 import com.community.domain.report.ReplyReportRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
-import com.community.web.dto.ReplyForm;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.ReplyRepository;
 import com.community.service.ReplyService;
@@ -22,13 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -111,7 +106,7 @@ public class ReplyController {
                     "</div>";
             return r_del_message;
         }
-        if (findReply.getAccount().getNickname().equals(account.getNickname()) || account.getAccountType().equals(AccountType.ADMIN)) {
+        if (findReply.getAccount().getNickname().equals(account.getNickname()) || account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
             log.info("신고되지 않은 댓글");
             r_del_message = "<div class=\"bg-blue-500 border p-4 relative rounded-md\" uk-alert id=\"isDeleted\">\n" +
                     "    <button class=\"uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0\">\n" +

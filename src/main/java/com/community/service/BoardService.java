@@ -194,6 +194,13 @@ public class BoardService {
         return errorBoard;
     }
 
+    public void boardReportReset(Board board) {
+        board.setReportCount(0);
+        board.setIsReported(false);
+
+        boardRepository.save(board);
+    }
+
     public List<Board> top5BoardLists() {
         List<Board> findView = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
         List<Board> findLike = boardRepository.findTop5ByIsReportedOrderByLikesListDesc(false);

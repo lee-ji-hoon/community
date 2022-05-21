@@ -3,7 +3,6 @@ package com.community.web.controller;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
-import com.community.domain.board.Board;
 import com.community.domain.inquire.Inquire;
 import com.community.domain.inquire.InquireRepository;
 import com.community.domain.notice.Notice;
@@ -135,7 +134,7 @@ public class InfoPageController {
     public String boardDelete(@PathVariable long noticeId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         Optional<Notice> currentNotice = noticeRepository.findById(noticeId);
         Notice notice = currentNotice.get();
-        if (!account.getAccountType().equals(AccountType.ADMIN)) {
+        if (!account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
             redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
             return "redirect:/info/notice/detail/{noticeId}";
         }

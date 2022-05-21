@@ -3,15 +3,16 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.account.AccountType;
 import com.community.infra.config.AppProperties;
+import com.community.infra.config.SecurityUser;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
 import com.community.domain.account.UserAccount;
 import com.community.infra.mail.EmailMessage;
 import com.community.infra.mail.EmailService;
-import com.community.web.dto.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +43,7 @@ public class AccountService implements UserDetailsService {
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
-        newAccount.setAccountType(AccountType.USER);
+        newAccount.setAccountType(AccountType.ROLE_USER);
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
@@ -106,7 +107,8 @@ public class AccountService implements UserDetailsService {
     // 로그인
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
+                //new UserAccount(account),
+                new SecurityUser(account),
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
@@ -121,13 +123,15 @@ public class AccountService implements UserDetailsService {
     // 이메일 로그인
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
+        log.info("UserDetail : mainOrNickname ={}", emailOrNickname);
+
         Account account = accountRepository.findByEmail(emailOrNickname);
 
         if (account == null) {
             throw new UsernameNotFoundException(emailOrNickname);
         }
-
-        return new UserAccount(account);
+        //return new UserAccount(account);
+        return new SecurityUser(account);
     }
 
     public Account getAccount(String nickname) {

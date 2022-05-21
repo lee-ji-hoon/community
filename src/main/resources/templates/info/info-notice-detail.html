@@ -61,7 +61,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <h1 class="lg:text-3xl text-2xl font-semibold mb-2" th:text="${notice.noticeTitle}">제목</h1>
                                         <!-- ADMIN 만 뜨는 수정폼 -->
-                                        <th:block th:if="${account.accountType.equals(account.accountType.ADMIN)}">
+                                        <th:block th:if="${account.getAccountType.equals(account.getAccountType.ROLE_ADMIN)}">
                                             <div>
                                                 <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
                                                    data-tippy-placement="right" title="공지글 수정하기">
