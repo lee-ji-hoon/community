@@ -1,12 +1,10 @@
 package com.community.service;
 
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.chat.Chat;
 import com.community.domain.chat.ChatRepository;
 import com.community.domain.chat.Room;
 import com.community.domain.chat.RoomRepository;
-import com.community.domain.market.MarketRepository;
 import com.community.web.dto.ChatForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
