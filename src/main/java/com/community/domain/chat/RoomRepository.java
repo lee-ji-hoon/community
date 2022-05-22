@@ -13,8 +13,12 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByRoomHostOrderByLastSendTimeDesc(Account account);
     List<Room> findByRoomAttenderOrderByLastSendTimeDesc(Account account);
 
+    List<Room> findByRoomHostOrRoomAttenderOrderByLastSendTimeDesc(Account account1, Account account2);
+
     List<Room> findTop2ByRoomHostOrderByLastSendTimeDesc(Account account);
     List<Room> findTop2ByRoomAttenderOrderByLastSendTimeDesc(Account account);
+
+    List<Room> findTop4ByRoomAttenderOrRoomAttenderOrderByLastSendTimeDesc(Account account1, Account account2);
 
     Room findByRoomId(Long roomId);
 

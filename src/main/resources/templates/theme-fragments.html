@@ -2956,11 +2956,6 @@
         formData.append("contact_title", $('#contact_title').val());
         formData.append("contact_content", $('#contact_content').val());
 
-        if (content_files.length === 0 && $('#imageName').val() == null) {
-            alert('이미지는 최소 1개 이상 업로드해야 합니다.');
-            return;
-        }
-
         for (let x = 0; x < content_files.length; x++) {
             // 삭제 안한것만 담아 준다.
             if (!content_files[x].is_delete) {

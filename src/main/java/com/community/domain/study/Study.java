@@ -1,9 +1,9 @@
 package com.community.domain.study;
 
-import com.community.domain.account.UserAccount;
 import com.community.domain.account.Account;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.tag.Tag;
+import com.community.infra.config.SecurityUser;
 import lombok.*;
 
 import javax.persistence.*;
@@ -118,17 +118,17 @@ public class Study {
         this.blockMembers.add(account);
     }
 
-    public boolean isJoinable(UserAccount userAccount) {
+    public boolean isJoinable(SecurityUser userAccount) {
         Account account = userAccount.getAccount();
         return this.recruiting() && !this.members.contains(account) && !this.managers.contains(account);
 
     }
 
-    public boolean isMember(UserAccount userAccount) {
+    public boolean isMember(SecurityUser userAccount) {
         return this.members.contains(userAccount.getAccount());
     }
 
-    public boolean isManager(UserAccount userAccount) {
+    public boolean isManager(SecurityUser userAccount) {
         return this.managers.contains(userAccount.getAccount());
     }
 

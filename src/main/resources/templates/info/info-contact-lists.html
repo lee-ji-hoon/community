@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="theme-fragments.html :: head"></head>
+<body>
+
+<div id="wrapper">
+
+    <!-- Header -->
+    <header th:replace="theme-fragments.html :: header"></header>
+
+    <!-- sidebar -->
+    <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='contact')"></div>
+
+    <!-- Main Contents -->
+    <div class="main_content">
+        <div class="mcontainer">
+            <div th:replace="theme-fragments.html :: checked-email"></div>
+
+            <div class="flex justify-between relative md:mb-4 mb-3">
+                <div class="flex-1">
+                    <h2 class="text-2xl font-semibold"> 문의사항 </h2>
+                    <nav class="responsive-nav md:m-0 -mx-4">
+                        <ul>
+                            <li th:classappend="${type == 'waiting'}? active">
+                                <a th:href="@{/info/contact/lists/waiting}" class="lg:px-2"> 답변 대기 </a>
+                            </li>
+                            <li th:classappend="${type == 'replied'}? active">
+                                <a th:href="@{/info/contact/lists/replied}" class="lg:px-2"> 답변 완료 </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <ul class="card divide-y divide-gray-100 sm:m-0 -mx-5">
+                <li th:each="inquire : ${inquires}">
+                    <div class="flex items-start space-x-5 p-7">
+                        <img th:if="${#strings.isEmpty(inquire.getAccount()?.profileImage)}"
+                             th:data-id="${inquire.getAccount().studentId}" style="width: 48px; height: 48px;"
+                             alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
+                        <img th:if="${!#strings.isEmpty(inquire.getAccount()?.profileImage)}"
+                             th:src="${inquire.getAccount()?.profileImage}" style="width: 48px; height: 48px;"
+                             alt="" class="rounded-full shadow w-12 h-12 is_avatar"/>
+                        <div class="flex-1">
+                            <a th:href="@{/info/contact/detail/{id}(id=${inquire.id})}" class="text-lg font-semibold line-clamp-1 mb-1" th:text="${inquire.title}">Title</a>
+                            <p class="text-sm text-gray-400 mb-2"> 업로드 날짜 : <span th:text="${account.dateTime(inquire.uploadTime)}"></span> </p>
+                            <p class="leading-6 line-clamp-2 mt-3" th:text="${inquire.content}"></p>
+                        </div>
+                        <div class="sm:flex items-center space-x-4 hidden">
+                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"></path><path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"></path></svg>
+                            <span class="text-xl" th:if="${inquire.isAnswered ? '1' : '0'}"> 0 </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

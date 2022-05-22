@@ -4,12 +4,15 @@ import com.community.domain.account.Account;
 import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.inquire.Inquire;
+import com.community.domain.inquire.InquireAnswer;
+import com.community.domain.inquire.InquireAnswerRepository;
 import com.community.domain.inquire.InquireRepository;
 import com.community.domain.notice.Notice;
 import com.community.domain.notice.NoticeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.service.InfoPageService;
+import com.community.web.dto.InquireAnswerForm;
 import com.community.web.dto.ReplyForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +39,7 @@ public class InfoPageController {
 
     private final InfoPageService infoPageService;
     private final InquireRepository inquireRepository;
+    private final InquireAnswerRepository inquireAnswerRepository;
     private final NoticeRepository noticeRepository;
     private final S3Repository s3Repository;
 
@@ -155,7 +159,7 @@ public class InfoPageController {
     @ResponseBody
     @RequestMapping(value = "/inquire-new", method = RequestMethod.POST)
     public Long noticeFormSubmit(@CurrentUser Account account,
-                                 @RequestParam(value = "article_file") List<MultipartFile> multipartFile,
+                                 @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
                                  @RequestParam(value = "contact_title", required = false) String contact_title,
                                  @RequestParam(value = "contact_content", required = false) String contact_content) {
         Inquire newInquire = infoPageService.saveNewInquire(
@@ -171,22 +175,44 @@ public class InfoPageController {
                               Model model) {
 
         Optional<Inquire> inquire = inquireRepository.findById(inquireId);
-        if (!inquire.get().getAccount().getNickname().equals(account.getNickname())) {
-            return "info/info-contact";
+        if (!inquire.get().getAccount().getNickname().equals(account.getNickname()) && !account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
+            return "redirect:/info/contact";
         }
+
+        Optional<InquireAnswer> currentAnswer = inquireAnswerRepository.findByInquire(inquire.get());
 
         model.addAttribute("account", account);
         model.addAttribute("inquire", inquire.get());
+        model.addAttribute("answer", currentAnswer);
+        model.addAttribute(new InquireAnswerForm());
 
         return "info/info-contact-detail";
     }
 
-    @GetMapping("/info/contact/lists")
-    public String inquireList(@CurrentUser Account account, Model model) {
+    @GetMapping("/info/contact/lists/{type}")
+    public String inquireList(@CurrentUser Account account, Model model, @PathVariable String type) {
+
+        switch (type) {
+            case "waiting" :
+                List<Inquire> isAnsweredFalse = inquireRepository.findByIsAnsweredAndAccountOrderByUploadTimeDesc(false, account);
+                model.addAttribute("inquires", isAnsweredFalse);
+                break;
+            case "replied" :
+                List<Inquire> isAnsweredTrue = inquireRepository.findByIsAnsweredAndAccountOrderByUploadTimeDesc(true, account);
+                model.addAttribute("inquires", isAnsweredTrue);
+                break;
+        }
 
         model.addAttribute("account", account);
 
-        return "info/info-contact";
+        return "info/info-contact-lists";
+    }
+
+    @PostMapping("/manager/contact/detail/{id}/answered")
+    public String inquireAnswer(@CurrentUser Account account, @PathVariable Long id, InquireAnswerForm inquireAnswerForm) {
+        Optional<Inquire> currentInquire = inquireRepository.findById(id);
+        infoPageService.inquireAnswerUpdate(currentInquire.get(), account, inquireAnswerForm);
+        return "redirect:/info/contact/detail/{id}";
     }
 
     @ResponseBody

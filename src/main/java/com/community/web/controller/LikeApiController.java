@@ -1,27 +1,21 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
 import com.community.infra.alarm.LikeCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardRepository;
-import com.community.domain.likes.LikeRepository;
 import com.community.domain.likes.Likes;
 import com.community.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,9 +23,7 @@ import java.util.Optional;
 public class LikeApiController {
     private final LikeService likeService;
 
-    private final LikeRepository likeRepository;
     private final BoardRepository boardRepository;
-    private final AccountRepository accountRepository;
     private final CouncilRepository councilRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 

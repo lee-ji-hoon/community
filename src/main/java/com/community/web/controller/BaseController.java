@@ -49,23 +49,15 @@ public class BaseController {
         log.info("chat account : {}", account);
         if(account != null){
             // 현재 계정이 참여중인 Room을 찾는 로직
-            List<Room> findMyRooms = new ArrayList<>();
-            List<Room> roomHostByAccount = roomRepository.findByRoomHostOrderByLastSendTimeDesc(account);
-            List<Room> roomAttenderByAccount = roomRepository.findByRoomAttenderOrderByLastSendTimeDesc(account);
+            List<Room> roomHostOrAttender = roomRepository.findByRoomHostOrRoomAttenderOrderByLastSendTimeDesc(account, account);
 
             // 채팅 알람에 띄워질 채팅방
-            List<Room> findTop4MyRooms = new ArrayList<>();
-            List<Room> roomHostTop2ByAccount = roomRepository.findTop2ByRoomHostOrderByLastSendTimeDesc(account);
-            List<Room> roomAttenderTop2ByAccount = roomRepository.findTop2ByRoomAttenderOrderByLastSendTimeDesc(account);
-            findTop4MyRooms.addAll(roomHostTop2ByAccount);
-            findTop4MyRooms.addAll(roomAttenderTop2ByAccount);
+            List<Room> roomHostOrAttenderTop4 = roomRepository.findTop4ByRoomAttenderOrRoomAttenderOrderByLastSendTimeDesc(account, account);
 
             // 해당 Room의 ChatList를 가져오는 로직
             List<Chat> chatNotifyLists = new ArrayList<>();
-            findMyRooms.addAll(roomAttenderByAccount);
-            findMyRooms.addAll(roomHostByAccount);
 
-            for (Room findMyRoom : findMyRooms) {
+            for (Room findMyRoom : roomHostOrAttender) {
                 List<Chat> readChkFalseChat = chatRepository.findByRoomAndReadChk(findMyRoom, false);
                 for (Chat chat : readChkFalseChat) {
                     if (!account.getNickname().equals(chat.getSender().getNickname())) {
@@ -76,7 +68,7 @@ public class BaseController {
 
             model.addAttribute("g_chatNotify", chatNotifyLists);
             model.addAttribute("g_chatService", chatService);
-            model.addAttribute("g_myRoom", findTop4MyRooms);
+            model.addAttribute("g_myRoom", roomHostOrAttenderTop4);
         }
     }
 
