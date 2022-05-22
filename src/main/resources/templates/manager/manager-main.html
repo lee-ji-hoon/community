@@ -36,6 +36,9 @@
                                     <li th:classappend="${type == 'reply'}? active">
                                         <a th:href="@{/manager/reply}" class="lg:px-2"> 댓글 </a>
                                     </li>
+                                    <li th:classappend="${type == 'inquire'}? active">
+                                        <a th:href="@{/manager/inquire}" class="lg:px-2"> 문의 </a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
@@ -176,6 +179,58 @@
                                                 </a>
                                             </li>
                                             <li th:if="${end < replyReportedLists.totalPages}">
+                                                <a th:href="@{'/board/' + ${type} + '/' (page=${start + 4})}">
+                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </th:block>
+                        <th:block th:if="${type == 'inquire'}">
+                            <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="inquire : ${inquireAnswerLists}">
+                                <div class="lg:flex lg:space-x-6 py-3">
+                                    <div class="flex-1 lg:pt-0">
+                                        <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500">문의</div>
+                                        <a th:href="@{/info/contact/detail/{inquireId}(inquireId = ${inquire.id})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${inquire.content}"></a>
+                                        <div class="flex items-center pt-2">
+                                            <div class="flex items-center">
+                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                                <a class="text-xs" th:text="${account.dateTime(inquire.uploadTime)}"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div th:if="${inquireAnswerLists.totalPages != 0}" class="justify-center flex">
+                                    <nav aria-label="Page navigation"
+                                         th:with="start=${(inquireAnswerLists.number/5)*5 + 1},
+                                         end=(${(inquireAnswerLists.totalPages == 0) ? 1 : (start + 4 < inquireAnswerLists.totalPages ? start + 4 : inquireAnswerLists.totalPages)})">
+                                        <ul class="inline-flex space-x-2">
+                                            <li th:if="${start > 1}">
+                                                <a th:href="@{'/board/' + ${type} + '/' (page=${start - 2})}">
+                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                            <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                        </svg>
+                                                    </button>
+                                                </a>
+                                            </li>
+                                            <li th:each="page : ${#numbers.sequence(start, end)}">
+                                                <a th:href="@{'/board/' + ${type} + '/' (page=${page - 1})}">
+                                                    <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                            class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                            th:text="${page}">
+                                                    </button>
+                                                </a>
+                                            </li>
+                                            <li th:if="${end < inquireAnswerLists.totalPages}">
                                                 <a th:href="@{'/board/' + ${type} + '/' (page=${start + 4})}">
                                                     <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
                                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
