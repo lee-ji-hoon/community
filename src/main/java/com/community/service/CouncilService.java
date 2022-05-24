@@ -1,18 +1,13 @@
 package com.community.service;
 
-import com.community.domain.graduation.Graduation;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
-import com.community.web.dto.CouncilForm;
 import com.community.domain.account.Account;
 import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;

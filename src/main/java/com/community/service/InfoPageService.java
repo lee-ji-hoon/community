@@ -1,14 +1,16 @@
 package com.community.service;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Board;
 import com.community.domain.inquire.Inquire;
+import com.community.domain.inquire.InquireAnswer;
+import com.community.domain.inquire.InquireAnswerRepository;
 import com.community.domain.inquire.InquireRepository;
 import com.community.domain.notice.Notice;
 import com.community.domain.notice.NoticeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
+import com.community.web.dto.InquireAnswerForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class InfoPageService {
 
     private final S3Repository s3Repository;
     private final InquireRepository inquireRepository;
+    private final InquireAnswerRepository inquireAnswerRepository;
     private final NoticeRepository noticeRepository;
     private final S3Service s3Service;
 
@@ -126,10 +129,24 @@ public class InfoPageService {
         }
     }
 
+    public void inquireAnswerUpdate(Inquire inquire, Account account, InquireAnswerForm inquireAnswerForm) {
+        InquireAnswer inquireAnswer = InquireAnswer.builder()
+                .inquire(inquire)
+                .account(account)
+                .answerTime(LocalDateTime.now())
+                .answerContent(inquireAnswerForm.getContent())
+                .build();
+        inquireAnswerRepository.save(inquireAnswer);
+        inquire.setIsAnswered(true);
+        inquire.setAnswerTime(LocalDateTime.now());
+        inquireRepository.save(inquire);
+    }
+
     /* 문의사항 끝 */
 
     public void deleteImage(S3 s3) {
         s3Repository.delete(s3);
         s3Service.deleteFile(s3.getImageName());
     }
+
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="theme-fragments.html :: head"></head>
 <style>
     #utextDiv{
@@ -61,7 +62,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <h1 class="lg:text-3xl text-2xl font-semibold mb-2" th:text="${notice.noticeTitle}">제목</h1>
                                         <!-- ADMIN 만 뜨는 수정폼 -->
-                                        <th:block th:if="${account.getAccountType.equals(account.getAccountType.ROLE_ADMIN)}">
+                                        <th:block sec:authorize="hasRole('ADMIN')">
                                             <div>
                                                 <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-10 w-10 z-10 rounded-full bg-blue-600 text-white absolute"
                                                    data-tippy-placement="right" title="공지글 수정하기">
@@ -145,7 +146,7 @@
                                     </div>
                                 </div>
                                 <th:block th:if="${notice.getImageList().size() != 0}">
-                                    <div class="uk-container my-4" uk-slider>
+                                    <div class="uk-container mt-4" uk-slider>
                                         <div class="uk-position-relative uk-visible-toggle uk-light">
                                             <div class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m">
                                                 <div th:each="image : ${notice.getImageList()}">
@@ -162,7 +163,7 @@
                                     <hr class="pb-2">
                                 </th:block>
                                 <div id="blk_div">
-                                    <div class="space-y-3 content" id="utextDiv" th:utext="${notice.noticeContent}"></div>
+                                    <div class="space-y-3 content mt-4" id="utextDiv" th:utext="${notice.noticeContent}"></div>
                                 </div>
                             </div>
                         </div>

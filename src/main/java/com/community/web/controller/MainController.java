@@ -2,7 +2,6 @@ package com.community.web.controller;
 
 import com.community.domain.account.Account;
 import com.community.domain.account.CurrentUser;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
 import com.community.domain.board.BoardRepository;
@@ -12,7 +11,6 @@ import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
-import com.community.service.CouncilService;
 import com.community.service.LikeService;
 import com.community.domain.study.Study;
 import com.community.web.dto.LoginRequest;
@@ -35,12 +33,10 @@ public class MainController {
     private final CouncilRepository councilRepository;
     private final ReplyRepository replyRepository;
     private final StudyRepository studyRepository;
-    private final AccountRepository accountRepository;
 
     private final ReplyService replyService;
     private final BoardService boardService;
     private final LikeService likeService;
-    private final CouncilService councilService;
 
 
     @GetMapping("/")

@@ -1,12 +1,10 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.account.AccountRepository;
 import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
-import com.community.domain.report.ReplyReportRepository;
 import com.community.infra.alarm.ReplyCreatePublish;
 import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
@@ -31,12 +29,10 @@ import java.nio.charset.StandardCharsets;
 public class ReplyController {
 
     private final BoardRepository boardRepository;
-    private final AccountRepository accountRepository;
     private final ReplyRepository replyRepository;
     private final MarketRepository marketRepository;
     private final CouncilRepository councilRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final ReplyReportRepository replyReportRepository;
 
     private final ReplyService replyService;
 

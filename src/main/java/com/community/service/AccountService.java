@@ -6,7 +6,6 @@ import com.community.infra.config.AppProperties;
 import com.community.infra.config.SecurityUser;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
-import com.community.domain.account.UserAccount;
 import com.community.infra.mail.EmailMessage;
 import com.community.infra.mail.EmailService;
 import lombok.RequiredArgsConstructor;

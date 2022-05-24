@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="theme-fragments.html :: head"></head>
 <body>
    
@@ -21,7 +22,7 @@
             <div class="bg-gradient-to-tr flex from-blue-400 h-52 items-center justify-center lg:h-80 pb-10 relative to-blue-300 via-blue-400 w-full">
 
                 <div class="text-center max-w-xl mx-auto z-10 relative px-5">
-                    <div class="lg:text-4xl text-2xl text-white font-semibold mb-3"><a th:text="${account.nickname}"></a>님의 문의사항입니다.</div>
+                    <div class="lg:text-4xl text-2xl text-white font-semibold mb-3"><a th:text="${inquire.getAccount().nickname}"></a>님의 문의사항입니다.</div>
                     <th:block th:if="${!inquire.isAnswered}">
                         <div class="text-white text-lg font-medium text-opacity-90"> 아직 답변이 달리지 않았습니다.</div>
                     </th:block>
@@ -34,36 +35,58 @@
             <div class="mcontainer">
  
                 <div class="-mt-16 bg-white max-w-2xl mx-auto p-10 relative rounded-md shadow">
-                    <form id="contact_form" onsubmit="return false" method="post" novalidate enctype="multipart/form-data">
-                        <div class="grid md:grid-cols-2 md:gap-y-7 md:gap-x-6 gap-6">
-                            <p id="contact_title" name="contact_title" class="with-border md:col-span-2" th:text="${inquire.title}">
-                            <p id="contact_content" name="contact_content" class="with-border md:col-span-2 p-5 px-7 resize-none h-72" th:text="${inquire.content}"></p>
-                            <th:block th:if="${inquire.getImageList().size() != 0}">
-                                <div id="imageRefreshForm" class="imageRefreshForm mb-4">
-                                    <div class="uk-container" uk-slider="center: true">
-                                        <div class="uk-position-relative uk-visible-toggle uk-light">
-                                            <div class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m" uk-lightbox>
-                                                <div th:each="image : ${inquire.getImageList()}">
-                                                    <a th:href="${image.getImagePath()}">
-                                                        <img th:src="${image.getImagePath()}" alt="">
-                                                    </a>
-                                                </div>
+                    <div class="grid md:grid-cols-2 md:gap-y-7 md:gap-x-6 gap-6">
+                        <input id="contact_title" name="contact_title" class="with-border md:col-span-2 pl-4" disabled th:value="${inquire.title}">
+                        <textarea disabled id="contact_content" name="contact_content" class="with-border md:col-span-2 p-4 resize-none h-36" th:text="${inquire.content}"></textarea>
+                        <th:block th:if="${inquire.getImageList().size() != 0}">
+                            <div id="imageRefreshForm" class="imageRefreshForm mb-4">
+                                <div class="uk-container mt-4 imageRefreshForm" uk-slider>
+                                    <div class="uk-position-relative uk-visible-toggle uk-light">
+                                        <div class="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m">
+                                            <div th:each="image : ${inquire.getImageList()}">
+                                                <a th:href="${image.getImagePath()}" data-fancybox="gallery">
+                                                    <img class="rounded" style="width: 200px; height: 150px;"
+                                                         th:src="${image.getImagePath()}"/>
+                                                </a>
                                             </div>
-                                            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
-                                            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
                                         </div>
+                                        <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                                        <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
                                     </div>
                                 </div>
-                                <hr class="pb-2">
-                            </th:block>
-                            <div class="md:col-span-2 md:flex items-center justify-between">
-                                <div></div>
-                                <button class="button bg-blue-700 w-full md:w-auto md:mt-0 mt-4" type="submit" onclick="registerAction()"> 전송 </button>
                             </div>
+                        </th:block>
+                    </div>
+                    <hr class="my-4">
+                    <div class="grid md:grid-cols-1 md:gap-y-7">
+                        <div sec:authorize="hasRole('USER') || hasRole('COUNCIL')">
+                            <th:block th:if="${inquire.isAnswered}">
+                                <textarea disabled class="with-border md:col-span-2 p-4 resize-none h-36" th:text="${answer.get().answerContent}"></textarea>
+                            </th:block>
+                            <th:block th:if="${!inquire.isAnswered}">
+                                <textarea disabled name="contact_content" class="with-border md:col-span-2 p-4 resize-none h-36">관리자가 답변을 준비하고 있습니다.</textarea>
+                            </th:block>
                         </div>
-                    </form>
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <th:block th:if="${inquire.isAnswered}">
+                                <textarea disabled class="with-border md:col-span-2 p-4 resize-none h-36" th:text="${answer.get().answerContent}">답변 내용</textarea>
+                            </th:block>
+                            <th:block th:if="${!inquire.isAnswered}">
+                                <form method="post" th:action="@{/manager/contact/detail/{id}/answered(id=${inquire.id})}" th:object="${inquireAnswerForm}">
+                                    <textarea id="contact_answer" th:field="*{content}" class="with-border md:col-span-2 p-4 resize-none h-36">답변 내용</textarea>
+                                    <br>
+                                    <button type="submit" class="button bg-blue-700 w-full md:w-auto md:mt-0 mt-4"> 답변 작성 </button>
+                                </form>
+                            </th:block>
+                        </div>
+                        <div class="md:col-span-2 md:flex items-center justify-between">
+                            <a th:href="@{/info/contact/lists/waiting}">
+                                <button type="button" class="button bg-blue-700 w-full md:w-auto md:mt-0 mt-4"> 목록으로 </button>
+                            </a>
+                            <div></div>
+                        </div>
+                    </div>
                 </div>
-        
             </div>
         </div>
     </div>
