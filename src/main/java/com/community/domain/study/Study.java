@@ -55,13 +55,13 @@ public class Study {
     @Column(name = "study_id")
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Account> managers = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Account> members = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Account> blockMembers = new HashSet<>();
 
     @Column(unique = true)
@@ -72,7 +72,6 @@ public class Study {
     private String shortDescription;
 
     @Lob
-    @Basic(fetch = FetchType.EAGER)
     private String fullDescription;
 
     private String managerEmail;
