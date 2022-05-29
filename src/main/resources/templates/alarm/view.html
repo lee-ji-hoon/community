@@ -45,7 +45,7 @@
                             <ul uk-switcher="connect: #timeline-tab; animation: uk-animation-fade">
                                 <li>
                                     <div class="form_refresh_study">
-                                        <a href="#" class="hover:bg-gray-100">스터디 <span th:text="${newMeetingAlarms.size() + newStudyAlarms.size()}"></span></a>
+                                        <a href="#" class="hover:bg-gray-100">동아리 <span th:text="${newMeetingAlarms.size() + newStudyAlarms.size()}"></span></a>
                                     </div>
                                 </li>
                                 <li>
@@ -71,9 +71,9 @@
                     <div class="lg:w-2/3">
 
                         <div class="uk-switcher lg:mt-8 mt-4" id="timeline-tab">
-                            <!-- 스터디 -->
+                            <!-- 동아리 -->
                             <div>
-                                <h5 class="px-5 font-bold" th:text="'스터디 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 스터디 알림</h5>
+                                <h5 class="px-5 font-bold" th:text="'동아리 생성 알림 ('+ ${newStudyAlarms.size()}+')'">새로운 동아리 알림</h5>
                                 <div th:replace="theme-fragments :: alarm-list(type=${newStudyAlarms})"></div>
                                 <h5 class="px-5 font-bold" th:text="'모임 생성 알림 ('+ ${newMeetingAlarms.size()}+')'">새로운 모임 알림</h5>
                                 <div th:replace="theme-fragments :: alarm-list(type=${newMeetingAlarms})"></div>
