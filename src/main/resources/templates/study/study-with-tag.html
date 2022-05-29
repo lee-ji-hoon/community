@@ -19,9 +19,9 @@
                 <div class="lg:w-3/4">
                     <div class="flex justify-between relative md:mb-4 mb-3">
                         <div class="flex-1">
-                            <span class="text-2xl font-semibold">스터디 목록</span>
+                            <span class="text-2xl font-semibold">동아리 목록</span>
                             <nav class="responsive-nav border-b md:m-0 -mx-4">
-                                <span href="#" class="lg" th:text="${tag.title} + '에 해당하는 스터디 조회 결과입니다.'">  </span>
+                                <span href="#" class="lg" th:text="${tag.title} + '에 해당하는 동아리 조회 결과입니다.'">  </span>
                             </nav>
                         </div>
 
@@ -30,7 +30,7 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
                                       clip-rule="evenodd"></path>
                             </svg>
-                            <span class="md:block hidden"> 스터디 추가 </span>
+                            <span class="md:block hidden"> 동아리 추가 </span>
                         </a>
                     </div>
                     <div th:replace="theme-fragments.html :: study-tag-list (tagList = ${studyTagListTitle})"></div>
