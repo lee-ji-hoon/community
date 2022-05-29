@@ -39,7 +39,7 @@ public class StudyEventListener {
 
     @EventListener
     public void studyCreate(StudyCreatedPublish studyCreatedPublish) {
-        log.info("스터디 알람 실행");
+        log.info("동아리 알람 실행");
         log.info("fromAccount : {}", studyCreatedPublish.getFromAccount().getNickname());
 
         Study study = studyRepository.findStudyWithTagsById(studyCreatedPublish.getStudy().getId());
@@ -52,14 +52,14 @@ public class StudyEventListener {
 
         accounts.forEach( toAccount -> {
             if (toAccount.isStudyCreatedByEmail()) {
-                log.info("스터디 이메일 발송 study : {}", study );
-                log.info("스터디 이메일 발송 account : {}", toAccount.getEmail() );
+                log.info("동아리 이메일 발송 study : {}", study );
+                log.info("동아리 이메일 발송 account : {}", toAccount.getEmail() );
                 sendEmail(study, toAccount);
             }
 
             if (toAccount.isStudyCreatedByWeb()) {
-                log.info("스터디 웹 발송 study : {}", study );
-                log.info("스터디 웹 발송 account : {}", toAccount );
+                log.info("동아리 웹 발송 study : {}", study );
+                log.info("동아리 웹 발송 account : {}", toAccount );
                 sendWeb(study, toAccount, fromAccount);
             }
         });
@@ -84,12 +84,12 @@ public class StudyEventListener {
         context.setVariable("link", "/study/" + study.getEncodePath());
         context.setVariable("nickname", account.getNickname());
         context.setVariable("linkName", study.getTitle());
-        context.setVariable("message", "본인 관심에 해당하는 새로운 스터디가 생성됐습니다.");
+        context.setVariable("message", "본인 관심에 해당하는 새로운 동아리가 생성됐습니다.");
         context.setVariable("host", appProperties.getHost());
 
         String process = templateEngine.process("account/study-link", context);
         EmailMessage emailMessage = EmailMessage.builder()
-                .subject("unect의 " + study.getTitle() + "스터디가 생겼습니다.")
+                .subject("unect의 " + study.getTitle() + "동아리가 생겼습니다.")
                 .to(account.getEmail())
                 .message(process)
                 .build();
