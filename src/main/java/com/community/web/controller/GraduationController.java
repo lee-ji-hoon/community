@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.FacesWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -96,7 +97,17 @@ public class GraduationController {
     }
 
     @GetMapping("/graduation-form")
-    public String graduationForm(@CurrentUser Account account, Model model) {
+    public String graduationForm(@CurrentUser Account account, Model model, RedirectAttributes redirectAttributes) {
+        boolean emailVerified = account.isEmailVerified();
+
+        log.info("email 체크 : {}", emailVerified);
+        if (!emailVerified) {
+            model.addAttribute(account);
+            redirectAttributes.addFlashAttribute("emailVerifiedChecked", "이메일 인증 후에 사용 가능합니다.");
+
+            return "redirect:/study";
+        }
+
         int format = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy")));
 
         model.addAttribute(account);
