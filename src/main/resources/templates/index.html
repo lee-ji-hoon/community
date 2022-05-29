@@ -39,7 +39,7 @@
                     <!-- Clips -->
                     <div th:if="${enrollStudy.size + myStudy.size() != 0}">
                         <div class="my-2 flex justify-between pb-3">
-                            <h2 class="text-xl font-semibold"> 내가 참여중인 스터디 ✏️</h2>
+                            <h2 class="text-xl font-semibold"> 내가 참여중인 동아리 ✏️</h2>
                             <a href="#" th:href="@{/study}" class="text-blue-500"> 전체 보기 </a>
                         </div>
                         <div class="-mt-3 card px-5 py-2 mb-7">
@@ -132,7 +132,7 @@
                                 </div>
                                 <hr class="my-4">
                                 <div class="flex-1 relative sm:mt-0 mt-3 mb-3">
-                                    <a class="text-lg font-semibold line-clamp-2"> 오늘 올라온 스터디 </a>
+                                    <a class="text-lg font-semibold line-clamp-2"> 오늘 올라온 동아리 </a>
                                     <div class="mt-1 text-sm font-medium"><a th:text="${s_today}"></a>개 업로드</div>
                                     <div class="mt-3">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700" data-tippy-placement="top">
