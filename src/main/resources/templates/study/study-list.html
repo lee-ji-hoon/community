@@ -23,8 +23,8 @@
                         <div class="flex-1">
                             <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
                                 <div>
-                                    <h2 class="text-2xl font-semibold"> 스터디</h2>
-                                    <p class="font-medium text-gray-500 leading-6"> 다양한 스터디들이 있으니 본인이 원하는 스터디를 찾아보세요. </p>
+                                    <h2 class="text-2xl font-semibold"> 동아리</h2>
+                                    <p class="font-medium text-gray-500 leading-6"> 본인이 원하는 동아리 및 스터디를 만들거나, 원하는 것을 찾아보세요. </p>
                                 </div>
                             </div>
                             <div class="lg:mt-8 mt-4">
@@ -96,23 +96,23 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
                                       clip-rule="evenodd"></path>
                             </svg>
-                            <span class="md:block hidden"> 스터디 추가 </span>
+                            <span class="md:block hidden"> 동아리 추가 </span>
                         </a>
                     </div>
 
                     <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
                         <div>
-                            <h2 class="text-xl font-semibold"> 추천 스터디 </h2>
-                            <p class="font-medium text-gray-500 leading-6"> 본인의 태그와 관련된 추천 스터디 입니다. </p>
+                            <h2 class="text-xl font-semibold"> 추천 동아리, 스터디 </h2>
+                            <p class="font-medium text-gray-500 leading-6"> 본인의 태그와 관련된 추천 동아리와 스터디들 입니다. </p>
                         </div>
                     </div>
-                    <!--추천 중인 스터디-->
+                    <!--추천 중인 동아리-->
                     <div th:replace="theme-fragments.html :: study-list-type-not-contains(studyType=${suggestStudyList})"></div>
 
                     <div class="sm:my-6 my-3 flex items-center justify-between border-b pb-3">
                         <div>
-                            <h2 class="text-xl font-semibold"> 참여중인 스터디 </h2>
-                            <p class="font-medium text-gray-500 leading-6"> 본인이 참여중이거나 관리하는 스터디들을 한 번에 볼 수 있습니다. </p>
+                            <h2 class="text-xl font-semibold"> 참여중인 동아리, 스터디 </h2>
+                            <p class="font-medium text-gray-500 leading-6"> 본인이 참여중이거나 관리하는 동아리와 스터디들을 한 번에 볼 수 있습니다. </p>
                         </div>
                     </div>
 
@@ -124,9 +124,9 @@
                     </nav>
 
                     <div class="uk-switcher" id="timeline-tab">
-                        <!--참여 중 스터디-->
+                        <!--참여 중 동아리-->
                         <div th:replace="theme-fragments.html :: study-list-type(studyType=${enrolledStudyList})"></div>
-                        <!--관리 중 스터디-->
+                        <!--관리 중 동아리-->
                         <div th:replace="theme-fragments.html :: study-list-type(studyType=${myStudyList})"></div>
                     </div>
 
