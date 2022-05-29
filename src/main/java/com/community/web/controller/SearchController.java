@@ -82,7 +82,7 @@ public class SearchController {
                 map.put(String.valueOf(market.getMarketId()), market.getItemName());
             }
         }
-        if (searchForm.getSearchType().equals("스터디")) {
+        if (searchForm.getSearchType().equals("동아리")) {
             List<Study> studyList = new ArrayList<>();
 
             Tag tag = tagRepository.findByTitle(keyword);
