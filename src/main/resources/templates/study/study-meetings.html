@@ -379,10 +379,10 @@
                     <!-- Sidebar -->
                     <div class="w-full space-y-6">
                         <div uk-sticky="media @m ; offset:80 ; bottom : true">
-                            <div class="widget card p-5">
-                                <h4 class="text-lg font-semibold"> 스터디 주요 관심사 </h4>
+                            <div class="widget card p-5" th:if="${study.isManager(account)}">
+                                <h4 class="text-lg font-semibold"> 동아리 주요 관심사 </h4>
                                 <h5 class="text-lg font-semibold" th:if="${study.tags.size() == 0}">
-                                    스터디 주제가 아직 등록되지 않았습니다.
+                                    동아리 주제가 아직 등록되지 않았습니다.
                                 </h5>
 
                                 <ul class="text-gray-600 space-y-3 mt-3" th:if="${study.tags.size() != 0}">
@@ -392,7 +392,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                                <a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="button gray mt-3 w-full"> 스터디 관심사 추가 </a>
+                                <a href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}" class="button gray mt-3 w-full"> 동아리 관심사 추가 </a>
                             </div>
 
                             <div class="widget card p-5 border-t mt-5">
@@ -436,7 +436,6 @@
     </div>
 </div>
 
-<!-- 스터디 참여 인원 -->
 <script th:replace="theme-fragments.html :: studyBanner"></script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
 
@@ -628,7 +627,7 @@
                 ['mybutton', ['hello']],
                 ['insert',['picture','link']],
             ],
-            placeholder: '스터디 모집글을 아래 양식을 참고해 작성해주세요. <br> 꼼꼼히 작성하면 멋진 스터디 팀원을 만나실 수 있을거예요.  <br/> [개발 스터디 모집 내용 예시] <br/> 스터디 주제 : <br/> 스터디 목표 : ' //placeholder 설정
+            placeholder: '스터디, 동아리 모집글을 아래 양식을 참고해 작성해주세요. <br> 꼼꼼히 작성하면 멋진 스터디, 동아리 팀원을 만나실 수 있을거예요.  <br/> [개발 스터디 모집 내용 예시] <br/> 스터디 주제 : <br/> 스터디 목표 : ' //placeholder 설정
 
         });
         let name = [[ ${study.path} ]];
