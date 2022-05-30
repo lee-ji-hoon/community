@@ -178,7 +178,7 @@
                                 </div>
                             </div>
                             <a th:if="${isOwner}"
-                               th:href="@{/settings/tags}" class="button gray mt-3 w-full"> 태그 추가 </a>
+                               th:href="@{/profile/settings/tags}" class="button gray mt-3 w-full"> 태그 추가 </a>
                         </div>
 
                         <div class="widget card p-1">
@@ -186,7 +186,7 @@
                                 class="text-lg font-semibold p-4"></h4>
 
                             <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${myStudyList})"></ul>
-                            <ul th:replace="theme-fragmen리s.html :: profile-open-study-list(studyList = ${enrolledStudyList})"></ul>
+                            <ul th:replace="theme-fragments.html :: profile-open-study-list(studyList = ${enrolledStudyList})"></ul>
                         </div>
                     </div>
                 </div>
