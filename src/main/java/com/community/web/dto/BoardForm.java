@@ -2,14 +2,15 @@ package com.community.web.dto;
 
 import com.community.domain.board.Board;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
-@ToString
+@Getter @Setter
 @NoArgsConstructor
 public class BoardForm {
     @NotBlank
