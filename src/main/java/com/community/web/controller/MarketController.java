@@ -2,18 +2,16 @@ package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
-import com.community.infra.aws.S3Service;
-import com.community.domain.board.ReplyRepository;
+import com.community.domain.reply.ReplyRepository;
 import com.community.service.BoardService;
 import com.community.domain.market.Market;
 import com.community.domain.market.MarketRepository;
 import com.community.service.MarketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,10 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Controller

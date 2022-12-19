@@ -1,7 +1,7 @@
 package com.community.domain.market;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.infra.aws.S3;
 import lombok.*;

@@ -1,7 +1,6 @@
 package com.community.domain.inquire;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

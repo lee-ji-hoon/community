@@ -1,7 +1,7 @@
 package com.community.domain.council;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
 import com.community.infra.aws.S3;
@@ -9,7 +9,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -2,12 +2,12 @@ package com.community.service;
 
 import com.community.domain.account.Account;
 import com.community.domain.board.Board;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import com.community.domain.council.CouncilRepository;
 import com.community.domain.market.MarketRepository;
 import com.community.web.dto.ReplyForm;
 import com.community.domain.board.BoardRepository;
-import com.community.domain.board.ReplyRepository;
+import com.community.domain.reply.ReplyRepository;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;
