@@ -1,8 +1,5 @@
 package com.community.domain.notice;
 
-import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
-import com.community.domain.bookmark.Bookmark;
 import com.community.infra.aws.S3;
 import lombok.*;
 import org.hibernate.annotations.Type;

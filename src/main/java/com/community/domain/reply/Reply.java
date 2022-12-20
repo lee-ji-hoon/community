@@ -1,6 +1,7 @@
-package com.community.domain.board;
+package com.community.domain.reply;
 
 import com.community.domain.account.Account;
+import com.community.domain.board.Board;
 import com.community.domain.council.Council;
 import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;

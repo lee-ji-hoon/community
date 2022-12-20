@@ -6,14 +6,13 @@ import com.community.domain.alarm.Alarm;
 import com.community.domain.alarm.AlarmRepository;
 import com.community.domain.alarm.AlarmType;
 import com.community.domain.board.Board;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import com.community.domain.market.Market;
 import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

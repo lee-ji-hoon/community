@@ -1,8 +1,7 @@
 package com.community.domain.study;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
-import com.community.domain.study.Study;
+import com.community.domain.reply.Reply;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

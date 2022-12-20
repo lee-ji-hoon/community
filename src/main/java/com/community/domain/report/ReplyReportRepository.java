@@ -1,7 +1,7 @@
 package com.community.domain.report;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyReportRepository extends JpaRepository<ReplyReport, Long> {

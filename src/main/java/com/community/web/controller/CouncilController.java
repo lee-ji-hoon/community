@@ -2,13 +2,12 @@ package com.community.web.controller;
 
 import com.community.domain.account.CurrentUser;
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
-import com.community.domain.board.ReplyRepository;
+import com.community.domain.reply.Reply;
+import com.community.domain.reply.ReplyRepository;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
 import com.community.domain.likes.LikeRepository;
 import com.community.domain.likes.Likes;
-import com.community.infra.aws.S3Repository;
 import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.council.Council;
