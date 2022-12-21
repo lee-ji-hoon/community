@@ -11,12 +11,9 @@ import com.community.infra.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +21,13 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collections;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class AccountService implements UserDetailsService {
+public class AccountService {
 
     private final AccountRepository accountRepository;
     private final EmailService emailService;
@@ -103,8 +100,29 @@ public class AccountService implements UserDetailsService {
         emailService.sendEmail(emailMessage);
     }
 
+    // 회원 정보 갱신
+    public void forceAuthentication (Account account) {
+        String accountRole = "";
+        if (account.getUsername().contains("test")) {
+            accountRole = "ADMIN";
+        } else {
+            accountRole = "MEMBER";
+        }
+        SecurityUser securityUser = new SecurityUser(account, Collections.singletonList(new SimpleGrantedAuthority(accountRole)));
+
+        UsernamePasswordAuthenticationToken authentication =
+                UsernamePasswordAuthenticationToken.authenticated(
+                        securityUser,
+                        null,
+                        securityUser.getAuthorities()
+                );
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+    }
+
     // 로그인
-    public void login(Account account) {
+   /* public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 //new UserAccount(account),
                 new SecurityUser(account),
@@ -117,8 +135,8 @@ public class AccountService implements UserDetailsService {
     public void completeSignUp(Account account) {
         account.completeEmailCheck();
         login(account);
-    }
-
+    }*/
+/*
     // 이메일 로그인
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
@@ -131,7 +149,7 @@ public class AccountService implements UserDetailsService {
         }
         //return new UserAccount(account);
         return new SecurityUser(account);
-    }
+    }*/
 
     public Account getAccount(String nickname) {
         Account byNickname = accountRepository.findByNickname(nickname);

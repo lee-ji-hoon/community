@@ -6,24 +6,51 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
 
-    private final AccountService accountService;
-    private final DataSource dataSource;
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .formLogin(
+                        formLogin -> formLogin
+                                .loginPage("/login")
+                                .loginProcessingUrl("/login")
+                )
+                .logout(
+                        logout -> logout
+                                .logoutUrl("/logout")
+                )
+                .authorizeRequests(
+                        request -> request
+                                .antMatchers("/study/**", "/board/**", "/council/**", "/").authenticated()
+                                .antMatchers("/manager/**").hasAnyRole("ADMIN")
+                                .anyRequest().permitAll()
+                )
+                .csrf(
+                        csrf -> csrf
+                                .ignoringAntMatchers("/h2-console/**")
+                );
+        return http.build();
+    }
 
-    @Override
+
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
@@ -33,12 +60,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .antMatchers("/manager/*").hasAnyRole("ADMIN")
                 .anyRequest().authenticated();
-        /*
+        *//*
         * 기존 formLogin 로직
         http.formLogin()
                 .loginPage("/login")
                 .permitAll();
-        */
+        *//*
         http.logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/");
@@ -68,5 +95,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .mvcMatchers("/node_modules/**", "/assets/**", "/error", "/images/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
+    }*/
 }

@@ -49,7 +49,7 @@ public class AccountController {
         }
 
         Account account = accountService.processNewAccount(signUpForm);
-        accountService.login(account);
+//        accountService.login(account);
         return "redirect:/";
     }
 
@@ -68,7 +68,7 @@ public class AccountController {
             return "account/checked-email";
         }
 
-        accountService.completeSignUp(account);
+//        accountService.completeSignUp(account);
         model.addAttribute(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
@@ -137,7 +137,7 @@ public class AccountController {
             return "account/email-login-view";
         }
 
-        accountService.login(account);
+//        accountService.login(account);
         return "account/email-login-view";
 
     }
