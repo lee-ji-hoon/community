@@ -27,9 +27,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         if (account.getUsername().contains("test")) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("MEMBER"));
         }
+        authorities.add(new SimpleGrantedAuthority("MEMBER"));
 
         return new SecurityUser(account, authorities);
     }

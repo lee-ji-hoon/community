@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
 import javax.sql.DataSource;
 
@@ -36,9 +38,13 @@ public class SecurityConfig {
                 )
                 .authorizeRequests(
                         request -> request
-                                .mvcMatchers("/login", "/sign-up", "/check-email", "/check-email-token",
-                                        "/email-login", "/check-email-login", "/login-link", "/email-login-view").permitAll()
-                                .antMatchers("/manager/*").hasAnyRole("ADMIN")
+                                .antMatchers("/study/**", "/board/**", "/council/**", "/").authenticated()
+                                .antMatchers("/manager/**").hasAnyRole("ADMIN")
+                                .anyRequest().permitAll()
+                )
+                .csrf(
+                        csrf -> csrf
+                                .ignoringAntMatchers("/h2-console/**")
                 );
         return http.build();
     }
