@@ -50,7 +50,7 @@ public class ProfileService {
     public void updateNickname(Account account, String nickname) {
         account.setNickname(nickname);
         accountRepository.save(account);
-        accountService.login(account);
+        accountService.forceAuthentication(account);
     }
 
     // 회원탈퇴

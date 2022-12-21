@@ -2,23 +2,36 @@ package com.community.infra.config;
 
 import com.community.domain.account.Account;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-@Slf4j
-@Getter @Setter
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Getter
 public class SecurityUser extends User {
-    private Account account;
+    private final Long id;
+    private final String username;
+    private final String nickname;
+    private final String email;
+    private final LocalDateTime joinedAt;
 
-    public SecurityUser(Account account) {
-        super(account.getEmail(), account.getPassword(), AuthorityUtils.createAuthorityList(account.getAccountType().toString()));
+    public SecurityUser(Account account, List<GrantedAuthority> authorities) {
+        super(account.getUsername(), account.getPassword(), authorities);
+        this.id = account.getId();
+        this.username = account.getUsername();
+        this.nickname = account.getNickname();
+        this.email = account.getEmail();
+        this.joinedAt = account.getJoinedAt();
+    }
 
-        log.info("SecurityUser member.username = {}", account.getUsername());
-        log.info("SecurityUser member.password = {}", account.getPassword());
-        log.info("SecurityUser member.accountType = {}", account.getAccountType().toString());
-
-        this.account = account;
+    public Account getAccount() {
+        return Account.builder()
+                .id(id)
+                .joinedAt(joinedAt)
+                .username(username)
+                .nickname(nickname)
+                .email(email)
+                .build();
     }
 }
