@@ -30,15 +30,15 @@ public class SecurityConfig {
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/login")
-                                .loginProcessingUrl("/login")
                 )
                 .logout(
                         logout -> logout
                                 .logoutUrl("/logout")
+                                .logoutSuccessUrl("/")
                 )
                 .authorizeRequests(
                         request -> request
-                                .antMatchers("/study/**", "/board/**", "/council/**", "/").authenticated()
+                                .antMatchers("/study/**", "/board/**", "/council/**").authenticated()
                                 .antMatchers("/manager/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 )

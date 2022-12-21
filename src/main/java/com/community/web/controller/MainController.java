@@ -16,6 +16,7 @@ import com.community.domain.study.Study;
 import com.community.web.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,10 @@ public class MainController {
     public String home(@CurrentUser Account account, Model model) {
         if (account != null) {
             model.addAttribute(account);
+            List<Study> enrollStudy = studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account);
+            List<Study> myStudy = studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account);
+            model.addAttribute("enrollStudy", enrollStudy);
+            model.addAttribute("myStudy", myStudy);
         }
         List<Board> boardList = boardRepository.findAll();
         List<Board> todayBoardList = new ArrayList<>();
@@ -71,14 +76,8 @@ public class MainController {
 
         List<Board> top5Board = boardService.top5BoardLists();
 
-        List<Study> enrollStudy = studyRepository.findByMembersContainingOrderByPublishedDateTimeDesc(account);
-
-        List<Study> myStudy = studyRepository.findByManagersContainingOrderByPublishedDateTimeDesc(account);
-
         model.addAttribute("board", top5Board);
 
-        model.addAttribute("enrollStudy", enrollStudy);
-        model.addAttribute("myStudy", myStudy);
         model.addAttribute("now", LocalDateTime.now());
 
         model.addAttribute("notice", noticeLists);
@@ -94,12 +93,6 @@ public class MainController {
         model.addAttribute("s_today",todayStudyList.size());
 
         return "index";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("account", new LoginRequest());
-        return "login-form";
     }
 
 }
