@@ -241,7 +241,7 @@
                                                                     </div>
                                                                 </th:block>
                                                                 <th:block th:if="${board.reportCount == 0}">
-                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.bid})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
+                                                                    <a th:href="@{/board/detail/{boardId}/delete(boardId=${board.id})}" class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm py-2.5">삭제하기</a>
                                                                     <button type="submit" onclick="updateProject()" class="bg-blue-600 h-9 items-center justify-center rounded-md text-white px-5 font-medium">수정하기</button>
                                                                 </th:block>
                                                             </div>
@@ -280,7 +280,7 @@
                                         <div class="flex-none w-5">
                                             <div th:if="${likes.isEmpty()}">
                                                 <form id="like_add">
-                                                    <input type="hidden" id="like_postId" name="like_postId" th:value="${board.bid}"/>
+                                                    <input type="hidden" id="like_postId" name="like_postId" th:value="${board.id}"/>
                                                     <input type="hidden" id="like_postSort" name="like_postSort" value="board"/>
                                                     <div uk-tooltip="좋아요">
                                                         <a class="like_heart_click text-sm">
@@ -293,7 +293,7 @@
                                             </div>
                                             <div th:if="${likes.isPresent()}">
                                                 <form id="like_cancel">
-                                                    <input type="hidden" id="like_postId" name="like_postId" th:value="${board.bid}"/>
+                                                    <input type="hidden" id="like_postId" name="like_postId" th:value="${board.id}"/>
                                                     <input type="hidden" id="like_postSort" name="like_postSort" value="board"/>
                                                     <div uk-tooltip="좋아요 취소">
                                                         <a class="like_heart_click">
@@ -311,7 +311,7 @@
                                         <div class="flex-none w-5 mr-2" id="bookmark_div">
                                             <div th:if="${bookmark.isEmpty()}">
                                                 <form id="bookmarkAdd">
-                                                    <input type="hidden" id="postId" name="postId" th:value="${board.bid}"/>
+                                                    <input type="hidden" id="postId" name="postId" th:value="${board.id}"/>
                                                     <input type="hidden" id="postSort" name="postSort" value="board"/>
                                                     <div uk-tooltip="북마크">
                                                         <a class="bookmark_click">
@@ -325,7 +325,7 @@
                                             <div th:if="${bookmark.isPresent()}">
                                                 <form id="bookmarkCancel">
                                                     <div uk-tooltip="북마크 해제">
-                                                        <input type="hidden" id="postId" name="postId" th:value="${board.bid}"/>
+                                                        <input type="hidden" id="postId" name="postId" th:value="${board.id}"/>
                                                         <input type="hidden" id="postSort" name="postSort" value="board"/>
                                                         <a class="bookmark_click">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 48 48" id="bookmarkDelBtn" class="text-blue-500 font-bold" fill="currentColor">
@@ -338,7 +338,7 @@
                                         </div>
                                         <th:block th:if="${board.writer != account}">
                                             <div class="text-red-500 flex-none" uk-tooltip="신고하기">
-                                                <a th:href="@{/board/report/{boardId}(boardId = ${board.bid})}">
+                                                <a th:href="@{/board/report/{boardId}(boardId = ${board.id})}">
                                                     <i class="fa fa-bullhorn fa-lg" aria-hidden="true"></i>
                                                     <span class="likes">신고</span>
                                                 </a>
@@ -362,7 +362,7 @@
                         <div class="bg-gray-100 rounded-full relative dark:bg-gray-800 border-b">
                             <form id="reply_form" onsubmit="return false">
                                 <input type="hidden" id="r_postId" name="r_postId"
-                                       th:value="${board.bid}" readonly>
+                                       th:value="${board.id}" readonly>
                                 <input type="hidden" id="r_postSort" name="r_postSort"
                                        value="board" readonly>
                                 <input autocomplete="off" type="text" id="r_content" placeholder="여러분의 소중한 댓글을 입력해주세요." name="r_content" class="bg-transparent max-h-10 shadow-none px-5">
@@ -449,7 +449,7 @@
                             <h2 class="text-lg font-semibold my-3">실시간 인기글</h2>
                             <ul>
                                 <li th:each="top5Board : ${top5Board}">
-                                    <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                    <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.id})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
                                         <h3 class="font-medium line-clamp-1" th:text="${top5Board.title}"></h3>
                                         <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
                                             <th:block th:if="${top5Board.boardTitle=='자유'}">
@@ -490,7 +490,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script th:replace="theme-fragments.html :: form-validation"></script>
-<script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl = '/board/'+ ${board.bid} +'/update')"></script>
+<script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl = '/board/'+ ${board.id} +'/update')"></script>
 <script type="application/javascript" th:inline="javascript">
     function imageDeleteInit(id) {
         $.ajax({

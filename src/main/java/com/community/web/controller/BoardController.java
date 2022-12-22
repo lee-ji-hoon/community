@@ -51,7 +51,6 @@ public class BoardController {
     private final ReplyService replyService;
 
     @GetMapping("/board/{type}")
-    @PreAuthorize("isAnonymous()")
     public String boardTypeList(Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                                 @PageableDefault(size = 5, page = 0, sort = "uploadTime",
