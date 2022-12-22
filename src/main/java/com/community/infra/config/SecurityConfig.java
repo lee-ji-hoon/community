@@ -50,7 +50,7 @@ public class SecurityConfig {
                 )
                 .authorizeRequests(
                         request -> request
-                                .antMatchers("/study/**", "/board/**", "/council/**").authenticated()
+                                .antMatchers("/study/**", "/council/**").authenticated()
                                 .antMatchers("/manager/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
                 );

@@ -42,7 +42,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     List<Board> findTop5ByIsReportedOrderByLikesListDesc(Boolean isReported);
     List<Board> findTop5ByIsReportedOrderByReplyListDesc(Boolean isReported);
 
-    Board findByBid(long id);
+    Board findById(long id);
 
     void deleteAllByWriterId(long writerId);
     /*

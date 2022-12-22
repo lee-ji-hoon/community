@@ -7,7 +7,7 @@ import com.community.domain.board.Board;
 import com.community.domain.board.Reply;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.bookmark.BookmarkRepository;
-import com.community.infra.aws.S3Repository;
+import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
 import com.community.web.dto.ReplyForm;
 import com.community.web.dto.BoardReportForm;
@@ -24,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,49 @@ public class BoardController {
 
     private final BoardService boardService;
     private final ReplyService replyService;
+
+    @GetMapping("/board/{type}")
+    @PreAuthorize("isAnonymous()")
+    public String boardTypeList(Model model,
+                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
+                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                        direction = Sort.Direction.ASC) Pageable pageable,
+                                @PathVariable String type,
+                                @AuthenticationPrincipal SecurityUser securityUser) {
+        if (securityUser == null) {
+            log.info("securityUser={}", securityUser);
+        } else {
+            Account account = securityUser.getAccount();
+            model.addAttribute(account);
+        }
+        log.info("securityUser={}", securityUser);
+        // Top5 게시물
+        List<Board> top5Board = boardService.top5BoardLists();
+
+        switch (type) {
+            case "free" :
+                Page<Board> boardFree = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
+                model.addAttribute("boardType", boardFree);
+                break;
+            case "forum" :
+                Page<Board> boardForum= boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
+                model.addAttribute("boardType", boardForum);
+                break;
+            case "qna" :
+                Page<Board> boardQna = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
+                model.addAttribute("boardType", boardQna);
+                break;
+        }
+
+        model.addAttribute("pageNo", page);
+        model.addAttribute("top5Board", top5Board);
+        model.addAttribute("service", boardService);
+        model.addAttribute("replyService", replyService);
+        model.addAttribute(new BoardForm());
+        model.addAttribute(type);
+
+        return "board/boards";
+    }
 
     @GetMapping("/board/{type}/search")
     public String boardSearch(String keyword, @CurrentUser Account account, Model model,
@@ -82,41 +127,6 @@ public class BoardController {
 
     }
 
-    @GetMapping("/board/{type}")
-    public String boardTypeList(@CurrentUser Account account, Model model,
-                                @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
-                                        direction = Sort.Direction.ASC) Pageable pageable,
-                                @PathVariable String type) {
-        // Top5 게시물
-        List<Board> top5Board = boardService.top5BoardLists();
-
-        switch (type) {
-            case "free" :
-                Page<Board> boardFree = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
-                model.addAttribute("boardType", boardFree);
-                break;
-            case "forum" :
-                Page<Board> boardForum= boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
-                model.addAttribute("boardType", boardForum);
-                break;
-            case "qna" :
-                Page<Board> boardQna = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
-                model.addAttribute("boardType", boardQna);
-                break;
-        }
-
-        model.addAttribute("pageNo", page);
-        model.addAttribute("top5Board", top5Board);
-        model.addAttribute("service", boardService);
-        model.addAttribute("replyService", replyService);
-        model.addAttribute(new BoardForm());
-        model.addAttribute(type);
-        model.addAttribute(account);
-
-        return "board/boards";
-    }
-
     @ResponseBody
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
     public Long boardFormSubmit(@CurrentUser Account account,
@@ -131,7 +141,7 @@ public class BoardController {
                 post_sort, post_sub_sort,
                 post_title, post_sub_title, post_content);
 
-        return newBoard.getBid();
+        return newBoard.getId();
     }
 
     /* 게시물 작성 관련 */
@@ -150,7 +160,7 @@ public class BoardController {
         }
 
         boardService.viewUpdate(boardId, request, response);
-        Board currentBoard = boardRepository.findByBid(boardId);
+        Board currentBoard = boardRepository.findById(boardId);
 
         // 좋아요 및 댓글
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);
@@ -194,7 +204,7 @@ public class BoardController {
     @GetMapping("/board/detail/{boardId}/delete")
     public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
         log.info("보드 찾기 : " + boardId);
-        Board currentBoard = boardRepository.findByBid(boardId);
+        Board currentBoard = boardRepository.findById(boardId);
         String postSort = currentBoard.getBoardTitle();
         if (account.getId().equals(currentBoard.getWriter().getId()) || account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
             log.info("보드 삭제 : " + currentBoard);

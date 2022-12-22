@@ -56,7 +56,7 @@ public class ReplyEventListener {
 
             Account writer = board.getWriter();
             if (writer.isReplyByPost()) {
-                log.info("댓글 발송 board : {}", board.getBid());
+                log.info("댓글 발송 board : {}", board.getId());
                 log.info("댓글 발송 account : {}", writer.getNickname());
                 sendWebByBoardReply(reply, board, writer, fromAccount);
             }
@@ -92,10 +92,10 @@ public class ReplyEventListener {
     private void sendWebByBoardReply(Reply reply, Board board, Account writer, Account fromAccount) {
         Alarm alarm = new Alarm();
         alarm.setTitle(board.getTitle());
-        alarm.setLink("/board/detail/"+board.getBid());
+        alarm.setLink("/board/detail/"+board.getId());
         alarm.setChecked(false);
         alarm.setCreateAlarmTime(LocalDateTime.now());
-        alarm.setPath(String.valueOf(board.getBid()));
+        alarm.setPath(String.valueOf(board.getId()));
         alarm.setMessage(reply.getContent());
         alarm.setToAccount(writer);
         alarm.setFromAccount(fromAccount);

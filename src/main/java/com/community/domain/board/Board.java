@@ -1,10 +1,12 @@
 package com.community.domain.board;
 
 import com.community.domain.account.Account;
+import com.community.domain.base.BaseEntity;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
 import com.community.infra.aws.S3;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,15 +16,11 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of = "bid")
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Board {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long bid;
+@SuperBuilder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString(callSuper = true)
+public class Board extends BaseEntity {
 
     //post_sort
     private String boardTitle;

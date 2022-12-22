@@ -53,7 +53,7 @@ public class ReportController {
         if (board.isEmpty()) {
             return "error-page";
         }
-        Board currentBoard = boardRepository.findByBid(board.get().getBid());
+        Board currentBoard = boardRepository.findById(board.get().getId());
         Boolean isReported = boardReportRepository.existsByAccountAndBoard(account, currentBoard);
         if (isReported) {
             redirectAttributes.addFlashAttribute("isReportedMessage","이미 신고한 게시물입니다.");
@@ -81,7 +81,7 @@ public class ReportController {
             Boolean isReported = replyReportRepository.existsByAccountAndReply(account, currentReply);
             if (isReported) {
                 redirectAttributes.addFlashAttribute("isReportedReplyMessage","이미 신고한 댓글입니다.");
-                String path = String.valueOf(currentReply.getBoard().getBid());
+                String path = String.valueOf(currentReply.getBoard().getId());
                 return "redirect:/board/detail/" + updatePath(path);
             }
         }
@@ -126,7 +126,7 @@ public class ReportController {
 
     @PostMapping("/board/detail/{boardId}/report")
     public String boardReport(@PathVariable Long boardId, BoardReportForm boardReportForm, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
-        Board currentBoard = boardRepository.findByBid(boardId);
+        Board currentBoard = boardRepository.findById(boardId).get();
         reportService.saveBoardReport(currentBoard, account, boardReportForm);
         redirectAttributes.addFlashAttribute("isUpdatedMessage","신고 접수되었습니다.");
         return "redirect:/board/detail/{boardId}";
@@ -136,7 +136,7 @@ public class ReportController {
         Reply currentReply = replyRepository.findByRid(rid);
         if (currentReply.getBoard()!=null) {
             reportService.saveReplyReport(currentReply, account, replyReportForm);
-            String path = String.valueOf(currentReply.getBoard().getBid());
+            String path = String.valueOf(currentReply.getBoard().getId());
             redirectAttributes.addFlashAttribute("reportCompleteMessage","신고 접수되었습니다.");
             return "redirect:/board/detail/" + updatePath(path);
         }

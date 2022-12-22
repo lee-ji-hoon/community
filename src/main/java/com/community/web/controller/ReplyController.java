@@ -49,7 +49,7 @@ public class ReplyController {
         Reply reply = replyService.addReply(account, r_postSort, r_postId, r_content);
         switch (r_postSort) {
             case "board":
-                Board currentBoard = boardRepository.findByBid(r_postId);
+                Board currentBoard = boardRepository.findById(r_postId).get();
                 if(!currentBoard.getWriter().getId().equals(account.getId())) {
                     log.info("board 댓글 알림 이벤트 실행");
                     applicationEventPublisher.publishEvent(new ReplyCreatePublish(reply, account));

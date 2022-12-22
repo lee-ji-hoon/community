@@ -3,17 +3,11 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
-import com.community.domain.graduation.Graduation;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
-import com.community.web.dto.BoardForm;
-import com.community.domain.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -138,7 +131,7 @@ public class BoardService {
 
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
-        Board board = boardRepository.findByBid(boardId);
+        Board board = boardRepository.findById(boardId).get();
         Integer page = board.getPageView();
         board.setPageView(++page);
         boardRepository.save(board);
@@ -185,7 +178,7 @@ public class BoardService {
 
     public Boolean boardReportedOrNull(long bid) {
         Boolean errorBoard = null;
-        Optional<Board> currentBoard = boardRepository.findById(bid);
+        Optional<Board> currentBoard = Optional.ofNullable(boardRepository.findById(bid));
         if (currentBoard.isEmpty() || currentBoard.get().getIsReported().equals(true)) {
             errorBoard = true;
             return errorBoard;
@@ -208,13 +201,13 @@ public class BoardService {
 
         Map<Long, Board> listMap = new HashMap<>(5);
         for (Board board : findView) {
-            listMap.put(board.getBid(), board);
+            listMap.put(board.getId(), board);
         }
         for (Board board : findLike) {
-            listMap.put(board.getBid(), board);
+            listMap.put(board.getId(), board);
         }
         for (Board board : findReply) {
-            listMap.put(board.getBid(), board);
+            listMap.put(board.getId(), board);
         }
 
         List<Board> findTop5Boards = new ArrayList<>(listMap.values());

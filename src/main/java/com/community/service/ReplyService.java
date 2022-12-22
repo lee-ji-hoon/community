@@ -46,7 +46,7 @@ public class ReplyService {
                 reply.setMarket(currentMarket);
                 break;
             case "board":
-                Board currentBoard = boardRepository.findByBid(postId);
+                Board currentBoard = boardRepository.findById(postId).get();
                 reply.setBoard(currentBoard);
                 break;
             case "council":
