@@ -67,21 +67,8 @@ public class BoardController {
         // Top5 게시물
         List<Board> top5Board = boardService.top5BoardLists();
 
-        switch (type) {
-            case "free" :
-                Page<Board> boardFree = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
-                model.addAttribute("boardType", boardFree);
-                break;
-            case "forum" :
-                Page<Board> boardForum= boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
-                model.addAttribute("boardType", boardForum);
-                break;
-            case "qna" :
-                Page<Board> boardQna = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
-                model.addAttribute("boardType", boardQna);
-                break;
-        }
-
+        Page<Board> boardType = boardService.boardTypeControl(type, pageable);
+        model.addAttribute("boardType", boardType);
         model.addAttribute("pageNo", page);
         model.addAttribute("top5Board", top5Board);
         model.addAttribute("service", boardService);

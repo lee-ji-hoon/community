@@ -8,6 +8,8 @@ import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,6 +100,22 @@ public class BoardService {
                 log.info("s3Image : {}", s3Image);
             }
         }
+    }
+
+    public Page<Board> boardTypeControl(String type, Pageable pageable) {
+        Page<Board> boardPage = null;
+        switch (type) {
+            case "free" :
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
+                break;
+            case "forum" :
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
+                break;
+            case "qna" :
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
+                break;
+        }
+        return boardPage;
     }
 
     public String boardDateTime(LocalDateTime localDateTime){
