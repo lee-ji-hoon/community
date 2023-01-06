@@ -28,7 +28,7 @@ public class LikeService {
 
         switch (postSort) {
             case "board":
-                Board currentBoard = boardRepository.findByBid(postId);
+                Board currentBoard = boardRepository.findById(postId).get();
                 // 중복 좋아요 방지
                 if(isNotAlreadyBoardLike(account, currentBoard)) {
                     likes.setBoard(currentBoard);
@@ -49,7 +49,7 @@ public class LikeService {
         Likes likes;
         switch (postSort) {
             case "board":
-                Board currentBoard = boardRepository.findByBid(postId);
+                Board currentBoard = boardRepository.findById(postId).get();
                 likes = likeRepository.findByBoardAndAccount(currentBoard, account);
                 likeRepository.delete(likes);
                 break;

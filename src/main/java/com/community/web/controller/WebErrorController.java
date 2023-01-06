@@ -16,7 +16,7 @@ public class WebErrorController implements ErrorController {
         return null;
     }
 
-    @GetMapping("/error")
+    /*@GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
@@ -33,6 +33,6 @@ public class WebErrorController implements ErrorController {
         }
 
         return "error-page";
-    }
+    }*/
 
 }

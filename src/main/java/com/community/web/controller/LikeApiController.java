@@ -37,7 +37,7 @@ public class LikeApiController {
         Likes likes = likeService.addLike(account, like_postSort, like_postId);
         switch (like_postSort) {
             case "board":
-                Board currentBoard = boardRepository.findByBid(like_postId);
+                Board currentBoard = boardRepository.findById(like_postId).get();
                 if(!currentBoard.getWriter().getId().equals(account.getId())) {
                     log.info("board 좋아요 알림 이벤트 실행");
                     applicationEventPublisher.publishEvent(new LikeCreatePublish(likes, account));

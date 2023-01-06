@@ -57,7 +57,7 @@ public class SearchController {
             boardList.addAll(searchTitle);
 
             for (Board board : boardList) {
-                map.put(String.valueOf(board.getBid()), board.getTitle());
+                map.put(String.valueOf(board.getId()), board.getTitle());
             }
         }
         if (searchForm.getSearchType().equals("학생회")) {

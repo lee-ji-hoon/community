@@ -13,372 +13,364 @@
                 display: none;
             }
         </style>
-        <!-- sidebar -->
-        <div th:replace="fragments/side-bar :: side_bar(currentSideMenu='board')"></div>
+        <div th:replace="theme-fragments.html :: checked-email"></div>
 
-        <!-- Main Contents -->
-        <div class="main_content">
-            <div class="mcontainer">
-                <div th:replace="theme-fragments.html :: checked-email"></div>
+        <div class="lg:flex lg:space-x-12">
 
-                <div class="lg:flex lg:space-x-12">
+            <div class="lg:w-3/4 mb-3">
+                <div class="flex justify-between relative md:mb-4 mb-3">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-semibold"> 커뮤니티 </h2>
+                        <nav class="responsive-nav md:m-0 -mx-4">
+                            <ul>
+                                <li th:classappend="${type == 'free'}? active">
+                                    <a th:href="@{/board/free}" class="lg:px-2"> 자유 </a>
+                                </li>
+                                <li th:classappend="${type == 'forum'}? active">
+                                    <a th:href="@{/board/forum}" class="lg:px-2"> 정보 </a>
+                                </li>
+                                <li th:classappend="${type == 'qna'}? active">
+                                    <a th:href="@{/board/qna}" class="lg:px-2"> 질문 </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10" data-tippy-placement="left" title="새 게시글 작성하기">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">
+                                <path fill-rule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                            <span> 게시글 작성 </span>
+                        </a>
+                        <!-- Craete video post modal -->
+                        <div id="create-post-modal" uk-modal>
+                            <div class="uk-modal-dialog">
+                                <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
+                                        type="button" uk-close>
+                                    <i class="icon-feather-close"></i>
+                                </button>
 
-                    <div class="lg:w-3/4 mb-3">
-                        <div class="flex justify-between relative md:mb-4 mb-3">
-                            <div class="flex-1">
-                                <h2 class="text-2xl font-semibold"> 커뮤니티 </h2>
-                                <nav class="responsive-nav md:m-0 -mx-4">
-                                    <ul>
-                                        <li th:classappend="${type == 'free'}? active">
-                                            <a th:href="@{/board/free}" class="lg:px-2"> 자유 </a>
-                                        </li>
-                                        <li th:classappend="${type == 'forum'}? active">
-                                            <a th:href="@{/board/forum}" class="lg:px-2"> 정보 </a>
-                                        </li>
-                                        <li th:classappend="${type == 'qna'}? active">
-                                            <a th:href="@{/board/qna}" class="lg:px-2"> 질문 </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <div>
-                                <a href="#create-post-modal" uk-toggle class="flex items-center justify-center h-8 lg:px-3 px-2 rounded-md bg-blue-600 text-white space-x-1 absolute right-0 z-10" data-tippy-placement="left" title="새 게시글 작성하기">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4">
-                                        <path fill-rule="evenodd"
-                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                                              clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span> 게시글 작성 </span>
-                                </a>
-                                <!-- Craete video post modal -->
-                                <div id="create-post-modal" uk-modal>
-                                    <div class="uk-modal-dialog">
-                                        <button class="uk-modal-close-default hover:bg-gray-100 rounded-full p-2.5 block uk-icon uk-close mt-0.5"
-                                                type="button" uk-close>
-                                            <i class="icon-feather-close"></i>
-                                        </button>
-
-                                        <div class="uk-modal-header bg-white">
-                                            <h3 class="text-lg font-semibold" id="forum_head">글 작성하기 </h3>
-                                        </div>
-                                        <form class="needs-validation" id="board_form" onsubmit="return false" method="post" novalidate enctype="multipart/form-data">
-                                            <div class="uk-modal-body" uk-overflow-auto>
-                                                <div class="space-y-4 g:w-8/12">
-                                                    <div class="form-group">
-                                                        <label for="post_sort"> 유형 선택 </label>
-                                                        <select id="post_sort" name="post_sort"  class="shadow-none with-border px-2">
-                                                            <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
-                                                            <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
-                                                            <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
-                                                        </select>
-                                                    </div>
-                                                    <div id="subBoardSort">
-                                                        <div class="form-group">
-                                                            <label for="post_sub_sort"> 종류 선택 </label>
-                                                            <select id="post_sub_sort" name="post_sub_sort" class="shadow-none with-border form-control px-2">
-                                                                <optgroup label="QnA" id="opgQnA">
-                                                                    <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
-                                                                    <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
-                                                                    <option data-icon="icon-material-outline-help-outline" value="college">학교 관련</option>
-                                                                    <option data-icon="icon-material-outline-movie" value="qnaEtc"> 기타 </option>
-                                                                </optgroup>
-                                                                <optgroup label="정보" id="opgInfo">
-                                                                    <option data-icon="icon-material-outline-language" value="web"> HTML</option>
-                                                                    <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
-                                                                    <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
-                                                                    <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
-                                                                    <option data-icon="icon-material-outline-movie" value="infoEtc"> 기타 </option>
-                                                                </optgroup>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="font-semibold text-lg"> Details </div>
-                                                    <!-- 제목 -->
-                                                    <div class="form-group">
-                                                        <div class="line">
-                                                            <input class="line__input form-control" id="post_title" max="30" name="post_title"
-                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
-                                                                   aria-describedby="titleHelp" required autocomplete="off">
-                                                            <span for="username" class="line__placeholder"> 제목 </span>
-                                                        </div>
-                                                        <small id="titleHelp" class="form-text text-muted">
-                                                            제목은 2글자부터 최대 30글자까지 입력 가능합니다.
-                                                        </small>
-                                                        <small class="invalid-feedback">제목을 입력해주세요.</small>
-                                                    </div>
-                                                    <!-- 소제목 -->
-                                                    <div id="postTitleSub" class="form-group">
-                                                        <div class="line">
-                                                            <input class="line__input form-group" id="post_sub_title" name="post_sub_title"
-                                                                   type="text" onkeyup="this.setAttribute('value', this.value);"
-                                                                   aria-describedby="subTitleHelp" autocomplete="off">
-                                                            <span for="username" class="line__placeholder"> 소제목 </span>
-                                                        </div>
-                                                        <small id="subTitleHelp" class="form-text text-muted">
-                                                            예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
-                                                        </small>
-                                                    </div>
-                                                    <!-- 본문 -->
-                                                    <div>
-                                                        <div>
-                                                        <textarea class="form-control"  id="post_content" name="post_content"
-                                                                  type="text" aria-describedby="contentHelp" required></textarea>
-                                                        </div>
-                                                        <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
-                                                        <small class="invalid-feedback">글을 입력해주세요.</small>
-                                                    </div>
-                                                    <div class="col-span-2">
-                                                        <div uk-form-custom class="w-full py-3">
-                                                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
-                                                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
-                                                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
-                                                                </svg>
-                                                            </div>
-                                                            <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
-                                                        </div>
-
-                                                        <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
-                                                    </div>
-
-                                                    <div class="col-span-2">
-                                                        <br />
-                                                        <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
-                                                        </div>
-                                                    </div>
+                                <div class="uk-modal-header bg-white">
+                                    <h3 class="text-lg font-semibold" id="forum_head">글 작성하기 </h3>
+                                </div>
+                                <form class="needs-validation" id="board_form" onsubmit="return false" method="post" novalidate enctype="multipart/form-data">
+                                    <div class="uk-modal-body" uk-overflow-auto>
+                                        <div class="space-y-4 g:w-8/12">
+                                            <div class="form-group">
+                                                <label for="post_sort"> 유형 선택 </label>
+                                                <select id="post_sort" name="post_sort"  class="shadow-none with-border px-2">
+                                                    <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
+                                                    <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
+                                                    <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
+                                                </select>
+                                            </div>
+                                            <div id="subBoardSort">
+                                                <div class="form-group">
+                                                    <label for="post_sub_sort"> 종류 선택 </label>
+                                                    <select id="post_sub_sort" name="post_sub_sort" class="shadow-none with-border form-control px-2">
+                                                        <optgroup label="QnA" id="opgQnA">
+                                                            <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
+                                                            <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
+                                                            <option data-icon="icon-material-outline-help-outline" value="college">학교 관련</option>
+                                                            <option data-icon="icon-material-outline-movie" value="qnaEtc"> 기타 </option>
+                                                        </optgroup>
+                                                        <optgroup label="정보" id="opgInfo">
+                                                            <option data-icon="icon-material-outline-language" value="web"> HTML</option>
+                                                            <option data-icon="icon-material-outline-code" value="java"> JAVA</option>
+                                                            <option data-icon="icon-material-outline-movie" value="media"> 영상</option>
+                                                            <option data-icon="icon-material-outline-movie" value="vrar"> VR/AR</option>
+                                                            <option data-icon="icon-material-outline-movie" value="infoEtc"> 기타 </option>
+                                                        </optgroup>
+                                                    </select>
                                                 </div>
                                             </div>
-
-                                            <div class="uk-modal-footer uk-text-right bg-white">
-                                                <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">취소</button>
-                                                <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" type="submit" onclick="registerAction()">저장</button>
+                                            <div class="font-semibold text-lg"> Details </div>
+                                            <!-- 제목 -->
+                                            <div class="form-group">
+                                                <div class="line">
+                                                    <input class="line__input form-control" id="post_title" max="30" name="post_title"
+                                                           type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                           aria-describedby="titleHelp" required autocomplete="off">
+                                                    <span for="username" class="line__placeholder"> 제목 </span>
+                                                </div>
+                                                <small id="titleHelp" class="form-text text-muted">
+                                                    제목은 2글자부터 최대 30글자까지 입력 가능합니다.
+                                                </small>
+                                                <small class="invalid-feedback">제목을 입력해주세요.</small>
                                             </div>
-                                        </form>
+                                            <!-- 소제목 -->
+                                            <div id="postTitleSub" class="form-group">
+                                                <div class="line">
+                                                    <input class="line__input form-group" id="post_sub_title" name="post_sub_title"
+                                                           type="text" onkeyup="this.setAttribute('value', this.value);"
+                                                           aria-describedby="subTitleHelp" autocomplete="off">
+                                                    <span for="username" class="line__placeholder"> 소제목 </span>
+                                                </div>
+                                                <small id="subTitleHelp" class="form-text text-muted">
+                                                    예) Spring MVC 모델에 대해 자세히 알아보는 글입니다.
+                                                </small>
+                                            </div>
+                                            <!-- 본문 -->
+                                            <div>
+                                                <div>
+                                                        <textarea class="form-control"  id="post_content" name="post_content"
+                                                                  type="text" aria-describedby="contentHelp" required></textarea>
+                                                </div>
+                                                <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
+                                                <small class="invalid-feedback">글을 입력해주세요.</small>
+                                            </div>
+                                            <div class="col-span-2">
+                                                <div uk-form-custom class="w-full py-3">
+                                                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-32 items-center justify-center relative w-full rounded-lg dark:bg-gray-800 dark:border-gray-600">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                                        </svg>
+                                                    </div>
+                                                    <input id="input_file" multiple="multiple" type="file" accept="image/png, image/jpeg">
+                                                </div>
 
+                                                <span class="text-gray-500 text-xs">※첨부파일은 최대 6개까지 등록이 가능합니다.</span>
+                                            </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <form th:action="@{'/board/'+ ${type} +'/search'}" class="form-inline" method="get"
-                                      style=" float: right; position: relative; margin-top: 40px">
-                                    <div class="box">
-                                        <div class="container-1">
-                                            <span class="icon"><i class="fa fa-search"></i></span>
-
-                                            <input th:if="${type == 'free'}" type="search" name="keyword" id="search" placeholder="자유게시판 검색" />
-                                            <input th:if="${type == 'forum'}" type="search" name="keyword" id="search" placeholder="정보게시판 검색" />
-                                            <input th:if="${type == 'qna'}" type="search" name="keyword" id="search" placeholder="질문게시판 검색" />
-                                            <input th:if="${type == 'myProduct'}" type="search" name="keyword" id="search" placeholder="내가 작성한 게시글 검색" />
+                                            <div class="col-span-2">
+                                                <br />
+                                                <div class="grid sm:grid-cols-3 grid-cols-2" id="articlefileChange">
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    <div class="uk-modal-footer uk-text-right bg-white">
+                                        <button class="bg-red-500 font-medium h-9 items-center justify-center px-5 rounded-md text-white text-sm uk-modal-close" type="button">취소</button>
+                                        <button class="bg-blue-500 h-9 items-center justify-center rounded-md text-white px-5 font-medium" type="submit" onclick="registerAction()">저장</button>
                                     </div>
                                 </form>
+
+
                             </div>
                         </div>
-                        <div>
-                            <th:block th:if="${deleteMessage}">
-                                <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
-                            </th:block>
-                            <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${boardType}">
-                                <div class="lg:flex lg:space-x-6 py-3">
-                                    <div class="flex-1 lg:pt-0">
-                                        <th:block th:if="${board.boardTitle=='자유'}">
-                                            <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <th:block th:if="${board.boardTitle=='정보'}">
-                                            <div class="float-left bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <th:block th:if="${board.boardTitle=='질문'}">
-                                            <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
-                                        </th:block>
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${board.bid})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
-                                        <div class="flex items-center pt-2">
-                                            <div class="flex items-center">
-                                                <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${account.dateTime(board.uploadTime)}"></a>
-                                            </div>
-                                            <div class="flex items-center mx-4 align-middle">
-                                                <ion-icon name="heart-outline" class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${board.likesList.size()}"></a>
-                                            </div>
-                                            <div class="flex items-center">
-                                                <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
-                                                <a class="text-xs" th:text="${board.replyList.size()}"></a>
-                                                <th:block th:if="${replyService.boardReplyPresent(board)}">
-                                                    <div class="-space-x-2 flex items-center ml-1">
-                                                        <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                            <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
-                                                                 alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
-                                                            <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                                 th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
-                                                                 alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
-                                                        </div>
-                                                    </div>
-                                                </th:block>
+                    </div>
+                    <div>
+                        <form th:action="@{'/board/'+ ${type} +'/search'}" class="form-inline" method="get"
+                              style=" float: right; position: relative; margin-top: 40px">
+                            <div class="box">
+                                <div class="container-1">
+                                    <span class="icon"><i class="fa fa-search"></i></span>
 
-                                            </div>
-                                            <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
-                                        </div>
-                                    </div>
+                                    <input th:if="${type == 'free'}" type="search" name="keyword" id="search" placeholder="자유게시판 검색" />
+                                    <input th:if="${type == 'forum'}" type="search" name="keyword" id="search" placeholder="정보게시판 검색" />
+                                    <input th:if="${type == 'qna'}" type="search" name="keyword" id="search" placeholder="질문게시판 검색" />
+                                    <input th:if="${type == 'myProduct'}" type="search" name="keyword" id="search" placeholder="내가 작성한 게시글 검색" />
                                 </div>
                             </div>
-                            <div class="mt-2">
-                                <div th:if="${boardType.totalPages != 0}" class="justify-center flex">
-                                    <nav aria-label="Page navigation"
-                                         th:with="start=${(boardType.number/5)*5 + 1},
-                                         end=(${(boardType.totalPages == 0) ? 1 : (start + 4 < boardType.totalPages ? start + 4 : boardType.totalPages)})">
-                                        <ul class="inline-flex space-x-2">
-                                            <li th:if="${start > 1}">
-                                                <a th:href="@{'/board/' + ${type} + '/' (page=${start - 2})}">
-                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                                            <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                                                        </svg>
-                                                    </button>
-                                                </a>
-                                            </li>
-                                            <li th:each="page : ${#numbers.sequence(start, end)}">
-                                                <a th:href="@{'/board/' + ${type} + '/' (page=${page - 1})}">
-                                                    <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
-                                                            class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
-                                                            th:text="${page}">
-                                                    </button>
-                                                </a>
-                                            </li>
-                                            <li th:if="${end < boardType.totalPages}">
-                                                <a th:href="@{'/board/' + ${type} + '/' (page=${start + 4})}">
-                                                    <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
-                                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                                            <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                                                        </svg>
-                                                    </button>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <th:block th:if="${deleteMessage}">
+                        <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
+                    </th:block>
+                    <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${boardType}">
+                        <div class="lg:flex lg:space-x-6 py-3">
+                            <div class="flex-1 lg:pt-0">
+                                <th:block th:if="${board.boardTitle=='자유'}">
+                                    <div class="float-left bg-blue-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
+                                </th:block>
+                                <th:block th:if="${board.boardTitle=='정보'}">
+                                    <div class="float-left bg-purple-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
+                                </th:block>
+                                <th:block th:if="${board.boardTitle=='질문'}">
+                                    <div class="float-left bg-yellow-100 font-semibold w-11 px-2.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
+                                </th:block>
+                                <a th:href="@{/board/detail/{boardId}(boardId = ${board.id})}" class="pl-2 text-lg font-semibold line-clamp-1" th:text="${board.title}"></a>
+                                <div class="flex items-center pt-2">
+                                    <div class="flex items-center">
+                                        <ion-icon name="time-outline" class="mr-2"></ion-icon>
+                                        <a class="text-xs" th:text="${@ut.setDateTime(board.uploadTime)}"></a>
+                                    </div>
+                                    <div class="flex items-center mx-4 align-middle">
+                                        <ion-icon name="heart-outline" class="mr-2"></ion-icon>
+                                        <a class="text-xs" th:text="${board.likesList.size()}"></a>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
+                                        <a class="text-xs" th:text="${board.replyList.size()}"></a>
+                                        <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                            <div class="-space-x-2 flex items-center ml-1">
+                                                <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
+                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                         th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
+                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
+                                                    <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                         th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
+                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                </div>
+                                            </div>
+                                        </th:block>
+
+                                    </div>
+                                    <!--<div class="flex items-center"> <ion-icon name="bookmark-outline" class="text-xl mr-2"></ion-icon> 12  </div>-->
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="lg:w-1/4 w-full flex-shrink-0">
-                        <div uk-sticky="offset:100" class="uk-sticky">
-                            <div class="card divide-y divide-gray-100 px-4 mb-4">
-                                <h2 class="text-lg font-semibold my-3">실시간 인기글</h2>
-                                <ul>
-                                    <li th:each="top5Board : ${top5Board}">
-                                        <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.bid})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                            <h3 class="font-medium line-clamp-1" th:text="${top5Board.title}"></h3>
-                                            <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
-                                                <th:block th:if="${top5Board.boardTitle=='자유'}">
-                                                    <div class="bg-blue-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${top5Board.boardTitle}"></div>
-                                                </th:block>
-                                                <th:block th:if="${top5Board.boardTitle=='정보'}">
-                                                    <div class="bg-purple-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${top5Board.boardTitle}"></div>
-                                                </th:block>
-                                                <th:block th:if="${top5Board.boardTitle=='질문'}">
-                                                    <div class="bg-yellow-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${top5Board.boardTitle}"></div>
-                                                </th:block>
-                                                <div class="pb-1"> . </div>
-                                                <ion-icon name="time-outline"></ion-icon>
-                                                <div th:text="${service.boardDateTime(top5Board.uploadTime)}"></div>
-                                                <div class="pb-1"> . </div>
-                                                <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                                                <div th:text="${replyService.boardReplySize(top5Board)}"></div>
-                                            </div>
+                    <div class="mt-2">
+                        <div th:if="${boardType.totalPages != 0}" class="justify-center flex">
+                            <nav aria-label="Page navigation"
+                                 th:with="start=${(boardType.number/5)*5 + 1},
+                                         end=(${(boardType.totalPages == 0) ? 1 : (start + 4 < boardType.totalPages ? start + 4 : boardType.totalPages)})">
+                                <ul class="inline-flex space-x-2">
+                                    <li th:if="${start > 1}">
+                                        <a th:href="@{'/board/' + ${type} + '/' (page=${start - 2})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:each="page : ${#numbers.sequence(start, end)}">
+                                        <a th:href="@{'/board/' + ${type} + '/' (page=${page - 1})}">
+                                            <button th:classappend="${page == pageNo + 1} ? 'text-white bg-indigo-600' : 'text-indigo-600'"
+                                                    class="w-10 h-10 font-bold transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
+                                                    th:text="${page}">
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li th:if="${end < boardType.totalPages}">
+                                        <a th:href="@{'/board/' + ${type} + '/' (page=${start + 4})}">
+                                            <button class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
                                         </a>
                                     </li>
                                 </ul>
-                            </div>
+                            </nav>
                         </div>
                     </div>
                 </div>
-                <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-                <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-                <script th:replace="theme-fragments.html :: form-validation"></script>
-                <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
-                <script type="application/javascript">
-                    $( document ).ready( function() {
-                        $('#post_content').summernote({
-                            placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
-                            tabsize: 2,
-                            toolbar: [
-                                ['font', ['bold', 'italic', 'underline', 'clear']],
-                            ],
-                            maxHeight: null,
-                            minHeight: null,
-                            lang : 'ko-KR',
-                            height: 500,
-                        });
+            </div>
 
-                        function resetValue() {
-                            $('#post_title').val('');
-                            $('#post_sub_title').val('');
-                        }
-                        $('#postTitle').val('');
-                        jQuery('#post_sort').change(function() {
-                            var state = jQuery('#post_sort option:selected').val();
-                            if (state == '자유') {
-                                // 작성 값 초기화 및 메뉴명 변경
-                                $("#forum_head").text('글 작성하기');
-                                $('#titleHelp').text("글의 주제를 나타내는 제목을 작성해주세요.");
-                                $('#subTitleHelp').text("");
-                                $('#contentHelp').text("정치 및 저격 등 수준 낮은 게시글은 예고 없이 삭제됩니다.");
-                                resetValue();
-
-                                // 자유게시판일 경우 SubTitle 빈값
-                                $("#post_sub_sort option:eq(0)").prop("selected", true);
-
-                                // Hide and Show
-                                jQuery('#subBoardSort').hide();
-                                jQuery('#postTitleSub').hide();
-                                //$('#post_sub_sort').selectpicker('refresh');
-                                //$('#board_form').load(window.location.href+' #board_form');
-                            }
-                            if (state == '질문') {
-                                // 작성 값 초기화 및 메뉴명 변경
-                                $("#forum_head").text('Q&A 작성하기');
-                                $('#titleHelp').text("무엇이 궁금한가요?");
-                                $('#subTitleHelp').text("");
-                                $('#contentHelp').text("궁금한 내용을 최대한 자세하게 작성해주세요.");
-                                resetValue();
-
-                                // 질문게시판일 경우 SubTitle 선택 selected
-                                $("#post_sub_sort option:eq(0)").prop("selected", true);
-
-                                // Hide and Show
-                                jQuery('#opgQnA').show();
-                                jQuery('#opgInfo').hide();
-                                jQuery('#subBoardSort').show();
-                                jQuery('#postTitleSub').hide();
-                                //$('#post_sub_sort').selectpicker('refresh');
-                                //$('#board_form').load(window.location.href+' #board_form');
-                            }
-                            if (state == '정보') {
-                                // 작성 값 초기화 및 메뉴명 변경
-                                $("#forum_head").text('정보 작성하기');
-                                $('#titleHelp').text("공유하려는 정보의 주제를 작성해주세요.");
-                                $('#subTitleHelp').text("해당 글을 어필하는 소제목을 작성해주세요.");
-                                $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
-                                resetValue();
-
-                                // 정보게시판일 경우 SubTitle 선택 selected
-                                $("#post_sub_sort option:eq(0)").prop("selected", true);
-
-                                // Hide and Show
-                                jQuery('#opgQnA').hide();
-                                jQuery('#opgInfo').show();
-                                jQuery('#subBoardSort').show();
-                                jQuery('#postTitleSub').show();
-                                //$('#post_sub_sort').selectpicker('refresh');
-                                //$('#board_form').load(window.location.href+' #board_form');
-                            }
-                        });
-                    });
-                </script>
+            <div class="lg:w-1/4 w-full flex-shrink-0">
+                <div uk-sticky="offset:100" class="uk-sticky">
+                    <div class="card divide-y divide-gray-100 px-4 mb-4">
+                        <h2 class="text-lg font-semibold my-3">실시간 인기글</h2>
+                        <ul>
+                            <li th:each="top5Board : ${top5Board}">
+                                <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.id})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                    <h3 class="font-medium line-clamp-1" th:text="${top5Board.title}"></h3>
+                                    <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
+                                        <th:block th:if="${top5Board.boardTitle=='자유'}">
+                                            <div class="bg-blue-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${top5Board.boardTitle}"></div>
+                                        </th:block>
+                                        <th:block th:if="${top5Board.boardTitle=='정보'}">
+                                            <div class="bg-purple-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${top5Board.boardTitle}"></div>
+                                        </th:block>
+                                        <th:block th:if="${top5Board.boardTitle=='질문'}">
+                                            <div class="bg-yellow-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${top5Board.boardTitle}"></div>
+                                        </th:block>
+                                        <div class="pb-1"> . </div>
+                                        <ion-icon name="time-outline"></ion-icon>
+                                        <div th:text="${@ut.setDateTime(top5Board.uploadTime)}"></div>
+                                        <div class="pb-1"> . </div>
+                                        <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                                        <div th:text="${replyService.boardReplySize(top5Board)}"></div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+        <script th:replace="theme-fragments.html :: form-validation"></script>
+        <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
+        <script type="application/javascript">
+            $( document ).ready( function() {
+                $('#post_content').summernote({
+                    placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
+                    tabsize: 2,
+                    toolbar: [
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ],
+                    maxHeight: null,
+                    minHeight: null,
+                    lang : 'ko-KR',
+                    height: 500,
+                });
+
+                function resetValue() {
+                    $('#post_title').val('');
+                    $('#post_sub_title').val('');
+                }
+                $('#postTitle').val('');
+                jQuery('#post_sort').change(function() {
+                    var state = jQuery('#post_sort option:selected').val();
+                    if (state == '자유') {
+                        // 작성 값 초기화 및 메뉴명 변경
+                        $("#forum_head").text('글 작성하기');
+                        $('#titleHelp').text("글의 주제를 나타내는 제목을 작성해주세요.");
+                        $('#subTitleHelp').text("");
+                        $('#contentHelp').text("정치 및 저격 등 수준 낮은 게시글은 예고 없이 삭제됩니다.");
+                        resetValue();
+
+                        // 자유게시판일 경우 SubTitle 빈값
+                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+
+                        // Hide and Show
+                        jQuery('#subBoardSort').hide();
+                        jQuery('#postTitleSub').hide();
+                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#board_form').load(window.location.href+' #board_form');
+                    }
+                    if (state == '질문') {
+                        // 작성 값 초기화 및 메뉴명 변경
+                        $("#forum_head").text('Q&A 작성하기');
+                        $('#titleHelp').text("무엇이 궁금한가요?");
+                        $('#subTitleHelp').text("");
+                        $('#contentHelp').text("궁금한 내용을 최대한 자세하게 작성해주세요.");
+                        resetValue();
+
+                        // 질문게시판일 경우 SubTitle 선택 selected
+                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+
+                        // Hide and Show
+                        jQuery('#opgQnA').show();
+                        jQuery('#opgInfo').hide();
+                        jQuery('#subBoardSort').show();
+                        jQuery('#postTitleSub').hide();
+                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#board_form').load(window.location.href+' #board_form');
+                    }
+                    if (state == '정보') {
+                        // 작성 값 초기화 및 메뉴명 변경
+                        $("#forum_head").text('정보 작성하기');
+                        $('#titleHelp').text("공유하려는 정보의 주제를 작성해주세요.");
+                        $('#subTitleHelp').text("해당 글을 어필하는 소제목을 작성해주세요.");
+                        $('#contentHelp').text("정보에 대한 내용을 자세히 설명해주세요.");
+                        resetValue();
+
+                        // 정보게시판일 경우 SubTitle 선택 selected
+                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+
+                        // Hide and Show
+                        jQuery('#opgQnA').hide();
+                        jQuery('#opgInfo').show();
+                        jQuery('#subBoardSort').show();
+                        jQuery('#postTitleSub').show();
+                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#board_form').load(window.location.href+' #board_form');
+                    }
+                });
+            });
+        </script>
     </main>
 
 </body>

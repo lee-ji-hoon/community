@@ -11,9 +11,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.header.writers.frameoptions.WhiteListedAllowFromStrategy;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 
@@ -27,24 +29,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(
+                        csrf -> csrf
+                                .ignoringAntMatchers("/h2-console/**")
+                                .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                )
+                .sessionManagement(
+                        session -> session
+                                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                )
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/login")
-                                .loginProcessingUrl("/login")
+                                .defaultSuccessUrl("/")
                 )
                 .logout(
                         logout -> logout
                                 .logoutUrl("/logout")
+                                .logoutSuccessUrl("/")
                 )
                 .authorizeRequests(
                         request -> request
-                                .antMatchers("/study/**", "/board/**", "/council/**", "/").authenticated()
+                                .antMatchers("/study/**", "/council/**").authenticated()
                                 .antMatchers("/manager/**").hasAnyRole("ADMIN")
                                 .anyRequest().permitAll()
-                )
-                .csrf(
-                        csrf -> csrf
-                                .ignoringAntMatchers("/h2-console/**")
                 );
         return http.build();
     }

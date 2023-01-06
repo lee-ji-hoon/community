@@ -13,7 +13,15 @@
             <!-- Header -->
             <header th:replace="fragments/header :: header"></header>
 
-            <main layout:fragment="main"></main>
+            <!-- sidebar -->
+            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
+
+            <div class="main_content">
+                <div class="mcontainer">
+                    <div sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: checked-email"></div>
+                    <main layout:fragment="main"></main>
+                </div>
+            </div>
         </div>
     </body>
 </html>

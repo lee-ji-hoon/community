@@ -35,14 +35,14 @@ public class LikeEventListener {
         Account fromAccount = likeCreatePublish.getFromAccount();
 
         Board board = likes.getBoard();
-        log.info("board : {}", board.getBid());
+        log.info("board : {}", board.getId());
 
         Optional<Account> byId = accountRepository.findById(board.getWriter().getId());
         String nickname = byId.get().getNickname();
 
         log.info("writer : {}", nickname);
         if (byId.get().isLikesByPost()) {
-            log.info("좋아요 발송 board : {}", board.getBid());
+            log.info("좋아요 발송 board : {}", board.getId());
             log.info("좋아요 발송 account : {}", nickname);
             sendWebByBoardLikes(likes, board, byId, fromAccount);
         }
@@ -52,10 +52,10 @@ public class LikeEventListener {
     private void sendWebByBoardLikes(Likes likes, Board board, Optional<Account> byId, Account fromAccount) {
         Alarm alarm = new Alarm();
         alarm.setTitle(board.getTitle());
-        alarm.setLink("/board/detail/"+board.getBid());
+        alarm.setLink("/board/detail/"+board.getId());
         alarm.setChecked(false);
         alarm.setCreateAlarmTime(LocalDateTime.now());
-        alarm.setPath(String.valueOf(board.getBid()));
+        alarm.setPath(String.valueOf(board.getId()));
         alarm.setMessage(fromAccount.getNickname() + "님이 좋아요 누르셨습니다.");
         alarm.setToAccount(byId.get());
         alarm.setFromAccount(fromAccount);

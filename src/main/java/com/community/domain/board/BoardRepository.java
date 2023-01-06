@@ -17,32 +17,27 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
 
-    Page<Board> findByBoardTitleOrContentContainingOrTitleContainingAndIsReportedOrderByUploadTimeDesc(String type, String keyword1, String keyword2, Boolean isReported, Pageable pageable);
 
     long countAllByWriterAndBoardTitle(Account account, String boardTitle);
 
     Page<Board> findByWriterAndBoardTitleAndIsReported(Account account, String boardTitle, Boolean isReported, Pageable pageable);
 
-    Page<Board> findAllByBoardTitleOrderByUploadTimeDesc(String title, Pageable pageable);
 
     /* 검색 관련 쿼리 */
     List<Board> findByContentContainingOrderByUploadTimeDesc(String keyword);
     List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
 
     /* 신고된 게시글 제외 쿼리 */
-    List<Board> findTop4ByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
-    List<Board> findAllByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported);
 
     Page<Board> findByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported, Pageable pageable);
 
-    List<Board> findTop4ByIsReportedOrderByUploadTimeDesc(Boolean isReported);
 
     /* 실시간 인기글 */
     List<Board> findTop5ByIsReportedOrderByPageViewDesc(Boolean isReported);
     List<Board> findTop5ByIsReportedOrderByLikesListDesc(Boolean isReported);
     List<Board> findTop5ByIsReportedOrderByReplyListDesc(Boolean isReported);
 
-    Board findByBid(long id);
+    Board findById(long id);
 
     void deleteAllByWriterId(long writerId);
     /*

@@ -1,15 +1,15 @@
 package com.community.web.controller;
 
 import com.community.domain.account.Account;
-import com.community.domain.study.StudyRepository;
+import com.community.web.dto.LoginRequest;
 import com.community.web.dto.SignUpForm;
 import com.community.domain.account.AccountRepository;
 import com.community.web.dto.validator.SignUpFormValidator;
 import com.community.domain.account.CurrentUser;
-import com.community.web.dto.ProfileForm;
 import com.community.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -34,8 +34,16 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+    @GetMapping("/login")
+    @PreAuthorize("isAnonymous()")
+    public String login(Model model) {
+        model.addAttribute("loginRequest", new LoginRequest());
+        return "login-form";
+    }
+
     // 회원가입 진입
     @GetMapping("/sign-up")
+    @PreAuthorize("isAnonymous()")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
         return "account/sign-up";
@@ -43,6 +51,7 @@ public class AccountController {
 
     // 회원가입 요청
     @PostMapping("/sign-up")
+    @PreAuthorize("isAnonymous()")
     public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors) {
         if (errors.hasErrors()) {
             return "account/sign-up";
@@ -100,12 +109,14 @@ public class AccountController {
 
     // 이메일 로그인
     @GetMapping("/email-login")
+    @PreAuthorize("isAnonymous()")
     public String sendEmailLoginLinkView() {
         return "account/email-login";
     }
 
     // 이메일 로그인 요청
     @PostMapping("/email-login")
+    @PreAuthorize("isAnonymous()")
     public String sendEmailLoginLink(String email, Model model, RedirectAttributes redirectAttributes) {
 
         Account account = accountRepository.findByEmail(email);

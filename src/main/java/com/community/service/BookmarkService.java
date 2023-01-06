@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.community.domain.bookmark.QBookmark.bookmark;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +38,7 @@ public class BookmarkService {
                 .build();
         switch (postSort) {
             case "board":
-                Board board = boardRepository.findByBid(postId);
+                Board board = boardRepository.findById(postId).get();
                 bookmark.setBoard(board);
                 bookmarkRepository.save(bookmark);
                 break;
@@ -66,7 +64,7 @@ public class BookmarkService {
         Optional<Bookmark> currentBookmark;
         switch (postSort) {
             case "board":
-                Board currentBoard = boardRepository.findByBid(postId);
+                Board currentBoard = boardRepository.findById(postId).get();
                 currentBookmark = bookmarkRepository.findByAccountAndBoard(account, currentBoard);
                 bookmarkRepository.delete(currentBookmark.get());
                 break;
