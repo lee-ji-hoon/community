@@ -14,6 +14,7 @@ public class SecurityUser extends User {
     private final String username;
     private final String nickname;
     private final String email;
+    private final String studentId;
     private final LocalDateTime joinedAt;
 
     public SecurityUser(Account account, List<GrantedAuthority> authorities) {
@@ -21,6 +22,7 @@ public class SecurityUser extends User {
         this.id = account.getId();
         this.username = account.getUsername();
         this.nickname = account.getNickname();
+        this.studentId = account.getStudentId();
         this.email = account.getEmail();
         this.joinedAt = account.getJoinedAt();
     }
@@ -31,6 +33,7 @@ public class SecurityUser extends User {
                 .joinedAt(joinedAt)
                 .username(username)
                 .nickname(nickname)
+                .studentId(studentId)
                 .email(email)
                 .build();
     }
