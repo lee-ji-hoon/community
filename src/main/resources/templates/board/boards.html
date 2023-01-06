@@ -189,7 +189,7 @@
                                 <div class="flex items-center pt-2">
                                     <div class="flex items-center">
                                         <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                        <a class="text-xs" th:text="${board.dateTime(board.uploadTime)}"></a>
+                                        <a class="text-xs" th:text="${@ut.setDateTime(board.uploadTime)}"></a>
                                     </div>
                                     <div class="flex items-center mx-4 align-middle">
                                         <ion-icon name="heart-outline" class="mr-2"></ion-icon>
@@ -276,7 +276,7 @@
                                         </th:block>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="time-outline"></ion-icon>
-                                        <div th:text="${service.boardDateTime(top5Board.uploadTime)}"></div>
+                                        <div th:text="${@ut.setDateTime(top5Board.uploadTime)}"></div>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="chatbox-ellipses-outline"></ion-icon>
                                         <div th:text="${replyService.boardReplySize(top5Board)}"></div>
