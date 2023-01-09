@@ -85,4 +85,8 @@ public class BookmarkService {
                 break;
         }
     }
+
+    public boolean existBookmarkByBoardAndAccount(Board board, Account account) {
+        return bookmarkRepository.existsByBoardAndAccount(board, account);
+    }
 }

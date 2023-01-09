@@ -259,7 +259,7 @@
                             <hr class="my-4">
                             <div id="like_div" class="flex" sec:authorize="isAuthenticated()">
                                 <div class="flex-none w-5">
-                                    <div th:if="${likes.isEmpty()}">
+                                    <div th:if="${!likes}">
                                         <form id="like_add">
                                             <input type="hidden" id="like_postId" name="like_postId" th:value="${board.id}"/>
                                             <input type="hidden" id="like_postSort" name="like_postSort" value="board"/>
@@ -272,7 +272,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div th:if="${likes.isPresent()}">
+                                    <div th:if="${likes}">
                                         <form id="like_cancel">
                                             <input type="hidden" id="like_postId" name="like_postId" th:value="${board.id}"/>
                                             <input type="hidden" id="like_postSort" name="like_postSort" value="board"/>
@@ -290,7 +290,7 @@
                                     <span id="like_result" class="text-justify flex-none w-5 ml-1" th:text="${board.likesList.size()}"></span>
                                 </div>
                                 <div class="flex-none w-5 mr-2" id="bookmark_div">
-                                    <div th:if="${bookmark.isEmpty()}">
+                                    <div th:if="${!bookmark}">
                                         <form id="bookmarkAdd">
                                             <input type="hidden" id="postId" name="postId" th:value="${board.id}"/>
                                             <input type="hidden" id="postSort" name="postSort" value="board"/>
@@ -303,7 +303,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div th:if="${bookmark.isPresent()}">
+                                    <div th:if="${bookmark}">
                                         <form id="bookmarkCancel">
                                             <div uk-tooltip="북마크 해제">
                                                 <input type="hidden" id="postId" name="postId" th:value="${board.id}"/>
@@ -367,7 +367,7 @@
                     </div>
 
                     <div class="space-y-5" sec:authorize="isAuthenticated()">
-                        <div th:each="reply : ${reply}" class="flex gap-x-4 relative rounded-md">
+                        <div th:each="reply : ${board.replyList}" class="flex gap-x-4 relative rounded-md">
                             <img th:if="${#strings.isEmpty(reply.getAccount()?.profileImage)}"
                                  th:data-id="${reply.getAccount().studentId}" style="width: 48px; height: 48px;"
                                  alt="" class="identicon rounded-full shadow w-12 h-12 is_avatar"/>
@@ -380,7 +380,7 @@
                                         <span>수정</span>
                                     </a>
                                 </div>
-                                <div class="absolute right-16 top-0 text-blue-500 updateSubmit" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
+                                <div class="absolute right-16 top-0 text-blue-500 updateSubmit hidden" uk-tooltip="댓글 수정" th:onclick="|updateComplete.replyUpdateAjax(${reply.rid})|" th:id="|replyUpdateSubmit${reply.rid}|">
                                     <a>
                                         <span>등록</span>
                                     </a>
@@ -463,7 +463,7 @@
 
     <div th:replace="theme-fragments :: bookmarkAjax"></div>
     <div th:replace="theme-fragments :: likeAjax"></div>
-    <div th:replace="theme-fragments :: replyAjax"></div>
+    <div th:replace="fragments/reply-fragments :: replyAjax"></div>
     <script src="/node_modules/@fancyapps/ui/dist/fancybox.umd.js"></script>
     <link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">

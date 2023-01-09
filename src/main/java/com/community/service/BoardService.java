@@ -3,6 +3,7 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
+import com.community.domain.likes.LikeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
@@ -32,6 +33,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final S3Repository s3Repository;
     private final S3Service s3Service;
+    private final LikeService likeService;
+    private final BookmarkService bookmarkService;
 
     private final ModelMapper mapper;
 
@@ -222,5 +225,13 @@ public class BoardService {
         board.setReportCount(0);
         board.setWriter(account);
         return board;
+    }
+
+    public boolean existLikeByBoard(Board board, Account account) {
+        return likeService.existLikeByBoardAndAccount(board, account);
+    }
+
+    public boolean existBookmarkByBoard(Board board, Account account) {
+        return bookmarkService.existBookmarkByBoardAndAccount(board, account);
     }
 }

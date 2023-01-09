@@ -122,11 +122,13 @@ public class BoardController {
 
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
-    public String boardDetail(@PathVariable long boardId, @CurrentUser Account account,
+    public String boardDetail(@PathVariable long boardId, @AuthenticationPrincipal SecurityUser securityUser,
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
         Board currentBoard = boardService.findBoardById(boardId);
+
+        Account account = securityUser.getAccount();
 
         List<Board> top5Board = boardService.top5BoardLists();
         model.addAttribute("account", account);
@@ -134,16 +136,10 @@ public class BoardController {
         boardService.viewUpdate(boardId, request, response);
 
         // 좋아요 및 댓글
-        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);
-        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndBoard(account, currentBoard);
-        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(currentBoard);
 
         model.addAttribute("board", currentBoard);
-        model.addAttribute("service", boardService);
-        model.addAttribute("likes", likes);
-        model.addAttribute("bookmark", existBookmark);
-        model.addAttribute("reply", replies);
-        model.addAttribute("replyService", replyService);
+        model.addAttribute("likes", boardService.existLikeByBoard(currentBoard, account));
+        model.addAttribute("bookmark", boardService.existBookmarkByBoard(currentBoard, account));
         model.addAttribute("top5Board", top5Board);
 
         model.addAttribute(new ReplyForm());
