@@ -58,7 +58,7 @@ public class BoardController {
     @GetMapping("/board/{type}")
     public String boardTypeList(Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 5, page = 0, sort = "createDate",
                                         direction = Sort.Direction.ASC) Pageable pageable,
                                 @PathVariable String type) {
         // Top5 게시물
@@ -76,15 +76,12 @@ public class BoardController {
 
     @ResponseBody
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
-    public Long boardFormSubmit(@CurrentUser Account account,
-                                @RequestParam Map<String, Object> params,
+    public Long boardFormSubmit(@AuthenticationPrincipal SecurityUser securityUser,
+                                @RequestParam Map<String, Object>params,
                                 @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile) {
-        // TODO : null 값 들어오는거 이유 찾기 || ObjectMapper Bean 등록하기
-//        ObjectMapper mapper = new ObjectMapper();
-        BoardForm dto = modelMapper.map(params, BoardForm.class);
-//        BoardForm dto = mapper.convertValue(params, BoardForm.class);
 
-        Board savedBoard = boardService.saveNewBoard(multipartFile, dto);
+        BoardForm dto = modelMapper.map(params, BoardForm.class);
+        Board savedBoard = boardService.saveNewBoard(multipartFile, dto, securityUser.getAccount());
 
         return savedBoard.getId();
     }
@@ -92,7 +89,7 @@ public class BoardController {
     @GetMapping("/board/{type}/search")
     public String boardSearch(String keyword, @CurrentUser Account account, Model model,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                              @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                              @PageableDefault(size = 5, page = 0, sort = "createDate",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
         String searchType = "";
@@ -129,15 +126,12 @@ public class BoardController {
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
+        Board currentBoard = boardService.findBoardById(boardId);
+
         List<Board> top5Board = boardService.top5BoardLists();
         model.addAttribute("account", account);
-        Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
-        if (hasBoardError) {
-            return "error-page";
-        }
 
         boardService.viewUpdate(boardId, request, response);
-        Board currentBoard = boardRepository.findById(boardId);
 
         // 좋아요 및 댓글
         Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);

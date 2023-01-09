@@ -7,6 +7,7 @@ import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
 import com.community.web.dto.BoardForm;
+import com.community.web.exception.IdNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -34,9 +35,10 @@ public class BoardService {
 
     private final ModelMapper mapper;
 
-    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto) {
-        Board newBoard = mapper.map(dto, Board.class);
+    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, Account account) {
+        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), account);
         uploadImage(multipartFile, newBoard);
+
         return boardRepository.save(newBoard);
     }
 
@@ -209,4 +211,16 @@ public class BoardService {
         return findTop5Boards;
     }
 
+    public Board findBoardById(Long boardId) {
+        Optional<Board> optBoard = boardRepository.findById(boardId);
+        return optBoard.orElseThrow( () -> new IdNotFoundException(boardId + "번 게시물은 존재하지 않습니다."));
+    }
+
+    public Board setBasicInfo(Board board, Account account) {
+        board.setIsReported(false);
+        board.setPageView(0);
+        board.setReportCount(0);
+        board.setWriter(account);
+        return board;
+    }
 }
