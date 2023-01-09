@@ -69,7 +69,7 @@
                                 <div class="flex items-center pt-3 align-middle">
                                     <div class="flex items-center">
                                         <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                        <a class="text-xs" th:text="${service.boardDateTime(board.getCreateDate)}"></a>
+                                        <a class="text-xs" th:text="${@ut.setDateTime(board.getCreateDate())}"></a>
                                     </div>
                                     <div class="flex items-center mx-4 align-middle">
                                         <ion-icon name="heart-outline" class="mr-2"></ion-icon>
