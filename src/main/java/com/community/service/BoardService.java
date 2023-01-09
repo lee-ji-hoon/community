@@ -7,8 +7,10 @@ import com.community.domain.likes.LikeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
+import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
 import com.community.web.exception.IdNotFoundException;
+import com.community.web.exception.IsReportedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -38,32 +40,11 @@ public class BoardService {
 
     private final ModelMapper mapper;
 
-    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, Account account) {
-        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), account);
+    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, SecurityUser securityUser) {
+        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), securityUser.getAccount());
         uploadImage(multipartFile, newBoard);
 
         return boardRepository.save(newBoard);
-    }
-
-    public Board saveNewBoard(List<MultipartFile> multipartFile, Account account,
-                              String post_sort, String post_sub_sort,
-                              String post_title, String post_sub_title, String post_content) {
-
-        Board board = Board.builder()
-                .writer(account)
-                .boardTitle(post_sort)
-                .subBoardTitle(post_sub_sort)
-                .title(post_title)
-                .subTitle(post_sub_title)
-                .content(post_content)
-                .pageView(0)
-                .isReported(false)
-                .reportCount(0)
-                .build();
-
-        uploadImage(multipartFile, board);
-
-        return boardRepository.save(board);
     }
 
     public void deleteBoard(Board board) {
@@ -170,14 +151,12 @@ public class BoardService {
         }
     }
 
-    public Boolean boardReportedOrNull(long bid) {
-        Boolean errorBoard = null;
+    public boolean boardReportedOrNull(long bid) {
+        boolean errorBoard = false;
         Optional<Board> currentBoard = Optional.ofNullable(boardRepository.findById(bid));
-        if (currentBoard.isEmpty() || currentBoard.get().getIsReported().equals(true)) {
+        if (currentBoard.isEmpty() || currentBoard.get().getIsReported()) {
             errorBoard = true;
-            return errorBoard;
         }
-        errorBoard = false;
         return errorBoard;
     }
 
@@ -216,6 +195,11 @@ public class BoardService {
 
     public Board findBoardById(Long boardId) {
         Optional<Board> optBoard = boardRepository.findById(boardId);
+        optBoard.ifPresent( b -> {
+            if (b.getIsReported()) {
+                throw new IsReportedException(boardId + "신고된 게시글입니다.");
+            }
+        });
         return optBoard.orElseThrow( () -> new IdNotFoundException(boardId + "번 게시물은 존재하지 않습니다."));
     }
 

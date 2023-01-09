@@ -75,13 +75,14 @@ public class BoardController {
     }
 
     @ResponseBody
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
-    public Long boardFormSubmit(@AuthenticationPrincipal SecurityUser securityUser,
-                                @RequestParam Map<String, Object>params,
+    public Long addNewBoard(@AuthenticationPrincipal SecurityUser securityUser,
+                                @RequestParam Map<String, Object> params,
                                 @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile) {
 
         BoardForm dto = modelMapper.map(params, BoardForm.class);
-        Board savedBoard = boardService.saveNewBoard(multipartFile, dto, securityUser.getAccount());
+        Board savedBoard = boardService.saveNewBoard(multipartFile, dto, securityUser);
 
         return savedBoard.getId();
     }
