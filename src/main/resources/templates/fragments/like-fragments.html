@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<body>
+    <div th:fragment="likeAjax">
+    <script>
+        $(document).on('click', '.like_heart_click', function() {
+            // .like_heart_click은 <a></a>태그의 class 이름
+            // 해당 태그를 클릭하면 진행되는 메소드
+            if($(this).children('svg').attr('class') == "likeAddBtn text-blue-500"){
+                // this는 클릭한 태그 전역
+                // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
+                $.ajax({
+                    url:'/like/add',
+                    type:'get',
+                    data : $('#like_add').serialize(),
+                    success : function (){
+                        $('#blk_div').load(location.href+' #blk_div');
+                    },
+                });
+            }else if($(this).children('svg').attr('class') == "likeDelBtn text-red-500"){
+                $.ajax({
+                    url:'/like/delete',
+                    type:'get',
+                    data : $('#like_cancel').serialize(),
+                    success : function (){
+                        $('#blk_div').load(location.href+' #blk_div');
+                    },
+                });
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

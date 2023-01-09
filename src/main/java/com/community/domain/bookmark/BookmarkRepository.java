@@ -21,4 +21,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Optional<Bookmark> findByAccountAndMarket(Account account, Market market);
 
     Optional<Bookmark> findByAccountAndStudy(Account account, Study study);
+
+    boolean existsByBoardAndAccount(Board board, Account account);
 }

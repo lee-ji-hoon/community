@@ -60,8 +60,4 @@ public class Board extends BaseEntity {
     private Account writer;
 
     private Integer pageView;
-
-    private LocalDateTime uploadTime;
-
-    private LocalDateTime updateTime;
 }

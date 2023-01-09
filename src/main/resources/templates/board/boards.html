@@ -59,8 +59,8 @@
                                     <div class="uk-modal-body" uk-overflow-auto>
                                         <div class="space-y-4 g:w-8/12">
                                             <div class="form-group">
-                                                <label for="post_sort"> 유형 선택 </label>
-                                                <select id="post_sort" name="post_sort"  class="shadow-none with-border px-2">
+                                                <label for="boardTitle"> 유형 선택 </label>
+                                                <select id="boardTitle" name="boardTitle"  class="shadow-none with-border px-2">
                                                     <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
                                                     <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
                                                     <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
@@ -68,8 +68,8 @@
                                             </div>
                                             <div id="subBoardSort">
                                                 <div class="form-group">
-                                                    <label for="post_sub_sort"> 종류 선택 </label>
-                                                    <select id="post_sub_sort" name="post_sub_sort" class="shadow-none with-border form-control px-2">
+                                                    <label for="subBoardTitle"> 종류 선택 </label>
+                                                    <select id="subBoardTitle" name="subBoardTitle" class="shadow-none with-border form-control px-2">
                                                         <optgroup label="QnA" id="opgQnA">
                                                             <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
                                                             <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
@@ -90,7 +90,7 @@
                                             <!-- 제목 -->
                                             <div class="form-group">
                                                 <div class="line">
-                                                    <input class="line__input form-control" id="post_title" max="30" name="post_title"
+                                                    <input class="line__input form-control" id="title" max="30" name="title"
                                                            type="text" onkeyup="this.setAttribute('value', this.value);"
                                                            aria-describedby="titleHelp" required autocomplete="off">
                                                     <span for="username" class="line__placeholder"> 제목 </span>
@@ -103,7 +103,7 @@
                                             <!-- 소제목 -->
                                             <div id="postTitleSub" class="form-group">
                                                 <div class="line">
-                                                    <input class="line__input form-group" id="post_sub_title" name="post_sub_title"
+                                                    <input class="line__input form-group" id="subTitle" name="subTitle"
                                                            type="text" onkeyup="this.setAttribute('value', this.value);"
                                                            aria-describedby="subTitleHelp" autocomplete="off">
                                                     <span for="username" class="line__placeholder"> 소제목 </span>
@@ -115,7 +115,7 @@
                                             <!-- 본문 -->
                                             <div>
                                                 <div>
-                                                        <textarea class="form-control"  id="post_content" name="post_content"
+                                                        <textarea class="form-control"  id="content" name="content"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>
                                                 </div>
                                                 <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
@@ -189,7 +189,7 @@
                                 <div class="flex items-center pt-2">
                                     <div class="flex items-center">
                                         <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                        <a class="text-xs" th:text="${@ut.setDateTime(board.uploadTime)}"></a>
+                                        <a class="text-xs" th:text="${@ut.setDateTime(board.getCreateDate())}"></a>
                                     </div>
                                     <div class="flex items-center mx-4 align-middle">
                                         <ion-icon name="heart-outline" class="mr-2"></ion-icon>
@@ -198,15 +198,17 @@
                                     <div class="flex items-center">
                                         <ion-icon name="chatbubble-ellipses-outline"  class="mr-2"></ion-icon>
                                         <a class="text-xs" th:text="${board.replyList.size()}"></a>
-                                        <th:block th:if="${replyService.boardReplyPresent(board)}">
+                                        <th:block th:if="${board.replyList.size() != 0}">
                                             <div class="-space-x-2 flex items-center ml-1">
-                                                <div th:each="topReply : ${replyService.boardsReplyTop3List(board)}">
-                                                    <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                         th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
-                                                         alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
-                                                    <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
-                                                         th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
-                                                         alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                <div th:each="topReply, status : ${board.getReplyList()}">
+                                                    <th:block th:if="${status.index <= 3}">
+                                                        <img th:if="${#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                             th:data-id="${topReply.getAccount().studentId}" style="width: 1.75rem; height: 1.75rem;"
+                                                             alt="" class="identicon border-2 border-white rounded-full w-7 is_avatar">
+                                                        <img th:if="${!#strings.isEmpty(topReply.getAccount()?.profileImage)}"
+                                                             th:src="${topReply.getAccount()?.profileImage}" style="width: 1.75rem; height: 1.75rem;"
+                                                             alt="" class="border-2 border-white rounded-full w-7 is_avatar"/>
+                                                    </th:block>
                                                 </div>
                                             </div>
                                         </th:block>
@@ -261,25 +263,25 @@
                     <div class="card divide-y divide-gray-100 px-4 mb-4">
                         <h2 class="text-lg font-semibold my-3">실시간 인기글</h2>
                         <ul>
-                            <li th:each="top5Board : ${top5Board}">
-                                <a th:href="@{/board/detail/{boardId}(boardId = ${top5Board.id})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
-                                    <h3 class="font-medium line-clamp-1" th:text="${top5Board.title}"></h3>
+                            <li th:each="board : ${top5Board}">
+                                <a th:href="@{/board/detail/{boardId}(boardId = ${board.id})}" class="hover:bg-gray-100 rounded-md p-2 -mx-2 block">
+                                    <h3 class="font-medium line-clamp-1" th:text="${board.title}"></h3>
                                     <div class="clear-both pt-2 flex items-center my-auto text-xs space-x-1.5">
-                                        <th:block th:if="${top5Board.boardTitle=='자유'}">
-                                            <div class="bg-blue-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${top5Board.boardTitle}"></div>
+                                        <th:block th:if="${board.getBoardTitle().equals('자유')}">
+                                            <div class="bg-blue-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-blue-500" th:text="${board.boardTitle}"></div>
                                         </th:block>
-                                        <th:block th:if="${top5Board.boardTitle=='정보'}">
-                                            <div class="bg-purple-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${top5Board.boardTitle}"></div>
+                                        <th:block th:if="${board.getBoardTitle().equals('정보')}">
+                                            <div class="bg-purple-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-purple-500" th:text="${board.boardTitle}"></div>
                                         </th:block>
-                                        <th:block th:if="${top5Board.boardTitle=='질문'}">
-                                            <div class="bg-yellow-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${top5Board.boardTitle}"></div>
+                                        <th:block th:if="${board.getBoardTitle().equals('질문')}">
+                                            <div class="bg-yellow-100 font-semibold w-10 px-1.5 py-1 rounded-full text-center text-xs text-yellow-500" th:text="${board.boardTitle}"></div>
                                         </th:block>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="time-outline"></ion-icon>
-                                        <div th:text="${@ut.setDateTime(top5Board.uploadTime)}"></div>
+                                        <div th:text="${@ut.setDateTime(board.getCreateDate)}"></div>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                                        <div th:text="${replyService.boardReplySize(top5Board)}"></div>
+                                        <div th:text="${board.getReplyList().size()}"></div>
                                     </div>
                                 </a>
                             </li>
@@ -291,10 +293,10 @@
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script th:replace="theme-fragments.html :: form-validation"></script>
-        <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
+        <script th:replace="fragments/board-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
         <script type="application/javascript">
             $( document ).ready( function() {
-                $('#post_content').summernote({
+                $('#content').summernote({
                     placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
                     tabsize: 2,
                     toolbar: [
@@ -307,12 +309,12 @@
                 });
 
                 function resetValue() {
-                    $('#post_title').val('');
-                    $('#post_sub_title').val('');
+                    $('#title').val('');
+                    $('#subTitle').val('');
                 }
                 $('#postTitle').val('');
-                jQuery('#post_sort').change(function() {
-                    var state = jQuery('#post_sort option:selected').val();
+                jQuery('#boardTitle').change(function() {
+                    var state = jQuery('#boardTitle option:selected').val();
                     if (state == '자유') {
                         // 작성 값 초기화 및 메뉴명 변경
                         $("#forum_head").text('글 작성하기');
@@ -322,12 +324,12 @@
                         resetValue();
 
                         // 자유게시판일 경우 SubTitle 빈값
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#subBoardSort').hide();
                         jQuery('#postTitleSub').hide();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                     if (state == '질문') {
@@ -339,14 +341,14 @@
                         resetValue();
 
                         // 질문게시판일 경우 SubTitle 선택 selected
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#opgQnA').show();
                         jQuery('#opgInfo').hide();
                         jQuery('#subBoardSort').show();
                         jQuery('#postTitleSub').hide();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                     if (state == '정보') {
@@ -358,14 +360,14 @@
                         resetValue();
 
                         // 정보게시판일 경우 SubTitle 선택 selected
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#opgQnA').hide();
                         jQuery('#opgInfo').show();
                         jQuery('#subBoardSort').show();
                         jQuery('#postTitleSub').show();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                 });

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<body>
+    <div th:fragment="bookmarkAjax">
+        <script>
+            $(document).on('click', '.bookmark_click', function() {
+                // 해당 태그를 클릭하면 진행되는 메소드
+                if($(this).children('svg').attr('id') == "bookmarkAddBtn"){
+                    // this는 클릭한 태그 전역
+                    // a 태그 하위에 있는 i 태그의 class가 fa fa-thumbs-up일 때
+                    $.ajax({
+                        url:'/bookmark/add',
+                        type:'get',
+                        data : $('#bookmarkAdd').serialize(),
+                        success : function (){
+                            console.log("북마크 실행");
+                            $('#blk_div').load(location.href+' #blk_div');
+                        },
+                    });
+                }else if($(this).children('svg').attr('id') == "bookmarkDelBtn"){
+                    $.ajax({
+                        url:'/bookmark/delete',
+                        type:'get',
+                        data : $('#bookmarkCancel').serialize(),
+                        success : function (){
+                            console.log("북마크 취소");
+                            $('#blk_div').load(location.href+' #blk_div');
+                        },
+                    });
+                }
+            });
+        </script>
+    </div>
+    <div th:fragment="bookmarkListDeleteAjax">
+        <script>
+            // 북마크 삭제
+            let deleteBookmarkBtn = {
+                deleteBookmark: function (postId, postSort) {
+                    swal({
+                        title: "북마크를 제거하시겠습니까?",
+                        text: "삭제된 북마크 내역은 복구할 수 없습니다.",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            window.addEventListener('keydown', function (e){
+                                if (e.keyCode == 13) {
+                                    swal("엔터키는 사용할 수 없습니다.");
+                                }
+                            })
+                            if (willDelete) {
+                                $.ajax({
+                                    url:'/bookmark/delete',
+                                    type:'get',
+                                    data : (postSort === 'market') ? $(`#bookmarkCancelMarket${postId}`).serialize() :
+                                        (postSort === 'board') ? $(`#bookmarkCancelBoard${postId}`).serialize() :
+                                            (postSort === 'study') ? $(`#bookmarkCancelStudy${postId}`).serialize() :
+                                                (postSort === 'council') ? $(`#bookmarkCancelCouncil${postId}`).serialize() : 0,
+                                    success : function (){
+                                        console.log("북마크 취소");
+                                        $('#blk_div').load(location.href+' #blk_div');
+                                    },
+                                });
+                                swal("북마크가 삭제되었습니다.", {
+                                    icon: "success",
+                                });
+                            } else {
+                                swal("북마크가 삭제되지 않았습니다. 다시 시도해주세요.");
+                            }
+                        });
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

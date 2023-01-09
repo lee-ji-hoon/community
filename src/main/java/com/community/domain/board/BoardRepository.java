@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryExtension {
 
     // 매니저 기능 관련
-    Page<Board> findByIsReportedOrderByUploadTimeDesc(Boolean isReported, Pageable pageable);
+    Page<Board> findByIsReportedOrderByCreateDateDesc(Boolean isReported, Pageable pageable);
 
     // 페이징 기능 관련
     Page<Board> findAll(Pageable pageable);
@@ -24,12 +25,12 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
 
     /* 검색 관련 쿼리 */
-    List<Board> findByContentContainingOrderByUploadTimeDesc(String keyword);
-    List<Board> findByTitleContainingOrderByUploadTimeDesc(String keyword);
+    List<Board> findByContentContainingOrderByCreateDateDesc(String keyword);
+    List<Board> findByTitleContainingOrderByCreateDateDesc(String keyword);
 
     /* 신고된 게시글 제외 쿼리 */
 
-    Page<Board> findByBoardTitleAndIsReportedOrderByUploadTimeDesc(String boardTitle, Boolean isReported, Pageable pageable);
+    Page<Board> findByBoardTitleAndIsReportedOrderByCreateDateDesc(String boardTitle, Boolean isReported, Pageable pageable);
 
 
     /* 실시간 인기글 */
@@ -39,6 +40,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     Board findById(long id);
 
+    @Override
+    Optional<Board> findById(Long id);
+
     void deleteAllByWriterId(long writerId);
     /*
     *
@@ -46,6 +50,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     *
     */
     /* 신고된 게시글 쿼리 */
-    List<Board> findByIsReportedOrderByUploadTimeDesc(Boolean isReported);
+    List<Board> findByIsReportedOrderByCreateDateDesc(Boolean isReported);
 
 }

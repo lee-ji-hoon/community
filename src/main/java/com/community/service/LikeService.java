@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -76,5 +77,9 @@ public class LikeService {
             return likeList.size();
         }
         return 0;
+    }
+
+    public boolean existLikeByBoardAndAccount(Board board, Account account) {
+        return likeRepository.existsByAccountAndBoard(account, board);
     }
 }

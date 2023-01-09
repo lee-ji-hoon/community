@@ -17,8 +17,10 @@ import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.likes.LikeRepository;
 import com.community.domain.likes.Likes;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -50,20 +53,14 @@ public class BoardController {
     private final BoardService boardService;
     private final ReplyService replyService;
 
+    private final ModelMapper modelMapper;
+
     @GetMapping("/board/{type}")
     public String boardTypeList(Model model,
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                                @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                                @PageableDefault(size = 5, page = 0, sort = "createDate",
                                         direction = Sort.Direction.ASC) Pageable pageable,
-                                @PathVariable String type,
-                                @AuthenticationPrincipal SecurityUser securityUser) {
-        if (securityUser == null) {
-            log.info("securityUser={}", securityUser);
-        } else {
-            Account account = securityUser.getAccount();
-            model.addAttribute(account);
-        }
-        log.info("securityUser={}", securityUser);
+                                @PathVariable String type) {
         // Top5 게시물
         List<Board> top5Board = boardService.top5BoardLists();
 
@@ -71,18 +68,28 @@ public class BoardController {
         model.addAttribute("boardType", boardType);
         model.addAttribute("pageNo", page);
         model.addAttribute("top5Board", top5Board);
-        model.addAttribute("service", boardService);
-        model.addAttribute("replyService", replyService);
         model.addAttribute(new BoardForm());
         model.addAttribute(type);
 
         return "board/boards";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/board-new", method = RequestMethod.POST)
+    public Long boardFormSubmit(@AuthenticationPrincipal SecurityUser securityUser,
+                                @RequestParam Map<String, Object>params,
+                                @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile) {
+
+        BoardForm dto = modelMapper.map(params, BoardForm.class);
+        Board savedBoard = boardService.saveNewBoard(multipartFile, dto, securityUser.getAccount());
+
+        return savedBoard.getId();
+    }
+
     @GetMapping("/board/{type}/search")
     public String boardSearch(String keyword, @CurrentUser Account account, Model model,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
-                              @PageableDefault(size = 5, page = 0, sort = "uploadTime",
+                              @PageableDefault(size = 5, page = 0, sort = "createDate",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
         String searchType = "";
@@ -113,52 +120,26 @@ public class BoardController {
 
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/board-new", method = RequestMethod.POST)
-    public Long boardFormSubmit(@CurrentUser Account account,
-                                     @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                     @RequestParam(value = "post_sort", required = false) String post_sort,
-                                     @RequestParam(value = "post_sub_sort", required = false) String post_sub_sort,
-                                     @RequestParam(value = "post_title", required = false ) String post_title,
-                                     @RequestParam(value = "post_sub_title", required = false) String post_sub_title,
-                                     @RequestParam(value = "post_content", required = false) String post_content) {
-        Board newBoard = boardService.saveNewBoard(
-                multipartFile, account,
-                post_sort, post_sub_sort,
-                post_title, post_sub_title, post_content);
-
-        return newBoard.getId();
-    }
-
-    /* 게시물 작성 관련 */
-
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
-    public String boardDetail(@PathVariable long boardId, @CurrentUser Account account,
+    public String boardDetail(@PathVariable long boardId, @AuthenticationPrincipal SecurityUser securityUser,
                               HttpServletRequest request, HttpServletResponse response,
                               Model model) {
 
+        Board currentBoard = boardService.findBoardById(boardId);
+
+        Account account = securityUser.getAccount();
+
         List<Board> top5Board = boardService.top5BoardLists();
         model.addAttribute("account", account);
-        Boolean hasBoardError = boardService.boardReportedOrNull(boardId);
-        if (hasBoardError) {
-            return "error-page";
-        }
 
         boardService.viewUpdate(boardId, request, response);
-        Board currentBoard = boardRepository.findById(boardId);
 
         // 좋아요 및 댓글
-        Optional<Likes> likes = likeRepository.findByAccountAndBoard(account, currentBoard);
-        Optional<Bookmark> existBookmark = bookmarkRepository.findByAccountAndBoard(account, currentBoard);
-        List<Reply> replies = replyRepository.findAllByBoardOrderByUploadTimeDesc(currentBoard);
 
         model.addAttribute("board", currentBoard);
-        model.addAttribute("service", boardService);
-        model.addAttribute("likes", likes);
-        model.addAttribute("bookmark", existBookmark);
-        model.addAttribute("reply", replies);
-        model.addAttribute("replyService", replyService);
+        model.addAttribute("likes", boardService.existLikeByBoard(currentBoard, account));
+        model.addAttribute("bookmark", boardService.existBookmarkByBoard(currentBoard, account));
         model.addAttribute("top5Board", top5Board);
 
         model.addAttribute(new ReplyForm());
