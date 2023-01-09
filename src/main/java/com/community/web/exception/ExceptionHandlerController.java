@@ -16,7 +16,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(value = IsReportedException.class)
-    public @ResponseBody String notExistId(IsReportedException e) {
+    public @ResponseBody String isReportedContent(IsReportedException e) {
         log.error("IsReportedException={}", e);
         return Script.href("/", e.getMessage());
     }
