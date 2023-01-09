@@ -14,4 +14,10 @@ public class ExceptionHandlerController {
         log.error("IdNotFoundException={}", e);
         return Script.href("/", e.getMessage());
     }
+
+    @ExceptionHandler(value = IsReportedException.class)
+    public @ResponseBody String notExistId(IsReportedException e) {
+        log.error("IsReportedException={}", e);
+        return Script.href("/", e.getMessage());
+    }
 }
