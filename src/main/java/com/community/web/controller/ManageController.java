@@ -51,7 +51,7 @@ public class ManageController {
                               @PathVariable String type) {
         switch (type) {
             case "board" :
-                Page<Board> boardReportedLists = boardRepository.findByIsReportedOrderByUploadTimeDesc(true, pageable);
+                Page<Board> boardReportedLists = boardRepository.findByIsReportedOrderByCreateDateDesc(true, pageable);
                 model.addAttribute("boardReportedLists", boardReportedLists);
                 break;
             case "reply" :

@@ -13,10 +13,8 @@ import com.community.domain.council.Council;
 import com.community.domain.council.CouncilRepository;
 import com.community.service.LikeService;
 import com.community.domain.study.Study;
-import com.community.web.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +50,7 @@ public class MainController {
         List<Board> boardList = boardRepository.findAll();
         List<Board> todayBoardList = new ArrayList<>();
         for (Board b_list : boardList) {
-            if (b_list.getUploadTime().toLocalDate().equals(LocalDate.now())) {
+            if (b_list.getCreateDate().toLocalDate().equals(LocalDate.now())) {
                 todayBoardList.add(b_list);
             }
         }

@@ -90,7 +90,7 @@
                                             <!-- 제목 -->
                                             <div class="form-group">
                                                 <div class="line">
-                                                    <input class="line__input form-control" id="post_title" max="30" name="post_title"
+                                                    <input class="line__input form-control" id="title" max="30" name="title"
                                                            type="text" onkeyup="this.setAttribute('value', this.value);"
                                                            aria-describedby="titleHelp" required autocomplete="off">
                                                     <span for="username" class="line__placeholder"> 제목 </span>
@@ -189,7 +189,7 @@
                                 <div class="flex items-center pt-2">
                                     <div class="flex items-center">
                                         <ion-icon name="time-outline" class="mr-2"></ion-icon>
-                                        <a class="text-xs" th:text="${@ut.setDateTime(board.uploadTime)}"></a>
+                                        <a class="text-xs" th:text="${@ut.setDateTime(board.getCreateDate)}"></a>
                                     </div>
                                     <div class="flex items-center mx-4 align-middle">
                                         <ion-icon name="heart-outline" class="mr-2"></ion-icon>
@@ -278,7 +278,7 @@
                                         </th:block>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="time-outline"></ion-icon>
-                                        <div th:text="${@ut.setDateTime(board.uploadTime)}"></div>
+                                        <div th:text="${@ut.setDateTime(board.getCreateDate)}"></div>
                                         <div class="pb-1"> . </div>
                                         <ion-icon name="chatbox-ellipses-outline"></ion-icon>
                                         <div th:text="${board.getReplyList().size()}"></div>
@@ -309,7 +309,7 @@
                 });
 
                 function resetValue() {
-                    $('#post_title').val('');
+                    $('#title').val('');
                     $('#subTitle').val('');
                 }
                 $('#postTitle').val('');

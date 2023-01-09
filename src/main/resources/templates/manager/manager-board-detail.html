@@ -105,7 +105,7 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <div class="text-base font-semibold"><a th:href="@{/profile/{nickname}/view(nickname=${board.getWriter().nickname})}" th:text="${board.getWriter().nickname}"></a></div>
-                                            <div class="text-xs" th:text="${account.dateTime(board.uploadTime)}">게시물 시간</div>
+                                            <div class="text-xs" th:text="${account.dateTime(board.getCreateDate)}">게시물 시간</div>
                                         </div>
                                     </div>
                                 </div>

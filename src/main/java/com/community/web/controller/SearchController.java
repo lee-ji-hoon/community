@@ -51,8 +51,8 @@ public class SearchController {
 
         if (searchForm.getSearchType().equals("커뮤니티")) {
             List<Board> boardList = new ArrayList<>();
-            List<Board> searchContent = boardRepository.findByContentContainingOrderByUploadTimeDesc(keyword);
-            List<Board> searchTitle = boardRepository.findByTitleContainingOrderByUploadTimeDesc(keyword);
+            List<Board> searchContent = boardRepository.findByContentContainingOrderByCreateDateDesc(keyword);
+            List<Board> searchTitle = boardRepository.findByTitleContainingOrderByCreateDateDesc(keyword);
             boardList.addAll(searchContent);
             boardList.addAll(searchTitle);
 

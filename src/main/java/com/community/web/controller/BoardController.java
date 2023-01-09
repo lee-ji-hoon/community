@@ -17,8 +17,10 @@ import com.community.service.BoardService;
 import com.community.service.ReplyService;
 import com.community.domain.likes.LikeRepository;
 import com.community.domain.likes.Likes;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -49,6 +52,8 @@ public class BoardController {
 
     private final BoardService boardService;
     private final ReplyService replyService;
+
+    private final ModelMapper modelMapper;
 
     @GetMapping("/board/{type}")
     public String boardTypeList(Model model,
@@ -72,18 +77,16 @@ public class BoardController {
     @ResponseBody
     @RequestMapping(value = "/board-new", method = RequestMethod.POST)
     public Long boardFormSubmit(@CurrentUser Account account,
-                                @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                @RequestParam(value = "boardTitle", required = false) String boardTitle,
-                                @RequestParam(value = "subBoardTitle", required = false) String subBoardTitle,
-                                @RequestParam(value = "title", required = false ) String title,
-                                @RequestParam(value = "subTitle", required = false) String subTitle,
-                                @RequestParam(value = "content", required = false) String content) {
-        Board newBoard = boardService.saveNewBoard(
-                multipartFile, account,
-                boardTitle, subBoardTitle,
-                title, subTitle, content);
+                                @RequestParam Map<String, Object> params,
+                                @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile) {
+        // TODO : null 값 들어오는거 이유 찾기 || ObjectMapper Bean 등록하기
+//        ObjectMapper mapper = new ObjectMapper();
+        BoardForm dto = modelMapper.map(params, BoardForm.class);
+//        BoardForm dto = mapper.convertValue(params, BoardForm.class);
 
-        return newBoard.getId();
+        Board savedBoard = boardService.saveNewBoard(multipartFile, dto);
+
+        return savedBoard.getId();
     }
 
     @GetMapping("/board/{type}/search")

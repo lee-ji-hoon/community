@@ -6,8 +6,10 @@ import com.community.domain.board.Board;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
+import com.community.web.dto.BoardForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -32,11 +32,13 @@ public class BoardService {
     private final S3Repository s3Repository;
     private final S3Service s3Service;
 
-    public static final int SEC = 60;
-    public static final int MIN = 60;
-    public static final int HOUR = 24;
-    public static final int DAY = 30;
-    public static final int MONTH = 12;
+    private final ModelMapper mapper;
+
+    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto) {
+        Board newBoard = mapper.map(dto, Board.class);
+        uploadImage(multipartFile, newBoard);
+        return boardRepository.save(newBoard);
+    }
 
     public Board saveNewBoard(List<MultipartFile> multipartFile, Account account,
                               String post_sort, String post_sub_sort,
@@ -50,7 +52,6 @@ public class BoardService {
                 .subTitle(post_sub_title)
                 .content(post_content)
                 .pageView(0)
-                .uploadTime(LocalDateTime.now())
                 .isReported(false)
                 .reportCount(0)
                 .build();
@@ -77,7 +78,6 @@ public class BoardService {
         board.setTitle(post_title);
         board.setSubTitle(post_sub_title);
         board.setContent(post_content);
-        board.setUpdateTime(LocalDateTime.now());
 
         uploadImage(multipartFile, board);
     }
@@ -106,45 +106,16 @@ public class BoardService {
         Page<Board> boardPage = null;
         switch (type) {
             case "free" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("자유", false, pageable);
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("자유", false, pageable);
                 break;
             case "forum" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("정보", false, pageable);
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("정보", false, pageable);
                 break;
             case "qna" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByUploadTimeDesc("질문", false, pageable);
+                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("질문", false, pageable);
                 break;
         }
         return boardPage;
-    }
-
-    public String boardDateTime(LocalDateTime localDateTime){
-        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-        Date date = Date.from(instant);
-
-        long curTime = System.currentTimeMillis();
-        long regTime = date.getTime();
-        long diffTime = (curTime - regTime) / 1000;
-        String msg = null;
-        if (diffTime < BoardService.SEC) {
-            // sec
-            msg = diffTime + "초 전";
-        } else if ((diffTime /= BoardService.SEC) < BoardService.MIN) {
-            // min
-            msg = diffTime + "분 전";
-        } else if ((diffTime /= BoardService.MIN) < BoardService.HOUR) {
-            // hour
-            msg = (diffTime) + "시간 전";
-        } else if ((diffTime /= BoardService.HOUR) < BoardService.DAY) {
-            // day
-            msg = (diffTime) + "일 전";
-        } else if ((diffTime /= BoardService.DAY) < BoardService.MONTH) {
-            // day
-            msg = (diffTime) + "달 전";
-        } else {
-            msg = (diffTime) + "년 전";
-        }
-        return msg;
     }
 
     /* 페이지 조회수 증가 서비스 */
