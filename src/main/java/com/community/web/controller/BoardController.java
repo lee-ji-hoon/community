@@ -55,15 +55,7 @@ public class BoardController {
                                 @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                                 @PageableDefault(size = 5, page = 0, sort = "uploadTime",
                                         direction = Sort.Direction.ASC) Pageable pageable,
-                                @PathVariable String type,
-                                @AuthenticationPrincipal SecurityUser securityUser) {
-        if (securityUser == null) {
-            log.info("securityUser={}", securityUser);
-        } else {
-            Account account = securityUser.getAccount();
-            model.addAttribute(account);
-        }
-        log.info("securityUser={}", securityUser);
+                                @PathVariable String type) {
         // Top5 게시물
         List<Board> top5Board = boardService.top5BoardLists();
 
@@ -71,8 +63,6 @@ public class BoardController {
         model.addAttribute("boardType", boardType);
         model.addAttribute("pageNo", page);
         model.addAttribute("top5Board", top5Board);
-        model.addAttribute("service", boardService);
-        model.addAttribute("replyService", replyService);
         model.addAttribute(new BoardForm());
         model.addAttribute(type);
 
