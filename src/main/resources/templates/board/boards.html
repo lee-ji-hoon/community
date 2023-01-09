@@ -59,8 +59,8 @@
                                     <div class="uk-modal-body" uk-overflow-auto>
                                         <div class="space-y-4 g:w-8/12">
                                             <div class="form-group">
-                                                <label for="post_sort"> 유형 선택 </label>
-                                                <select id="post_sort" name="post_sort"  class="shadow-none with-border px-2">
+                                                <label for="boardTitle"> 유형 선택 </label>
+                                                <select id="boardTitle" name="boardTitle"  class="shadow-none with-border px-2">
                                                     <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
                                                     <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
                                                     <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
@@ -68,8 +68,8 @@
                                             </div>
                                             <div id="subBoardSort">
                                                 <div class="form-group">
-                                                    <label for="post_sub_sort"> 종류 선택 </label>
-                                                    <select id="post_sub_sort" name="post_sub_sort" class="shadow-none with-border form-control px-2">
+                                                    <label for="subBoardTitle"> 종류 선택 </label>
+                                                    <select id="subBoardTitle" name="subBoardTitle" class="shadow-none with-border form-control px-2">
                                                         <optgroup label="QnA" id="opgQnA">
                                                             <option data-icon="icon-material-outline-help-outline" value="" hidden>선택</option>
                                                             <option data-icon="icon-material-outline-help-outline" value="major">전공 관련</option>
@@ -103,7 +103,7 @@
                                             <!-- 소제목 -->
                                             <div id="postTitleSub" class="form-group">
                                                 <div class="line">
-                                                    <input class="line__input form-group" id="post_sub_title" name="post_sub_title"
+                                                    <input class="line__input form-group" id="subTitle" name="subTitle"
                                                            type="text" onkeyup="this.setAttribute('value', this.value);"
                                                            aria-describedby="subTitleHelp" autocomplete="off">
                                                     <span for="username" class="line__placeholder"> 소제목 </span>
@@ -115,7 +115,7 @@
                                             <!-- 본문 -->
                                             <div>
                                                 <div>
-                                                        <textarea class="form-control"  id="post_content" name="post_content"
+                                                        <textarea class="form-control"  id="content" name="content"
                                                                   type="text" aria-describedby="contentHelp" required></textarea>
                                                 </div>
                                                 <small id="contentHelp" class="form-text text-muted">남을 비방하는 글은 제제가 있을 수 있습니다.</small>
@@ -293,10 +293,10 @@
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script th:replace="theme-fragments.html :: form-validation"></script>
-        <script th:replace="theme-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
+        <script th:replace="fragments/board-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
         <script type="application/javascript">
             $( document ).ready( function() {
-                $('#post_content').summernote({
+                $('#content').summernote({
                     placeholder: '글의 내용을 입력해주세요.<br/>타인에게 불쾌감을 주는 글은 예고없이 삭제됩니다.<br/>또한 신고가 누적될 시 제재가 있을 수 있습니다.',
                     tabsize: 2,
                     toolbar: [
@@ -310,11 +310,11 @@
 
                 function resetValue() {
                     $('#post_title').val('');
-                    $('#post_sub_title').val('');
+                    $('#subTitle').val('');
                 }
                 $('#postTitle').val('');
-                jQuery('#post_sort').change(function() {
-                    var state = jQuery('#post_sort option:selected').val();
+                jQuery('#boardTitle').change(function() {
+                    var state = jQuery('#boardTitle option:selected').val();
                     if (state == '자유') {
                         // 작성 값 초기화 및 메뉴명 변경
                         $("#forum_head").text('글 작성하기');
@@ -324,12 +324,12 @@
                         resetValue();
 
                         // 자유게시판일 경우 SubTitle 빈값
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#subBoardSort').hide();
                         jQuery('#postTitleSub').hide();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                     if (state == '질문') {
@@ -341,14 +341,14 @@
                         resetValue();
 
                         // 질문게시판일 경우 SubTitle 선택 selected
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#opgQnA').show();
                         jQuery('#opgInfo').hide();
                         jQuery('#subBoardSort').show();
                         jQuery('#postTitleSub').hide();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                     if (state == '정보') {
@@ -360,14 +360,14 @@
                         resetValue();
 
                         // 정보게시판일 경우 SubTitle 선택 selected
-                        $("#post_sub_sort option:eq(0)").prop("selected", true);
+                        $("#subBoardTitle option:eq(0)").prop("selected", true);
 
                         // Hide and Show
                         jQuery('#opgQnA').hide();
                         jQuery('#opgInfo').show();
                         jQuery('#subBoardSort').show();
                         jQuery('#postTitleSub').show();
-                        //$('#post_sub_sort').selectpicker('refresh');
+                        //$('#subBoardTitle').selectpicker('refresh');
                         //$('#board_form').load(window.location.href+' #board_form');
                     }
                 });

@@ -69,6 +69,23 @@ public class BoardController {
         return "board/boards";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/board-new", method = RequestMethod.POST)
+    public Long boardFormSubmit(@CurrentUser Account account,
+                                @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
+                                @RequestParam(value = "boardTitle", required = false) String boardTitle,
+                                @RequestParam(value = "subBoardTitle", required = false) String subBoardTitle,
+                                @RequestParam(value = "title", required = false ) String title,
+                                @RequestParam(value = "subTitle", required = false) String subTitle,
+                                @RequestParam(value = "content", required = false) String content) {
+        Board newBoard = boardService.saveNewBoard(
+                multipartFile, account,
+                boardTitle, subBoardTitle,
+                title, subTitle, content);
+
+        return newBoard.getId();
+    }
+
     @GetMapping("/board/{type}/search")
     public String boardSearch(String keyword, @CurrentUser Account account, Model model,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
@@ -102,25 +119,6 @@ public class BoardController {
         return "board/board-search";
 
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/board-new", method = RequestMethod.POST)
-    public Long boardFormSubmit(@CurrentUser Account account,
-                                     @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                     @RequestParam(value = "post_sort", required = false) String post_sort,
-                                     @RequestParam(value = "post_sub_sort", required = false) String post_sub_sort,
-                                     @RequestParam(value = "post_title", required = false ) String post_title,
-                                     @RequestParam(value = "post_sub_title", required = false) String post_sub_title,
-                                     @RequestParam(value = "post_content", required = false) String post_content) {
-        Board newBoard = boardService.saveNewBoard(
-                multipartFile, account,
-                post_sort, post_sub_sort,
-                post_title, post_sub_title, post_content);
-
-        return newBoard.getId();
-    }
-
-    /* 게시물 작성 관련 */
 
     // 위에서 요청한 리다이렉트 {boardId}로 다시 GetMapping
     @GetMapping("/board/detail/{boardId}")
