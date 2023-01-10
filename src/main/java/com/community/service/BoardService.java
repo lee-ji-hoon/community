@@ -56,6 +56,26 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    public boolean isBoardOwner(Account account, Board board) {
+
+        if (!board.getWriter().equals(account)) {
+            throw new IdNotFoundException("잘못된 접근입니다.");
+        }
+        return true;
+    }
+
+    public void updateBoard(List<MultipartFile> multipartFile, BoardForm dto,
+                            SecurityUser securityUser, Board board) {
+
+        if (isBoardOwner(securityUser.getAccount(), board)) {
+
+            mapper.map(dto, board);
+
+            uploadImage(multipartFile, board);
+        }
+
+    }
+
     public void updateBoard(Board board, List<MultipartFile> multipartFile,
                                  String post_sort, String post_sub_sort,
                                  String post_title, String post_sub_title, String post_content) {

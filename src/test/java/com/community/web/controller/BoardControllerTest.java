@@ -47,7 +47,7 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("검색 분야가 ENUM 타입에 맞는지 확인")
-    void searchTypeMatchTest() throws Exception {
+    void searchTypeMatchTest() {
 
         String type = "FREE";
 

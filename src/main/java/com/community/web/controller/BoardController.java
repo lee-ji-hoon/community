@@ -129,20 +129,18 @@ public class BoardController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/board/{id}/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/{id}/update", method = RequestMethod.PUT)
     public ResponseEntity boardUpdate(@PathVariable Long id,
-                                           @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile,
-                                           @RequestParam(value = "post_sort", required = false) String post_sort,
-                                           @RequestParam(value = "post_sub_sort", required = false) String post_sub_sort,
-                                           @RequestParam(value = "post_title", required = false ) String post_title,
-                                           @RequestParam(value = "post_sub_title", required = false) String post_sub_title,
-                                           @RequestParam(value = "post_content", required = false) String post_content) {
+                                      @AuthenticationPrincipal SecurityUser securityUser,
+                                      @RequestParam Map<String, Object> params,
+                                      @RequestParam(value = "article_file", required = false) List<MultipartFile> multipartFile) {
 
-        Optional<Board> byId = boardRepository.findById(id);
-        Board board = byId.get();
+        Board currentBoard = boardService.findBoardById(id);
 
-        boardService.updateBoard(board, multipartFile, post_sort,
-                post_sub_sort, post_title, post_sub_title, post_content);
+        BoardForm dto = modelMapper.map(params, BoardForm.class);
+
+        boardService.updateBoard(multipartFile, dto, securityUser, currentBoard);
+
         return ResponseEntity.ok().build();
     }
 
