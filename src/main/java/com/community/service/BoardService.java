@@ -11,6 +11,7 @@ import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
 import com.community.web.exception.IdNotFoundException;
 import com.community.web.exception.IsReportedException;
+import com.community.web.exception.NotOwnerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -57,7 +58,7 @@ public class BoardService {
     public boolean isBoardOwner(Account account, Board board) {
 
         if (!board.getWriter().equals(account)) {
-            throw new IdNotFoundException("잘못된 접근입니다.");
+            throw new NotOwnerException("잘못된 접근입니다.");
         }
         return true;
     }
