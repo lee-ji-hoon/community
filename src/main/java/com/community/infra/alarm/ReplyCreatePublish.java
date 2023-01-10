@@ -1,7 +1,7 @@
 package com.community.infra.alarm;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
+import com.community.domain.reply.Reply;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 

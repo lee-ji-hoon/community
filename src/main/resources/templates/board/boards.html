@@ -13,7 +13,7 @@
                 display: none;
             }
         </style>
-        <div th:replace="theme-fragments.html :: checked-email"></div>
+        <div th:replace="layout/fragments/service/email-fragments :: checked-email"></div>
 
         <div class="lg:flex lg:space-x-12">
 
@@ -61,9 +61,8 @@
                                             <div class="form-group">
                                                 <label for="boardTitle"> 유형 선택 </label>
                                                 <select id="boardTitle" name="boardTitle"  class="shadow-none with-border px-2">
-                                                    <option data-icon="icon-material-outline-assignment" value="자유" selected>자유</option>
-                                                    <option data-icon="icon-material-outline-help-outline" value="질문">질문</option>
-                                                    <option data-icon="icon-material-outline-assignment" value="정보">정보</option>
+                                                    <option th:each="sort : ${T(com.community.domain.board.BoardSort).values()}"
+                                                            th:value="${sort.key}" th:text="${sort.value}"></option>
                                                 </select>
                                             </div>
                                             <div id="subBoardSort">
@@ -171,7 +170,7 @@
                 </div>
                 <div>
                     <th:block th:if="${deleteMessage}">
-                        <div th:replace="theme-fragments.html :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
+                        <div th:replace="layout/fragments/service/notice-fragments :: blue-notice(message=${deleteMessage})" class="mb-4"></div>
                     </th:block>
                     <div class="card divide-y divide-gray-100 px-4 mb-4" th:each="board : ${boardType}">
                         <div class="lg:flex lg:space-x-6 py-3">
@@ -293,7 +292,7 @@
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script th:replace="theme-fragments.html :: form-validation"></script>
-        <script th:replace="fragments/board-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
+        <script th:replace="layout/fragments/domain/board-fragments.html :: s3-board-image-upload(uploadUrl='/board-new')"></script>
         <script type="application/javascript">
             $( document ).ready( function() {
                 $('#content').summernote({

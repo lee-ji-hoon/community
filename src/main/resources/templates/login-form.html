@@ -5,7 +5,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 
-<head th:replace="fragments/head :: head"></head>
+<head th:replace="layout/fragments/layout/head :: head"></head>
 <style>
     body{
         background-color: #f0f2f5;
@@ -29,7 +29,7 @@
                         <form class="needs-validation p-6 space-y-4 relative bg-white shadow-lg rounded-lg"
                               th:action th:object="${loginRequest}" method="POST">
                             <div th:if="${param.error}">
-                                <div th:replace="theme-fragments.html :: red-notice(message='이메일 또는 패스워드가 정확하지 않습니다.')"></div>
+                                <div th:replace="layout/fragments/service/notice-fragments :: red-notice(message='이메일 또는 패스워드가 정확하지 않습니다.')"></div>
                             </div>
                             <div class="form-group">
                                 <label for="username" class="mb-0">닉네임 또는 이메일</label>

@@ -3,12 +3,15 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
-import com.community.domain.likes.LikeRepository;
+import com.community.domain.board.BoardSort;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
+import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
 import com.community.web.exception.IdNotFoundException;
+import com.community.web.exception.IsReportedException;
+import com.community.web.exception.NotOwnerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -38,32 +40,11 @@ public class BoardService {
 
     private final ModelMapper mapper;
 
-    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, Account account) {
-        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), account);
+    public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, SecurityUser securityUser) {
+        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), securityUser.getAccount());
         uploadImage(multipartFile, newBoard);
 
         return boardRepository.save(newBoard);
-    }
-
-    public Board saveNewBoard(List<MultipartFile> multipartFile, Account account,
-                              String post_sort, String post_sub_sort,
-                              String post_title, String post_sub_title, String post_content) {
-
-        Board board = Board.builder()
-                .writer(account)
-                .boardTitle(post_sort)
-                .subBoardTitle(post_sub_sort)
-                .title(post_title)
-                .subTitle(post_sub_title)
-                .content(post_content)
-                .pageView(0)
-                .isReported(false)
-                .reportCount(0)
-                .build();
-
-        uploadImage(multipartFile, board);
-
-        return boardRepository.save(board);
     }
 
     public void deleteBoard(Board board) {
@@ -74,17 +55,24 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public void updateBoard(Board board, List<MultipartFile> multipartFile,
-                                 String post_sort, String post_sub_sort,
-                                 String post_title, String post_sub_title, String post_content) {
+    public boolean isBoardOwner(Account account, Board board) {
 
-        board.setBoardTitle(post_sort);
-        board.setSubBoardTitle(post_sub_sort);
-        board.setTitle(post_title);
-        board.setSubTitle(post_sub_title);
-        board.setContent(post_content);
+        if (!board.getWriter().equals(account)) {
+            throw new NotOwnerException("잘못된 접근입니다.");
+        }
+        return true;
+    }
 
-        uploadImage(multipartFile, board);
+    public void updateBoard(List<MultipartFile> multipartFile, BoardForm dto,
+                            SecurityUser securityUser, Board board) {
+
+        if (isBoardOwner(securityUser.getAccount(), board)) {
+
+            mapper.map(dto, board);
+
+            uploadImage(multipartFile, board);
+        }
+
     }
 
     private void uploadImage(List<MultipartFile> multipartFile, Board board) {
@@ -108,18 +96,10 @@ public class BoardService {
     }
 
     public Page<Board> boardTypeControl(String type, Pageable pageable) {
-        Page<Board> boardPage = null;
-        switch (type) {
-            case "free" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("자유", false, pageable);
-                break;
-            case "forum" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("정보", false, pageable);
-                break;
-            case "qna" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("질문", false, pageable);
-                break;
-        }
+        Page<Board> boardPage = boardRepository
+                .findByBoardTitleAndIsReportedOrderByCreateDateDesc(
+                        BoardSort.valueOf(type.toUpperCase()).getValue(), false, pageable
+                );
         return boardPage;
     }
 
@@ -170,17 +150,6 @@ public class BoardService {
         }
     }
 
-    public Boolean boardReportedOrNull(long bid) {
-        Boolean errorBoard = null;
-        Optional<Board> currentBoard = Optional.ofNullable(boardRepository.findById(bid));
-        if (currentBoard.isEmpty() || currentBoard.get().getIsReported().equals(true)) {
-            errorBoard = true;
-            return errorBoard;
-        }
-        errorBoard = false;
-        return errorBoard;
-    }
-
     public void boardReportReset(Board board) {
         board.setReportCount(0);
         board.setIsReported(false);
@@ -216,6 +185,11 @@ public class BoardService {
 
     public Board findBoardById(Long boardId) {
         Optional<Board> optBoard = boardRepository.findById(boardId);
+        optBoard.ifPresent( b -> {
+            if (b.getIsReported()) {
+                throw new IsReportedException(boardId + "신고된 게시글입니다.");
+            }
+        });
         return optBoard.orElseThrow( () -> new IdNotFoundException(boardId + "번 게시물은 존재하지 않습니다."));
     }
 

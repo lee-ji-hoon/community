@@ -4,13 +4,13 @@ import com.community.domain.account.Account;
 import com.community.domain.base.BaseEntity;
 import com.community.domain.bookmark.Bookmark;
 import com.community.domain.likes.Likes;
+import com.community.domain.reply.Reply;
 import com.community.infra.aws.S3;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

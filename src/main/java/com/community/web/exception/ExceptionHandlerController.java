@@ -14,4 +14,16 @@ public class ExceptionHandlerController {
         log.error("IdNotFoundException={}", e);
         return Script.href("/", e.getMessage());
     }
+
+    @ExceptionHandler(value = IsReportedException.class)
+    public @ResponseBody String isReportedContent(IsReportedException e) {
+        log.error("IsReportedException={}", e);
+        return Script.href("/", e.getMessage());
+    }
+
+    @ExceptionHandler(value = NotOwnerException.class)
+    public @ResponseBody String isNotOwner(NotOwnerException e) {
+        log.error("NotOwnerException={}", e);
+        return Script.href("/", e.getMessage());
+    }
 }
