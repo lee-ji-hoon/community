@@ -1,8 +1,8 @@
 package com.community.service;
 
 import com.community.domain.account.Account;
-import com.community.domain.board.Reply;
-import com.community.domain.board.ReplyRepository;
+import com.community.domain.reply.Reply;
+import com.community.domain.reply.ReplyRepository;
 import com.community.domain.study.Meetings;
 import com.community.domain.study.Study;
 import com.community.domain.study.StudyRepository;
