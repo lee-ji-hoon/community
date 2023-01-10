@@ -4,7 +4,6 @@ import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardSort;
-import com.community.domain.likes.LikeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
 import com.community.infra.aws.S3Service;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -74,19 +72,6 @@ public class BoardService {
             uploadImage(multipartFile, board);
         }
 
-    }
-
-    public void updateBoard(Board board, List<MultipartFile> multipartFile,
-                                 String post_sort, String post_sub_sort,
-                                 String post_title, String post_sub_title, String post_content) {
-
-        board.setBoardTitle(post_sort);
-        board.setSubBoardTitle(post_sub_sort);
-        board.setTitle(post_title);
-        board.setSubTitle(post_sub_title);
-        board.setContent(post_content);
-
-        uploadImage(multipartFile, board);
     }
 
     private void uploadImage(List<MultipartFile> multipartFile, Board board) {
@@ -162,15 +147,6 @@ public class BoardService {
             String value=viewCookie.getValue();
             log.info("viewCookie Check Logic : exist Cookie Value = " + value);
         }
-    }
-
-    public boolean boardReportedOrNull(long bid) {
-        boolean errorBoard = false;
-        Optional<Board> currentBoard = Optional.ofNullable(boardRepository.findById(bid));
-        if (currentBoard.isEmpty() || currentBoard.get().getIsReported()) {
-            errorBoard = true;
-        }
-        return errorBoard;
     }
 
     public void boardReportReset(Board board) {

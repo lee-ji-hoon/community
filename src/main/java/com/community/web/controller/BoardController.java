@@ -5,16 +5,10 @@ import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
 import com.community.domain.board.BoardSort;
-import com.community.domain.bookmark.BookmarkRepository;
 import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
-import com.community.web.dto.ReplyForm;
-import com.community.web.dto.BoardReportForm;
 import com.community.domain.board.BoardRepository;
-import com.community.domain.reply.ReplyRepository;
 import com.community.service.BoardService;
-import com.community.service.ReplyService;
-import com.community.domain.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -43,12 +37,8 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardRepository boardRepository;
-    private final LikeRepository likeRepository;
-    private final ReplyRepository replyRepository;
-    private final BookmarkRepository bookmarkRepository;
 
     private final BoardService boardService;
-    private final ReplyService replyService;
 
     private final ModelMapper modelMapper;
 
