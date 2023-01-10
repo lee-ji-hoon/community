@@ -3,6 +3,7 @@ package com.community.service;
 import com.community.domain.account.Account;
 import com.community.domain.board.BoardRepository;
 import com.community.domain.board.Board;
+import com.community.domain.board.BoardSort;
 import com.community.domain.likes.LikeRepository;
 import com.community.infra.aws.S3;
 import com.community.infra.aws.S3Repository;
@@ -89,18 +90,10 @@ public class BoardService {
     }
 
     public Page<Board> boardTypeControl(String type, Pageable pageable) {
-        Page<Board> boardPage = null;
-        switch (type) {
-            case "free" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("자유", false, pageable);
-                break;
-            case "forum" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("정보", false, pageable);
-                break;
-            case "qna" :
-                boardPage = boardRepository.findByBoardTitleAndIsReportedOrderByCreateDateDesc("질문", false, pageable);
-                break;
-        }
+        Page<Board> boardPage = boardRepository
+                .findByBoardTitleAndIsReportedOrderByCreateDateDesc(
+                        BoardSort.valueOf(type.toUpperCase()).getValue(), false, pageable
+                );
         return boardPage;
     }
 

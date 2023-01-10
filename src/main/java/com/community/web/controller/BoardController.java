@@ -4,6 +4,7 @@ import com.community.domain.account.Account;
 import com.community.domain.account.AccountType;
 import com.community.domain.account.CurrentUser;
 import com.community.domain.board.Board;
+import com.community.domain.board.BoardSort;
 import com.community.domain.bookmark.BookmarkRepository;
 import com.community.infra.config.SecurityUser;
 import com.community.web.dto.BoardForm;
@@ -64,7 +65,6 @@ public class BoardController {
         model.addAttribute("boardType", boardType);
         model.addAttribute("pageNo", page);
         model.addAttribute("top5Board", top5Board);
-        model.addAttribute(new BoardForm());
         model.addAttribute(type);
 
         return "board/boards";
@@ -84,34 +84,20 @@ public class BoardController {
     }
 
     @GetMapping("/board/{type}/search")
-    public String boardSearch(String keyword, @CurrentUser Account account, Model model,
+    public String boardSearch(String keyword, Model model,
                               @RequestParam(required = false, defaultValue = "0", value = "page") int page,
                               @PageableDefault(size = 5, page = 0, sort = "createDate",
                                       direction = Sort.Direction.ASC) Pageable pageable,
                               @PathVariable String type) {
-        String searchType = "";
-        switch (type) {
-            case "free" :
-                searchType = "자유";
-                break;
-            case "forum" :
-                searchType = "정보";
-                break;
-            case "qna" :
-                searchType = "질문";
-                break;
-        }
+
+        String searchType = BoardSort.valueOf(type.toUpperCase()).getValue();
 
         Page<Board> searchBoardResult = boardRepository.findByKeywordAndType(searchType, keyword, pageable);
-        for (Board board : searchBoardResult) {
-            log.info("boardTitle={}", board.getTitle());
-        }
+
         model.addAttribute("searchBoardResult", searchBoardResult);
         model.addAttribute("pageNo", page);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("replyService", replyService);
         model.addAttribute(type);
-        model.addAttribute(account);
 
         return "board/board-search";
 
@@ -125,23 +111,19 @@ public class BoardController {
 
         Board currentBoard = boardService.findBoardById(boardId);
 
-        Account account = securityUser.getAccount();
+        if (securityUser != null) {
+            Account account = securityUser.getAccount();
+            model.addAttribute("account", account);
+            model.addAttribute("likes", boardService.existLikeByBoard(currentBoard, account));
+            model.addAttribute("bookmark", boardService.existBookmarkByBoard(currentBoard, account));
+        }
 
         List<Board> top5Board = boardService.top5BoardLists();
-        model.addAttribute("account", account);
 
         boardService.viewUpdate(boardId, request, response);
 
-        // 좋아요 및 댓글
-
         model.addAttribute("board", currentBoard);
-        model.addAttribute("likes", boardService.existLikeByBoard(currentBoard, account));
-        model.addAttribute("bookmark", boardService.existBookmarkByBoard(currentBoard, account));
         model.addAttribute("top5Board", top5Board);
-
-        model.addAttribute(new ReplyForm());
-        model.addAttribute(new BoardReportForm());
-        model.addAttribute(new BoardForm(currentBoard));
 
         return "board/board-detail";
     }

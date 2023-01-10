@@ -1,15 +1,13 @@
 package com.community.web.controller;
 
 import com.community.domain.board.Board;
+import com.community.domain.board.BoardSort;
 import com.community.web.dto.BoardForm;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +42,18 @@ class BoardControllerTest {
 
         assertThat(savedBoard.getTitle()).isEqualTo("제목테스트");
         assertThat(savedBoard.getContent()).isEqualTo("내용테스트");
+
+    }
+
+    @Test
+    @DisplayName("검색 분야가 ENUM 타입에 맞는지 확인")
+    void searchTypeMatchTest() throws Exception {
+
+        String type = "FREE";
+
+        String result = BoardSort.valueOf(type).getValue();
+
+        assertThat(result).isEqualTo("자유");
 
     }
 
