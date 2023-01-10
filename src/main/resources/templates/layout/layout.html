@@ -5,20 +5,20 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
 
-    <head th:replace="fragments/head :: head"></head>
+    <head th:replace="layout/fragments/layout/head :: head"></head>
 
     <body>
         <div id="wrapper">
 
             <!-- Header -->
-            <header th:replace="fragments/header :: header"></header>
+            <header th:replace="layout/fragments/layout/header :: header"></header>
 
             <!-- sidebar -->
-            <div th:replace="theme-fragments.html :: side_bar(currentSideMenu='board')"></div>
+            <div th:replace="layout/fragments/layout/side-bar :: side_bar(currentSideMenu='board')"></div>
 
             <div class="main_content">
                 <div class="mcontainer">
-                    <div sec:authorize="isAuthenticated()" th:replace="theme-fragments.html :: checked-email"></div>
+                    <div sec:authorize="isAuthenticated()" th:replace="layout/fragments/service/email-fragments :: checked-email"></div>
                     <main layout:fragment="main"></main>
                 </div>
             </div>

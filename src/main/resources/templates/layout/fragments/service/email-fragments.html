@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+<body>
+    <div th:fragment="checked-email">
+        <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
+            <a href="#" th:href="@{/check-email}" class="alert-link">unect 가입을 완료해주세요. </a>인증 전까지는 몇몇 서비스를 사용 할 수 없습니다.
+        </div>
+        <div class="mb-3" th:if="${emailVerifiedChecked}">
+            <div th:replace="theme-fragments.html :: red-notice(message=${emailVerifiedChecked})"></div>
+        </div>
+    </div>
+</body>
+</html>

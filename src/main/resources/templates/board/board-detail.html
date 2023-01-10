@@ -35,13 +35,13 @@
                 <div id="isUpdated"></div>
             </div>
             <div th:if="${isUpdatedMessage}">
-                <div th:replace="theme-fragments.html :: blue-notice(message=${isUpdatedMessage})"></div>
+                <div th:replace="layout/fragments/service/notice-fragments :: blue-notice(message=${isUpdatedMessage})"></div>
             </div>
             <div th:if="${isReportedMessage}">
-                <div th:replace="theme-fragments.html :: red-notice(message=${isReportedMessage})"></div>
+                <div th:replace="layout/fragments/service/notice-fragments :: red-notice(message=${isReportedMessage})"></div>
             </div>
             <div th:if="${errorMessage}">
-                <div th:replace="theme-fragments.html :: red-notice(message=${errorMessage})"></div>
+                <div th:replace="layout/fragments/service/notice-fragments :: red-notice(message=${errorMessage})"></div>
             </div>
             <div class="card">
                 <div class="form_refresh">
@@ -332,10 +332,10 @@
                 </div>
             </div>
             <div th:if="${isReportedReplyMessage}">
-                <div th:replace="theme-fragments.html :: red-notice(message=${isReportedReplyMessage})"></div>
+                <div th:replace="layout/fragments/service/notice-fragments :: red-notice(message=${isReportedReplyMessage})"></div>
             </div>
             <div th:if="${reportCompleteMessage}">
-                <div th:replace="theme-fragments.html :: blue-notice(message=${reportCompleteMessage})"></div>
+                <div th:replace="layout/fragments/service/notice-fragments :: blue-notice(message=${reportCompleteMessage})"></div>
             </div>
             <!-- 댓글 작성 폼 -->
             <div class="card p-6 relative" sec:authorize="isAuthenticated()">
@@ -461,9 +461,9 @@
 
     </div>
 
-    <div th:replace="fragments/bookmark-fragments :: bookmarkAjax"></div>
-    <div th:replace="fragments/like-fragments :: likeAjax"></div>
-    <div th:replace="fragments/reply-fragments :: replyAjax"></div>
+    <div th:replace="layout/fragments/domain/bookmark-fragments :: bookmarkAjax"></div>
+    <div th:replace="layout/fragments/domain/like-fragments :: likeAjax"></div>
+    <div th:replace="layout/fragments/domain/reply-fragments :: replyAjax"></div>
     <script src="/node_modules/@fancyapps/ui/dist/fancybox.umd.js"></script>
     <link rel="stylesheet" href="/node_modules/@fancyapps/ui/dist/fancybox.css">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">

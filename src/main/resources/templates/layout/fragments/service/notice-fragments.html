@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html">
+    <body>
+        <div th:fragment="blue-notice (message)" class="bg-blue-500 border p-4 relative rounded-md" uk-alert>
+            <button class="uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0">
+                <i class="icon-feather-x"></i>
+            </button>
+            <h3 class="text-lg font-semibold text-white">알림</h3>
+            <p class="text-white text-opacity-75" th:text="${message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div th:fragment="red-notice (message)" class="bg-red-500 border p-4 relative rounded-md" uk-alert>
+            <button class="uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0">
+                <i class="icon-feather-x"></i>
+            </button>
+            <h3 class="text-lg font-semibold text-white">주의</h3>
+            <p class="text-white text-opacity-75" th:text="${message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+
+        <div th:fragment="gray-notice (message)" class="bg-green-500 border p-4 relative rounded-md" uk-alert>
+            <button class="uk-alert-close absolute bg-gray-100 bg-opacity-20 m-5 p-0.5 pb-0 right-0 rounded text-gray-200 text-xl top-0">
+                <i class="icon-feather-x"></i>
+            </button>
+            <h3 class="text-lg font-semibold text-white">정보</h3>
+            <p class="text-white text-opacity-75" th:text="${message}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+    </body>
+</html>
