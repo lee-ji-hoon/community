@@ -47,17 +47,21 @@ public class BoardService {
         return boardRepository.save(newBoard);
     }
 
-    public void deleteBoard(Board board) {
-        List<S3> imageList = board.getImageList(); // 이미지 불러오기
+    public void deleteBoard(Long boardId, SecurityUser securityUser) {
 
-        for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+        Board currentBoard = findBoardById(boardId);
 
-        boardRepository.delete(board);
+        if (isBoardOwner(securityUser.getAccount(), currentBoard)) {
+            List<S3> imageList = currentBoard.getImageList(); // 이미지 불러오기
+            for (S3 s3 : imageList) s3Service.deleteFile(s3.getImageName()); // 이미지 삭제
+            boardRepository.delete(currentBoard);
+        }
+
     }
 
     public boolean isBoardOwner(Account account, Board board) {
 
-        if (!board.getWriter().equals(account)) {
+        if (!board.getWriter().getUsername().equals(account.getUsername())) {
             throw new NotOwnerException("잘못된 접근입니다.");
         }
         return true;

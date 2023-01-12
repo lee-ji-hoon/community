@@ -136,24 +136,12 @@ public class BoardController {
 
     // 게시물 삭제
     @GetMapping("/board/detail/{boardId}/delete")
-    public String boardDelete(@PathVariable long boardId, @CurrentUser Account account, RedirectAttributes redirectAttributes) {
-        log.info("보드 찾기 : " + boardId);
-        Board currentBoard = boardRepository.findById(boardId);
-        String postSort = currentBoard.getBoardTitle();
-        if (account.getId().equals(currentBoard.getWriter().getId()) || account.getAccountType().equals(AccountType.ROLE_ADMIN)) {
-            log.info("보드 삭제 : " + currentBoard);
-            boardService.deleteBoard(currentBoard);
-            redirectAttributes.addFlashAttribute("deleteMessage", "해당 게시글이 삭제되었습니다.");
-            switch (postSort) {
-                case "자유" :
-                    return "redirect:/board/free";
-                case "정보" :
-                    return "redirect:/board/forum";
-                case "질문" :
-                    return "redirect:/board/qna";
-            }
-        }
-        redirectAttributes.addFlashAttribute("errorMessage", "게시물 삭제 권한이 없습니다.");
-        return "redirect:/board/detail/{boardId}";
+    @PreAuthorize("isAuthenticated()")
+    public String boardDelete(@PathVariable Long boardId,
+                              @AuthenticationPrincipal SecurityUser securityUser) {
+
+        boardService.deleteBoard(boardId, securityUser);
+
+        return "redirect:/board/free";
     }
 }
