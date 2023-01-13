@@ -41,10 +41,9 @@ public class ReportService {
                 .report_content(reportForm.getReport_content())
                 .build();
         boardReportRepository.save(boardReport);
-        Integer boardReportCount = board.getReportCount();
-        board.setReportCount(++boardReportCount);
-        if (boardReportCount >= MAX_BOARD_AND_REPLY_REPORT_COUNT) {
-            board.setIsReported(true);
+        board.increaseReportCount();
+        if (board.getReportCount() >= MAX_BOARD_AND_REPLY_REPORT_COUNT) {
+            board.setReported();
         }
         boardRepository.save(board);
     }

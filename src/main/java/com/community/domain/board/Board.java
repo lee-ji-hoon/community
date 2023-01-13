@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,16 +23,20 @@ import java.util.List;
 public class Board extends BaseEntity {
 
     //post_sort
+    @Setter
     private String boardTitle;
 
     //post_sub_sort
+    @Setter
     private String subBoardTitle;
 
-    @NotBlank
     //post_title
+    @NotBlank
+    @Setter
     private String title;
 
     //post_sub_title
+    @Setter
     private String subTitle;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -52,6 +56,7 @@ public class Board extends BaseEntity {
     private Integer reportCount;
 
     @NotBlank
+    @Setter
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -60,4 +65,28 @@ public class Board extends BaseEntity {
     private Account writer;
 
     private Integer pageView;
+
+    public void setBasicInfo(Account account) {
+        this.isReported = false;
+        this.pageView = 0;
+        this.reportCount = 0;
+        this.writer = account;
+    }
+
+    public void setReportReset() {
+        this.reportCount = 0;
+        this.isReported = false;
+    }
+
+    public void increasePageView() {
+        this.pageView += 1;
+    }
+
+    public void increaseReportCount() {
+        this.reportCount += 1;
+    }
+
+    public void setReported() {
+        this.isReported = true;
+    }
 }
