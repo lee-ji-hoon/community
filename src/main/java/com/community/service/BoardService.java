@@ -41,10 +41,12 @@ public class BoardService {
     private final ModelMapper mapper;
 
     public Board saveNewBoard(List<MultipartFile> multipartFile, BoardForm dto, SecurityUser securityUser) {
-        Board newBoard = setBasicInfo(mapper.map(dto, Board.class), securityUser.getAccount());
-        uploadImage(multipartFile, newBoard);
+        Board savedBoard = mapper.map(dto, Board.class);
+        savedBoard.setBasicInfo(securityUser.getAccount());
 
-        return boardRepository.save(newBoard);
+        uploadImage(multipartFile, savedBoard);
+
+        return boardRepository.save(savedBoard);
     }
 
     public void deleteBoard(Long boardId, SecurityUser securityUser) {
@@ -109,10 +111,9 @@ public class BoardService {
 
     /* 페이지 조회수 증가 서비스 */
     private void pageViewUpdate(Long boardId){
-        Board board = boardRepository.findById(boardId).get();
-        Integer page = board.getPageView();
-        board.setPageView(++page);
-        boardRepository.save(board);
+        Board currentBoard = findBoardById(boardId);
+        currentBoard.increasePageView();
+        boardRepository.save(currentBoard);
     }
 
     public void viewUpdate(long id, HttpServletRequest request, HttpServletResponse response) {
@@ -155,36 +156,14 @@ public class BoardService {
     }
 
     public void boardReportReset(Board board) {
-        board.setReportCount(0);
-        board.setIsReported(false);
+
+        board.setReportReset();
 
         boardRepository.save(board);
     }
 
     public List<Board> top5BoardLists() {
-        List<Board> findView = boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
-        List<Board> findLike = boardRepository.findTop5ByIsReportedOrderByLikesListDesc(false);
-        List<Board> findReply = boardRepository.findTop5ByIsReportedOrderByReplyListDesc(false);
-
-        Map<Long, Board> listMap = new HashMap<>(5);
-        for (Board board : findView) {
-            listMap.put(board.getId(), board);
-        }
-        for (Board board : findLike) {
-            listMap.put(board.getId(), board);
-        }
-        for (Board board : findReply) {
-            listMap.put(board.getId(), board);
-        }
-
-        List<Board> findTop5Boards = new ArrayList<>(listMap.values());
-        Collections.sort(findTop5Boards, (b1, b2)
-                -> (b2.getReplyList().size() + b2.getLikesList().size() + b2.getPageView())
-                - (b1.getReplyList().size() + b1.getLikesList().size() + b1.getPageView()));
-        while (findTop5Boards.size() > 5) {
-            findTop5Boards.remove(findTop5Boards.size() - 1);
-        }
-        return findTop5Boards;
+        return boardRepository.findTop5ByIsReportedOrderByPageViewDesc(false);
     }
 
     public Board findBoardById(Long boardId) {
@@ -195,14 +174,6 @@ public class BoardService {
             }
         });
         return optBoard.orElseThrow( () -> new IdNotFoundException(boardId + "번 게시물은 존재하지 않습니다."));
-    }
-
-    public Board setBasicInfo(Board board, Account account) {
-        board.setIsReported(false);
-        board.setPageView(0);
-        board.setReportCount(0);
-        board.setWriter(account);
-        return board;
     }
 
     public boolean existLikeByBoard(Board board, Account account) {
