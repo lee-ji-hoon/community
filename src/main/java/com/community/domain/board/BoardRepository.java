@@ -40,6 +40,10 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     Board findById(long id);
 
+    List<Board> findByWriterId(long id);
+
+    List<Board> findByWriter(Account account);
+
     @Override
     Optional<Board> findById(Long id);
 
