@@ -25,9 +25,13 @@ class BoardServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @BeforeEach
-    void testCall() {
-        boardRepository.findById(6);
+    @Test
+    @Order(1)
+    @DisplayName("findBoardByAccountId")
+    void findBoardByAccountId() {
+        Optional<Account> byId = accountRepository.findById(1L);
+        List<Board> boards = boardRepository.findByWriterId(byId.get().getId());
+        assertThat(boards.size()).isEqualTo(2);
     }
 
     @Test
@@ -36,15 +40,6 @@ class BoardServiceTest {
     void findBoardByAccount() {
         Optional<Account> byId = accountRepository.findById(1L);
         List<Board> boards = boardRepository.findByWriter(byId.get());
-        assertThat(boards.size()).isEqualTo(2);
-    }
-
-    @Test
-    @Order(1)
-    @DisplayName("findBoardByAccountId")
-    void findBoardByAccountId() {
-        Optional<Account> byId = accountRepository.findById(1L);
-        List<Board> boards = boardRepository.findByWriterId(byId.get().getId());
         assertThat(boards.size()).isEqualTo(2);
     }
 }
