@@ -27,10 +27,13 @@ class BoardServiceTest {
 
     @Test
     @Order(1)
-    @DisplayName("findBoardByAccountId")
-    void findBoardByAccountId() {
+    @DisplayName("findBoardByAccountUsername")
+    void findBoardByAccountUsername() {
         Optional<Account> byId = accountRepository.findById(1L);
-        List<Board> boards = boardRepository.findByWriterId(byId.get().getId());
+        long start = System.currentTimeMillis();
+        List<Board> boards = boardRepository.findByWriter_Username(byId.get().getUsername());
+        long end = System.currentTimeMillis();
+        System.out.println("JPA 실행 시간 : " + (end - start)/1000.0);
         assertThat(boards.size()).isEqualTo(2);
     }
 
@@ -39,7 +42,22 @@ class BoardServiceTest {
     @DisplayName("findBoardByAccount")
     void findBoardByAccount() {
         Optional<Account> byId = accountRepository.findById(1L);
+        long start = System.currentTimeMillis();
         List<Board> boards = boardRepository.findByWriter(byId.get());
+        long end = System.currentTimeMillis();
+        System.out.println("JPA 실행 시간 : " + (end - start)/1000.0);
+        assertThat(boards.size()).isEqualTo(2);
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("findBoardByAccountId")
+    void findBoardByAccountId() {
+        Optional<Account> byId = accountRepository.findById(1L);
+        long start = System.currentTimeMillis();
+        List<Board> boards = boardRepository.findByWriterId(byId.get().getId());
+        long end = System.currentTimeMillis();
+        System.out.println("JPA 실행 시간 : " + (end - start)/1000.0);
         assertThat(boards.size()).isEqualTo(2);
     }
 }
